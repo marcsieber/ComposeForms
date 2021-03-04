@@ -20,9 +20,29 @@ Steve Vogel <steve.vogel@students.fhnw.ch>
 * Trennung UI - Daten
 * Multilanguage Ünterstützung
 * Viele Felder
+* Verschiedene Validierungen möglich
+** Max. / Min.-Werte
+** Regex
+** Input-Grösse
+* Viele verschiedene Inputfelder verwendbar:
+** Boolean
+** Color
+** Date
+** Double
+** Integer
+** MultiSelection
+** Passwort
+** String
+** Section
+* Trennung Model / View
+* Beim Aufruf muss der Typ des Feldes nicht angegeben werden.
+  Der Typ vom Property wird automatisch erkannt und das dazu passende Feld ausgewählt.
 
 
 ==== Nachteil
 * Beispiel zu komplex
 * Wenig generisch
 * Aufruf Form.of("label", property, property) zu umständlich
+* UI ist verbesserbar
+* Keine Verwendung von Attributen
+
