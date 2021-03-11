@@ -36,7 +36,7 @@ Steve Vogel <steve.vogel@students.fhnw.ch>
 ** Section
 * Trennung Model / View
 * Beim Aufruf muss der Typ des Feldes nicht angegeben werden.
-  Der Typ vom Property wird automatisch erkannt und das dazu passende Feld ausgewählt.
+Der Typ vom Property wird automatisch erkannt und das dazu passende Feld ausgewählt.
 
 
 ==== Nachteile
@@ -62,5 +62,4 @@ Steve Vogel <steve.vogel@students.fhnw.ch>
 
 ==== Fazit
 Bei Verwendung von Attributen für die API verkürzt sich der Aufruf beim Formularerstellen im Vergleich zum Aufruf bei FormsFX.
-
 
