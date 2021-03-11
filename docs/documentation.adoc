@@ -14,15 +14,53 @@ Steve Vogel <steve.vogel@students.fhnw.ch>
 
 == Analysen
 
-=== Forms FX 2
+=== Forms FX 2 (API)
 
-==== Vorteil
+==== Vorteile
 * Trennung UI - Daten
 * Multilanguage Ünterstützung
 * Viele Felder
+* Verschiedene Validierungen möglich
+** Max. / Min.-Werte
+** Regex
+** Input-Grösse
+* Viele verschiedene Inputfelder verwendbar:
+** Boolean
+** Color
+** Date
+** Double
+** Integer
+** MultiSelection
+** Passwort
+** String
+** Section
+* Trennung Model / View
+* Beim Aufruf muss der Typ des Feldes nicht angegeben werden.
+  Der Typ vom Property wird automatisch erkannt und das dazu passende Feld ausgewählt.
 
 
-==== Nachteil
+==== Nachteile
 * Beispiel zu komplex
 * Wenig generisch
 * Aufruf Form.of("label", property, property) zu umständlich
+* UI ist verbesserbar
+* Keine Verwendung von Attributen
+
+=== Mountainform Attributebased (Architektur) (Workshop 4, Dieter Holz)
+
+==== Vorteile
+* Alle Werte zu einem Anzeigeobjekt an einem Ort
+* Validierung pro Typ möglich
+* Wiederverendbarkeit, wenig Code-Duplikationen
+* Trennung Model/View
+* View aufgeteilt in sinnvolle Klassen
+
+==== Nachteile
+* Eingeschränktheit, da alle Attribute die selben Properies haben
+
+==== TODO Builder Pattern vergleichen mit alles im Konstruktor
+
+==== Fazit
+Bei Verwendung von Attributen für die API verkürzt sich der Aufruf beim Formularerstellen im Vergleich zum Aufruf bei FormsFX.
+
+
