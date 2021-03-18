@@ -15,7 +15,7 @@ class AppModel() : HelpFunctions(){
     var stringValue = mutableStateOf("Ich bin Text")
     var longValue   = mutableStateOf("5")
 
-    var intValue    = createIntegerAttr(5)
+    var intValue    = createIntegerAttr(5).setLabel("Int: Juhu ")
 
 
 

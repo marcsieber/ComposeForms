@@ -41,10 +41,10 @@ fun AppUI(model: AppModel){
                         label = {Text("Long: ")}
                     )
                     OutlinedTextField(
-                        modifier = Modifier ,
-                        value = intValue.getValAsText().value,
+                        modifier = Modifier,
+                        value = intValue.getValAsText(),
                         onValueChange = {intValue.setValue(it)},
-                        label = {Text("Int: ")}
+                        label = {Text(intValue.getLabel())}
                     )
                     OutlinedTextField(
                         modifier = Modifier ,

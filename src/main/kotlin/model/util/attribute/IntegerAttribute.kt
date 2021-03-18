@@ -7,12 +7,20 @@ class IntegerAttribute(value : Int){
     private var valueAsText = mutableStateOf(value.toString());
     private var label = mutableStateOf("")
 
-
-    fun setValue(value : String){
-        valueAsText.value = value;
+    fun setLabel(label : String): IntegerAttribute{
+        this.label.value = label
+        return this
     }
 
-    fun getValAsText(): MutableState<String> {
-        return valueAsText
+    fun getLabel() : String{
+        return label.value
+    }
+
+    fun setValue(value : String){
+        valueAsText.value = value
+    }
+
+    fun getValAsText(): String {
+        return valueAsText.value
     }
 }
