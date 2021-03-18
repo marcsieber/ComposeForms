@@ -1,7 +1,6 @@
 import androidx.compose.runtime.mutableStateOf
-import model.util.HelpFunctions
 
-class AppModel() : HelpFunctions(){
+class AppModel(){
     var count = mutableStateOf(0)
 
     fun increaseCount(){
@@ -15,8 +14,9 @@ class AppModel() : HelpFunctions(){
     var stringValue = mutableStateOf("Ich bin Text")
     var longValue   = mutableStateOf("5")
 
-    var intValue    = createIntegerAttr(5).setLabel("Int: Juhu ")
-
+    var intValue    = IntegerAttribute(5)
+        .setLabel("Int: ")
+        .setRequired(true)
 
 
     var doubleValue = mutableStateOf("6.0")
