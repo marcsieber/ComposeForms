@@ -14,9 +14,10 @@ class AppModel(){
     var stringValue = mutableStateOf("Ich bin Text")
     var longValue   = mutableStateOf("5")
 
-    var intValue    = IntegerAttribute(5)
+    var intValue    = IntegerAttribute(10)
         .setLabel("Int: ")
         .setRequired(true)
+        .setReadOnly(true)
 
 
     var doubleValue = mutableStateOf("6.0")

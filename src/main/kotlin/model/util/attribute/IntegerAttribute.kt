@@ -4,8 +4,10 @@ class IntegerAttribute(value : Int){
     private var value = mutableStateOf(value)
 
     private var valueAsText = mutableStateOf(value.toString())
-    private var label = mutableStateOf("")
-    private var required = mutableStateOf(false)
+    private var label       = mutableStateOf("")
+    private var required    = mutableStateOf(false)
+    private var readOnly    = mutableStateOf(false)
+
 
 
 
@@ -21,7 +23,7 @@ class IntegerAttribute(value : Int){
         return this
     }
     fun getLabel() : String{
-        if(required.value){
+        if(isRequired()){
             return label.value + "*"
         }
         else{
@@ -33,7 +35,15 @@ class IntegerAttribute(value : Int){
         this.required.value = isRequired
         return this
     }
-    fun getRequired() : Boolean{
+    fun isRequired() : Boolean{
         return required.value
+    }
+
+    fun setReadOnly(isReadOnly : Boolean) : IntegerAttribute{
+        this.readOnly.value = isReadOnly
+        return this
+    }
+    fun isReadOnly() : Boolean{
+        return readOnly.value
     }
 }

@@ -3,8 +3,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,7 +42,8 @@ fun AppUI(model: AppModel){
                         modifier = Modifier,
                         value = intValue.getValAsText(),
                         onValueChange = {intValue.setValue(it)},
-                        label = {Text(intValue.getLabel())}
+                        label = {Text(intValue.getLabel())},
+                        readOnly = intValue.isReadOnly()
                     )
                     OutlinedTextField(
                         modifier = Modifier ,
