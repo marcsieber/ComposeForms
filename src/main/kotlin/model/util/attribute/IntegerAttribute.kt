@@ -4,18 +4,27 @@ import java.lang.NumberFormatException
 
 class IntegerAttribute(value : Int){
 
-    private var value               = mutableStateOf(value)
+    private var value               = Observable(value)
+    private var savedValue          = Observable(value)
     private var valueAsText         = Observable(value.toString())
     private var label               = mutableStateOf("")
     private var required            = mutableStateOf(false)
     private var readOnly            = mutableStateOf(false)
     private var valid               = mutableStateOf(false)
     private var validationMessage   = mutableStateOf("")
+    private var changed             = mutableStateOf(false)
 
+    /**
+     * after instantiation: call all default-listeners:
+     * When valueAsText changes setValue is called
+     * When value       changes setChanged is called
+     * When savedValue  changes setChanged(false) is called
+     */
     init {
-        valueAsText.addListener{ s -> setNewValue(s) }
+        valueAsText.addListener { newVal -> setValue(newVal) }
+        this.value.addListener  { newVal -> setChanged(newVal)}
+        savedValue.addListener  { setChanged(false)}
     }
-
 
     /**
      * Adds the parameter to the valueAsText listeners
@@ -28,32 +37,49 @@ class IntegerAttribute(value : Int){
     }
 
     /**
-     * <p> This method checks if the new input value is valid.
-     * If it is, the new value is set.
-     * If it isn't, setValid(false) is called.</p>
+     *Set the savedValue to the current value.
+     * This makes the attribute "not changed" again.
      */
-    fun setNewValue(newVal : String){
+    fun save(){
+        setSavedValue(getValue())
+    }
+
+    /**
+     * This method checks if the new input value is valid.
+     * If it is, the new value is set.
+     * If it isn't, setValid(false) is called.
+     */
+    fun setValue(newVal : String) : IntegerAttribute{
         try{
             setValid(true)
             setValidationMessage("Valid Input")
-            setValue(Integer.valueOf(newVal))
+            this.value.setValue(Integer.valueOf(newVal))
         } catch (e : NumberFormatException){
             setValid(false)
             setValidationMessage("No Integer")
             e.printStackTrace()
         }
+        return this
     }
 
     private fun setValue(value: Int) : IntegerAttribute {
-        this.value.value = value
-        return this
+        return setValue(value.toString())
     }
-    private fun getValue() : Int{
-        return value.value
+    fun getValue() : Int{
+        return value.getValue()
     }
 
-    fun setValAsText(valueAsText : String){
+    private fun setSavedValue(value: Int) : IntegerAttribute{
+        this.savedValue.setValue(value)
+        return this
+    }
+    fun getSavedValue() : Int{
+        return savedValue.getValue()
+    }
+
+    fun setValAsText(valueAsText : String) : IntegerAttribute{
         this.valueAsText.setValue(valueAsText)
+        return this
     }
     fun getValAsText(): String {
         return valueAsText.getValue()
@@ -63,7 +89,6 @@ class IntegerAttribute(value : Int){
         this.label.value = label
         return this
     }
-
     /**
      * @return the label-text: if the attribute is a required field, a "*" is added behind the labeltext
      */
@@ -106,5 +131,21 @@ class IntegerAttribute(value : Int){
     }
     fun getValidationMessage() : String {
         return validationMessage.value
+    }
+
+    /**
+     * isChanged = true, if value and savedValue are not equal
+     * @return IntegerAttribute
+     */
+    private fun setChanged(newVal: Int) : IntegerAttribute{
+        this.changed.value = !newVal.equals(getSavedValue())
+        return this
+    }
+    private fun setChanged(isChanged : Boolean) : IntegerAttribute{
+        this.changed.value = isChanged
+        return this
+    }
+    fun isChanged() : Boolean{
+        return changed.value
     }
 }

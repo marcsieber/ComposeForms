@@ -24,6 +24,16 @@ fun AppUI(model: AppModel){
                 }) {
                 Text("Reset")
             }
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Green),
+                enabled = intValue.isChanged(),
+                onClick = {
+                    intValue.save()
+                }){
+                Text("Speichern")
+            }
+
             Row {
                 Column {
                     OutlinedTextField(

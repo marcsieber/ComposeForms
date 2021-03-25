@@ -23,5 +23,4 @@ class Observable<T>(initValue: T) {
     fun addListener(obs: (T) -> Unit){
         listeners.add(obs)
     }
-
 }
