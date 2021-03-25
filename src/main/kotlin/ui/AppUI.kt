@@ -6,10 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AppUI(model: AppModel){
+fun AppUI(model: AppModel) {
     with(model){
         Column(Modifier.fillMaxSize(), Arrangement.spacedBy(5.dp)) {
             Button(modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -48,13 +52,22 @@ fun AppUI(model: AppModel){
                         onValueChange = {longValue.value = it},
                         label = {Text("Long: ")}
                     )
+
                     OutlinedTextField(
-                        modifier = Modifier,
+                        modifier = Modifier.onKeyEvent{event ->
+                            if (event.key == Key.DirectionUp) {
+                                intValue.setValAsText( (intValue.getValue() + intValue.getStepSize()!!).toString())
+                            }
+                            if(event.key == Key.DirectionDown){
+                                intValue.setValAsText( (intValue.getValue() - intValue.getStepSize()!!).toString())
+                            }
+                            return@onKeyEvent true},
                         value = intValue.getValAsText(),
                         onValueChange = {intValue.setValAsText(it)},
                         label = {Text(intValue.getLabel())},
                         readOnly = intValue.isReadOnly()
                     )
+
                     OutlinedTextField(
                         modifier = Modifier ,
                         value = doubleValue.value,

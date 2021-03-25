@@ -14,10 +14,13 @@ class AppModel(){
     var stringValue = mutableStateOf("Ich bin Text")
     var longValue   = mutableStateOf("5")
 
-    var intValue    = IntegerAttribute(10)
+    var intValue    = IntegerAttribute(11)
         .setLabel("Int: ")
         .setRequired(true)
         .setReadOnly(false)
+        .setLowerBound(10)
+        .setUpperBound(20)
+        .setStepSize(2)
         .addValueAsTextListener { s -> println(s) }
 
 

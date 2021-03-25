@@ -14,6 +14,12 @@ class IntegerAttribute(value : Int){
     private var validationMessage   = mutableStateOf("")
     private var changed             = mutableStateOf(false)
 
+    //optional extra-properties for IntegerAttribute
+    private var lowerBound          = mutableStateOf(Int.MIN_VALUE)
+    private var upperBound          = mutableStateOf(Int.MAX_VALUE)
+    private var stepSize            = mutableStateOf(1)
+    private var stepStart           = value
+
     /**
      * after instantiation: call all default-listeners:
      * When valueAsText changes setValue is called
@@ -51,6 +57,7 @@ class IntegerAttribute(value : Int){
      */
     fun setValue(newVal : String) : IntegerAttribute{
         try{
+            validatedValue(Integer.valueOf(newVal))
             setValid(true)
             setValidationMessage("Valid Input")
             this.value.setValue(Integer.valueOf(newVal))
@@ -60,6 +67,22 @@ class IntegerAttribute(value : Int){
             e.printStackTrace()
         }
         return this
+    }
+
+    /**
+     * This method checks, if the value is valid regarding the optional extra-properties.
+     * If it is not valid there will be thrown an exception.
+     *
+     * @throws NumberFormatException
+     *
+     * this mehod is called in the setValue method
+     */
+    private fun validatedValue(newVal: Int){
+        if  (    !(newVal >= lowerBound.value
+                && newVal <= upperBound.value
+                && (stepStart + newVal) %  stepSize.value == 0)){
+            throw NumberFormatException("validation missmatched (lowerBound/upperBound/stepSize)")
+        }
     }
 
     private fun setValue(value: Int) : IntegerAttribute {
@@ -147,5 +170,29 @@ class IntegerAttribute(value : Int){
     }
     fun isChanged() : Boolean{
         return changed.value
+    }
+
+    fun setLowerBound(lowerBound : Int) : IntegerAttribute{
+        this.lowerBound.value = lowerBound
+        return this
+    }
+    fun getLowerBound() : Int {
+        return lowerBound.value
+    }
+
+    fun setUpperBound(upperBound : Int) : IntegerAttribute{
+        this.upperBound.value = upperBound
+        return this
+    }
+    fun getUpperBound() : Int {
+        return upperBound.value
+    }
+
+    fun setStepSize(stepSize : Int) : IntegerAttribute{
+        this.stepSize.value = stepSize
+        return this
+    }
+    fun getStepSize() : Int {
+        return stepSize.value
     }
 }
