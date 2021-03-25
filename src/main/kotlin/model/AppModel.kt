@@ -18,6 +18,7 @@ class AppModel(){
         .setLabel("Int: ")
         .setRequired(true)
         .setReadOnly(false)
+        .addValueAsTextListener { s -> println(s) }
 
 
     var doubleValue = mutableStateOf("6.0")

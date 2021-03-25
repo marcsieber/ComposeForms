@@ -1,15 +1,31 @@
 import androidx.compose.runtime.mutableStateOf
+import model.util.Observable
 import java.lang.NumberFormatException
 
 class IntegerAttribute(value : Int){
-    private var value               = mutableStateOf(value)
 
-    private var valueAsText         = mutableStateOf(value.toString())
+    private var value               = mutableStateOf(value)
+    private var valueAsText         = Observable(value.toString())
     private var label               = mutableStateOf("")
     private var required            = mutableStateOf(false)
     private var readOnly            = mutableStateOf(false)
     private var valid               = mutableStateOf(false)
     private var validationMessage   = mutableStateOf("")
+
+    init {
+        valueAsText.addListener{ s -> setNewValue(s) }
+    }
+
+
+    /**
+     * Adds the parameter to the valueAsText listeners
+     * @param func: a function with a String parameter returning Unit
+     * @return the called instance
+     */
+    fun addValueAsTextListener(func: (String) -> Unit) : IntegerAttribute{
+        valueAsText.addListener(func)
+        return this
+    }
 
     /**
      * <p> This method checks if the new input value is valid.
@@ -24,6 +40,7 @@ class IntegerAttribute(value : Int){
         } catch (e : NumberFormatException){
             setValid(false)
             setValidationMessage("No Integer")
+            e.printStackTrace()
         }
     }
 
@@ -36,10 +53,10 @@ class IntegerAttribute(value : Int){
     }
 
     fun setValAsText(valueAsText : String){
-        this.valueAsText.value = valueAsText
+        this.valueAsText.setValue(valueAsText)
     }
     fun getValAsText(): String {
-        return valueAsText.value
+        return valueAsText.getValue()
     }
 
     fun setLabel(label : String) : IntegerAttribute{
