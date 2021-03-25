@@ -27,7 +27,7 @@ fun AppUI(model: AppModel){
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Green),
-                enabled = intValue.isChanged(),
+                enabled = intValue.isValid() && intValue.isChanged(),
                 onClick = {
                     intValue.save()
                 }){
