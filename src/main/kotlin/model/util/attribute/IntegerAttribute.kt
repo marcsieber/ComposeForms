@@ -10,7 +10,7 @@ class IntegerAttribute(value : Int){
     private var label               = mutableStateOf("")
     private var required            = mutableStateOf(false)
     private var readOnly            = mutableStateOf(false)
-    private var valid               = mutableStateOf(false)
+    private var valid               = mutableStateOf(true)
     private var validationMessage   = mutableStateOf("")
     private var changed             = mutableStateOf(false)
 
@@ -23,31 +23,24 @@ class IntegerAttribute(value : Int){
     /**
      * after instantiation: call all default-listeners:
      * When valueAsText changes setValue is called
-     * When value       changes setChanged is called
+     * When valueAsText changes setChanged is called
      * When savedValue  changes setChanged(false) is called
      */
     init {
         valueAsText.addListener { newVal -> setValue(newVal) }
-        this.value.addListener  { newVal -> setChanged(newVal)}
+        valueAsText.addListener { newVal -> setChanged(newVal) }
         savedValue.addListener  { setChanged(false)}
     }
 
     /**
      * Adds the parameter to the valueAsText listeners
+     *
      * @param func: a function with a String parameter returning Unit
-     * @return the called instance
+     * @return the called instance : IntegerAttribute
      */
     fun addValueAsTextListener(func: (String) -> Unit) : IntegerAttribute{
         valueAsText.addListener(func)
         return this
-    }
-
-    /**
-     *Set the savedValue to the current value.
-     * This makes the attribute "not changed" again.
-     */
-    fun save(){
-        setSavedValue(getValue())
     }
 
     /**
@@ -75,15 +68,37 @@ class IntegerAttribute(value : Int){
      *
      * @throws NumberFormatException
      *
-     * this mehod is called in the setValue method
+     * this method is called in the setValue method
      */
     private fun validatedValue(newVal: Int){
         if  (    !(newVal >= lowerBound.value
                 && newVal <= upperBound.value
                 && (stepStart + newVal) %  stepSize.value == 0)){
-            throw NumberFormatException("validation missmatched (lowerBound/upperBound/stepSize)")
+            throw NumberFormatException("Validation missmatched (lowerBound/upperBound/stepSize)")
         }
     }
+
+    //******************************************************************************************************
+    //Functions called on user actions
+
+    /**
+     * Set the savedValue to the current value.
+     * This makes the attribute "not changed" again.
+     */
+    fun save(){
+        setSavedValue(getValue())
+    }
+
+    /**
+     * This method resets the valAsText to the last stored value.
+     * The value is indirectly adjusted as well, because the value listens to valAsText, and setValue(newVal) is executed.
+     */
+    fun undo(){
+        setValAsText(getSavedValue().toString())
+    }
+
+    //******************************************************************************************************
+    //Getter & Setter
 
     private fun setValue(value: Int) : IntegerAttribute {
         return setValue(value.toString())
@@ -158,10 +173,12 @@ class IntegerAttribute(value : Int){
 
     /**
      * isChanged = true, if value and savedValue are not equal
-     * @return IntegerAttribute
+     *
+     * @param newVal : String
+     * @return the called instance : IntegerAttribute
      */
-    private fun setChanged(newVal: Int) : IntegerAttribute{
-        this.changed.value = !newVal.equals(getSavedValue())
+    private fun setChanged(newVal: String) : IntegerAttribute{
+        this.changed.value = !newVal.equals(getSavedValue().toString())
         return this
     }
     private fun setChanged(isChanged : Boolean) : IntegerAttribute{
@@ -172,17 +189,45 @@ class IntegerAttribute(value : Int){
         return changed.value
     }
 
+    /**
+     * This method checks if the given value for lowerBound is below the upperBound value
+     * If yes, the value is set
+     * If no, an exception is thrown
+     *
+     * @param lowerBound : Int
+     * @throws IllegalArgumentException
+     * @return the called instance : IntegerAttribute
+     */
     fun setLowerBound(lowerBound : Int) : IntegerAttribute{
-        this.lowerBound.value = lowerBound
-        return this
+        if(lowerBound < upperBound.value) {
+            this.lowerBound.value = lowerBound
+            return this
+        }
+        else {
+            throw NumberFormatException("LowerBound is not lower than upperBound")
+        }
     }
     fun getLowerBound() : Int {
         return lowerBound.value
     }
 
+    /**
+     * This method checks if the given value for upperBound is above the lowerBound value
+     * If yes, the value is set
+     * If no, an exception is thrown
+     *
+     * @param upperBound : Int
+     * @throws IllegalArgumentException
+     * @return the called instance : IntegerAttribute
+     */
     fun setUpperBound(upperBound : Int) : IntegerAttribute{
-        this.upperBound.value = upperBound
-        return this
+        if(upperBound > lowerBound.value){
+            this.upperBound.value = upperBound
+            return this
+        }
+        else {
+            throw NumberFormatException("UpperBound is not greater than lowerBound")
+        }
     }
     fun getUpperBound() : Int {
         return upperBound.value

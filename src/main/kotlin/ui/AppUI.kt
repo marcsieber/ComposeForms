@@ -35,7 +35,16 @@ fun AppUI(model: AppModel) {
                 onClick = {
                     intValue.save()
                 }){
-                Text("Speichern")
+                Text("Save")
+            }
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Yellow),
+                enabled = intValue.isChanged(),
+                onClick = {
+                    intValue.undo()
+                }){
+                Text("Undo")
             }
 
             Row {
@@ -65,7 +74,8 @@ fun AppUI(model: AppModel) {
                         value = intValue.getValAsText(),
                         onValueChange = {intValue.setValAsText(it)},
                         label = {Text(intValue.getLabel())},
-                        readOnly = intValue.isReadOnly()
+                        readOnly = intValue.isReadOnly(),
+                        isError = !intValue.isValid()
                     )
 
                     OutlinedTextField(
