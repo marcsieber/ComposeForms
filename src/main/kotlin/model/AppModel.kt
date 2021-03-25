@@ -17,7 +17,7 @@ class AppModel(){
     var intValue    = IntegerAttribute(10)
         .setLabel("Int: ")
         .setRequired(true)
-        .setReadOnly(true)
+        .setReadOnly(false)
 
 
     var doubleValue = mutableStateOf("6.0")

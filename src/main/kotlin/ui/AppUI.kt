@@ -41,7 +41,7 @@ fun AppUI(model: AppModel){
                     OutlinedTextField(
                         modifier = Modifier,
                         value = intValue.getValAsText(),
-                        onValueChange = {intValue.setValue(it)},
+                        onValueChange = {intValue.setValAsText(it)},
                         label = {Text(intValue.getLabel())},
                         readOnly = intValue.isReadOnly()
                     )
