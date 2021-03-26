@@ -1,6 +1,7 @@
 import androidx.compose.runtime.mutableStateOf
 import model.util.Observable
 import java.lang.NumberFormatException
+import kotlin.jvm.Throws
 
 class IntegerAttribute(value : Int){
 
@@ -19,6 +20,7 @@ class IntegerAttribute(value : Int){
     private var upperBound          = mutableStateOf(Int.MAX_VALUE)
     private var stepSize            = mutableStateOf(1)
     private var stepStart           = value
+
 
     /**
      * after instantiation: call all default-listeners:
@@ -43,12 +45,15 @@ class IntegerAttribute(value : Int){
         return this
     }
 
+    //******************************************************************************************************
+    //Validation
+
     /**
      * This method checks if the new input value is valid.
      * If it is, the new value is set.
      * If it isn't, setValid(false) is called.
      */
-    fun setValue(newVal : String) : IntegerAttribute{
+    private fun setValue(newVal : String) : IntegerAttribute{
         try{
             validatedValue(Integer.valueOf(newVal))
             setValid(true)
@@ -57,6 +62,10 @@ class IntegerAttribute(value : Int){
         } catch (e : NumberFormatException){
             setValid(false)
             setValidationMessage("No Integer")
+            e.printStackTrace()
+        } catch (e : IllegalArgumentException){
+            setValid(false)
+            setValidationMessage(e.message.toString())
             e.printStackTrace()
         }
         return this
@@ -70,11 +79,12 @@ class IntegerAttribute(value : Int){
      *
      * this method is called in the setValue method
      */
+    @Throws(IllegalArgumentException :: class)
     private fun validatedValue(newVal: Int){
         if  (    !(newVal >= lowerBound.value
                 && newVal <= upperBound.value
                 && (stepStart + newVal) %  stepSize.value == 0)){
-            throw NumberFormatException("Validation missmatched (lowerBound/upperBound/stepSize)")
+            throw IllegalArgumentException("Validation missmatched (lowerBound/upperBound/stepSize)")
         }
     }
 
@@ -163,7 +173,7 @@ class IntegerAttribute(value : Int){
         return valid.value
     }
 
-    fun setValidationMessage(message : String) : IntegerAttribute{
+    private fun setValidationMessage(message : String) : IntegerAttribute{
         this.validationMessage.value = message
         return this
     }
@@ -204,7 +214,7 @@ class IntegerAttribute(value : Int){
             return this
         }
         else {
-            throw NumberFormatException("LowerBound is not lower than upperBound")
+            throw IllegalArgumentException("LowerBound is not lower than upperBound")
         }
     }
     fun getLowerBound() : Int {
@@ -226,7 +236,7 @@ class IntegerAttribute(value : Int){
             return this
         }
         else {
-            throw NumberFormatException("UpperBound is not greater than lowerBound")
+            throw IllegalArgumentException("UpperBound is not greater than lowerBound")
         }
     }
     fun getUpperBound() : Int {
