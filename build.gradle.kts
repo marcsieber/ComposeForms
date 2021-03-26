@@ -1,5 +1,4 @@
 import org.jetbrains.compose.compose
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -18,10 +17,18 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation("org.junit.jupiter:junit-jupiter:5.7.1")
 }
 
+tasks {
+    test {
+        useJUnitPlatform()
+    }
+}
+
+
 tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "14"
+    kotlinOptions.jvmTarget = "11"
 }
 
 compose.desktop {
