@@ -1,21 +1,16 @@
 import androidx.compose.runtime.mutableStateOf
+import java.util.*
 
 class AppModel(){
-    var count = mutableStateOf(0)
-
-    fun increaseCount(){
-        count.value++
-    }
-
-    fun resetCount(){
-        count.value = 0
-    }
 
     var stringValue = mutableStateOf("Ich bin Text")
     var longValue   = mutableStateOf("5")
 
     var intValue    = IntegerAttribute(11)
-        .setLabel("Int: ")
+        //.setLabel("Int: ")
+        .setLabelForLanguage(Locale.GERMAN,"deutscher Int: ")
+        .setLabelForLanguage(Locale.ENGLISH,"english Int: ")
+        .setCurrentLanguage(Locale.GERMAN)
         .setRequired(true)
         .setReadOnly(false)
         .setLowerBound(10)

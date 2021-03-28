@@ -1,6 +1,8 @@
 import androidx.compose.runtime.mutableStateOf
 import model.util.Observable
 import java.lang.NumberFormatException
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.jvm.Throws
 
 class IntegerAttribute(value : Int){
@@ -14,6 +16,8 @@ class IntegerAttribute(value : Int){
     private var valid               = mutableStateOf(true)
     private var validationMessage   = mutableStateOf("")
     private var changed             = mutableStateOf(false)
+    private var labels              = HashMap<Locale,String>()
+    private var currentLanguage     = mutableStateOf<Locale?>(null)
 
     //optional extra-properties for IntegerAttribute
     private var lowerBound          = mutableStateOf(Int.MIN_VALUE)
@@ -107,8 +111,33 @@ class IntegerAttribute(value : Int){
         setValAsText(getSavedValue().toString())
     }
 
+    /**
+     * This method changes the language.
+     * When setCurrentLanguage(language) is called, the label is set to the label name in the language.
+     * If no label name has been defined in this language yet, the label name will be set to "...".
+     *
+     * Default value if setLanguage is not called: @see setLabelForLanguage()
+     *
+     * @param language : Locale
+     * @return the called instance : IntegerAttribute
+     */
+    fun setCurrentLanguage(language : Locale) : IntegerAttribute{
+        label.value = labels.getOrDefault(language, "...")
+        currentLanguage.value = language
+        return this
+    }
+
     //******************************************************************************************************
     //Getter & Setter
+
+    /**
+     * This method checks if the language is set as the current language
+     * @param language : Locale
+     * @return Boolean
+     */
+    fun isCurrentLanguage(language : Locale) : Boolean{
+        return currentLanguage.value == language
+    }
 
     private fun setValue(value: Int) : IntegerAttribute {
         return setValue(value.toString())
@@ -147,6 +176,26 @@ class IntegerAttribute(value : Int){
         else{
             return label.value
         }
+    }
+
+    /**
+     * setLabelForLanguage is needed if the app should support multiple languages.
+     * The language and the corresponding label name for this attribute is stored in a hashmap.
+     *
+     * If (at the beginning) no language is selected (call of setCurrentLanguage),
+     * the first entry in the hashmap will be used.
+     *
+     * @param language : Locale
+     * @param label : String
+     * @return the called instance : IntegerAttribute
+     */
+    fun setLabelForLanguage(language : Locale, label : String) : IntegerAttribute{
+        if(labels.size == 0){
+            setLabel(label)
+            setCurrentLanguage(language)
+        }
+        labels[language] = label
+        return this
     }
 
     fun setRequired(isRequired : Boolean) : IntegerAttribute{

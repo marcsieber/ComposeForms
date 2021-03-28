@@ -435,8 +435,3 @@ internal class IntegerAttributeTest {
         assertSame(false, intA.isValid())
     }
 }
-
-//***********************************************************************************************************
-//Private functions
-
-//todo

@@ -7,27 +7,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
+import java.util.*
 
 @Composable
 fun AppUI(model: AppModel) {
     with(model){
         Column(Modifier.fillMaxSize(), Arrangement.spacedBy(5.dp)) {
-            Button(modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = {
-                    increaseCount()
-                }) {
-                Text(if (count.value == 0) "Hello World" else "Clicked ${count.value}!")
-            }
-            Button(modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = {
-                    resetCount()
-                }) {
-                Text("Reset")
-            }
+
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Green),
@@ -45,6 +34,24 @@ fun AppUI(model: AppModel) {
                     intValue.undo()
                 }){
                 Text("Undo")
+            }
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Magenta),
+                enabled = !intValue.isCurrentLanguage(Locale.GERMAN),
+                onClick = {
+                    intValue.setCurrentLanguage(Locale.GERMAN)
+                }){
+                Text("Deutsch")
+            }
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Magenta),
+                enabled = !intValue.isCurrentLanguage(Locale.ENGLISH),
+                onClick = {
+                    intValue.setCurrentLanguage(Locale.ENGLISH)
+                }){
+                Text("Englisch")
             }
 
             Row {
@@ -84,14 +91,14 @@ fun AppUI(model: AppModel) {
                         onValueChange = {doubleValue.value = it},
                         label = {Text("Double: ")}
                     )
+                }
+                Column {
                     OutlinedTextField(
                         modifier = Modifier ,
                         value = floatValue.value,
                         onValueChange = {floatValue.value = it},
                         label = {Text("Float: ")}
                     )
-                }
-                Column {
                     OutlinedTextField(
                         modifier = Modifier ,
                         value = dateValue.value,
