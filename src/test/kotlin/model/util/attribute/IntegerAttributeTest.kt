@@ -13,25 +13,6 @@ internal class IntegerAttributeTest {
 //Public functions
 
     @Test
-    fun tesAddValueAsTextListener() {
-        //given
-        val intA = IntegerAttribute(3)
-
-        //when
-        intA.addValueAsTextListener { s -> if(s.equals("A")){intA.setValid(false)}else{intA.setValid(true)} }
-        intA.setValAsText("A")
-
-        //then
-        assertSame(false, intA.isValid())
-
-        //when
-        intA.setValAsText("B")
-
-        //then
-        assertSame(true, intA.isValid())
-    }
-
-    @Test
     fun testSave() {
         //given
         val intAttribute = IntegerAttribute(5)

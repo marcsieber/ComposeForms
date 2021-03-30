@@ -7,9 +7,9 @@ import kotlin.jvm.Throws
 
 class IntegerAttribute(value : Int){
 
-    private val value               = Observable(value)
-    private val savedValue          = Observable(value)
-    private val valueAsText         = Observable(value.toString())
+    private var value               = value
+    private var savedValue          = value
+    private val valueAsText         = mutableStateOf(value.toString())
     private val label               = mutableStateOf("")
     private val required            = mutableStateOf(false)
     private val readOnly            = mutableStateOf(false)
@@ -20,34 +20,11 @@ class IntegerAttribute(value : Int){
     private val currentLanguage     = mutableStateOf<Locale?>(null)
 
     //optional extra-properties for IntegerAttribute
-    private val lowerBound          = mutableStateOf(Int.MIN_VALUE)
-    private val upperBound          = mutableStateOf(Int.MAX_VALUE)
-    private val stepSize            = mutableStateOf(1)
+    private var lowerBound          = Int.MIN_VALUE
+    private var upperBound          = Int.MAX_VALUE
+    private var stepSize            = 1
     private val stepStart           = value
 
-
-    /**
-     * after instantiation: call all default-listeners:
-     * When valueAsText changes setValue is called
-     * When valueAsText changes setChanged is called
-     * When savedValue  changes setChanged(false) is called
-     */
-    init {
-        valueAsText.addListener { newVal -> setValue(newVal) }
-        valueAsText.addListener { newVal -> setChanged(newVal) }
-        savedValue.addListener  { setChanged(false)}
-    }
-
-    /**
-     * Adds the parameter to the valueAsText listeners
-     *
-     * @param func: a function with a String parameter returning Unit
-     * @return the called instance : IntegerAttribute
-     */
-    fun addValueAsTextListener(func: (String) -> Unit) : IntegerAttribute{
-        valueAsText.addListener(func)
-        return this
-    }
 
     //******************************************************************************************************
     //Validation
@@ -62,7 +39,7 @@ class IntegerAttribute(value : Int){
             validatedValue(Integer.valueOf(newVal))
             setValid(true)
             setValidationMessage("Valid Input")
-            this.value.setValue(Integer.valueOf(newVal))
+            setValue(Integer.valueOf(newVal))
         } catch (e : NumberFormatException){
             setValid(false)
             setValidationMessage("No Integer")
@@ -85,9 +62,8 @@ class IntegerAttribute(value : Int){
      */
     @Throws(IllegalArgumentException :: class)
     private fun validatedValue(newVal: Int){
-        if  (    !(newVal >= lowerBound.value
-                && newVal <= upperBound.value
-                && (stepStart + newVal) %  stepSize.value == 0)){
+        if  (    !(newVal in lowerBound..upperBound
+                && (stepStart + newVal) %  stepSize == 0)){
             throw IllegalArgumentException("Validation missmatched (lowerBound/upperBound/stepSize)")
         }
     }
@@ -96,11 +72,12 @@ class IntegerAttribute(value : Int){
     //Functions called on user actions
 
     /**
-     * Set the savedValue to the current value.
-     * This makes the attribute "not changed" again.
+     * This method sets the savedValue to the current value
+     * and makes the attribute "not changed" again.
      */
     fun save(){
         setSavedValue(getValue())
+        setChanged(false)
     }
 
     /**
@@ -140,26 +117,35 @@ class IntegerAttribute(value : Int){
     }
 
     private fun setValue(value: Int) : IntegerAttribute {
-        return setValue(value.toString())
+        this.value = value
+        return this
     }
     fun getValue() : Int{
-        return value.getValue()
+        return value
     }
 
     private fun setSavedValue(value: Int) : IntegerAttribute{
-        this.savedValue.setValue(value)
+        this.savedValue = value
         return this
     }
     fun getSavedValue() : Int{
-        return savedValue.getValue()
+        return savedValue
     }
 
+    /**
+     * This method sets valueAsText to the new value, calls setChanged to look if there
+     * are changes in comparison to the savedValue and it calls setValue.
+     * @param valueAsText : String
+     * @return the called instance : IntegerAttribute
+     */
     fun setValAsText(valueAsText : String) : IntegerAttribute{
-        this.valueAsText.setValue(valueAsText)
+        this.valueAsText.value = valueAsText
+        setChanged(valueAsText)
+        setValue(valueAsText)
         return this
     }
     fun getValAsText(): String {
-        return valueAsText.getValue()
+        return valueAsText.value
     }
 
     fun setLabel(label : String) : IntegerAttribute{
@@ -258,8 +244,8 @@ class IntegerAttribute(value : Int){
      * @return the called instance : IntegerAttribute
      */
     fun setLowerBound(lowerBound : Int) : IntegerAttribute{
-        if(lowerBound < upperBound.value) {
-            this.lowerBound.value = lowerBound
+        if(lowerBound < upperBound) {
+            this.lowerBound = lowerBound
             return this
         }
         else {
@@ -267,7 +253,7 @@ class IntegerAttribute(value : Int){
         }
     }
     fun getLowerBound() : Int {
-        return lowerBound.value
+        return lowerBound
     }
 
     /**
@@ -280,8 +266,8 @@ class IntegerAttribute(value : Int){
      * @return the called instance : IntegerAttribute
      */
     fun setUpperBound(upperBound : Int) : IntegerAttribute{
-        if(upperBound > lowerBound.value){
-            this.upperBound.value = upperBound
+        if(upperBound > lowerBound){
+            this.upperBound = upperBound
             return this
         }
         else {
@@ -289,14 +275,14 @@ class IntegerAttribute(value : Int){
         }
     }
     fun getUpperBound() : Int {
-        return upperBound.value
+        return upperBound
     }
 
     fun setStepSize(stepSize : Int) : IntegerAttribute{
-        this.stepSize.value = stepSize
+        this.stepSize = stepSize
         return this
     }
     fun getStepSize() : Int {
-        return stepSize.value
+        return stepSize
     }
 }

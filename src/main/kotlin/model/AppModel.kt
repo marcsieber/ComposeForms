@@ -16,7 +16,6 @@ class AppModel(){
         .setLowerBound(10)
         .setUpperBound(20)
         .setStepSize(2)
-        .addValueAsTextListener { s -> println(s) }
 
 
     val doubleValue = mutableStateOf("6.0")
