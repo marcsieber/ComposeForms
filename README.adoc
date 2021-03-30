@@ -1,4 +1,245 @@
-= Asciidoctor Beispiel
+= ReadMe Compose Forms
+:icons: font
+:stem:
+:toc: left
+:url-docs: https://asciidoctor.org/docs
+:url-gem: https://rubygems.org/gems/asciidoctor
 
-Geht zurück auf einen Konferenz-Beitrag von Markus Schlichting.
+== Attribut-Properties
 
+=== Allgemein
+
+.Allgemeine Attribut-Properties
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+| value
+| Int
+| zuletzt valider Wert
+
+| savedValue
+| Int
+| zuletzt gespeicherter Wert
+
+| valueAsText
+| String
+| aktueller Wert
+
+| label
+| String
+| Label-Text
+
+| required
+| Boolean
+| Ist das Attribut ein Pflichtfeld?
+
+| readOnly
+| Boolean
+| Ist das Attribut ein schreibgeschütztes Feld, das nicht verändert werden kann?
+
+| valid
+| Boolean
+| Ist valueAsText ein valider Input?
+
+| validationMessage
+| String
+| Nachricht zur Validierung
+
+| changed
+| Boolean
+| Gibt es Änderungen im Vergleich zum savedValue?
+
+| labels
+| HashMap<Locale,String>
+| Beinhaltet (Sprache, Label-Name)-Pärchen, bei Mehrsprachigkeit
+
+| currentLanguage
+| Locale
+| aktuelle Sprache bei Mehrsprachigkeit
+
+|===
+
+=== Zusatz für Integer-Attribute
+
+.Optionale Extra-Properties für das Integer-Attribute, die den validen Input einschränken
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+| lowerBound
+| Int
+| untere Grenze für Input
+
+| upperBound
+| Int
+| obere Grenze für Input
+
+| stepSize
+| Int
+| Schrittgrösse
+
+| stepStart
+| Int
+| Zahl, von der aus die Schritte nach oben/unten gerechnet werden
+
+|===
+
+== Funktionen
+
+=== Funktionen für Benutzer-Aktionen
+
+.Funktionen, die bei Benutzer-Aktionen aufgerufen werden können
+[cols="2,2",width=100%,frame=topbot]
+|===
+| Funktion | Auswirkung
+
+| save()
+| Speichert den Wert des Attributs, wenn es in einem validen Zustand ist.
+
+| undo()
+| Setzt den Wert des Attributs auf den letzten gespeicherten Wert zurück.
+
+| setCurrentLanguage(language : Locale)
+| Setzt die aktuelle Sprache auf language. +
+Achtung: Wenn die Sprache zuvor nicht bei der Konfiguration des Attributs definiert wurde, wird in den Labels der Default-Wert "..." gesetzt.
+
+|===
+
+
+
+=== Funktionen für die Konfiguration eines Attributs (Setter)
+
+==== Allgemein
+
+Alle Setter geben die aktuelle Instanz (das Attribut) wieder zurück, sodass ein Attribut mit seinen Konfigurationen ganz einfach erstellt werden kann.
+
+BEISPIEL +
+
+Die Properties mit * werden auf jeden Fall geändert.
+Die anderen Properties müssen nicht, können jedoch, je  nach mitgegebenem Funktions-Parameter, geändert werden.
+
+
+.Funktionen zur Konfiguration eines Attributs (Setter)
+[cols="2,3",width=100%,frame=topbot]
+|===
+| Funktion |  verändert folgende Properties
+
+| setCurrentLanguage(language : Locale)
+|
+
+| setValAsText(valueAsText : String)
+| - valueAsText * +
+- changed +
+- valid +
+- validationMessage +
+- value +
+
+| setLabel(label : String)
+|
+
+| setLabelForLanguage(language : Locale, label : String)
+|
+
+| setRequired(isRequired : Boolean)
+|
+
+| setReadOnly(isReadOnly : Boolean)
+|
+
+| setValid(isValid : Boolean)
+|
+
+|===
+
+==== Zusatz für Integer-Attribute
+
+.Funktionen zur zusätzlichen Konfiguration eines Integer-Attributs (Setter)
+[cols="2,3",width=100%,frame=topbot]
+|===
+| Funktion |  verändert folgende Properties
+
+| setLowerBound(lowerBound : Int)
+|
+
+| setUpperBound(upperBound : Int)
+|
+
+| setStepSize(stepSize : Int)
+|
+
+|===
+
+
+
+=== Funktionen zur Abfrage von Attribut-Werten (Getter)
+
+==== Allgemein
+
+.Getter-Funktionen, die Auskunft über gesetzte Werte geben
+[cols="2,1,2",width=100%,frame=topbot]
+|===
+| Funktion | Rückgabe-Typ | Beschreibung
+
+| isCurrentLanguage(language : Locale)
+| Boolean
+| Gibt zurück, ob die aktuelle Sprache diesselbe ist, wie die als Parameter angegebene Sprache.
+
+| getValue()
+| Int
+| Gibt den aktuellen validen Wert zurück.
+
+| getSavedValue()
+| Int
+| Gibt den gespeicherten Wert zurück.
+
+| getValAsText()
+| String
+|
+
+| getLabel()
+| String
+|
+
+| isRequired()
+| Boolean
+|
+
+| isReadOnly()
+| Boolean
+|
+
+| isValid()
+| Boolean
+|
+
+| getValidationMessage()
+| String
+|
+
+| isChanged()
+| Boolean
+|
+
+|===
+
+==== Zusatz für Integer-Attribute
+
+.Zusätzliche Getter-Funktionen, falls optionale Extra-Properties für das Integer-Attribut gesetzt wurden
+[cols="2,1,2",width=100%,frame=topbot]
+|===
+| Funktion | Rückgabe-Typ | Beschreibung
+
+| getLowerBound()
+| Int
+|
+
+| getUpperBound()
+| Int
+|
+
+| getStepSize()
+| Int
+|
+
+|===
