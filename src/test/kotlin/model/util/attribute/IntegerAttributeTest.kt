@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import java.lang.IllegalArgumentException
-import java.lang.NumberFormatException
+import java.util.*
 
 internal class IntegerAttributeTest {
 
@@ -55,6 +55,43 @@ internal class IntegerAttributeTest {
         assertSame(5, intAttribute.getSavedValue())
         assertEquals("5", intAttribute.getValAsText())
         assertSame(false, intAttribute.isChanged())
+    }
+
+    @Test
+    fun testSetCurrentLanguage() {
+        //given
+        val intA = IntegerAttribute(2)
+        val defaultLabel = "..."
+        val label = "LABEL"
+        val lang = Locale.GERMAN
+
+        //when
+        intA.setCurrentLanguage(lang)
+
+        //then
+        assertEquals(defaultLabel, intA.getLabel())
+        assertTrue(intA.isCurrentLanguage(lang))
+
+        //when
+        intA.setLabelForLanguage(Locale.GERMAN, label)
+
+        //then
+        assertEquals(label, intA.getLabel())
+        assertTrue(intA.isCurrentLanguage(lang))
+    }
+
+    @Test
+    fun testIsCurrentLanguage() {
+        //given
+        val intA = IntegerAttribute(4)
+        val lang = Locale.GERMAN
+
+        //when
+        intA.setCurrentLanguage(lang)
+
+        //then
+        assertTrue(intA.isCurrentLanguage(lang))
+        assertFalse(intA.isCurrentLanguage(Locale.ENGLISH))
     }
 
     @Test
@@ -132,6 +169,25 @@ internal class IntegerAttributeTest {
 
         //then
         assertSame(label,intA.getLabel())
+    }
+
+    @Test
+    fun testSetLabelForLanguage() {
+        //given
+        val intA = IntegerAttribute(3)
+
+        //when
+        intA.setLabelForLanguage(Locale.GERMAN, "Hallo")
+        intA.setLabelForLanguage(Locale.ENGLISH, "Hi")
+
+        //then
+        assertEquals("Hallo", intA.getLabel())
+
+        //when
+        intA.setCurrentLanguage(Locale.ENGLISH)
+
+        //then
+        assertEquals("Hi", intA.getLabel())
     }
 
     @Test

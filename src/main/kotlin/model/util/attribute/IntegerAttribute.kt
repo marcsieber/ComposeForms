@@ -176,11 +176,11 @@ class IntegerAttribute(value : Int){
      * @return the called instance : IntegerAttribute
      */
     fun setLabelForLanguage(language : Locale, label : String) : IntegerAttribute{
-        if(labels.size == 0){
+        labels[language] = label
+        if(labels.size == 1){
             setLabel(label)
             setCurrentLanguage(language)
         }
-        labels[language] = label
         return this
     }
 
