@@ -7,23 +7,23 @@ import kotlin.jvm.Throws
 
 class IntegerAttribute(value : Int){
 
-    private var value               = Observable(value)
-    private var savedValue          = Observable(value)
-    private var valueAsText         = Observable(value.toString())
-    private var label               = mutableStateOf("")
-    private var required            = mutableStateOf(false)
-    private var readOnly            = mutableStateOf(false)
-    private var valid               = mutableStateOf(true)
-    private var validationMessage   = mutableStateOf("")
-    private var changed             = mutableStateOf(false)
-    private var labels              = HashMap<Locale,String>()
-    private var currentLanguage     = mutableStateOf<Locale?>(null)
+    private val value               = Observable(value)
+    private val savedValue          = Observable(value)
+    private val valueAsText         = Observable(value.toString())
+    private val label               = mutableStateOf("")
+    private val required            = mutableStateOf(false)
+    private val readOnly            = mutableStateOf(false)
+    private val valid               = mutableStateOf(true)
+    private val validationMessage   = mutableStateOf("")
+    private val changed             = mutableStateOf(false)
+    private val labels              = HashMap<Locale,String>()
+    private val currentLanguage     = mutableStateOf<Locale?>(null)
 
     //optional extra-properties for IntegerAttribute
-    private var lowerBound          = mutableStateOf(Int.MIN_VALUE)
-    private var upperBound          = mutableStateOf(Int.MAX_VALUE)
-    private var stepSize            = mutableStateOf(1)
-    private var stepStart           = value
+    private val lowerBound          = mutableStateOf(Int.MIN_VALUE)
+    private val upperBound          = mutableStateOf(Int.MAX_VALUE)
+    private val stepSize            = mutableStateOf(1)
+    private val stepStart           = value
 
 
     /**
