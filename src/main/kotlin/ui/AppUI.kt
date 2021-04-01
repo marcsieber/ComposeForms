@@ -72,14 +72,14 @@ fun AppUI(model: AppModel) {
                     OutlinedTextField(
                         modifier = Modifier.onKeyEvent{event ->
                             if (event.key == Key.DirectionUp) {
-                                intValue.setValAsText( (intValue.getValue() + intValue.getStepSize()!!).toString())
+                                intValue.setValueAsText( (intValue.getValue() + intValue.getStepSize()!!).toString())
                             }
                             if(event.key == Key.DirectionDown){
-                                intValue.setValAsText( (intValue.getValue() - intValue.getStepSize()!!).toString())
+                                intValue.setValueAsText( (intValue.getValue() - intValue.getStepSize()!!).toString())
                             }
                             return@onKeyEvent true},
-                        value = intValue.getValAsText(),
-                        onValueChange = {intValue.setValAsText(it)},
+                        value = intValue.getValueAsText(),
+                        onValueChange = {intValue.setValueAsText(it)},
                         label = {Text(intValue.getLabel())},
                         readOnly = intValue.isReadOnly(),
                         isError = !intValue.isValid()
