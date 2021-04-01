@@ -1,6 +1,5 @@
 package model.util.attribute
 
-import IntegerAttribute
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*

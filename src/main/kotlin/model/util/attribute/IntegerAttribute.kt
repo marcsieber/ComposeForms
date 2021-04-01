@@ -1,3 +1,5 @@
+package model.util.attribute
+
 import androidx.compose.runtime.mutableStateOf
 import java.lang.NumberFormatException
 import java.util.*
@@ -32,8 +34,10 @@ class IntegerAttribute(value : Int){
      * This method checks if the new input value is valid.
      * If it is, the new value is set.
      * If it isn't, setValid(false) is called.
+     *
+     * @param newVal the new value as a String
      */
-    private fun setValue(newVal : String) : IntegerAttribute{
+    private fun setValue(newVal : String){
         try{
             validatedValue(Integer.valueOf(newVal))
             setValid(true)
@@ -48,7 +52,6 @@ class IntegerAttribute(value : Int){
             setValidationMessage(e.message.toString())
             e.printStackTrace()
         }
-        return this
     }
 
     /**
@@ -56,14 +59,12 @@ class IntegerAttribute(value : Int){
      * If it is not valid there will be thrown an exception.
      *
      * @throws NumberFormatException
-     *
-     * this method is called in the setValue method
      */
     @Throws(IllegalArgumentException :: class)
     private fun validatedValue(newVal: Int){
         if  (    !(newVal in lowerBound..upperBound
                 && (stepStart + newVal) %  stepSize == 0)){
-            throw IllegalArgumentException("Validation missmatched (lowerBound/upperBound/stepSize)")
+            throw IllegalArgumentException("Validation mismatched (lowerBound/upperBound/stepSize)")
         }
     }
 
@@ -119,6 +120,7 @@ class IntegerAttribute(value : Int){
         this.value = value
         return this
     }
+
     fun getValue() : Int{
         return value
     }
@@ -127,6 +129,7 @@ class IntegerAttribute(value : Int){
         this.savedValue = value
         return this
     }
+
     fun getSavedValue() : Int{
         return savedValue
     }
@@ -139,15 +142,14 @@ class IntegerAttribute(value : Int){
      * @return the called instance : IntegerAttribute
      */
     fun setValAsText(valueAsText : String) : IntegerAttribute{
-        if(isReadOnly()){
-            return this
-        }else{
+        if(!isReadOnly()){
             this.valueAsText.value = valueAsText
             setChanged(valueAsText)
             setValue(valueAsText)
-            return this
         }
+        return this
     }
+
     fun getValAsText(): String {
         return valueAsText.value
     }
@@ -156,24 +158,24 @@ class IntegerAttribute(value : Int){
         this.label.value = label
         return this
     }
+
     /**
      * @return the label-text: if the attribute is a required field, a "*" is added behind the labeltext
      */
     fun getLabel() : String{
-        if(isRequired()){
-            return label.value + "*"
-        }
-        else{
-            return label.value
+        return if(isRequired()){
+            label.value + "*"
+        } else{
+            label.value
         }
     }
 
     /**
      * setLabelForLanguage is needed if the app should support multiple languages.
-     * The language and the corresponding label name for this attribute is stored in a hashmap.
+     * The language and the corresponding label name for this attribute is stored.
      *
      * If (at the beginning) no language is selected (call of setCurrentLanguage),
-     * the first entry in the hashmap will be used.
+     * the label of the first language that is set will be used.
      *
      * @param language : Locale
      * @param label : String
@@ -192,6 +194,7 @@ class IntegerAttribute(value : Int){
         this.required.value = isRequired
         return this
     }
+
     fun isRequired() : Boolean{
         return required.value
     }
@@ -208,6 +211,7 @@ class IntegerAttribute(value : Int){
         this.valid.value = isValid
         return this
     }
+
     fun isValid() : Boolean{
         return valid.value
     }
@@ -216,12 +220,13 @@ class IntegerAttribute(value : Int){
         this.validationMessage.value = message
         return this
     }
+
     fun getValidationMessage() : String {
         return validationMessage.value
     }
 
     /**
-     * isChanged = true, if value and savedValue are not equal
+     * isChanged is true, if value and savedValue are not equal
      *
      * @param newVal : String
      * @return the called instance : IntegerAttribute
@@ -230,10 +235,12 @@ class IntegerAttribute(value : Int){
         this.changed.value = !newVal.equals(getSavedValue().toString())
         return this
     }
+
     private fun setChanged(isChanged : Boolean) : IntegerAttribute{
         this.changed.value = isChanged
         return this
     }
+
     fun isChanged() : Boolean{
         return changed.value
     }
@@ -256,6 +263,7 @@ class IntegerAttribute(value : Int){
             throw IllegalArgumentException("LowerBound is not lower than upperBound")
         }
     }
+
     fun getLowerBound() : Int {
         return lowerBound
     }
@@ -278,6 +286,7 @@ class IntegerAttribute(value : Int){
             throw IllegalArgumentException("UpperBound is not greater than lowerBound")
         }
     }
+
     fun getUpperBound() : Int {
         return upperBound
     }
@@ -286,6 +295,7 @@ class IntegerAttribute(value : Int){
         this.stepSize = stepSize
         return this
     }
+
     fun getStepSize() : Int {
         return stepSize
     }
