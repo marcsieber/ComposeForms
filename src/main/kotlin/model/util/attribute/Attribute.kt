@@ -1,10 +1,11 @@
 package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
+import model.FormModel
 import java.util.*
 import kotlin.collections.HashMap
 
-abstract class Attribute <A> (value : Int) where A : Attribute<A>{
+abstract class Attribute <A> (private val model : FormModel, value : Int) where A : Attribute<A>{
 
     //******************************************************************************************************
     //Properties
@@ -30,9 +31,11 @@ abstract class Attribute <A> (value : Int) where A : Attribute<A>{
      * This method sets the savedValue to the current value
      * and makes the attribute "not changed" again.
      */
-    fun save(){
+    fun save() : Boolean{
+        println("save")
         setSavedValue(getValue())
         setChanged(false)
+        return !isChanged()
     }
 
     /**
@@ -115,8 +118,12 @@ abstract class Attribute <A> (value : Int) where A : Attribute<A>{
         return this as A
     }
 
+    /**
+     *
+     */
     fun setValid(isValid : Boolean) : A{
         this.valid.value = isValid
+        this.model.setValidForAll()
         return this as A
     }
     //******************************************************************************************************
@@ -146,10 +153,15 @@ abstract class Attribute <A> (value : Int) where A : Attribute<A>{
      */
     private fun setChanged(newVal: String) {
         this.changed.value = !newVal.equals(getSavedValue().toString())
+        this.model.setChangedForAll()
     }
 
+    /**
+     *
+     */
     private fun setChanged(isChanged : Boolean) {
         this.changed.value = isChanged
+        model.setChangedForAll()
     }
 
     //******************************************************************************************************

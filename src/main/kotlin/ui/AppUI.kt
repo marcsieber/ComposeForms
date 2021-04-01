@@ -13,43 +13,43 @@ import androidx.compose.ui.unit.dp
 import java.util.*
 
 @Composable
-fun AppUI(model: AppModel) {
+fun AppUI(model: UserDefinedModel) {
     with(model){
         Column(Modifier.fillMaxSize(), Arrangement.spacedBy(5.dp)) {
 
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Green),
-                enabled = intValue.isValid() && intValue.isChanged(),
+                enabled = isValidForAll() && isChangedForAll(),
                 onClick = {
-                    intValue.save()
+                    saveAll()
                 }){
                 Text("Save")
             }
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Yellow),
-                enabled = intValue.isChanged(),
+                enabled = isChangedForAll(),
                 onClick = {
-                    intValue.undo()
+                    undoAll()
                 }){
                 Text("Undo")
             }
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Magenta),
-                enabled = !intValue.isCurrentLanguage(Locale.GERMAN),
+                enabled = !isCurrentLanguageForAll(Locale.GERMAN),
                 onClick = {
-                    intValue.setCurrentLanguage(Locale.GERMAN)
+                    setCurrentLanguageForAll(Locale.GERMAN)
                 }){
                 Text("Deutsch")
             }
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(backgroundColor =  Color.Magenta),
-                enabled = !intValue.isCurrentLanguage(Locale.ENGLISH),
+                enabled = !isCurrentLanguageForAll(Locale.ENGLISH),
                 onClick = {
-                    intValue.setCurrentLanguage(Locale.ENGLISH)
+                    setCurrentLanguageForAll(Locale.ENGLISH)
                 }){
                 Text("Englisch")
             }
@@ -72,17 +72,32 @@ fun AppUI(model: AppModel) {
                     OutlinedTextField(
                         modifier = Modifier.onKeyEvent{event ->
                             if (event.key == Key.DirectionUp) {
-                                intValue.setValueAsText( (intValue.getValue() + intValue.getStepSize()!!).toString())
+                                intValue1.setValueAsText( (intValue1.getValue() + intValue1.getStepSize()!!).toString())
                             }
                             if(event.key == Key.DirectionDown){
-                                intValue.setValueAsText( (intValue.getValue() - intValue.getStepSize()!!).toString())
+                                intValue1.setValueAsText( (intValue1.getValue() - intValue1.getStepSize()!!).toString())
                             }
                             return@onKeyEvent true},
-                        value = intValue.getValueAsText(),
-                        onValueChange = {intValue.setValueAsText(it)},
-                        label = {Text(intValue.getLabel())},
-                        readOnly = intValue.isReadOnly(),
-                        isError = !intValue.isValid()
+                        value = intValue1.getValueAsText(),
+                        onValueChange = {intValue1.setValueAsText(it)},
+                        label = {Text(intValue1.getLabel())},
+                        readOnly = intValue1.isReadOnly(),
+                        isError = !intValue1.isValid()
+                    )
+                    OutlinedTextField(
+                        modifier = Modifier.onKeyEvent{event ->
+                            if (event.key == Key.DirectionUp) {
+                                intValue2.setValueAsText( (intValue2.getValue() + intValue2.getStepSize()!!).toString())
+                            }
+                            if(event.key == Key.DirectionDown){
+                                intValue2.setValueAsText( (intValue2.getValue() - intValue2.getStepSize()!!).toString())
+                            }
+                            return@onKeyEvent true},
+                        value = intValue2.getValueAsText(),
+                        onValueChange = {intValue2.setValueAsText(it)},
+                        label = {Text(intValue2.getLabel())},
+                        readOnly = intValue2.isReadOnly(),
+                        isError = !intValue2.isValid()
                     )
 
                     OutlinedTextField(
