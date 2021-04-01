@@ -1,4 +1,5 @@
 import androidx.compose.runtime.mutableStateOf
+import model.util.attribute.IntegerAttribute
 import java.util.*
 
 class AppModel(){
