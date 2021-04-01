@@ -9,9 +9,6 @@ import java.util.*
 
 internal class IntegerAttributeTest {
 
-//***********************************************************************************************************
-//Public functions
-
     @Test
     fun testSave() {
         //given
@@ -114,6 +111,12 @@ internal class IntegerAttributeTest {
 
         //then
         assertSame(20,intA.getSavedValue())
+
+        //when
+        intA.setValAsText("3")
+
+        //then
+        assertSame(20,intA.getSavedValue())
     }
 
     @Test
@@ -134,6 +137,8 @@ internal class IntegerAttributeTest {
         //then
         assertSame(false, intA.isValid())
         assertSame("No Integer", intA.getValidationMessage())
+        assertSame(4,intA.getValue())
+        assertEquals("a",intA.getValAsText())
     }
 
     @Test
@@ -262,9 +267,11 @@ internal class IntegerAttributeTest {
 
         //when
         intA.setReadOnly(readOnly)
+        intA.setValAsText("2")
 
         //then
         assertSame(readOnly, intA.isReadOnly())
+        assertEquals("24", intA.getValAsText())
 
         //when
         intA.setReadOnly(notReadOnly)

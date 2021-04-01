@@ -134,14 +134,19 @@ class IntegerAttribute(value : Int){
     /**
      * This method sets valueAsText to the new value, calls setChanged to look if there
      * are changes in comparison to the savedValue and it calls setValue.
+     * The new values are only set if the attribute is not readonly.
      * @param valueAsText : String
      * @return the called instance : IntegerAttribute
      */
     fun setValAsText(valueAsText : String) : IntegerAttribute{
-        this.valueAsText.value = valueAsText
-        setChanged(valueAsText)
-        setValue(valueAsText)
-        return this
+        if(isReadOnly()){
+            return this
+        }else{
+            this.valueAsText.value = valueAsText
+            setChanged(valueAsText)
+            setValue(valueAsText)
+            return this
+        }
     }
     fun getValAsText(): String {
         return valueAsText.value
