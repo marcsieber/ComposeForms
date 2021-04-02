@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "1.4.30"
     id("org.jetbrains.compose") version "0.3.0"
     id("jacoco")
+    id("org.sonarqube") version "3.1"
 }
 
 group = "ch.fhnw.forms"
@@ -27,7 +28,6 @@ tasks {
     }
 }
 
-
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "11"
 }
@@ -35,5 +35,16 @@ tasks.withType<KotlinCompile>() {
 compose.desktop {
     application {
         mainClass = "MainKt"
+    }
+}
+
+
+tasks{
+    jacocoTestReport {
+        reports {
+            xml.isEnabled = true
+            csv.isEnabled = false
+            html.destination = file("${buildDir}/jacocoHtml")
+        }
     }
 }
