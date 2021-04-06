@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: git fetch --unshallow
       - run: ./gradlew test -i
       - run: ./gradlew jacocoTestReport
       - run: ./gradlew build sonarqube -Dsonar.projectKey=compose -Dsonar.sources=. -Dsonar.host.url=http://138.68.97.60:9000 -Dsonar.login=${{secrets.SONAR_PASSWORD}} -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/*
