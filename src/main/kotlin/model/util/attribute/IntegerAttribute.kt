@@ -1,10 +1,7 @@
 package model.util.attribute
 
-import androidx.compose.runtime.mutableStateOf
 import model.FormModel
 import java.lang.NumberFormatException
-import java.util.*
-import kotlin.collections.HashMap
 import kotlin.jvm.Throws
 
 class IntegerAttribute(model: FormModel, value : Int) : Attribute<IntegerAttribute>(model, value) {
