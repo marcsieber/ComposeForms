@@ -9,7 +9,7 @@ fun main() = Window(
     size = IntSize(600, 460)
 ) {
     MaterialTheme {
-        val model = remember { AppModel()}
+        val model = remember { UserDefinedModel()}
         AppUI(model)
     }
 }

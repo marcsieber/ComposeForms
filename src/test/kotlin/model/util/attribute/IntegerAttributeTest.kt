@@ -1,5 +1,8 @@
 package model.util.attribute
 
+import androidx.compose.runtime.mutableStateListOf
+import model.BaseFormModel
+import model.FormModel
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -8,55 +11,85 @@ import java.util.*
 
 internal class IntegerAttributeTest {
 
+    var model : FormModel = object:FormModel{
+        override fun getAttributes(): List<Attribute<*>> {
+            return mutableStateListOf()
+        }
+
+        override fun getTitle(): String {
+            return ""
+        }
+
+        override fun saveAll(): Boolean {
+            return true
+        }
+
+        override fun undoAll(): Boolean {
+            return true
+        }
+
+        override fun setCurrentLanguageForAll(lang: Locale) {
+
+        }
+
+        override fun setChangedForAll() {
+
+        }
+
+        override fun setValidForAll() {
+
+        }
+    }
+
     @Test
     fun testSave() {
         //given
-        val intAttribute = IntegerAttribute(5)
+        val intAttribute = IntegerAttribute(model, 5)
 
         //when
-        intAttribute.setValAsText("7")
+        intAttribute.setValueAsText("7")
         intAttribute.save()
 
         //then
         assertSame(7,intAttribute.getValue())
         assertSame(7, intAttribute.getSavedValue())
-        assertEquals("7", intAttribute.getValAsText())
+        assertEquals("7", intAttribute.getValueAsText())
         assertSame(false, intAttribute.isChanged())
     }
 
     @Test
     fun testUndo() {
         //given
-        val intAttribute = IntegerAttribute(3)
+        val intAttribute = IntegerAttribute(model,3)
 
         //when
-        intAttribute.setValAsText("7")
+        intAttribute.setValueAsText("7")
         intAttribute.undo()
 
         //then
         assertSame(3,intAttribute.getValue())
         assertSame(3, intAttribute.getSavedValue())
-        assertEquals("3", intAttribute.getValAsText())
+        assertEquals("3", intAttribute.getValueAsText())
         assertSame(false, intAttribute.isChanged())
 
         //when
-        intAttribute.setValAsText("5")
+        intAttribute.setValueAsText("5")
         intAttribute.save()
-        intAttribute.setValAsText("12")
-        intAttribute.setValAsText("14")
+        intAttribute.setValueAsText("12")
+        intAttribute.setValueAsText("14")
         intAttribute.undo()
 
         //then
         assertSame(5,intAttribute.getValue())
         assertSame(5, intAttribute.getSavedValue())
-        assertEquals("5", intAttribute.getValAsText())
+        assertEquals("5", intAttribute.getValueAsText())
         assertSame(false, intAttribute.isChanged())
     }
 
     @Test
     fun testSetCurrentLanguage() {
         //given
-        val intA = IntegerAttribute(2)
+        val intA = IntegerAttribute(model,2)
         val defaultLabel = "..."
         val label = "LABEL"
         val lang = Locale.GERMAN
@@ -79,7 +112,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testIsCurrentLanguage() {
         //given
-        val intA = IntegerAttribute(4)
+        val intA = IntegerAttribute(model,4)
         val lang = Locale.GERMAN
 
         //when
@@ -93,7 +126,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testGetValue() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
 
         //then
         assertSame(24,intA.getValue())
@@ -102,17 +135,17 @@ internal class IntegerAttributeTest {
     @Test
     fun testGetSavedValue() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
 
         //when
-        intA.setValAsText("20")
+        intA.setValueAsText("20")
         intA.save()
 
         //then
         assertSame(20,intA.getSavedValue())
 
         //when
-        intA.setValAsText("3")
+        intA.setValueAsText("3")
 
         //then
         assertSame(20,intA.getSavedValue())
@@ -121,38 +154,38 @@ internal class IntegerAttributeTest {
     @Test
     fun testSetValAsText() {
         //given
-        val intA = IntegerAttribute(8)
+        val intA = IntegerAttribute(model,8)
 
         //when
-        intA.setValAsText("4")
+        intA.setValueAsText("4")
 
         //then
-        assertEquals("4", intA.getValAsText())
+        assertEquals("4", intA.getValueAsText())
         assertSame(4,intA.getValue())
 
         //when
-        intA.setValAsText("a")
+        intA.setValueAsText("a")
 
         //then
         assertSame(false, intA.isValid())
         assertSame("No Integer", intA.getValidationMessage())
         assertSame(4,intA.getValue())
-        assertEquals("a",intA.getValAsText())
+        assertEquals("a",intA.getValueAsText())
     }
 
     @Test
     fun testGetValAsText() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
 
         //then
-        assertEquals("24",intA.getValAsText())
+        assertEquals("24",intA.getValueAsText())
     }
 
     @Test
     fun testSetLabel() {
         //given
-        val intA = IntegerAttribute(12)
+        val intA = IntegerAttribute(model,12)
         val label = "Name: "
 
         //when
@@ -165,7 +198,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testGetLabel() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
         val label = "Name: "
 
         //when
@@ -178,7 +211,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testSetLabelForLanguage() {
         //given
-        val intA = IntegerAttribute(3)
+        val intA = IntegerAttribute(model,3)
 
         //when
         intA.setLabelForLanguage(Locale.GERMAN, "Hallo")
@@ -197,7 +230,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testSetRequired() {
         //given
-        val intA = IntegerAttribute(12)
+        val intA = IntegerAttribute(model,12)
         val label = "Name: "
         val required = true
         val notRequired = false
@@ -220,7 +253,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testIsRequired() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
         val required = true
         val notRequired = false
 
@@ -240,7 +273,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testSetReadOnly() {
         //given
-        val intA = IntegerAttribute(12)
+        val intA = IntegerAttribute(model,12)
         val readOnly = true
         val notReadOnly = false
 
@@ -260,17 +293,17 @@ internal class IntegerAttributeTest {
     @Test
     fun testIsReadOnly() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
         val readOnly = true
         val notReadOnly = false
 
         //when
         intA.setReadOnly(readOnly)
-        intA.setValAsText("2")
+        intA.setValueAsText("2")
 
         //then
         assertSame(readOnly, intA.isReadOnly())
-        assertEquals("24", intA.getValAsText())
+        assertEquals("24", intA.getValueAsText())
 
         //when
         intA.setReadOnly(notReadOnly)
@@ -282,7 +315,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testSetValid() {
         //given
-        val intA = IntegerAttribute(12)
+        val intA = IntegerAttribute(model,12)
         val valid = true
         val notValid = false
 
@@ -302,7 +335,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testIsValid() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
         val valid = true
         val notValid = false
 
@@ -322,10 +355,10 @@ internal class IntegerAttributeTest {
     @Test
     fun testGetValidationMessage(){
         //given
-        val intA = IntegerAttribute(2)
+        val intA = IntegerAttribute(model,2)
 
         //when
-        intA.setValAsText("Hallo")
+        intA.setValueAsText("Hallo")
 
         //then
         assertSame("No Integer", intA.getValidationMessage())
@@ -334,13 +367,13 @@ internal class IntegerAttributeTest {
     @Test
     fun testIsChanged() {
         //given
-        val intA = IntegerAttribute(3)
+        val intA = IntegerAttribute(model,3)
 
         //then
         assertSame(false, intA.isChanged())
 
         //when
-        intA.setValAsText("5")
+        intA.setValueAsText("5")
 
         //then
         assertSame(true, intA.isChanged())
@@ -355,7 +388,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testSetLowerBound() {
         //given
-        val intA = IntegerAttribute(12)
+        val intA = IntegerAttribute(model,12)
         val upperBound = 10
         val lowerBoundWrong1 = 11
         val lowerBoundWrong2 = 10
@@ -386,7 +419,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testGetLowerBound() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
         val lowerBound = 3
 
         //when
@@ -399,7 +432,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testSetUpperBound() {
         //given
-        val intA = IntegerAttribute(12)
+        val intA = IntegerAttribute(model,12)
         val lowerBound = 10
         val upperBoundWrong1 = 9
         val upperBoundWrong2 = 10
@@ -430,7 +463,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testGetUpperBound() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
         val upperBound = 3
 
         //when
@@ -443,7 +476,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testSetStepSize() {
         //given
-        val intA = IntegerAttribute(12)
+        val intA = IntegerAttribute(model,12)
         val stepSize = 2
 
         //when
@@ -456,7 +489,7 @@ internal class IntegerAttributeTest {
     @Test
     fun testGetStepSize() {
         //given
-        val intA = IntegerAttribute(24)
+        val intA = IntegerAttribute(model,24)
         val stepSize = 4
 
         //when
@@ -466,13 +499,13 @@ internal class IntegerAttributeTest {
         assertSame(stepSize, intA.getStepSize())
 
         //when
-        intA.setValAsText("28")
+        intA.setValueAsText("28")
 
         //then
         assertSame(true, intA.isValid())
 
         //when
-        intA.setValAsText("25")
+        intA.setValueAsText("25")
 
         //then
         assertSame(false, intA.isValid())
