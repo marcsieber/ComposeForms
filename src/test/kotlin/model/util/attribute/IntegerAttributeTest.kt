@@ -511,8 +511,4 @@ internal class IntegerAttributeTest {
         assertSame(false, intA.isValid())
     }
 
-    @Test
-    fun testFailForPipeline(){
-        assertEquals(true, false)
-    }
 }
