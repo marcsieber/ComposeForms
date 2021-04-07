@@ -510,4 +510,9 @@ internal class IntegerAttributeTest {
         //then
         assertSame(false, intA.isValid())
     }
+
+    @Test
+    fun testFailForPipeline(){
+        assertEquals(true, false)
+    }
 }
