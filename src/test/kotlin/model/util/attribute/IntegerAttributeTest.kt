@@ -1,389 +1,33 @@
 package model.util.attribute
 
-import androidx.compose.runtime.mutableStateListOf
 import model.BaseFormModel
-import model.FormModel
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import java.lang.IllegalArgumentException
-import java.util.*
 
-internal class IntegerAttributeTest {
+internal class IntegerAttributeTest: AttributeTest<Int>() {
 
-    var model : FormModel = object:FormModel{
-        override fun getAttributes(): List<Attribute<*>> {
-            return mutableStateListOf()
-        }
-
-        override fun getTitle(): String {
-            return ""
-        }
-
-        override fun saveAll(): Boolean {
-            return true
-        }
-
-        override fun undoAll(): Boolean {
-            return true
-        }
-
-        override fun setCurrentLanguageForAll(lang: Locale) {
-
-        }
-
-        override fun setChangedForAll() {
-
-        }
-
-        override fun setValidForAll() {
-
-        }
+    override fun provideAttribute(model: BaseFormModel, value: Int): Attribute<*> {
+        return IntegerAttribute(model, value)
     }
 
-    @Test
-    fun testSave() {
-        //given
-        val intAttribute = IntegerAttribute(model, 5)
+    init{
+        validValue1        = 5
+        validValue1AsText  = "5"
 
-        //when
-        intAttribute.setValueAsText("7")
-        intAttribute.save()
+        validValue2        = 7
+        validValue2AsText  = "7"
 
-        //then
-        assertSame(7,intAttribute.getValue())
-        assertSame(7, intAttribute.getSavedValue())
-        assertEquals("7", intAttribute.getValueAsText())
-        assertSame(false, intAttribute.isChanged())
+        validValue3        = 12
+        validValue3AsText  = "12"
+
+        validValue4        = 14
+        validValue4AsText  = "14"
+
+        notValidValue1AsText   = "a"
     }
 
-    @Test
-    fun testUndo() {
-        //given
-        val intAttribute = IntegerAttribute(model,3)
-
-        //when
-        intAttribute.setValueAsText("7")
-        intAttribute.undo()
-
-        //then
-        assertSame(3,intAttribute.getValue())
-        assertSame(3, intAttribute.getSavedValue())
-        assertEquals("3", intAttribute.getValueAsText())
-        assertSame(false, intAttribute.isChanged())
-
-        //when
-        intAttribute.setValueAsText("5")
-        intAttribute.save()
-        intAttribute.setValueAsText("12")
-        intAttribute.setValueAsText("14")
-        intAttribute.undo()
-
-        //then
-        assertSame(5,intAttribute.getValue())
-        assertSame(5, intAttribute.getSavedValue())
-        assertEquals("5", intAttribute.getValueAsText())
-        assertSame(false, intAttribute.isChanged())
-    }
-
-    @Test
-    fun testSetCurrentLanguage() {
-        //given
-        val intA = IntegerAttribute(model,2)
-        val defaultLabel = "..."
-        val label = "LABEL"
-        val lang = Locale.GERMAN
-
-        //when
-        intA.setCurrentLanguage(lang)
-
-        //then
-        assertEquals(defaultLabel, intA.getLabel())
-        assertTrue(intA.isCurrentLanguage(lang))
-
-        //when
-        intA.setLabelForLanguage(Locale.GERMAN, label)
-
-        //then
-        assertEquals(label, intA.getLabel())
-        assertTrue(intA.isCurrentLanguage(lang))
-    }
-
-    @Test
-    fun testIsCurrentLanguage() {
-        //given
-        val intA = IntegerAttribute(model,4)
-        val lang = Locale.GERMAN
-
-        //when
-        intA.setCurrentLanguage(lang)
-
-        //then
-        assertTrue(intA.isCurrentLanguage(lang))
-        assertFalse(intA.isCurrentLanguage(Locale.ENGLISH))
-    }
-
-    @Test
-    fun testGetValue() {
-        //given
-        val intA = IntegerAttribute(model,24)
-
-        //then
-        assertSame(24,intA.getValue())
-    }
-
-    @Test
-    fun testGetSavedValue() {
-        //given
-        val intA = IntegerAttribute(model,24)
-
-        //when
-        intA.setValueAsText("20")
-        intA.save()
-
-        //then
-        assertSame(20,intA.getSavedValue())
-
-        //when
-        intA.setValueAsText("3")
-
-        //then
-        assertSame(20,intA.getSavedValue())
-    }
-
-    @Test
-    fun testSetValAsText() {
-        //given
-        val intA = IntegerAttribute(model,8)
-
-        //when
-        intA.setValueAsText("4")
-
-        //then
-        assertEquals("4", intA.getValueAsText())
-        assertSame(4,intA.getValue())
-
-        //when
-        intA.setValueAsText("a")
-
-        //then
-        assertSame(false, intA.isValid())
-        assertSame("No Integer", intA.getValidationMessage())
-        assertSame(4,intA.getValue())
-        assertEquals("a",intA.getValueAsText())
-    }
-
-    @Test
-    fun testGetValAsText() {
-        //given
-        val intA = IntegerAttribute(model,24)
-
-        //then
-        assertEquals("24",intA.getValueAsText())
-    }
-
-    @Test
-    fun testSetLabel() {
-        //given
-        val intA = IntegerAttribute(model,12)
-        val label = "Name: "
-
-        //when
-        intA.setLabel(label)
-
-        //then
-        assertEquals(label, intA.getLabel())
-    }
-
-    @Test
-    fun testGetLabel() {
-        //given
-        val intA = IntegerAttribute(model,24)
-        val label = "Name: "
-
-        //when
-        intA.setLabel(label)
-
-        //then
-        assertSame(label,intA.getLabel())
-    }
-
-    @Test
-    fun testSetLabelForLanguage() {
-        //given
-        val intA = IntegerAttribute(model,3)
-
-        //when
-        intA.setLabelForLanguage(Locale.GERMAN, "Hallo")
-        intA.setLabelForLanguage(Locale.ENGLISH, "Hi")
-
-        //then
-        assertEquals("Hallo", intA.getLabel())
-
-        //when
-        intA.setCurrentLanguage(Locale.ENGLISH)
-
-        //then
-        assertEquals("Hi", intA.getLabel())
-    }
-
-    @Test
-    fun testSetRequired() {
-        //given
-        val intA = IntegerAttribute(model,12)
-        val label = "Name: "
-        val required = true
-        val notRequired = false
-
-        //when
-        intA.setLabel(label)
-        intA.setRequired(required)
-
-        //then
-        assertEquals(required, intA.isRequired())
-        assertEquals(label + "*", intA.getLabel())
-
-        //when
-        intA.setRequired(notRequired)
-
-        //then
-        assertEquals(notRequired, intA.isRequired())
-    }
-
-    @Test
-    fun testIsRequired() {
-        //given
-        val intA = IntegerAttribute(model,24)
-        val required = true
-        val notRequired = false
-
-        //when
-        intA.setRequired(required)
-
-        //then
-        assertSame(required, intA.isRequired())
-
-        //when
-        intA.setRequired(notRequired)
-
-        //then
-        assertSame(notRequired, intA.isRequired())
-    }
-
-    @Test
-    fun testSetReadOnly() {
-        //given
-        val intA = IntegerAttribute(model,12)
-        val readOnly = true
-        val notReadOnly = false
-
-        //when
-        intA.setReadOnly(readOnly)
-
-        //then
-        assertEquals(readOnly, intA.isReadOnly())
-
-        //when
-        intA.setReadOnly(notReadOnly)
-
-        //then
-        assertEquals(notReadOnly, intA.isReadOnly())
-    }
-
-    @Test
-    fun testIsReadOnly() {
-        //given
-        val intA = IntegerAttribute(model,24)
-        val readOnly = true
-        val notReadOnly = false
-
-        //when
-        intA.setReadOnly(readOnly)
-        intA.setValueAsText("2")
-
-        //then
-        assertSame(readOnly, intA.isReadOnly())
-        assertEquals("24", intA.getValueAsText())
-
-        //when
-        intA.setReadOnly(notReadOnly)
-
-        //then
-        assertSame(notReadOnly, intA.isReadOnly())
-    }
-
-    @Test
-    fun testSetValid() {
-        //given
-        val intA = IntegerAttribute(model,12)
-        val valid = true
-        val notValid = false
-
-        //when
-        intA.setValid(valid)
-
-        //then
-        assertEquals(valid, intA.isValid())
-
-        //when
-        intA.setValid(notValid)
-
-        //then
-        assertEquals(notValid, intA.isValid())
-    }
-
-    @Test
-    fun testIsValid() {
-        //given
-        val intA = IntegerAttribute(model,24)
-        val valid = true
-        val notValid = false
-
-        //when
-        intA.setValid(valid)
-
-        //then
-        assertSame(valid, intA.isValid())
-
-        //when
-        intA.setValid(notValid)
-
-        //then
-        assertSame(notValid, intA.isValid())
-    }
-
-    @Test
-    fun testGetValidationMessage(){
-        //given
-        val intA = IntegerAttribute(model,2)
-
-        //when
-        intA.setValueAsText("Hallo")
-
-        //then
-        assertSame("No Integer", intA.getValidationMessage())
-    }
-
-    @Test
-    fun testIsChanged() {
-        //given
-        val intA = IntegerAttribute(model,3)
-
-        //then
-        assertSame(false, intA.isChanged())
-
-        //when
-        intA.setValueAsText("5")
-
-        //then
-        assertSame(true, intA.isChanged())
-
-        //when
-        intA.save()
-
-        //then
-        assertSame(false, intA.isChanged())
-    }
 
     @Test
     fun testSetLowerBound() {
@@ -510,5 +154,7 @@ internal class IntegerAttributeTest {
         //then
         assertSame(false, intA.isValid())
     }
+
+
 
 }
