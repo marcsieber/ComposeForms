@@ -6,11 +6,6 @@ import kotlin.jvm.Throws
 
 class IntegerAttribute(model: FormModel, value : Int) : NumberAttribute<IntegerAttribute, Int>(model, value) {
 
-    init {
-        lowerBound = Int.MIN_VALUE
-        upperBound = Int.MAX_VALUE
-    }
-
     //******************************************************************************************************
     //Validation
 

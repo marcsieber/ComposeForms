@@ -21,10 +21,11 @@ abstract class AttributeTest<T : Any> {
     lateinit var validValue3AsText : String
     lateinit var validValue4AsText : String
     lateinit var notValidValue1AsText : String
+    lateinit var validationMessage : String
 
-    lateinit var attribute : Attribute<*>
+    lateinit var attribute : Attribute<*,*>
 
-    protected abstract fun provideAttribute(model: BaseFormModel, value: T) : Attribute<*>
+    protected abstract fun provideAttribute(model: BaseFormModel, value: T) : Attribute<*,*>
 
     @BeforeEach
     fun setUp(){
@@ -107,7 +108,7 @@ abstract class AttributeTest<T : Any> {
 
         //then
         assertSame(false,           attribute.isValid())
-        assertSame("No Integer",    attribute.getValidationMessage())
+        assertSame(validationMessage,    attribute.getValidationMessage())
         assertSame(validValue2,              attribute.getValue())
         assertEquals(notValidValue1AsText,   attribute.getValueAsText())
     }
@@ -329,10 +330,10 @@ abstract class AttributeTest<T : Any> {
     @Test
     fun testGetValidationMessage() {
         //when
-        attribute.setValueAsText("Hallo")
+        attribute.setValueAsText(notValidValue1AsText)
 
         //then
-        assertSame("No Integer", attribute.getValidationMessage())
+        assertSame(validationMessage, attribute.getValidationMessage())
     }
 
     @Test

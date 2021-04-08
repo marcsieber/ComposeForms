@@ -8,7 +8,7 @@ import java.lang.IllegalArgumentException
 
 internal class IntegerAttributeTest: AttributeTest<Int>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: Int): Attribute<*> {
+    override fun provideAttribute(model: BaseFormModel, value: Int): Attribute<*,*> {
         return IntegerAttribute(model, value)
     }
 
@@ -26,6 +26,7 @@ internal class IntegerAttributeTest: AttributeTest<Int>() {
         validValue4AsText  = "14"
 
         notValidValue1AsText   = "a"
+        validationMessage = "No Integer"
     }
 
 

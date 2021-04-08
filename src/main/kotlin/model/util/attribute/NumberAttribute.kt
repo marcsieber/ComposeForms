@@ -9,11 +9,20 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
     //******************************************************************************************************
     //Optional extra-properties for IntegerAttribute
 
-    lateinit var lowerBound : T //TODO: Getter!
-    lateinit var upperBound : T
-    lateinit var stepSize   : T
-    private  val stepStart    = value
+    private lateinit var lowerBound : T
+    private lateinit var upperBound : T
+    private  var stepSize  = 1 as T
+    private  val stepStart = value
 
+    /**
+     *
+     */
+    init {
+        if (stepStart is Int){
+            this.lowerBound = Int.MIN_VALUE as T
+            this.upperBound = Int.MAX_VALUE as T
+        }
+    }
 
     //******************************************************************************************************
     //Validation
@@ -45,6 +54,7 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
      * @return the called instance : IntegerAttribute
      */
     fun setLowerBound(lowerBound : T) : N {
+
         if(lowerBound < upperBound) {
             this.lowerBound = lowerBound
             return this as N
@@ -81,15 +91,15 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
     //******************************************************************************************************
     //Public Getter
 
-//    fun getLowerBound() : T {
-//        return lowerBound
-//    }
-//
-//    fun getUpperBound() : T {
-//        return upperBound
-//    }
-//
-//    fun getStepSize() : T {
-//        return stepSize
-//    }
+    fun getLowerBound() : T {
+        return lowerBound
+    }
+
+    fun getUpperBound() : T {
+        return upperBound
+    }
+
+    fun getStepSize() : T {
+        return stepSize
+    }
 }

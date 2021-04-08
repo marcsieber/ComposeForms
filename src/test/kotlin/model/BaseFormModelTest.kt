@@ -14,8 +14,8 @@ internal class BaseFormModelTest {
     val ALTER = 50
     val ANZ_KINDER = 3
 
-    lateinit var alter : Attribute<*>
-    lateinit var anzKinder : Attribute<*>
+    lateinit var alter : Attribute<*,*>
+    lateinit var anzKinder : Attribute<*,*>
 
     @BeforeEach
     fun setUp(){
