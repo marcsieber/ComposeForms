@@ -4,7 +4,7 @@ import model.util.attribute.Attribute
 import java.util.*
 
 interface FormModel {
-    fun getAttributes() : List<Attribute<*>>
+    fun getAttributes() : List<Attribute<*,*>>
     fun getTitle() : String
     fun setTitle(title: String)
     fun saveAll() : Boolean

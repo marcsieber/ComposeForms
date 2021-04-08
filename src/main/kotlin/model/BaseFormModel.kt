@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import model.util.attribute.Attribute
 import model.util.attribute.IntegerAttribute
+import model.util.attribute.StringAttribute
 import java.util.*
 
 abstract class BaseFormModel : FormModel {
@@ -12,7 +13,7 @@ abstract class BaseFormModel : FormModel {
     //Properties
 
     private var title               = ""
-    private var allAttributes       = mutableStateListOf<Attribute<*>>()
+    private var allAttributes       = mutableStateListOf<Attribute<*,*>>()
     private var changedForAll       = mutableStateOf(false)
     private val validForAll         = mutableStateOf(true)
     private var currentLanguage     = mutableStateOf<Locale?>(null)
@@ -73,6 +74,16 @@ abstract class BaseFormModel : FormModel {
         return attr
     }
 
+    /**
+     * This method creates an String attribute and the attribute is remembered.
+     * @param value : String
+     * @return attr : StringAttribute
+     */
+    fun createStringAttribute(value : String = "") : StringAttribute{
+        val attr = StringAttribute(this, value)
+        allAttributes.add(attr)
+        return attr
+    }
 
     //******************************************************************************************************
     //Setter
@@ -82,7 +93,7 @@ abstract class BaseFormModel : FormModel {
      * If yes, changedForAll is set true. If not, changedForAll is set false.
      */
     override fun setChangedForAll(){
-        changedForAll.value = allAttributes.stream().anyMatch(Attribute<*>::isChanged)
+        changedForAll.value = allAttributes.stream().anyMatch(Attribute<*,*>::isChanged)
         println("Changed: " + changedForAll.value)
     }
 
@@ -91,7 +102,7 @@ abstract class BaseFormModel : FormModel {
      * If yes, changed is set true. If not, changed is set false.
      */
     override fun setValidForAll(){
-        validForAll.value = allAttributes.stream().allMatch(Attribute<*>::isValid)
+        validForAll.value = allAttributes.stream().allMatch(Attribute<*,*>::isValid)
         println("Valid: " + validForAll.value)
     }
 
@@ -102,7 +113,7 @@ abstract class BaseFormModel : FormModel {
     //******************************************************************************************************
     //Getter
 
-    override fun getAttributes(): List<Attribute<*>> {
+    override fun getAttributes(): List<Attribute<*,*>> {
         return allAttributes
     }
 

@@ -59,9 +59,11 @@ fun AppUI(model: UserDefinedModel) {
                 Column {
                     OutlinedTextField(
                         modifier = Modifier ,
-                        value = stringValue.value,
-                        onValueChange = {stringValue.value = it},
-                        label = {Text("String: ")}
+                        value = stringValue.getValueAsText(),
+                        onValueChange = {stringValue.setValueAsText(it)},
+                        label = {Text(stringValue.getLabel())} ,
+                        readOnly = stringValue.isReadOnly(),
+                        isError = !stringValue.isValid()
                     )
                     OutlinedTextField(
                         modifier = Modifier ,
@@ -73,10 +75,10 @@ fun AppUI(model: UserDefinedModel) {
                     OutlinedTextField(
                         modifier = Modifier.onKeyEvent{event ->
                             if (event.key == Key.DirectionUp) {
-                                intValue1.setValueAsText( (intValue1.getValue() + intValue1.getStepSize()!!).toString())
+                                intValue1.setValueAsText( (intValue1.getValue() + intValue1.stepSize).toString())
                             }
                             if(event.key == Key.DirectionDown){
-                                intValue1.setValueAsText( (intValue1.getValue() - intValue1.getStepSize()!!).toString())
+                                intValue1.setValueAsText( (intValue1.getValue() - intValue1.stepSize).toString())
                             }
                             return@onKeyEvent true},
                         value = intValue1.getValueAsText(),
@@ -88,10 +90,10 @@ fun AppUI(model: UserDefinedModel) {
                     OutlinedTextField(
                         modifier = Modifier.onKeyEvent{event ->
                             if (event.key == Key.DirectionUp) {
-                                intValue2.setValueAsText( (intValue2.getValue() + intValue2.getStepSize()!!).toString())
+                                intValue2.setValueAsText( (intValue2.getValue() + intValue2.stepSize).toString())
                             }
                             if(event.key == Key.DirectionDown){
-                                intValue2.setValueAsText( (intValue2.getValue() - intValue2.getStepSize()!!).toString())
+                                intValue2.setValueAsText( (intValue2.getValue() - intValue2.stepSize).toString())
                             }
                             return@onKeyEvent true},
                         value = intValue2.getValueAsText(),

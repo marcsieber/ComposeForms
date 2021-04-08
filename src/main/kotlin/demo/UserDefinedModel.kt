@@ -1,13 +1,21 @@
 package demo
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import model.BaseFormModel
 import model.util.attribute.IntegerAttribute
 import java.util.*
 
 class UserDefinedModel() : BaseFormModel(){
 
-    val stringValue = mutableStateOf("Ich bin Text")
+    val stringValue = createStringAttribute("Ich bin Text")
+        .setLabelForLanguage(Locale.GERMAN,"deutscher String: ")
+        .setLabelForLanguage(Locale.ENGLISH,"english String: ")
+        .setRequired(true)
+        .setReadOnly(false)
+        .setMinLength(2)
+        .setMaxLength(10)
+
     val longValue   = mutableStateOf("5")
 
     val intValue1    = createIntegerAttribute(11)
@@ -22,10 +30,8 @@ class UserDefinedModel() : BaseFormModel(){
         .setStepSize(2)
 
     val intValue2    = createIntegerAttribute(15)
-        //.setLabel("Int: ")
         .setLabelForLanguage(Locale.GERMAN,"deutscher Int: ")
         .setLabelForLanguage(Locale.ENGLISH,"english Int: ")
-//        .setCurrentLanguage(Locale.GERMAN)
         .setRequired(true)
         .setReadOnly(false)
         .setLowerBound(10)

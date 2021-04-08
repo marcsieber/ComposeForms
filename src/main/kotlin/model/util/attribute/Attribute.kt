@@ -5,7 +5,7 @@ import model.FormModel
 import java.util.*
 import kotlin.collections.HashMap
 
-abstract class Attribute <A> (private val model : FormModel, value : Int) where A : Attribute<A>{
+abstract class Attribute <A,T> (private val model : FormModel, value : T) where A : Attribute<A,T>{
 
     //******************************************************************************************************
     //Properties
@@ -23,7 +23,6 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
     private val labels              = HashMap<Locale,String>()
     private val currentLanguage     = mutableStateOf<Locale?>(null)
 
-
     //******************************************************************************************************
     //Public Setter
 
@@ -38,12 +37,12 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
         if(!isReadOnly()){
             this.valueAsText.value = valueAsText
             setChanged(valueAsText)
-            setValue(valueAsText)
+            checkAndSetValue(valueAsText)
         }
         return this as A
     }
 
-    protected abstract fun setValue(newVal: String)
+    protected abstract fun checkAndSetValue(newVal: String)
 
     fun setLabel(label : String) : A{
         this.label.value = label
@@ -131,7 +130,7 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
     //******************************************************************************************************
     //Protected Setter
 
-    protected fun setValue(value: Int) {
+    protected fun setValue(value: T) {
         this.value = value
     }
 
@@ -142,7 +141,7 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
     //******************************************************************************************************
     //Private Setter
 
-    private fun setSavedValue(value: Int) {
+    private fun setSavedValue(value: T) {
         this.savedValue = value
     }
 
@@ -170,11 +169,11 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
     //******************************************************************************************************
     //Public Getter
 
-    fun getValue() : Int{
+    fun getValue() : T{
         return value
     }
 
-    fun getSavedValue() : Int{
+    fun getSavedValue() : T{
         return savedValue
     }
 
