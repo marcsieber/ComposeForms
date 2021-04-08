@@ -32,7 +32,7 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
      * are changes in comparison to the savedValue and it calls setValue.
      * The new values are only set if the attribute is not readonly.
      * @param valueAsText : String
-     * @return the called instance : IntegerAttribute
+     * @return the called instance : Attribute
      */
     fun setValueAsText(valueAsText : String) : A{
         if(!isReadOnly()){
@@ -59,7 +59,7 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
      *
      * @param language : Locale
      * @param label : String
-     * @return the called instance : IntegerAttribute
+     * @return the called instance : Attribute
      */
     fun setLabelForLanguage(language : Locale, label : String) : A{
         labels[language] = label
@@ -81,7 +81,9 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
     }
 
     /**
-     *
+     * This method sets the valid value and calls setValidForAll()
+     * @param isvalid : Boolean
+     * @return the called instance : Attribute
      */
     fun setValid(isValid : Boolean) : A{
         this.valid.value = isValid
@@ -90,6 +92,7 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
     }
     //******************************************************************************************************
     //Internal Setter
+
     /**
      * This method sets the savedValue to the current value
      * and makes the attribute "not changed" again.
@@ -117,7 +120,7 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
      * Default value if setLanguage is not called: @see setLabelForLanguage()
      *
      * @param language : Locale
-     * @return the called instance : IntegerAttribute
+     * @return the called instance : Attribute
      */
     internal fun setCurrentLanguage(language : Locale) : A{
         label.value = labels.getOrDefault(language, "...")
@@ -147,7 +150,7 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
      * isChanged is true, if value and savedValue are not equal
      *
      * @param newVal : String
-     * @return the called instance : IntegerAttribute
+     * @return the called instance : Attribute
      */
     private fun setChanged(newVal: String) {
         this.changed.value = !newVal.equals(getSavedValue().toString())
@@ -155,7 +158,9 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
     }
 
     /**
-     *
+     * This method sets the changed value and calls setChangedForAll()
+     * @param isChanged : Boolean
+     * @return the called instance : Attribute
      */
     private fun setChanged(isChanged : Boolean) {
         this.changed.value = isChanged
