@@ -12,4 +12,4 @@ jobs:
           fetch-depth: 0
       - run: ./gradlew test -i
       - run: ./gradlew jacocoTestReport
-      - run: ./gradlew build sonarqube -Dsonar.projectKey=compose -Dsonar.sources=. -Dsonar.host.url=http://138.68.97.60:9000 -Dsonar.login=${{secrets.SONAR_PASSWORD}} -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/* -Dsonar.coverageReportPaths=src/main/kotlin/model/**/*
+      - run: ./gradlew build sonarqube -Dsonar.projectKey=compose -Dsonar.sources=. -Dsonar.host.url=http://138.68.97.60:9000 -Dsonar.login=${{secrets.SONAR_PASSWORD}} -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/* -Dsonar.coverage.exclusions=src/main/kotlin/*,src/main/ui/**/*
