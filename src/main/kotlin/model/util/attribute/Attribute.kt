@@ -25,44 +25,6 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
 
 
     //******************************************************************************************************
-    //Functions called on user actions
-
-    /**
-     * This method sets the savedValue to the current value
-     * and makes the attribute "not changed" again.
-     */
-    fun save() : Boolean{
-        println("save")
-        setSavedValue(getValue())
-        setChanged(false)
-        return !isChanged()
-    }
-
-    /**
-     * This method resets the valAsText to the last stored value.
-     * The value is indirectly adjusted as well, because the value listens to valAsText, and setValue(newVal) is executed.
-     */
-    fun undo(){
-        setValueAsText(getSavedValue().toString())
-    }
-
-    /**
-     * This method changes the language.
-     * When setCurrentLanguage(language) is called, the label is set to the label name in the language.
-     * If no label name has been defined in this language yet, the label name will be set to "...".
-     *
-     * Default value if setLanguage is not called: @see setLabelForLanguage()
-     *
-     * @param language : Locale
-     * @return the called instance : IntegerAttribute
-     */
-    fun setCurrentLanguage(language : Locale) : A{
-        label.value = labels.getOrDefault(language, "...")
-        currentLanguage.value = language
-        return this as A
-    }
-
-    //******************************************************************************************************
     //Public Setter
 
     /**
@@ -127,6 +89,43 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
         return this as A
     }
     //******************************************************************************************************
+    //Internal Setter
+    /**
+     * This method sets the savedValue to the current value
+     * and makes the attribute "not changed" again.
+     */
+    internal fun save() : Boolean{
+        println("save")
+        setSavedValue(getValue())
+        setChanged(false)
+        return !isChanged()
+    }
+
+    /**
+     * This method resets the valAsText to the last stored value.
+     * The value is indirectly adjusted as well, because the value listens to valAsText, and setValue(newVal) is executed.
+     */
+    internal fun undo(){
+        setValueAsText(getSavedValue().toString())
+    }
+
+    /**
+     * This method changes the language.
+     * When setCurrentLanguage(language) is called, the label is set to the label name in the language.
+     * If no label name has been defined in this language yet, the label name will be set to "...".
+     *
+     * Default value if setLanguage is not called: @see setLabelForLanguage()
+     *
+     * @param language : Locale
+     * @return the called instance : IntegerAttribute
+     */
+    internal fun setCurrentLanguage(language : Locale) : A{
+        label.value = labels.getOrDefault(language, "...")
+        currentLanguage.value = language
+        return this as A
+    }
+
+    //******************************************************************************************************
     //Protected Setter
 
     protected fun setValue(value: Int) {
@@ -136,7 +135,6 @@ abstract class Attribute <A> (private val model : FormModel, value : Int) where 
     protected fun setValidationMessage(message : String){
         this.validationMessage.value = message
     }
-
 
     //******************************************************************************************************
     //Private Setter

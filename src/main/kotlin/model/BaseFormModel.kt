@@ -18,6 +18,9 @@ abstract class BaseFormModel : FormModel {
     private var currentLanguage     = mutableStateOf<Locale?>(null)
 
 
+    //******************************************************************************************************
+    //Functions called on user actions
+
     /**
      *
      */
@@ -39,6 +42,11 @@ abstract class BaseFormModel : FormModel {
             false
         }
 
+    }
+
+    override fun setCurrentLanguageForAll(lang: Locale){
+        currentLanguage.value = lang
+        allAttributes.forEach{attribute -> attribute.setCurrentLanguage(lang) }
     }
 
     //******************************************************************************************************
@@ -64,9 +72,8 @@ abstract class BaseFormModel : FormModel {
         println("Valid: " + valid.value)
     }
 
-    override fun setCurrentLanguageForAll(lang: Locale){
-        currentLanguage.value = lang
-        allAttributes.forEach{attribute -> attribute.setCurrentLanguage(lang) }
+    override fun setTitle(title: String){
+        this.title = title
     }
 
     //******************************************************************************************************
