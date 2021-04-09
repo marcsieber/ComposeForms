@@ -25,7 +25,7 @@ abstract class AttributeTest<T : Any> {
 
     lateinit var attribute : Attribute<*,*>
 
-    protected abstract fun provideAttribute(model: BaseFormModel, value: T) : Attribute<*,*>
+    protected abstract fun provideAttribute(model: BaseFormModel, value: T) : Attribute<*, Any>
 
     @BeforeEach
     fun setUp(){

@@ -39,10 +39,10 @@ class StringAttribute(model: FormModel, value : String) : Attribute<StringAttrib
      */
     @Throws(IllegalArgumentException :: class)
     private fun validatedValue(newVal: String){
-        if (!(newVal.length >= minLength)){
+        if (newVal.length < minLength){
             throw IllegalArgumentException("Validation mismatched (minLength)")
         }
-        if (!(newVal.length <= maxLength)){
+        if (newVal.length > maxLength){
             throw IllegalArgumentException("Validation mismatched (maxLength)")
         }
     }

@@ -3,12 +3,10 @@ package model.util.attribute
 import model.BaseFormModel
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-
 internal class StringAttributeTest: AttributeTest<String>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: String): Attribute<*,*> {
-        return StringAttribute(model, value).setMaxLength(10)
+    override fun provideAttribute(model: BaseFormModel, value: String): Attribute<*, Any> {
+        return StringAttribute(model, value) as Attribute<*, Any>
     }
 
     init{
@@ -24,12 +22,14 @@ internal class StringAttributeTest: AttributeTest<String>() {
         validValue4        = "Name"
         validValue4AsText  = "Name"
 
-        notValidValue1AsText  = "123456789101112"
+        notValidValueAsText  = "123456789101112"
         validationMessage     = "Validation mismatched (maxLength)"
     }
 
     @Test
     fun checkAndSetValue() {
+        //when
+
     }
 
     @Test

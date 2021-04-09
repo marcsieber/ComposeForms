@@ -3,12 +3,12 @@ package model.util.attribute
 import model.BaseFormModel
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-import java.lang.IllegalArgumentException
+internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
 
-internal class IntegerAttributeTest: AttributeTest<Int>() {
-
-    override fun provideAttribute(model: BaseFormModel, value: Int): Attribute<*,*> {
+    override fun provideAttribute(model: BaseFormModel, value: Int): Attribute<*, Any> {
+        return IntegerAttribute(model, value) as Attribute<*, Any>
+    }
+    override fun provideNumberAttribute(model: BaseFormModel, value: Int): NumberAttribute<*, Int> {
         return IntegerAttribute(model, value)
     }
 
@@ -25,137 +25,29 @@ internal class IntegerAttributeTest: AttributeTest<Int>() {
         validValue4        = 14
         validValue4AsText  = "14"
 
-        notValidValue1AsText   = "a"
-        validationMessage = "No Integer"
-    }
+        notValidValueAsText     = "a"
+        validationMessage       = "No Integer"
 
+        //For NumberAttribute
+        upperBound          = 10
+        lowerBoundWrong1    = 11
+        lowerBoundWrong2    = 10
+        lowerBoundCorrect   = 0
 
-    @Test
-    fun testSetLowerBound() {
-        //given
-        val intA = IntegerAttribute(model,12)
-        val upperBound = 10
-        val lowerBoundWrong1 = 11
-        val lowerBoundWrong2 = 10
-        val lowerBoundCorrect = 0
+        lowerBound          = 10
+        upperBoundWrong1    = 9
+        upperBoundWrong2    = 10
+        upperBoundCorrect   = 14
 
-        //when
-        intA.setUpperBound(upperBound)
+        stepSizeCorrect = 2
+        stepSizeWrong1   = 0
+        stepSizeWrong2   = -1
 
-        //then
-        assertThrows(IllegalArgumentException :: class.java){
-            //when
-            intA.setLowerBound(lowerBoundWrong1)
-        }
-
-        //then
-        assertThrows(IllegalArgumentException :: class.java){
-            //when
-            intA.setLowerBound(lowerBoundWrong2)
-        }
-
-        //when
-        intA.setLowerBound(lowerBoundCorrect)
-
-        //then
-        assertSame(lowerBoundCorrect, intA.getLowerBound())
+        notValidValueBecauseWrongStepAsText = "8"
     }
 
     @Test
-    fun testGetLowerBound() {
-        //given
-        val intA = IntegerAttribute(model,24)
-        val lowerBound = 3
+    fun testCheckAndSetValue(){
 
-        //when
-        intA.setLowerBound(lowerBound)
-
-        //then
-        assertSame(lowerBound, intA.getLowerBound())
     }
-
-    @Test
-    fun testSetUpperBound() {
-        //given
-        val intA = IntegerAttribute(model,12)
-        val lowerBound = 10
-        val upperBoundWrong1 = 9
-        val upperBoundWrong2 = 10
-        val upperBoundCorrect = 14
-
-        //when
-        intA.setLowerBound(lowerBound)
-
-        //then
-        assertThrows(IllegalArgumentException :: class.java){
-            //when
-            intA.setUpperBound(upperBoundWrong1)
-        }
-
-        //then
-        assertThrows(IllegalArgumentException :: class.java){
-            //when
-            intA.setUpperBound(upperBoundWrong2)
-        }
-
-        //when
-        intA.setUpperBound(upperBoundCorrect)
-
-        //then
-        assertSame(upperBoundCorrect, intA.getUpperBound())
-    }
-
-    @Test
-    fun testGetUpperBound() {
-        //given
-        val intA = IntegerAttribute(model,24)
-        val upperBound = 3
-
-        //when
-        intA.setUpperBound(upperBound)
-
-        //then
-        assertSame(upperBound, intA.getUpperBound())
-    }
-
-    @Test
-    fun testSetStepSize() {
-        //given
-        val intA = IntegerAttribute(model,12)
-        val stepSize = 2
-
-        //when
-        intA.setStepSize(stepSize)
-
-        //then
-        assertSame(2,intA.getStepSize())
-    }
-
-    @Test
-    fun testGetStepSize() {
-        //given
-        val intA = IntegerAttribute(model,24)
-        val stepSize = 4
-
-        //when
-        intA.setStepSize(stepSize)
-
-        //then
-        assertSame(stepSize, intA.getStepSize())
-
-        //when
-        intA.setValueAsText("28")
-
-        //then
-        assertSame(true, intA.isValid())
-
-        //when
-        intA.setValueAsText("25")
-
-        //then
-        assertSame(false, intA.isValid())
-    }
-
-
-
 }
