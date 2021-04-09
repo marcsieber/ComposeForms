@@ -20,7 +20,7 @@ abstract class AttributeTest<T : Any> {
     lateinit var validValue2AsText : String
     lateinit var validValue3AsText : String
     lateinit var validValue4AsText : String
-    lateinit var notValidValue1AsText : String
+    lateinit var notValidValueAsText : String
     lateinit var validationMessage : String
 
     lateinit var attribute : Attribute<*,*>
@@ -104,18 +104,13 @@ abstract class AttributeTest<T : Any> {
         assertSame(validValue2,attribute.getValue())
 
         //when
-        attribute.setValueAsText(notValidValue1AsText)
+        attribute.setValueAsText(notValidValueAsText)
 
         //then
         assertSame(false,           attribute.isValid())
         assertSame(validationMessage,    attribute.getValidationMessage())
         assertSame(validValue2,              attribute.getValue())
-        assertEquals(notValidValue1AsText,   attribute.getValueAsText())
-    }
-
-    @Test
-    fun testSetValue_Int() {
-        //TODO
+        assertEquals(notValidValueAsText,   attribute.getValueAsText())
     }
 
     @Test
@@ -206,13 +201,28 @@ abstract class AttributeTest<T : Any> {
     }
 
     @Test
-    fun testSetValue_String() {
-        //TODO
+    fun testSetValue() {
+        //then
+        assertEquals(validValue1, attribute.getValue())
+
+        //when
+        attribute.setValueAsText(validValue2AsText)
+
+        //then
+        assertEquals(validValue2, attribute.getValue())
+
     }
 
     @Test
     fun testSetValidationMessage() {
-        //TODO
+        //then
+        assertEquals("", attribute.getValidationMessage())
+
+        //when
+        attribute.setValueAsText(notValidValueAsText)
+
+        //then
+        assertEquals(validationMessage, attribute.getValidationMessage())
     }
 
     @Test
@@ -330,7 +340,7 @@ abstract class AttributeTest<T : Any> {
     @Test
     fun testGetValidationMessage() {
         //when
-        attribute.setValueAsText(notValidValue1AsText)
+        attribute.setValueAsText(notValidValueAsText)
 
         //then
         assertSame(validationMessage, attribute.getValidationMessage())
