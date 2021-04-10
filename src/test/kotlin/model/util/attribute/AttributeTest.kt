@@ -44,6 +44,22 @@ abstract class AttributeTest<T : Any> {
         assertEquals(     validValue2,          attribute.getSavedValue())
         assertEquals(   validValue2AsText,    attribute.getValueAsText())
         assertFalse(attribute.isChanged())
+
+        //when
+        attribute.setValueAsText(notValidValueAsText)
+        attribute.save()
+
+        //then
+        assertEquals( notValidValueAsText, attribute.getValueAsText())
+        assertEquals(     validValue2,          attribute.getValue())
+        assertEquals(     validValue2,          attribute.getSavedValue())
+        assertFalse(attribute.isChanged())
+
+        //when
+        attribute.setValueAsText(validValue3AsText)
+
+        //then
+        assertTrue(attribute.isChanged())
     }
 
     @Test
