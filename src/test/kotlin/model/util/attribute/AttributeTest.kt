@@ -40,10 +40,10 @@ abstract class AttributeTest<T : Any> {
         attribute.save()
 
         //then
-        assertSame(     validValue2,          attribute.getValue())
-        assertSame(     validValue2,          attribute.getSavedValue())
+        assertEquals(     validValue2,          attribute.getValue())
+        assertEquals(     validValue2,          attribute.getSavedValue())
         assertEquals(   validValue2AsText,    attribute.getValueAsText())
-        assertSame( false,          attribute.isChanged())
+        assertFalse(attribute.isChanged())
     }
 
     @Test
@@ -53,10 +53,10 @@ abstract class AttributeTest<T : Any> {
         attribute.undo()
 
         //then
-        assertSame(validValue1,         attribute.getValue())
-        assertSame(validValue1,         attribute.getSavedValue())
-        assertEquals(validValue1AsText, attribute.getValueAsText())
-        assertSame(false,      attribute.isChanged())
+        assertEquals(validValue1,         attribute.getValue())
+        assertEquals(validValue1,         attribute.getSavedValue())
+        assertEquals(validValue1.toString(), attribute.getValueAsText())
+        assertFalse(attribute.isChanged())
 
         //when
         attribute.setValueAsText(validValue2AsText)
@@ -66,10 +66,10 @@ abstract class AttributeTest<T : Any> {
         attribute.undo()
 
         //then
-        assertSame(validValue2,         attribute.getValue())
-        assertSame(validValue2,         attribute.getSavedValue())
-        assertEquals(validValue2AsText, attribute.getValueAsText())
-        assertSame(false,      attribute.isChanged())
+        assertEquals(validValue2,         attribute.getValue())
+        assertEquals(validValue2,         attribute.getSavedValue())
+        assertEquals(validValue2.toString(), attribute.getValueAsText())
+        assertFalse(attribute.isChanged())
     }
 
     @Test
@@ -101,15 +101,15 @@ abstract class AttributeTest<T : Any> {
 
         //then
         assertEquals(validValue2AsText, attribute.getValueAsText())
-        assertSame(validValue2,attribute.getValue())
+        assertEquals(validValue2,attribute.getValue())
 
         //when
         attribute.setValueAsText(notValidValueAsText)
 
         //then
-        assertSame(false,           attribute.isValid())
-        assertSame(validationMessage,    attribute.getValidationMessage())
-        assertSame(validValue2,              attribute.getValue())
+        assertFalse(attribute.isValid())
+        assertEquals(validationMessage,    attribute.getValidationMessage())
+        assertEquals(validValue2,              attribute.getValue())
         assertEquals(notValidValueAsText,   attribute.getValueAsText())
     }
 
@@ -231,7 +231,7 @@ abstract class AttributeTest<T : Any> {
     @Test
     fun testGetValue() {
         //then
-        assertSame(validValue1, attribute.getValue())
+        assertEquals(validValue1, attribute.getValue())
     }
 
     @Test
@@ -241,19 +241,19 @@ abstract class AttributeTest<T : Any> {
         attribute.save()
 
         //then
-        assertSame(validValue2,attribute.getSavedValue())
+        assertEquals(validValue2,attribute.getSavedValue())
 
         //when
         attribute.setValueAsText(validValue3AsText)
 
         //then
-        assertSame(validValue2,attribute.getSavedValue())
+        assertEquals(validValue2,attribute.getSavedValue())
     }
 
     @Test
     fun testGetValueAsText() {
         //then
-        assertEquals(validValue1AsText, attribute.getValueAsText())
+        assertEquals(validValue1.toString(), attribute.getValueAsText())
     }
 
     @Test
@@ -278,7 +278,7 @@ abstract class AttributeTest<T : Any> {
         attribute.setLabel(label)
 
         //then
-        assertSame(label,attribute.getLabel())
+        assertEquals(label,attribute.getLabel())
     }
 
     @Test
@@ -291,13 +291,13 @@ abstract class AttributeTest<T : Any> {
         attribute.setRequired(required)
 
         //then
-        assertSame(required, attribute.isRequired())
+        assertEquals(required, attribute.isRequired())
 
         //when
         attribute.setRequired(notRequired)
 
         //then
-        assertSame(notRequired, attribute.isRequired())
+        assertEquals(notRequired, attribute.isRequired())
     }
 
     @Test
@@ -311,14 +311,14 @@ abstract class AttributeTest<T : Any> {
         attribute.setValueAsText(validValue2AsText)
 
         //then
-        assertSame(readOnly, attribute.isReadOnly())
-        assertEquals(validValue1AsText, attribute.getValueAsText())
+        assertEquals(readOnly, attribute.isReadOnly())
+        assertEquals(validValue1.toString(), attribute.getValueAsText())
 
         //when
         attribute.setReadOnly(notReadOnly)
 
         //then
-        assertSame(notReadOnly, attribute.isReadOnly())
+        assertEquals(notReadOnly, attribute.isReadOnly())
     }
 
     @Test
@@ -331,13 +331,13 @@ abstract class AttributeTest<T : Any> {
         attribute.setValid(valid)
 
         //then
-        assertSame(valid, attribute.isValid())
+        assertEquals(valid, attribute.isValid())
 
         //when
         attribute.setValid(notValid)
 
         //then
-        assertSame(notValid, attribute.isValid())
+        assertEquals(notValid, attribute.isValid())
     }
 
     @Test
@@ -346,24 +346,24 @@ abstract class AttributeTest<T : Any> {
         attribute.setValueAsText(notValidValueAsText)
 
         //then
-        assertSame(validationMessage, attribute.getValidationMessage())
+        assertEquals(validationMessage, attribute.getValidationMessage())
     }
 
     @Test
     fun testIsChanged() {
         //then
-        assertSame(false, attribute.isChanged())
+        assertFalse(attribute.isChanged())
 
         //when
         attribute.setValueAsText(validValue2AsText)
 
         //then
-        assertSame(true, attribute.isChanged())
+        assertTrue(attribute.isChanged())
 
         //when
         attribute.save()
 
         //then
-        assertSame(false, attribute.isChanged())
+        assertFalse(attribute.isChanged())
     }
 }

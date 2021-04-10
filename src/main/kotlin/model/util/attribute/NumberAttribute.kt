@@ -1,13 +1,14 @@
 package model.util.attribute
 
 import model.FormModel
+import org.junit.jupiter.api.Test
 import java.lang.NumberFormatException
 import kotlin.jvm.Throws
 
 abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N,T>(model,value) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
 
     //******************************************************************************************************
-    //Optional extra-properties for IntegerAttribute
+    //Optional extra-properties for NumberAttributes
 
     private lateinit var lowerBound : T
     private lateinit var upperBound : T
@@ -22,6 +23,14 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
             this.lowerBound = Int.MIN_VALUE as T
             this.upperBound = Int.MAX_VALUE as T
         }
+        if( stepStart is Short){
+            this.lowerBound = Short.MIN_VALUE as T
+            this.upperBound = Short.MAX_VALUE as T
+        }
+        if( stepStart is Double){
+            this.lowerBound = Double.MIN_VALUE as T
+            this.upperBound = Double.MAX_VALUE as T
+        }
     }
 
     //******************************************************************************************************
@@ -35,9 +44,13 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
      */
     @Throws(IllegalArgumentException :: class)
     protected fun validatedValue(newVal: T){
-        if  (    !(newVal in lowerBound..upperBound
-                    && (stepStart.toDouble() + newVal.toDouble()) %  stepSize.toDouble() == 0.0)){
-            throw IllegalArgumentException("Validation mismatched (lowerBound/upperBound/stepSize)")
+        if  (!(newVal in lowerBound..upperBound)){
+            throw IllegalArgumentException("Validation mismatched (lowerBound/upperBound)")
+        }
+        var stepSizeValid = ((stepStart.toDouble() + newVal.toDouble()) %  stepSize.toDouble())
+
+        if(!(stepSizeValid in 0.0..0.001 || stepSizeValid in (stepSize.toDouble() - 0.001)..stepSize.toDouble())){
+            throw IllegalArgumentException("Validation mismatched (stepsize)")
         }
     }
 
@@ -49,7 +62,7 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
      * If yes, the lowerbound value is set and the current textValue is checked to see if it is still valid.
      * If no, an exception is thrown
      *
-     * @param lowerBound : Int
+     * @param lowerBound : T
      * @throws IllegalArgumentException
      * @return the called instance : NumberAttribute
      */
@@ -70,7 +83,7 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
      * If yes, the upperbound value is set and the current textValue is checked to see if it is still valid.
      * If no, an exception is thrown
      *
-     * @param upperBound : Int
+     * @param upperBound : T
      * @throws IllegalArgumentException
      * @return the called instance : NumberAttribute
      */
@@ -108,5 +121,21 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
 
     fun getStepSize() : T {
         return stepSize
+    }
+
+    //******************************************************************************************************
+    //Converter
+
+    /**
+     * This method converts the comma in number inputs into a point.
+     *
+     * @param newValueAsText : String
+     * @return newValueAsText : String
+     */
+    fun convertComma(newValueAsText : String) : String{
+        if(newValueAsText.contains(",")){
+            return newValueAsText.replace(",", ".")
+        }
+        return newValueAsText
     }
 }

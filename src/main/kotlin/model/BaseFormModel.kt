@@ -2,9 +2,7 @@ package model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import model.util.attribute.Attribute
-import model.util.attribute.IntegerAttribute
-import model.util.attribute.StringAttribute
+import model.util.attribute.*
 import java.util.*
 
 abstract class BaseFormModel : FormModel {
@@ -70,6 +68,28 @@ abstract class BaseFormModel : FormModel {
      */
     fun createIntegerAttribute(value : Int = 0) : IntegerAttribute{
         val attr = IntegerAttribute(this, value)
+        allAttributes.add(attr)
+        return attr
+    }
+
+    /**
+     * This method creates an Short attribute and the attribute is remembered.
+     * @param value : Short
+     * @return attr : ShortAttribute
+     */
+    fun createShortAttribute(value : Short = 0) : ShortAttribute {
+        val attr = ShortAttribute(this, value)
+        allAttributes.add(attr)
+        return attr
+    }
+
+    /**
+     * This method creates an Double attribute and the attribute is remembered.
+     * @param value : Double
+     * @return attr : DoubleAttribute
+     */
+    fun createDoubleAttribute(value : Double = 0.0) : DoubleAttribute{
+        val attr = DoubleAttribute(this, value)
         allAttributes.add(attr)
         return attr
     }

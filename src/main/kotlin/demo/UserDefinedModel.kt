@@ -8,6 +8,10 @@ import java.util.*
 
 class UserDefinedModel() : BaseFormModel(){
 
+    init {
+        setCurrentLanguageForAll(Locale.GERMAN)
+    }
+    //String
     val stringValue = createStringAttribute("Ich bin Text")
         .setLabelForLanguage(Locale.GERMAN,"deutscher String: ")
         .setLabelForLanguage(Locale.ENGLISH,"english String: ")
@@ -16,8 +20,7 @@ class UserDefinedModel() : BaseFormModel(){
         .setMinLength(2)
         .setMaxLength(10)
 
-    val longValue   = mutableStateOf("5")
-
+    //Numbers
     val intValue1    = createIntegerAttribute()
         //.setLabel("Int: ")
         .setLabelForLanguage(Locale.GERMAN,"deutscher Int: ")
@@ -38,11 +41,26 @@ class UserDefinedModel() : BaseFormModel(){
         .setUpperBound(20)
         .setStepSize(2)
 
-    init {
-        setCurrentLanguageForAll(Locale.GERMAN)
-    }
+    val shortValue = createShortAttribute(9)
+        .setLabelForLanguage(Locale.GERMAN,"deutscher Short: ")
+        .setLabelForLanguage(Locale.ENGLISH,"english Short: ")
+        .setRequired(true)
+        .setReadOnly(false)
+        .setLowerBound(0)
+        .setUpperBound(100)
+        .setStepSize(2)
 
-    val doubleValue = mutableStateOf("6.0")
+    val longValue   = mutableStateOf("5")
+
+    val doubleValue = createDoubleAttribute(8.4)
+        .setLabelForLanguage(Locale.GERMAN,"deutscher Double: ")
+        .setLabelForLanguage(Locale.ENGLISH,"english Double: ")
+        .setRequired(true)
+        .setReadOnly(false)
+        .setLowerBound(4.9)
+        .setUpperBound(20.5)
+        .setStepSize(0.4)
+
     val floatValue  = mutableStateOf("7.9")
     val dateValue   = mutableStateOf("01/05/2020")
     val booleanValue = mutableStateOf(true)

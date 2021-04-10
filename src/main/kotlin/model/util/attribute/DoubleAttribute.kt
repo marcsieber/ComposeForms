@@ -2,10 +2,8 @@ package model.util.attribute
 
 import model.FormModel
 import java.lang.NumberFormatException
-import kotlin.jvm.Throws
 
-class IntegerAttribute(model: FormModel, value : Int) : NumberAttribute<IntegerAttribute, Int>(model, value) {
-
+class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<DoubleAttribute, Double>(model, value) {
     //******************************************************************************************************
     //Validation
 
@@ -18,15 +16,15 @@ class IntegerAttribute(model: FormModel, value : Int) : NumberAttribute<IntegerA
      * @throws NumberFormatException
      * @throws IllegalArgumentException
      */
-    override fun checkAndSetValue(newVal : String){
+    override fun checkAndSetValue(newVal: String) {
         try{
-            validatedValue(newVal.toInt())
+            validatedValue(newVal.toDouble())
             setValid(true)
             setValidationMessage("Valid Input")
-            setValue(Integer.valueOf(newVal))
+            setValue(newVal.toDouble())
         } catch (e : NumberFormatException){
             setValid(false)
-            setValidationMessage("No Integer")
+            setValidationMessage("No Double")
             e.printStackTrace()
         } catch (e : IllegalArgumentException){
             setValid(false)

@@ -57,7 +57,8 @@ fun AppUI(model: UserDefinedModel) {
 
             Row {
                 Column {
-                    OutlinedTextField(
+
+                    OutlinedTextField(          //stringValue
                         modifier = Modifier ,
                         value = stringValue.getValueAsText(),
                         onValueChange = {stringValue.setValueAsText(it)},
@@ -65,14 +66,8 @@ fun AppUI(model: UserDefinedModel) {
                         readOnly = stringValue.isReadOnly(),
                         isError = !stringValue.isValid()
                     )
-                    OutlinedTextField(
-                        modifier = Modifier ,
-                        value = longValue.value,
-                        onValueChange = {longValue.value = it},
-                        label = {Text("Long: ")}
-                    )
 
-                    OutlinedTextField(
+                    OutlinedTextField(          //intValue1
                         modifier = Modifier.onKeyEvent{event ->
                             if (event.key == Key.DirectionUp) {
                                 intValue1.setValueAsText( (intValue1.getValue() + intValue1.getStepSize()).toString())
@@ -87,7 +82,9 @@ fun AppUI(model: UserDefinedModel) {
                         readOnly = intValue1.isReadOnly(),
                         isError = !intValue1.isValid()
                     )
-                    OutlinedTextField(
+
+
+                    OutlinedTextField(          //intValue2
                         modifier = Modifier.onKeyEvent{event ->
                             if (event.key == Key.DirectionUp) {
                                 intValue2.setValueAsText( (intValue2.getValue() + intValue2.getStepSize()).toString())
@@ -103,12 +100,38 @@ fun AppUI(model: UserDefinedModel) {
                         isError = !intValue2.isValid()
                     )
 
-                    OutlinedTextField(
-                        modifier = Modifier ,
-                        value = doubleValue.value,
-                        onValueChange = {doubleValue.value = it},
-                        label = {Text("Double: ")}
+                    OutlinedTextField(          //shortValue
+                        modifier = Modifier.onKeyEvent{event ->
+                            if (event.key == Key.DirectionUp) {
+                                shortValue.setValueAsText( (shortValue.getValue() + shortValue.getStepSize()).toString())
+                            }
+                            if(event.key == Key.DirectionDown){
+                                shortValue.setValueAsText( (shortValue.getValue() - shortValue.getStepSize()).toString())
+                            }
+                            return@onKeyEvent true},
+                        value = shortValue.getValueAsText(),
+                        onValueChange = {shortValue.setValueAsText(it)},
+                        label = {Text(shortValue.getLabel())},
+                        readOnly = shortValue.isReadOnly(),
+                        isError = !shortValue.isValid()
                     )
+
+                    OutlinedTextField(          //doubleValue
+                        modifier = Modifier.onKeyEvent{event ->
+                            if (event.key == Key.DirectionUp) {
+                                doubleValue.setValueAsText( doubleValue.convertComma(String.format("%.8f",doubleValue.getValue() + doubleValue.getStepSize())))
+                            }
+                            if(event.key == Key.DirectionDown){
+                                doubleValue.setValueAsText( doubleValue.convertComma(String.format("%.8f",(doubleValue.getValue() - doubleValue.getStepSize()))))
+                            }
+                            return@onKeyEvent true},
+                        value = doubleValue.getValueAsText(),
+                        onValueChange = {doubleValue.setValueAsText(it)},
+                        label = {Text(doubleValue.getLabel())},
+                        readOnly = doubleValue.isReadOnly(),
+                        isError = !doubleValue.isValid()
+                    )
+
                 }
                 Column {
                     OutlinedTextField(

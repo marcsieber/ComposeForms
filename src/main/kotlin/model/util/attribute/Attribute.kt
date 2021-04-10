@@ -5,7 +5,7 @@ import model.FormModel
 import java.util.*
 import kotlin.collections.HashMap
 
-abstract class Attribute <A,T> (private val model : FormModel, value : T) where A : Attribute<A,T>{
+abstract class Attribute <A,T> (private val model : FormModel, value : T) where A : Attribute<A,T>, T : Any{
 
     //******************************************************************************************************
     //Properties
@@ -22,6 +22,7 @@ abstract class Attribute <A,T> (private val model : FormModel, value : T) where 
     private val changed             = mutableStateOf(false)
     private val labels              = HashMap<Locale,String>()
     private val currentLanguage     = mutableStateOf<Locale?>(null)
+
 
     //******************************************************************************************************
     //Public Setter

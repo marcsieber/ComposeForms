@@ -105,7 +105,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
         numAt.setStepSize(stepSizeCorrect)
 
         //then
-        Assertions.assertSame(2, numAt.getStepSize())
+        Assertions.assertSame(stepSizeCorrect, numAt.getStepSize())
     }
 
     @Test
