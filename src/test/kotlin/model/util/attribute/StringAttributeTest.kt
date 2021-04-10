@@ -1,12 +1,16 @@
 package model.util.attribute
 
 import model.BaseFormModel
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.lang.IllegalArgumentException
 
 internal class StringAttributeTest: AttributeTest<String>() {
 
     override fun provideAttribute(model: BaseFormModel, value: String): Attribute<*, Any> {
-        return StringAttribute(model, value) as Attribute<*, Any>
+        return StringAttribute(model, value).setMaxLength(10) as Attribute<*, Any>
     }
 
     init{
@@ -26,25 +30,94 @@ internal class StringAttributeTest: AttributeTest<String>() {
         validationMessage     = "Validation mismatched (maxLength)"
     }
 
-    @Test
-    fun checkAndSetValue() {
-        //when
+    lateinit var stringAtr : StringAttribute
 
+    @BeforeEach
+    fun setUpStringAtr(){
+        //given
+        stringAtr = StringAttribute(model, validValue1)
     }
 
     @Test
     fun setMinLength() {
+        //then
+        assertTrue(stringAtr.isValid())
+
+        //when
+        stringAtr.setMinLength(7)
+
+        //then
+        assertFalse(stringAtr.isValid())
     }
 
     @Test
     fun setMaxLength() {
+        //then
+        assertTrue(stringAtr.isValid())
+
+        //when
+        stringAtr.setMaxLength(3)
+
+        //then
+        assertFalse(stringAtr.isValid())
     }
 
     @Test
     fun getMinLength() {
+        //then
+        assertEquals(0,stringAtr.getMinLength())
+
+        //when
+        stringAtr.setMinLength(6)
+
+        //then
+        assertEquals(6,stringAtr.getMinLength())
+        assertFalse(stringAtr.isValid())
+
+        //TODO
+//        //then
+//        assertThrows(IllegalArgumentException::class.java){
+//            //when
+//            stringAtr.setMinLength(-1)
+//        }
+//
+//        //when
+//        stringAtr.setMaxLength(5)
+//
+//        //then
+//        assertThrows(IllegalArgumentException::class.java) {
+//            //when
+//            stringAtr.setMinLength(6)
+//        }
+
     }
 
     @Test
     fun getMaxLength() {
+        //then
+        assertEquals(Int.MAX_VALUE, stringAtr.getMaxLength())
+
+        //when
+        stringAtr.setMaxLength(4)
+
+        //then
+        assertEquals(4,stringAtr.getMaxLength())
+        assertFalse(stringAtr.isValid())
+
+        //TODO
+//        //then
+//        assertThrows(IllegalArgumentException::class.java){
+//            //when
+//            stringAtr.setMaxLength(-1)
+//        }
+//
+//        //when
+//        stringAtr.setMinLength(3)
+//
+//        //then
+//        Assertions.assertThrows(IllegalArgumentException::class.java) {
+//            //when
+//            stringAtr.setMaxLength(2)
+//        }
     }
 }

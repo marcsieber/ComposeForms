@@ -50,14 +50,50 @@ class StringAttribute(model: FormModel, value : String) : Attribute<StringAttrib
     //******************************************************************************************************
     //Setter
 
+    /**
+     * This method checks if the given value for minLength is positive and below the maxLength value.
+     * If yes, the minLength is set and the current textValue is checked to see if it is still valid.
+     *
+     * @param maxLength : Int
+     * @throws IllegalArgumentException
+     * @return the called instance : StringAttribute
+     */
     fun setMinLength(minLength : Int) : StringAttribute {
-        this.minLength = minLength
-        return this
+        if(minLength >= 0){
+            if(minLength < maxLength){
+                this.minLength = minLength
+                checkAndSetValue(getValueAsText())
+                return this
+            }
+            else{
+                throw IllegalArgumentException("minLength is not lower than maxLength")
+            }
+        }else{
+            throw IllegalArgumentException("minLength must be positive")
+        }
     }
 
+    /**
+     * This method checks if the given value for maxLength is positive and above the minLength value.
+     * If yes, the maxLength is set and the current textValue is checked to see if it is still valid.
+     *
+     * @param maxLength : Int
+     * @throws IllegalArgumentException
+     * @return the called instance : StringAttribute
+    */
     fun setMaxLength(maxLength : Int) : StringAttribute {
-        this.maxLength = maxLength
-        return this
+        if(maxLength >= 0){
+            if(maxLength > minLength){
+                this.maxLength = maxLength
+                checkAndSetValue(getValueAsText())
+                return this
+            }
+            else{
+                throw IllegalArgumentException("maxLength is not greater than minLength")
+            }
+        }else{
+            throw IllegalArgumentException("maxLength must be grater than 0")
+        }
     }
 
 

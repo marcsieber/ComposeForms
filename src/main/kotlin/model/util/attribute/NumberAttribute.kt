@@ -46,17 +46,18 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
 
     /**
      * This method checks if the given value for lowerBound is below the upperBound value
-     * If yes, the value is set
+     * If yes, the lowerbound value is set and the current textValue is checked to see if it is still valid.
      * If no, an exception is thrown
      *
      * @param lowerBound : Int
      * @throws IllegalArgumentException
-     * @return the called instance : IntegerAttribute
+     * @return the called instance : NumberAttribute
      */
     fun setLowerBound(lowerBound : T) : N {
 
         if(lowerBound < upperBound) {
             this.lowerBound = lowerBound
+            checkAndSetValue(getValueAsText())
             return this as N
         }
         else {
@@ -66,16 +67,17 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
 
     /**
      * This method checks if the given value for upperBound is above the lowerBound value
-     * If yes, the value is set
+     * If yes, the upperbound value is set and the current textValue is checked to see if it is still valid.
      * If no, an exception is thrown
      *
      * @param upperBound : Int
      * @throws IllegalArgumentException
-     * @return the called instance : IntegerAttribute
+     * @return the called instance : NumberAttribute
      */
     fun setUpperBound(upperBound : T) : N {
         if(upperBound > lowerBound){
             this.upperBound = upperBound
+            checkAndSetValue(getValueAsText())
             return this as N
         }
         else {
@@ -83,8 +85,13 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
         }
     }
 
+    /**
+     * The stepsize is set and the current textValue is checked to see if it is still valid.
+     * @return the called instance : NumberAttribute
+     */
     fun setStepSize(stepSize : T) : N {
         this.stepSize = stepSize
+        checkAndSetValue(getValueAsText())
         return this as N
     }
 

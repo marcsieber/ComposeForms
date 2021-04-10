@@ -215,8 +215,11 @@ abstract class AttributeTest<T : Any> {
 
     @Test
     fun testSetValidationMessage() {
+        //when
+        attribute.setValueAsText(validValue2AsText)
+
         //then
-        assertEquals("", attribute.getValidationMessage())
+        assertEquals("Valid Input", attribute.getValidationMessage())
 
         //when
         attribute.setValueAsText(notValidValueAsText)

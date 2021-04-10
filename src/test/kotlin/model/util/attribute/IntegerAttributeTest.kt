@@ -45,9 +45,4 @@ internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
 
         notValidValueBecauseWrongStepAsText = "8"
     }
-
-    @Test
-    fun testCheckAndSetValue(){
-
-    }
 }

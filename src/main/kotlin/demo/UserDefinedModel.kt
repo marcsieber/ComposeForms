@@ -18,7 +18,7 @@ class UserDefinedModel() : BaseFormModel(){
 
     val longValue   = mutableStateOf("5")
 
-    val intValue1    = createIntegerAttribute(11)
+    val intValue1    = createIntegerAttribute()
         //.setLabel("Int: ")
         .setLabelForLanguage(Locale.GERMAN,"deutscher Int: ")
         .setLabelForLanguage(Locale.ENGLISH,"english Int: ")
