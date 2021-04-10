@@ -1,6 +1,7 @@
 package model.util.attribute
 
 import model.FormModel
+import java.lang.NumberFormatException
 import kotlin.jvm.Throws
 
 class StringAttribute(model: FormModel, value : String) : Attribute<StringAttribute, String>(model, value) {
@@ -16,7 +17,9 @@ class StringAttribute(model: FormModel, value : String) : Attribute<StringAttrib
      * If it is, the new value is set.
      * If it isn't, setValid(false) is called.
      *
-     * @param newVal the new value as a String
+     * @param newVal : String
+     * @throws NumberFormatException
+     * @throws IllegalArgumentException
      */
     override fun checkAndSetValue(newVal : String){
         try{

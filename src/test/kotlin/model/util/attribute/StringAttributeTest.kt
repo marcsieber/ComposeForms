@@ -74,21 +74,20 @@ internal class StringAttributeTest: AttributeTest<String>() {
         assertEquals(6,stringAtr.getMinLength())
         assertFalse(stringAtr.isValid())
 
-        //TODO
-//        //then
-//        assertThrows(IllegalArgumentException::class.java){
-//            //when
-//            stringAtr.setMinLength(-1)
-//        }
-//
-//        //when
-//        stringAtr.setMaxLength(5)
-//
-//        //then
-//        assertThrows(IllegalArgumentException::class.java) {
-//            //when
-//            stringAtr.setMinLength(6)
-//        }
+        //then
+        assertThrows(IllegalArgumentException::class.java){
+            //when
+            stringAtr.setMinLength(-1)
+        }
+
+        //when
+        stringAtr.setMaxLength(7)
+
+        //then
+        assertThrows(IllegalArgumentException::class.java) {
+            //when
+            stringAtr.setMinLength(8)
+        }
 
     }
 
@@ -104,20 +103,19 @@ internal class StringAttributeTest: AttributeTest<String>() {
         assertEquals(4,stringAtr.getMaxLength())
         assertFalse(stringAtr.isValid())
 
-        //TODO
-//        //then
-//        assertThrows(IllegalArgumentException::class.java){
-//            //when
-//            stringAtr.setMaxLength(-1)
-//        }
-//
-//        //when
-//        stringAtr.setMinLength(3)
-//
-//        //then
-//        Assertions.assertThrows(IllegalArgumentException::class.java) {
-//            //when
-//            stringAtr.setMaxLength(2)
-//        }
+        //then
+        assertThrows(IllegalArgumentException::class.java){
+            //when
+            stringAtr.setMaxLength(-1)
+        }
+
+        //when
+        stringAtr.setMinLength(3)
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            //when
+            stringAtr.setMaxLength(2)
+        }
     }
 }
