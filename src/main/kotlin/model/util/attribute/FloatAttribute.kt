@@ -3,11 +3,11 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<DoubleAttribute, Double>(model, value) {
+class FloatAttribute(model: FormModel, value : Float) : NumberAttribute<FloatAttribute, Float>(model, value) {
 
     private var decimalPlaces = 1
 
-    //TODO: fix rounding on stepSize
+
     //TODO: use decimalPlaces
 
     //******************************************************************************************************
@@ -24,13 +24,13 @@ class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<Double
      */
     override fun checkAndSetValue(newVal: String) {
         try{
-            validatedValue(newVal.toDouble())
+            validatedValue(newVal.toFloat())
             setValid(true)
             setValidationMessage("Valid Input")
-            setValue(newVal.toDouble())
+            setValue(newVal.toFloat())
         } catch (e : NumberFormatException){
             setValid(false)
-            setValidationMessage("No Double")
+            setValidationMessage("No Float")
             e.printStackTrace()
         } catch (e : IllegalArgumentException){
             setValid(false)
@@ -42,7 +42,7 @@ class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<Double
     //******************************************************************************************************
     //Getter & Setter
 
-    fun setDecimalPlaces(decimalPlaces : Int) : DoubleAttribute{
+    fun setDecimalPlaces(decimalPlaces : Int) : FloatAttribute{
         this.decimalPlaces = decimalPlaces
         return this
     }
@@ -50,5 +50,4 @@ class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<Double
     fun getDecimalPlaces() : Int {
         return decimalPlaces
     }
-
 }

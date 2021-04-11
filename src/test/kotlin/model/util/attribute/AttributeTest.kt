@@ -12,7 +12,7 @@ abstract class AttributeTest<T : Any> {
 
     var model = object: BaseFormModel() { }
 
-    lateinit var validValue1 : T
+    lateinit var validValue1_uneven : T
     lateinit var validValue2 : T
     lateinit var validValue3 : T
     lateinit var validValue4 : T
@@ -30,7 +30,7 @@ abstract class AttributeTest<T : Any> {
     @BeforeEach
     fun setUp(){
         //given
-        attribute = provideAttribute(model, validValue1)
+        attribute = provideAttribute(model, validValue1_uneven)
     }
 
     @Test
@@ -69,9 +69,9 @@ abstract class AttributeTest<T : Any> {
         attribute.undo()
 
         //then
-        assertEquals(validValue1,         attribute.getValue())
-        assertEquals(validValue1,         attribute.getSavedValue())
-        assertEquals(validValue1.toString(), attribute.getValueAsText())
+        assertEquals(validValue1_uneven,         attribute.getValue())
+        assertEquals(validValue1_uneven,         attribute.getSavedValue())
+        assertEquals(validValue1_uneven.toString(), attribute.getValueAsText())
         assertFalse(attribute.isChanged())
 
         //when
@@ -219,7 +219,7 @@ abstract class AttributeTest<T : Any> {
     @Test
     fun testSetValue() {
         //then
-        assertEquals(validValue1, attribute.getValue())
+        assertEquals(validValue1_uneven, attribute.getValue())
 
         //when
         attribute.setValueAsText(validValue2AsText)
@@ -247,7 +247,7 @@ abstract class AttributeTest<T : Any> {
     @Test
     fun testGetValue() {
         //then
-        assertEquals(validValue1, attribute.getValue())
+        assertEquals(validValue1_uneven, attribute.getValue())
     }
 
     @Test
@@ -269,7 +269,7 @@ abstract class AttributeTest<T : Any> {
     @Test
     fun testGetValueAsText() {
         //then
-        assertEquals(validValue1.toString(), attribute.getValueAsText())
+        assertEquals(validValue1_uneven.toString(), attribute.getValueAsText())
     }
 
     @Test
@@ -328,7 +328,7 @@ abstract class AttributeTest<T : Any> {
 
         //then
         assertEquals(readOnly, attribute.isReadOnly())
-        assertEquals(validValue1.toString(), attribute.getValueAsText())
+        assertEquals(validValue1_uneven.toString(), attribute.getValueAsText())
 
         //when
         attribute.setReadOnly(notReadOnly)

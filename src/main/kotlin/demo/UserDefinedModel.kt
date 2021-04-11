@@ -1,9 +1,7 @@
 package demo
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import model.BaseFormModel
-import model.util.attribute.IntegerAttribute
 import java.util.*
 
 class UserDefinedModel() : BaseFormModel(){
@@ -50,7 +48,23 @@ class UserDefinedModel() : BaseFormModel(){
         .setUpperBound(100)
         .setStepSize(2)
 
-    val longValue   = mutableStateOf("5")
+    val longValue = createLongAttribute(9)
+        .setLabelForLanguage(Locale.GERMAN,"deutscher Long: ")
+        .setLabelForLanguage(Locale.ENGLISH,"english Long: ")
+        .setRequired(true)
+        .setReadOnly(false)
+        .setLowerBound(0)
+        .setUpperBound(100)
+        .setStepSize(2)
+
+    val floatValue = createFloatAttribute(9.5f)
+        .setLabelForLanguage(Locale.GERMAN,"deutscher Float: ")
+        .setLabelForLanguage(Locale.ENGLISH,"english Float: ")
+        .setRequired(true)
+        .setReadOnly(false)
+        .setLowerBound(0f)
+        .setUpperBound(100f)
+        .setStepSize(3f)
 
     val doubleValue = createDoubleAttribute(8.4)
         .setLabelForLanguage(Locale.GERMAN,"deutscher Double: ")
@@ -61,7 +75,7 @@ class UserDefinedModel() : BaseFormModel(){
         .setUpperBound(20.5)
         .setStepSize(0.4)
 
-    val floatValue  = mutableStateOf("7.9")
+
     val dateValue   = mutableStateOf("01/05/2020")
     val booleanValue = mutableStateOf(true)
     val radioButtonValue = mutableStateOf(true)

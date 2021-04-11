@@ -84,12 +84,34 @@ abstract class BaseFormModel : FormModel {
     }
 
     /**
+     * This method creates an Long attribute and the attribute is remembered.
+     * @param value : Long
+     * @return attr : LongAttribute
+     */
+    fun createLongAttribute(value : Long = 0) : LongAttribute {
+        val attr = LongAttribute(this, value)
+        allAttributes.add(attr)
+        return attr
+    }
+
+    /**
      * This method creates an Double attribute and the attribute is remembered.
      * @param value : Double
      * @return attr : DoubleAttribute
      */
     fun createDoubleAttribute(value : Double = 0.0) : DoubleAttribute{
         val attr = DoubleAttribute(this, value)
+        allAttributes.add(attr)
+        return attr
+    }
+
+    /**
+     * This method creates an Float attribute and the attribute is remembered.
+     * @param value : Float
+     * @return attr : FloatAttribute
+     */
+    fun createFloatAttribute(value : Float = 0f) : FloatAttribute {
+        val attr = FloatAttribute(this, value)
         allAttributes.add(attr)
         return attr
     }

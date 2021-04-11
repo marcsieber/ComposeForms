@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class ShortAttributeTest : NumberAttributeTest<Short>(){
+internal class LongAttributeTest : NumberAttributeTest<Long>(){
 
-    override fun provideAttribute(model: BaseFormModel, value: Short): Attribute<*, Any> {
-        return ShortAttribute(model, value) as Attribute<*, Any>
+    override fun provideAttribute(model: BaseFormModel, value: Long): Attribute<*, Any> {
+        return LongAttribute(model, value) as Attribute<*, Any>
     }
-    override fun provideNumberAttribute(model: BaseFormModel, value: Short): NumberAttribute<*, Short> {
-        return ShortAttribute(model, value)
+    override fun provideNumberAttribute(model: BaseFormModel, value: Long): NumberAttribute<*, Long> {
+        return LongAttribute(model, value)
     }
 
     init{
@@ -28,7 +28,7 @@ internal class ShortAttributeTest : NumberAttributeTest<Short>(){
         validValue4AsText  = "14"
 
         notValidValueAsText     = "a"
-        validationMessage       = "No Short"
+        validationMessage       = "No Long"
 
         //For NumberAttribute
         upperBound          = 10
@@ -47,6 +47,6 @@ internal class ShortAttributeTest : NumberAttributeTest<Short>(){
 
         notValidValueBecauseWrongStepAsText = "8"
 
-        valueWithCorrectStepSize = (validValue1_uneven-stepSizeCorrect_even).toShort()
+        valueWithCorrectStepSize = (validValue1_uneven-stepSizeCorrect_even).toLong()
     }
 }

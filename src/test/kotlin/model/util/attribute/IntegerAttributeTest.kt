@@ -1,7 +1,6 @@
 package model.util.attribute
 
 import model.BaseFormModel
-import org.junit.jupiter.api.Test
 
 internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
 
@@ -13,7 +12,7 @@ internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
     }
 
     init{
-        validValue1        = 5
+        validValue1_uneven        = 5
         validValue1AsText  = "5"
 
         validValue2        = 7
@@ -29,20 +28,22 @@ internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
         validationMessage       = "No Integer"
 
         //For NumberAttribute
-        upperBound          = 10
-        lowerBoundWrong1    = 11
-        lowerBoundWrong2    = 10
+        upperBound                                      = 10
+        lowerBoundWrong_becauseGreaterThanUpperBound    = 11
+        lowerBoundWrong_becauseSameAsUpperBound         = 10
         lowerBoundCorrect   = 0
 
-        lowerBound          = 10
-        upperBoundWrong1    = 9
-        upperBoundWrong2    = 10
-        upperBoundCorrect   = 14
+        lowerBound                                    = 10
+        upperBoundWrong_becauseLowerThanLowerBound    = 9
+        upperBoundWrong_becauseSameAsLowerBound       = 10
+        upperBoundCorrect                             = 14
 
-        stepSizeCorrect = 2
-        stepSizeWrong1   = 0
-        stepSizeWrong2   = -1
+        stepSizeCorrect_even            = 2
+        stepSizeWrong_because0          = 0
+        stepSizeWrong_becauseNegative   = -1
 
         notValidValueBecauseWrongStepAsText = "8"
+
+        valueWithCorrectStepSize = (validValue1_uneven-stepSizeCorrect_even)
     }
 }

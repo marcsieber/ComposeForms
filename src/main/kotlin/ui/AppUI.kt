@@ -116,6 +116,22 @@ fun AppUI(model: UserDefinedModel) {
                         isError = !shortValue.isValid()
                     )
 
+                    OutlinedTextField(          //longValue
+                        modifier = Modifier.onKeyEvent{event ->
+                            if (event.key == Key.DirectionUp) {
+                                longValue.setValueAsText( (longValue.getValue() + longValue.getStepSize()).toString())
+                            }
+                            if(event.key == Key.DirectionDown){
+                                longValue.setValueAsText( (longValue.getValue() - longValue.getStepSize()).toString())
+                            }
+                            return@onKeyEvent true},
+                        value = longValue.getValueAsText(),
+                        onValueChange = {longValue.setValueAsText(it)},
+                        label = {Text(longValue.getLabel())},
+                        readOnly = longValue.isReadOnly(),
+                        isError = !longValue.isValid()
+                    )
+
                     OutlinedTextField(          //doubleValue
                         modifier = Modifier.onKeyEvent{event ->
                             if (event.key == Key.DirectionUp) {
@@ -132,14 +148,25 @@ fun AppUI(model: UserDefinedModel) {
                         isError = !doubleValue.isValid()
                     )
 
+                    OutlinedTextField(          //floatValue
+                        modifier = Modifier.onKeyEvent{event ->
+                            if (event.key == Key.DirectionUp) {
+                                floatValue.setValueAsText( floatValue.convertComma(String.format("%.8f",floatValue.getValue() + floatValue.getStepSize())))
+                            }
+                            if(event.key == Key.DirectionDown){
+                                floatValue.setValueAsText( floatValue.convertComma(String.format("%.8f",(floatValue.getValue() - floatValue.getStepSize()))))
+                            }
+                            return@onKeyEvent true},
+                        value = floatValue.getValueAsText(),
+                        onValueChange = {floatValue.setValueAsText(it)},
+                        label = {Text(floatValue.getLabel())},
+                        readOnly = floatValue.isReadOnly(),
+                        isError = !floatValue.isValid()
+                    )
+
                 }
                 Column {
-                    OutlinedTextField(
-                        modifier = Modifier ,
-                        value = floatValue.value,
-                        onValueChange = {floatValue.value = it},
-                        label = {Text("Float: ")}
-                    )
+
                     OutlinedTextField(
                         modifier = Modifier ,
                         value = dateValue.value,

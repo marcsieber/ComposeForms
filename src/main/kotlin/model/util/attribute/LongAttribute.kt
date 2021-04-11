@@ -3,13 +3,7 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<DoubleAttribute, Double>(model, value) {
-
-    private var decimalPlaces = 1
-
-    //TODO: fix rounding on stepSize
-    //TODO: use decimalPlaces
-
+class LongAttribute(model: FormModel, value : Long) : NumberAttribute<LongAttribute, Long>(model, value) {
     //******************************************************************************************************
     //Validation
 
@@ -24,13 +18,13 @@ class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<Double
      */
     override fun checkAndSetValue(newVal: String) {
         try{
-            validatedValue(newVal.toDouble())
+            validatedValue(newVal.toLong())
             setValid(true)
             setValidationMessage("Valid Input")
-            setValue(newVal.toDouble())
+            setValue(newVal.toLong())
         } catch (e : NumberFormatException){
             setValid(false)
-            setValidationMessage("No Double")
+            setValidationMessage("No Long")
             e.printStackTrace()
         } catch (e : IllegalArgumentException){
             setValid(false)
@@ -38,17 +32,4 @@ class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<Double
             e.printStackTrace()
         }
     }
-
-    //******************************************************************************************************
-    //Getter & Setter
-
-    fun setDecimalPlaces(decimalPlaces : Int) : DoubleAttribute{
-        this.decimalPlaces = decimalPlaces
-        return this
-    }
-
-    fun getDecimalPlaces() : Int {
-        return decimalPlaces
-    }
-
 }

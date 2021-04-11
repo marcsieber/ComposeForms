@@ -2,6 +2,8 @@ package model.util.attribute
 
 import model.BaseFormModel
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
@@ -9,19 +11,20 @@ import java.lang.IllegalArgumentException
 abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T : Comparable<T>{
 
     lateinit var upperBound : T
-    lateinit var lowerBoundWrong1 : T
-    lateinit var lowerBoundWrong2 : T
+    lateinit var lowerBoundWrong_becauseGreaterThanUpperBound : T
+    lateinit var lowerBoundWrong_becauseSameAsUpperBound : T
     lateinit var lowerBoundCorrect : T
 
     lateinit var lowerBound : T
-    lateinit var upperBoundWrong1 : T
-    lateinit var upperBoundWrong2 : T
+    lateinit var upperBoundWrong_becauseLowerThanLowerBound : T
+    lateinit var upperBoundWrong_becauseSameAsLowerBound : T
     lateinit var upperBoundCorrect : T
 
-    lateinit var stepSizeCorrect : T
-    lateinit var stepSizeWrong1  : T
-    lateinit var stepSizeWrong2  : T
+    lateinit var stepSizeCorrect_even : T
+    lateinit var stepSizeWrong_because0  : T
+    lateinit var stepSizeWrong_becauseNegative  : T
     lateinit var notValidValueBecauseWrongStepAsText : String
+    lateinit var valueWithCorrectStepSize : T
 
     lateinit var numAt : NumberAttribute<*, T>
 
@@ -30,7 +33,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
     @BeforeEach
     fun setUpNumAtr(){
         //given
-        numAt = provideNumberAttribute(model, validValue1)
+        numAt = provideNumberAttribute(model, validValue1_uneven)
     }
 
     @Test
@@ -41,13 +44,13 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
         //then
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             //when
-            numAt.setLowerBound(lowerBoundWrong1)
+            numAt.setLowerBound(lowerBoundWrong_becauseGreaterThanUpperBound)
         }
 
         //then
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             //when
-            numAt.setLowerBound(lowerBoundWrong2)
+            numAt.setLowerBound(lowerBoundWrong_becauseSameAsUpperBound)
         }
 
         //when
@@ -74,20 +77,20 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
         //then
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             //when
-            numAt.setUpperBound(upperBoundWrong1)
+            numAt.setUpperBound(upperBoundWrong_becauseLowerThanLowerBound)
         }
 
         //then
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             //when
-            numAt.setUpperBound(upperBoundWrong2)
+            numAt.setUpperBound(upperBoundWrong_becauseSameAsLowerBound)
         }
 
         //when
         numAt.setUpperBound(upperBoundCorrect)
 
         //then
-        Assertions.assertSame(upperBoundCorrect, numAt.getUpperBound())
+        Assertions.assertEquals(upperBoundCorrect, numAt.getUpperBound(), "correct upperBound")
     }
 
     @Test
@@ -100,33 +103,64 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
     }
 
     @Test
-    fun testSetStepSize() { //TODO negative step sizes
+    fun testSetStepSize() {
         //when
-        numAt.setStepSize(stepSizeCorrect)
+        numAt.setStepSize(stepSizeCorrect_even)
 
         //then
-        Assertions.assertSame(stepSizeCorrect, numAt.getStepSize())
-    }
+        assertEquals(stepSizeCorrect_even, numAt.getStepSize(), "valid stepSize")
+        assertEquals(validValue1_uneven, numAt.getStepStart(), "correct stepStart")
 
-    @Test
-    fun testGetStepSize() {
-        //when
-        numAt.setStepSize(stepSizeCorrect)
-
-        //then
-        Assertions.assertSame(stepSizeCorrect, numAt.getStepSize())
 
         //when
-        numAt.setValueAsText(validValue1AsText)
+        numAt.setValueAsText(valueWithCorrectStepSize.toString())
 
         //then
-        Assertions.assertSame(true, numAt.isValid())
+        assertTrue(numAt.isValid(), "valid value")
 
         //when
         numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
 
         //then
-        Assertions.assertFalse(numAt.isValid())
+        Assertions.assertFalse(numAt.isValid(), "invalid value, because of stepSize")
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            //when
+            numAt.setStepSize(stepSizeWrong_because0)
+        }
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            //when
+            numAt.setStepSize(stepSizeWrong_because0)
+        }
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            //when
+            numAt.setStepSize(stepSizeWrong_becauseNegative)
+        }
     }
 
+    @Test
+    fun testGetStepSize() {
+        //when
+        numAt.setStepSize(stepSizeCorrect_even)
+
+        //then
+        assertEquals(stepSizeCorrect_even, numAt.getStepSize(), "valid stepSize")
+    }
+
+    @Test
+    fun testGetStepStart() {
+        //then
+        assertEquals(validValue1_uneven, numAt.getStepStart())
+
+        //when
+        numAt.setValueAsText(validValue3AsText)
+
+        //then
+        assertEquals(validValue1_uneven, numAt.getStepStart())
+    }
 }

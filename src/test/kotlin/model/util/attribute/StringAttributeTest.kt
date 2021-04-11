@@ -14,7 +14,7 @@ internal class StringAttributeTest: AttributeTest<String>() {
     }
 
     init{
-        validValue1        = "Hallo"
+        validValue1_uneven = "Hallo"
         validValue1AsText  = "Hallo"
 
         validValue2        = "789"
@@ -35,7 +35,7 @@ internal class StringAttributeTest: AttributeTest<String>() {
     @BeforeEach
     fun setUpStringAtr(){
         //given
-        stringAtr = StringAttribute(model, validValue1)
+        stringAtr = StringAttribute(model, validValue1_uneven)
     }
 
     @Test

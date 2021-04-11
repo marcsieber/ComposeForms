@@ -1,8 +1,6 @@
 package model.util.attribute
 
 import model.FormModel
-import org.junit.jupiter.api.Test
-import java.lang.NumberFormatException
 import kotlin.jvm.Throws
 
 abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N,T>(model,value) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
@@ -12,25 +10,14 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
 
     private lateinit var lowerBound : T
     private lateinit var upperBound : T
-    private  var stepSize  = 1 as T
-    private  val stepStart = value
+    private var stepSize  = 1 as T
+    private val stepStart = value
 
     /**
-     *
+     * Initialize LowerBound and UpperBound
      */
     init {
-        if (stepStart is Int){
-            this.lowerBound = Int.MIN_VALUE as T
-            this.upperBound = Int.MAX_VALUE as T
-        }
-        if( stepStart is Short){
-            this.lowerBound = Short.MIN_VALUE as T
-            this.upperBound = Short.MAX_VALUE as T
-        }
-        if( stepStart is Double){
-            this.lowerBound = Double.MIN_VALUE as T
-            this.upperBound = Double.MAX_VALUE as T
-        }
+        initializeLowerAndUpperBound()
     }
 
     //******************************************************************************************************
@@ -47,9 +34,11 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
         if  (!(newVal in lowerBound..upperBound)){
             throw IllegalArgumentException("Validation mismatched (lowerBound/upperBound)")
         }
-        var stepSizeValid = ((stepStart.toDouble() + newVal.toDouble()) %  stepSize.toDouble())
 
-        if(!(stepSizeValid in 0.0..0.001 || stepSizeValid in (stepSize.toDouble() - 0.001)..stepSize.toDouble())){
+        var moduloOfNewVal      = (newVal.toDouble() %  stepSize.toDouble())
+        var moduloOfStepStart   = (stepStart.toDouble() % stepSize.toDouble())
+
+        if(moduloOfNewVal != moduloOfStepStart){
             throw IllegalArgumentException("Validation mismatched (stepsize)")
         }
     }
@@ -99,13 +88,53 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
     }
 
     /**
-     * The stepsize is set and the current textValue is checked to see if it is still valid.
+     * This method checks if the stepSize is greater than 0.
+     * If yes, the stepsize is set and the current textValue is checked to see if it is still valid.
+     * If no, an exception is thrown
+     *
+     * @param stepSize : T
+     * @throws IllegalArgumentException
      * @return the called instance : NumberAttribute
      */
-    fun setStepSize(stepSize : T) : N {
-        this.stepSize = stepSize
-        checkAndSetValue(getValueAsText())
-        return this as N
+    fun setStepSize(stepSize: T) : N {
+        if(stepSize.toDouble() > 0.0){
+            this.stepSize = stepSize
+            checkAndSetValue(getValueAsText())
+            return this as N
+        }else{
+            throw IllegalArgumentException("stepSize must be positive")
+        }
+    }
+
+    //******************************************************************************************************
+    //Private Setter
+
+    /**
+     * This method sets the default values for the lowerBound and the upperBound depending on the
+     * type of the NumberAttribute.
+     */
+    private fun initializeLowerAndUpperBound(){
+        if (stepStart is Int){
+            this.lowerBound = Int.MIN_VALUE as T
+            this.upperBound = Int.MAX_VALUE as T
+        }
+
+        if( stepStart is Short){
+            this.lowerBound = Short.MIN_VALUE as T
+            this.upperBound = Short.MAX_VALUE as T
+        }
+        if( stepStart is Long){
+            this.lowerBound = Long.MIN_VALUE as T
+            this.upperBound = Long.MAX_VALUE as T
+        }
+        if( stepStart is Double){
+            this.lowerBound = Double.MIN_VALUE as T
+            this.upperBound = Double.MAX_VALUE as T
+        }
+        if( stepStart is Float){
+            this.lowerBound = Float.MIN_VALUE as T
+            this.upperBound = Float.MAX_VALUE as T
+        }
     }
 
     //******************************************************************************************************
@@ -121,6 +150,10 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
 
     fun getStepSize() : T {
         return stepSize
+    }
+
+    fun getStepStart() : T {
+        return stepStart
     }
 
     //******************************************************************************************************
