@@ -5,12 +5,11 @@ import model.FormModel
 import java.util.*
 import kotlin.collections.HashMap
 
-abstract class Attribute <A,T> (private val model : FormModel, value : T) where A : Attribute<A,T>, T : Any{
+abstract class Attribute <A,T> (private val model : FormModel, private var value : T) where A : Attribute<A,T>, T : Any{
 
     //******************************************************************************************************
     //Properties
 
-    private var value               = value
     private var savedValue          = value
     private val valueAsText         = mutableStateOf(value.toString())
 
@@ -101,7 +100,7 @@ abstract class Attribute <A,T> (private val model : FormModel, value : T) where 
         println("save")
         setSavedValue(getValue())
         setChanged(false)
-        return !isChanged()
+        return true
     }
 
     /**

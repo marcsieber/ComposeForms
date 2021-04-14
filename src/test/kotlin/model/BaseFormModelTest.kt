@@ -65,6 +65,11 @@ internal class BaseFormModelTest {
         assertEquals("40", alter.getValueAsText())
         assertSame(40, alter.getValue())
         assertEquals(61,alter.getSavedValue())
+
+
+        //when
+        alter.setValueAsText("a")
+        assertFalse(model.saveAll())
     }
 
     @Test
@@ -93,12 +98,36 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateIntegerAttribute() {
         //when
-        var attribute = model.createIntegerAttribute(5)
+        val attribute = model.createIntegerAttribute(5)
 
         //then
         assertEquals(5,attribute.getValue())
         assertEquals("5",attribute.getValueAsText())
         assertEquals(5,attribute.getSavedValue())
+
+        //when
+        val attributeDefaultVal = model.createIntegerAttribute()
+
+        //then
+        assertEquals(0, attributeDefaultVal.getValue())
+    }
+
+    @Test
+    fun testCreateStringAttribute() {
+        //when
+        val attribute = model.createStringAttribute("a")
+
+        //then
+        assertEquals("a", attribute.getValue())
+        assertEquals("a", attribute.getValueAsText())
+        assertEquals("a", attribute.getSavedValue())
+
+        //when
+        val attributeDefaultVal = model.createStringAttribute()
+
+        //then
+        assertEquals("", attributeDefaultVal.getValue())
+
     }
 
     @Test

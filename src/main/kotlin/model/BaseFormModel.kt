@@ -26,7 +26,7 @@ abstract class BaseFormModel : FormModel {
      */
     override fun saveAll(): Boolean {
         return if(isValidForAll()){
-            allAttributes.forEach{attribute -> attribute.save()}
+            allAttributes.forEach{ it.save() }
             println("savedAll")
             true
         }else{
@@ -41,7 +41,7 @@ abstract class BaseFormModel : FormModel {
      */
     override fun undoAll(): Boolean {
         return if(isChangedForAll()){
-            allAttributes.forEach{attribute -> attribute.undo()}
+            allAttributes.forEach{ it.undo() }
             true
         }else{
             false
