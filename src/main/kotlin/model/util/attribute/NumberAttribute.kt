@@ -11,7 +11,7 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T?) : Attribute<
     private lateinit var lowerBound : T
     private lateinit var upperBound : T
     private var stepSize  = 1 as T
-    private val stepStart: T = value ?: (0 as T)
+    private val stepStart: T = value ?: toDatatype("0")
 
     /**
      * Initialize LowerBound and UpperBound
@@ -171,4 +171,6 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T?) : Attribute<
         }
         return newValueAsText
     }
+
+    abstract fun toDatatype(castValue: String): T
 }

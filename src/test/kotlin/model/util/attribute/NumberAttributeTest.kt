@@ -28,7 +28,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
 
     lateinit var numAt : NumberAttribute<*, T>
 
-    abstract fun provideNumberAttribute(model: BaseFormModel, value: T) : NumberAttribute<*, T>
+    abstract fun provideNumberAttribute(model: BaseFormModel, value: T?) : NumberAttribute<*, T>
     
     @BeforeEach
     fun setUpNumAtr(){

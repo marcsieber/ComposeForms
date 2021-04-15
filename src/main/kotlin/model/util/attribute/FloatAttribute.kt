@@ -54,4 +54,8 @@ class FloatAttribute(model: FormModel, value : Float?) : NumberAttribute<FloatAt
     fun getDecimalPlaces() : Int {
         return decimalPlaces
     }
+
+    override fun toDatatype(castValue: String): Float {
+        return castValue.toFloat()
+    }
 }

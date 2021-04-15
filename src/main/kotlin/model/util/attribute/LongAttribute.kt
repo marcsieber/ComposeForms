@@ -36,4 +36,8 @@ class LongAttribute(model: FormModel, value : Long?) : NumberAttribute<LongAttri
             }
         }
     }
+
+    override fun toDatatype(castValue: String): Long {
+        return castValue.toLong()
+    }
 }

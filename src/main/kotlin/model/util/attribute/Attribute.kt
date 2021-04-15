@@ -11,7 +11,7 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
     //Properties
 
     private var savedValue          = value
-    private val valueAsText         = mutableStateOf(value.toString())
+    private val valueAsText         = mutableStateOf(value?.toString() ?: "")
 
     private val label               = mutableStateOf("")
     private val required            = mutableStateOf(false)

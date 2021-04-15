@@ -2,7 +2,6 @@ package model.util.attribute
 
 import model.FormModel
 import java.lang.NumberFormatException
-import kotlin.jvm.Throws
 
 class IntegerAttribute(model: FormModel, value : Int?) : NumberAttribute<IntegerAttribute, Int>(model, value) {
 
@@ -37,5 +36,9 @@ class IntegerAttribute(model: FormModel, value : Int?) : NumberAttribute<Integer
                 e.printStackTrace()
             }
         }
+    }
+
+    override fun toDatatype(castValue: String): Int {
+        return castValue.toInt()
     }
 }

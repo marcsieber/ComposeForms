@@ -25,7 +25,7 @@ abstract class AttributeTest<T : Any> {
 
     lateinit var attribute : Attribute<*,*>
 
-    protected abstract fun provideAttribute(model: BaseFormModel, value: T) : Attribute<*, Any>
+    protected abstract fun provideAttribute(model: BaseFormModel, value: T?) : Attribute<*, Any>
 
     @BeforeEach
     fun setUp(){
@@ -381,5 +381,30 @@ abstract class AttributeTest<T : Any> {
 
         //then
         assertFalse(attribute.isChanged())
+    }
+
+
+    @Test
+    fun testNullValues() {
+        //given
+        val attr = provideAttribute(model, null)
+
+        //then
+        assertEquals(null, attr.getValue())
+        assertEquals(null, attr.getSavedValue())
+        assertEquals("", attr.getValueAsText())
+        assertTrue(attr.isValid())
+
+
+
+        //after change
+        attr.setValueAsText(validValue1AsText)
+        attr.setValueAsText("")
+        assertEquals("Valid Input", attr.getValidationMessage())
+        assertEquals(null, attr.getSavedValue())
+        assertEquals("", attr.getValueAsText())
+        assertTrue(attr.isValid())
+
+        //is required
     }
 }

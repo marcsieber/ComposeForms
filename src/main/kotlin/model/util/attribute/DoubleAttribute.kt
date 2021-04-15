@@ -55,4 +55,7 @@ class DoubleAttribute(model: FormModel, value : Double?) : NumberAttribute<Doubl
         return decimalPlaces
     }
 
+    override fun toDatatype(castValue: String): Double {
+        return castValue.toDouble()
+    }
 }

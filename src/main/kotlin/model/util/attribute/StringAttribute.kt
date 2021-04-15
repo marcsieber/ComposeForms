@@ -7,7 +7,7 @@ import kotlin.jvm.Throws
 class StringAttribute(model: FormModel, value : String?) : Attribute<StringAttribute, String>(model, value) {
 
     private var minLength = 0
-    private var maxLength = Int.MAX_VALUE
+    private var maxLength = 1_000_000
 
     //******************************************************************************************************
     //Validation

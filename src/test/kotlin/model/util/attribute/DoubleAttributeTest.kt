@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test
 
 internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: Double): Attribute<*, Any> {
+    override fun provideAttribute(model: BaseFormModel, value: Double?): Attribute<*, Any> {
         return DoubleAttribute(model, value) as Attribute<*, Any>
     }
 
-    override fun provideNumberAttribute(model: BaseFormModel, value: Double): NumberAttribute<*, Double> {
+    override fun provideNumberAttribute(model: BaseFormModel, value: Double?): NumberAttribute<*, Double> {
         return DoubleAttribute(model, value)
     }
 

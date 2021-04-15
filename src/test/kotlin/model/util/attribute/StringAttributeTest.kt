@@ -9,8 +9,8 @@ import java.lang.IllegalArgumentException
 
 internal class StringAttributeTest: AttributeTest<String>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: String): Attribute<*, Any> {
-        return StringAttribute(model, value).setMaxLength(10) as Attribute<*, Any>
+    override fun provideAttribute(model: BaseFormModel, value: String?): Attribute<*, Any> {
+        return StringAttribute(model, value) as Attribute<*, Any>
     }
 
     init{
@@ -26,7 +26,8 @@ internal class StringAttributeTest: AttributeTest<String>() {
         validValue4        = "Name"
         validValue4AsText  = "Name"
 
-        notValidValueAsText  = "123456789101112"
+        notValidValueAsText  = "A".repeat(1_000_000 + 1)
+
         validationMessage     = "Validation mismatched (maxLength)"
     }
 
@@ -94,7 +95,7 @@ internal class StringAttributeTest: AttributeTest<String>() {
     @Test
     fun getMaxLength() {
         //then
-        assertEquals(Int.MAX_VALUE, stringAtr.getMaxLength())
+        assertEquals(1_000_000, stringAtr.getMaxLength())
 
         //when
         stringAtr.setMaxLength(4)

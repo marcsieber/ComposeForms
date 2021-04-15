@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test
 
 internal class FloatAttributeTest : NumberAttributeTest<Float>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: Float): Attribute<*, Any> {
+    override fun provideAttribute(model: BaseFormModel, value: Float?): Attribute<*, Any> {
         return FloatAttribute(model, value) as Attribute<*, Any>
     }
 
-    override fun provideNumberAttribute(model: BaseFormModel, value: Float): NumberAttribute<*, Float> {
+    override fun provideNumberAttribute(model: BaseFormModel, value: Float?): NumberAttribute<*, Float> {
         return FloatAttribute(model, value)
     }
 

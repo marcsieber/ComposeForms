@@ -37,4 +37,8 @@ class ShortAttribute(model: FormModel, value : Short?) : NumberAttribute<ShortAt
             }
         }
     }
+
+    override fun toDatatype(castValue: String): Short {
+        return castValue.toShort()
+    }
 }

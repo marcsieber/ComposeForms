@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test
 
 internal class LongAttributeTest : NumberAttributeTest<Long>(){
 
-    override fun provideAttribute(model: BaseFormModel, value: Long): Attribute<*, Any> {
+    override fun provideAttribute(model: BaseFormModel, value: Long?): Attribute<*, Any> {
         return LongAttribute(model, value) as Attribute<*, Any>
     }
-    override fun provideNumberAttribute(model: BaseFormModel, value: Long): NumberAttribute<*, Long> {
+    override fun provideNumberAttribute(model: BaseFormModel, value: Long?): NumberAttribute<*, Long> {
         return LongAttribute(model, value)
     }
 

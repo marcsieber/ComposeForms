@@ -4,10 +4,10 @@ import model.BaseFormModel
 
 internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: Int): Attribute<*, Any> {
+    override fun provideAttribute(model: BaseFormModel, value: Int?): Attribute<*, Any> {
         return IntegerAttribute(model, value) as Attribute<*, Any>
     }
-    override fun provideNumberAttribute(model: BaseFormModel, value: Int): NumberAttribute<*, Int> {
+    override fun provideNumberAttribute(model: BaseFormModel, value: Int?): NumberAttribute<*, Int> {
         return IntegerAttribute(model, value)
     }
 
