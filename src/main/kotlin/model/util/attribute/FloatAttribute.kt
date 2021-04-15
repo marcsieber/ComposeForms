@@ -3,7 +3,7 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class FloatAttribute(model: FormModel, value : Float) : NumberAttribute<FloatAttribute, Float>(model, value) {
+class FloatAttribute(model: FormModel, value : Float?) : NumberAttribute<FloatAttribute, Float>(model, value) {
 
     private var decimalPlaces = 1
 
@@ -22,20 +22,24 @@ class FloatAttribute(model: FormModel, value : Float) : NumberAttribute<FloatAtt
      * @throws NumberFormatException
      * @throws IllegalArgumentException
      */
-    override fun checkAndSetValue(newVal: String) {
-        try{
-            validatedValue(newVal.toFloat())
-            setValid(true)
-            setValidationMessage("Valid Input")
-            setValue(newVal.toFloat())
-        } catch (e : NumberFormatException){
-            setValid(false)
-            setValidationMessage("No Float")
-            e.printStackTrace()
-        } catch (e : IllegalArgumentException){
-            setValid(false)
-            setValidationMessage(e.message.toString())
-            e.printStackTrace()
+    override fun checkAndSetValue(newVal: String?) {
+        if(newVal == null){
+            setNullValue()
+        } else {
+            try {
+                validatedValue(newVal.toFloat())
+                setValid(true)
+                setValidationMessage("Valid Input")
+                setValue(newVal.toFloat())
+            } catch (e: NumberFormatException) {
+                setValid(false)
+                setValidationMessage("No Float")
+                e.printStackTrace()
+            } catch (e: IllegalArgumentException) {
+                setValid(false)
+                setValidationMessage(e.message.toString())
+                e.printStackTrace()
+            }
         }
     }
 

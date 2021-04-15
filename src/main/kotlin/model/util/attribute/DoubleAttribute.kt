@@ -3,7 +3,7 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<DoubleAttribute, Double>(model, value) {
+class DoubleAttribute(model: FormModel, value : Double?) : NumberAttribute<DoubleAttribute, Double>(model, value) {
 
     private var decimalPlaces = 1
 
@@ -22,20 +22,24 @@ class DoubleAttribute(model: FormModel, value : Double) : NumberAttribute<Double
      * @throws NumberFormatException
      * @throws IllegalArgumentException
      */
-    override fun checkAndSetValue(newVal: String) {
-        try{
-            validatedValue(newVal.toDouble())
-            setValid(true)
-            setValidationMessage("Valid Input")
-            setValue(newVal.toDouble())
-        } catch (e : NumberFormatException){
-            setValid(false)
-            setValidationMessage("No Double")
-            e.printStackTrace()
-        } catch (e : IllegalArgumentException){
-            setValid(false)
-            setValidationMessage(e.message.toString())
-            e.printStackTrace()
+    override fun checkAndSetValue(newVal: String?) {
+        if(newVal == null){
+            setNullValue()
+        } else {
+            try {
+                validatedValue(newVal.toDouble())
+                setValid(true)
+                setValidationMessage("Valid Input")
+                setValue(newVal.toDouble())
+            } catch (e: NumberFormatException) {
+                setValid(false)
+                setValidationMessage("No Double")
+                e.printStackTrace()
+            } catch (e: IllegalArgumentException) {
+                setValid(false)
+                setValidationMessage(e.message.toString())
+                e.printStackTrace()
+            }
         }
     }
 

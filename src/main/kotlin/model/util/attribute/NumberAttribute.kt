@@ -3,7 +3,7 @@ package model.util.attribute
 import model.FormModel
 import kotlin.jvm.Throws
 
-abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N,T>(model,value) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
+abstract class NumberAttribute <N,T> (model: FormModel, value : T?) : Attribute<N,T>(model,value) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
 
     //******************************************************************************************************
     //Optional extra-properties for NumberAttributes
@@ -11,7 +11,7 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T) : Attribute<N
     private lateinit var lowerBound : T
     private lateinit var upperBound : T
     private var stepSize  = 1 as T
-    private val stepStart = value
+    private val stepStart: T = value ?: (0 as T)
 
     /**
      * Initialize LowerBound and UpperBound

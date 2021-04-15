@@ -4,7 +4,7 @@ import model.FormModel
 import java.lang.NumberFormatException
 import kotlin.jvm.Throws
 
-class IntegerAttribute(model: FormModel, value : Int) : NumberAttribute<IntegerAttribute, Int>(model, value) {
+class IntegerAttribute(model: FormModel, value : Int?) : NumberAttribute<IntegerAttribute, Int>(model, value) {
 
     //******************************************************************************************************
     //Validation
@@ -18,20 +18,24 @@ class IntegerAttribute(model: FormModel, value : Int) : NumberAttribute<IntegerA
      * @throws NumberFormatException
      * @throws IllegalArgumentException
      */
-    override fun checkAndSetValue(newVal : String){
-        try{
-            validatedValue(newVal.toInt())
-            setValid(true)
-            setValidationMessage("Valid Input")
-            setValue(Integer.valueOf(newVal))
-        } catch (e : NumberFormatException){
-            setValid(false)
-            setValidationMessage("No Integer")
-            e.printStackTrace()
-        } catch (e : IllegalArgumentException){
-            setValid(false)
-            setValidationMessage(e.message.toString())
-            e.printStackTrace()
+    override fun checkAndSetValue(newVal : String?){
+        if(newVal == null){
+            setNullValue()
+        } else {
+            try {
+                validatedValue(newVal.toInt())
+                setValid(true)
+                setValidationMessage("Valid Input")
+                setValue(Integer.valueOf(newVal))
+            } catch (e: NumberFormatException) {
+                setValid(false)
+                setValidationMessage("No Integer")
+                e.printStackTrace()
+            } catch (e: IllegalArgumentException) {
+                setValid(false)
+                setValidationMessage(e.message.toString())
+                e.printStackTrace()
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ import model.FormModel
 import java.util.*
 import kotlin.collections.HashMap
 
-abstract class Attribute <A,T> (private val model : FormModel, private var value : T) where A : Attribute<A,T>, T : Any{
+abstract class Attribute <A,T> (private val model : FormModel, private var value : T?) where A : Attribute<A,T>, T : Any?{
 
     //******************************************************************************************************
     //Properties
@@ -37,12 +37,12 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
         if(!isReadOnly()){
             this.valueAsText.value = valueAsText
             setChanged(valueAsText)
-            checkAndSetValue(valueAsText)
+            checkAndSetValue( if(valueAsText.equals("")) null else valueAsText)
         }
         return this as A
     }
 
-    protected abstract fun checkAndSetValue(newVal: String)
+    protected abstract fun checkAndSetValue(newVal: String?)
 
     fun setLabel(label : String) : A{
         this.label.value = label
@@ -67,6 +67,12 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
             setCurrentLanguage(language)
         }
         return this as A
+    }
+
+    protected fun setNullValue(){
+        setValid(!isRequired())
+        setValidationMessage( if(isValid()) "Valid Input" else "Input Required")
+        setValue(null)
     }
 
     fun setRequired(isRequired : Boolean) : A{
@@ -130,7 +136,7 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
     //******************************************************************************************************
     //Protected Setter
 
-    protected fun setValue(value: T) {
+    protected fun setValue(value: T?) {
         this.value = value
     }
 
@@ -141,7 +147,7 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
     //******************************************************************************************************
     //Private Setter
 
-    private fun setSavedValue(value: T) {
+    private fun setSavedValue(value: T?) {
         this.savedValue = value
     }
 
@@ -169,11 +175,11 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
     //******************************************************************************************************
     //Public Getter
 
-    fun getValue() : T{
+    fun getValue() : T?{
         return value
     }
 
-    fun getSavedValue() : T{
+    fun getSavedValue() : T?{
         return savedValue
     }
 

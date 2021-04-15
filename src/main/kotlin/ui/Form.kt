@@ -117,10 +117,10 @@ class Form {
         OutlinedTextField(          //intValue1
             modifier = Modifier.onKeyEvent{event ->
                 if (event.key == Key.DirectionUp) {
-                    numAttr.setValueAsText( (numAttr.getValue().toDouble() + numAttr.getStepSize().toDouble()).toString())
+//                    numAttr.setValueAsText( (numAttr.getValue().toDouble() + numAttr.getStepSize().toDouble()).toString())
                 }
                 if(event.key == Key.DirectionDown){
-                    numAttr.setValueAsText( (numAttr.getValue().toDouble() - numAttr.getStepSize().toDouble()).toString())
+//                    numAttr.setValueAsText( (numAttr.getValue().toDouble() - numAttr.getStepSize().toDouble()).toString())
                 }
                 return@onKeyEvent true},
             value = numAttr.getValueAsText(),
