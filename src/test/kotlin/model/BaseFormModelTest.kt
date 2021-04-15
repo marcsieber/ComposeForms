@@ -107,7 +107,7 @@ internal class BaseFormModelTest {
         val attributeDefaultVal = model.createIntegerAttribute()
 
         //then
-        assertEquals(0, attributeDefaultVal.getValue())
+        assertEquals(null, attributeDefaultVal.getValue())
     }
 
     @Test
@@ -124,7 +124,7 @@ internal class BaseFormModelTest {
         val attributeDefaultVal = model.createShortAttribute()
 
         //then
-        assertEquals(0, attributeDefaultVal.getValue())
+        assertEquals(null, attributeDefaultVal.getValue())
     }
 
     @Test
@@ -141,7 +141,7 @@ internal class BaseFormModelTest {
         val attributeDefaultVal = model.createLongAttribute()
 
         //then
-        assertEquals(0, attributeDefaultVal.getValue())
+        assertEquals(null, attributeDefaultVal.getValue())
     }
 
     @Test
@@ -158,7 +158,7 @@ internal class BaseFormModelTest {
         val attributeDefaultVal = model.createDoubleAttribute()
 
         //then
-        assertEquals(0.0, attributeDefaultVal.getValue())
+        assertEquals(null, attributeDefaultVal.getValue())
     }
 
     @Test
@@ -175,7 +175,7 @@ internal class BaseFormModelTest {
         val attributeDefaultVal = model.createFloatAttribute()
 
         //then
-        assertEquals(0.0f, attributeDefaultVal.getValue())
+        assertEquals(null, attributeDefaultVal.getValue())
     }
 
     @Test
@@ -192,7 +192,7 @@ internal class BaseFormModelTest {
         val attributeDefaultVal = model.createStringAttribute()
 
         //then
-        assertEquals("", attributeDefaultVal.getValue())
+        assertEquals(null, attributeDefaultVal.getValue())
 
     }
 

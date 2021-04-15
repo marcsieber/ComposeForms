@@ -65,7 +65,7 @@ abstract class BaseFormModel : FormModel {
      * @param value : Int
      * @return attr : IntegerAttribute
      */
-    fun createIntegerAttribute(value : Int = 0) : IntegerAttribute{
+    fun createIntegerAttribute(value : Int? = null) : IntegerAttribute{
         val attr = IntegerAttribute(this, value)
         allAttributes.add(attr)
         return attr
@@ -76,7 +76,7 @@ abstract class BaseFormModel : FormModel {
      * @param value : Short
      * @return attr : ShortAttribute
      */
-    fun createShortAttribute(value : Short = 0) : ShortAttribute {
+    fun createShortAttribute(value : Short? = null) : ShortAttribute {
         val attr = ShortAttribute(this, value)
         allAttributes.add(attr)
         return attr
@@ -87,7 +87,7 @@ abstract class BaseFormModel : FormModel {
      * @param value : Long
      * @return attr : LongAttribute
      */
-    fun createLongAttribute(value : Long = 0) : LongAttribute {
+    fun createLongAttribute(value : Long? = null) : LongAttribute {
         val attr = LongAttribute(this, value)
         allAttributes.add(attr)
         return attr
@@ -98,7 +98,7 @@ abstract class BaseFormModel : FormModel {
      * @param value : Double
      * @return attr : DoubleAttribute
      */
-    fun createDoubleAttribute(value : Double = 0.0) : DoubleAttribute{
+    fun createDoubleAttribute(value : Double? = null) : DoubleAttribute{
         val attr = DoubleAttribute(this, value)
         allAttributes.add(attr)
         return attr
@@ -109,7 +109,7 @@ abstract class BaseFormModel : FormModel {
      * @param value : Float
      * @return attr : FloatAttribute
      */
-    fun createFloatAttribute(value : Float = 0f) : FloatAttribute {
+    fun createFloatAttribute(value : Float? = null) : FloatAttribute {
         val attr = FloatAttribute(this, value)
         allAttributes.add(attr)
         return attr
@@ -120,7 +120,7 @@ abstract class BaseFormModel : FormModel {
      * @param value : String
      * @return attr : StringAttribute
      */
-    fun createStringAttribute(value : String = "") : StringAttribute{
+    fun createStringAttribute(value : String? = null) : StringAttribute{
         val attr = StringAttribute(this, value)
         allAttributes.add(attr)
         return attr
