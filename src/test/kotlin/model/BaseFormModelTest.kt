@@ -111,6 +111,74 @@ internal class BaseFormModelTest {
     }
 
     @Test
+    fun testCreateShortAttribute() {
+        //when
+        val attribute = model.createShortAttribute(5)
+
+        //then
+        assertEquals(5,attribute.getValue())
+        assertEquals("5",attribute.getValueAsText())
+        assertEquals(5,attribute.getSavedValue())
+
+        //when
+        val attributeDefaultVal = model.createShortAttribute()
+
+        //then
+        assertEquals(0, attributeDefaultVal.getValue())
+    }
+
+    @Test
+    fun testCreateLongAttribute() {
+        //when
+        val attribute = model.createLongAttribute(5)
+
+        //then
+        assertEquals(5,attribute.getValue())
+        assertEquals("5",attribute.getValueAsText())
+        assertEquals(5,attribute.getSavedValue())
+
+        //when
+        val attributeDefaultVal = model.createLongAttribute()
+
+        //then
+        assertEquals(0, attributeDefaultVal.getValue())
+    }
+
+    @Test
+    fun testCreateDoubleAttribute() {
+        //when
+        val attribute = model.createDoubleAttribute(5.5)
+
+        //then
+        assertEquals(5.5,attribute.getValue())
+        assertEquals("5.5",attribute.getValueAsText())
+        assertEquals(5.5,attribute.getSavedValue())
+
+        //when
+        val attributeDefaultVal = model.createDoubleAttribute()
+
+        //then
+        assertEquals(0.0, attributeDefaultVal.getValue())
+    }
+
+    @Test
+    fun testCreateFloatAttribute() {
+        //when
+        val attribute = model.createFloatAttribute(5.5f)
+
+        //then
+        assertEquals(5.5f,attribute.getValue())
+        assertEquals("5.5",attribute.getValueAsText())
+        assertEquals(5.5f,attribute.getSavedValue())
+
+        //when
+        val attributeDefaultVal = model.createFloatAttribute()
+
+        //then
+        assertEquals(0.0f, attributeDefaultVal.getValue())
+    }
+
+    @Test
     fun testCreateStringAttribute() {
         //when
         val attribute = model.createStringAttribute("a")
