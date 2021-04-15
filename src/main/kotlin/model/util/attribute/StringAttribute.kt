@@ -12,6 +12,10 @@ class StringAttribute(model: FormModel, value : String?) : Attribute<StringAttri
     //******************************************************************************************************
     //Validation
 
+    init{
+        checkAndSetValue(value) //only on String, all the other have to be in bounds on first creation
+    }
+
     /**
      * This method checks if the new input value is valid.
      * If it is, the new value is set.

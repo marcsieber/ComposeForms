@@ -21,7 +21,7 @@ class UserDefinedModel() : BaseFormModel(){
         .setMaxLength(20)
 
     //Numbers
-    val intValue1    = createIntegerAttribute(10)
+    val intValue1    = createIntegerAttribute(50)
         //.setLabel("Int: ")
         .setLabelForLanguage(Locale.GERMAN,"deutscher Int: ")
         .setLabelForLanguage(Locale.ENGLISH,"english Int: ")
@@ -76,6 +76,9 @@ class UserDefinedModel() : BaseFormModel(){
         .setLowerBound(4.9)
         .setUpperBound(20.5)
         .setStepSize(0.4)
+
+    val stringXValue = createStringAttribute("A".repeat(1_5))
+        .setLabelForLanguage(Locale.GERMAN,"Test string ")
 
 
     val dateValue   = mutableStateOf("01/05/2020")
