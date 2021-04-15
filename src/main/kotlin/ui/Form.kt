@@ -35,7 +35,7 @@ class Form {
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
                         enabled = isChangedForAll(),
                         onClick = {
-                            saveAll()
+                            undoAll()
                         }) {
                         Text("Undo")
                     }

@@ -35,11 +35,11 @@ class UserDefinedModel() : BaseFormModel(){
     val intValue2    = createIntegerAttribute(15)
         .setLabelForLanguage(Locale.GERMAN,"deutscher Int: ")
         .setLabelForLanguage(Locale.ENGLISH,"english Int: ")
-        .setRequired(true)
+        .setRequired(false)
         .setReadOnly(false)
         .setLowerBound(10)
         .setUpperBound(20)
-        .setStepSize(2)
+        .setStepSize(1)
 
     val shortValue = createShortAttribute(9)
         .setLabelForLanguage(Locale.GERMAN,"deutscher Short: ")

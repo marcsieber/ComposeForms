@@ -114,7 +114,7 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
      * The value is indirectly adjusted as well, because the value listens to valAsText, and setValue(newVal) is executed.
      */
     internal fun undo(){
-        setValueAsText(getSavedValue().toString())
+        setValueAsText(getSavedValue()?.toString() ?: "")
     }
 
     /**
@@ -158,7 +158,7 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
      * @return the called instance : Attribute
      */
     private fun setChanged(newVal: String) {
-        this.changed.value = !newVal.equals(getSavedValue().toString())
+        this.changed.value = !newVal.equals(getSavedValue().toString()) && !(newVal.equals("") && getSavedValue() == null)
         this.model.setChangedForAll()
     }
 
