@@ -69,6 +69,10 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
         return this as A
     }
 
+    /**
+     * This method sets the value null.
+     * If it is a required field, valid is set false.
+     */
     protected fun setNullValue(){
         setValid(!isRequired())
         setValidationMessage( if(isValid()) "Valid Input" else "Input Required")
@@ -152,7 +156,9 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
     }
 
     /**
-     * isChanged is true, if value and savedValue are not equal
+     * Changed is true, if valueAsText and savedValue are not equal.
+     * If valueAsText and savedValue are equal or if valueAsText is "" and savedValue is null changed is set false.
+     * This method also calls setChangedForAll()
      *
      * @param newVal : String
      * @return the called instance : Attribute

@@ -21,11 +21,11 @@ class Form {
     fun of(model: FormModel){
         with(model) {
             Column {
-                Text(model.getTitle())
+                Text(getTitle())
 
 
                 LazyColumn {
-                    items(model.getAttributes()) { attribute ->
+                    items(getAttributes()) { attribute ->
                         attributeElement(attribute)
                     }
                 }

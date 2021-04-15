@@ -383,7 +383,6 @@ abstract class AttributeTest<T : Any> {
         assertFalse(attribute.isChanged())
     }
 
-
     @Test
     fun testNullValues() {
         //given
@@ -417,6 +416,5 @@ abstract class AttributeTest<T : Any> {
         assertEquals(null, attr.getSavedValue())
         assertEquals("", attr.getValueAsText())
         assertFalse(attr.isValid())
-
     }
 }

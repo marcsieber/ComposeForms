@@ -172,5 +172,9 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T?) : Attribute<
         return newValueAsText
     }
 
+    /**
+     * This method casts the String castValue into the wished number type
+     * @return castValue : wished number type
+     */
     abstract fun toDatatype(castValue: String): T
 }

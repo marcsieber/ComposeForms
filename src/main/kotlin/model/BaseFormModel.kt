@@ -27,7 +27,6 @@ abstract class BaseFormModel : FormModel {
     override fun saveAll(): Boolean {
         return if(isValidForAll()){
             allAttributes.forEach{ it.save() }
-            println("savedAll")
             true
         }else{
             false
@@ -136,7 +135,6 @@ abstract class BaseFormModel : FormModel {
      */
     override fun setChangedForAll(){
         changedForAll.value = allAttributes.stream().anyMatch(Attribute<*,*>::isChanged)
-        println("Changed: " + changedForAll.value)
     }
 
     /**
@@ -145,7 +143,6 @@ abstract class BaseFormModel : FormModel {
      */
     override fun setValidForAll(){
         validForAll.value = allAttributes.stream().allMatch(Attribute<*,*>::isValid)
-//        println("Valid: " + validForAll.value)
     }
 
     override fun setTitle(title: String){

@@ -27,8 +27,6 @@ internal class BaseFormModelTest {
                 .setLabel("Anzahl Kinder")
     }
 
-
-
     @Test
     fun testSaveAll() {
         //when
