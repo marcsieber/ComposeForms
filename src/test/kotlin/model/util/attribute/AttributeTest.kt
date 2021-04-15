@@ -395,16 +395,28 @@ abstract class AttributeTest<T : Any> {
         assertEquals("", attr.getValueAsText())
         assertTrue(attr.isValid())
 
-
-
-        //after change
+        //when
         attr.setValueAsText(validValue1AsText)
         attr.setValueAsText("")
+
+        //then
         assertEquals("Valid Input", attr.getValidationMessage())
+        assertEquals(null, attr.getValue())
         assertEquals(null, attr.getSavedValue())
         assertEquals("", attr.getValueAsText())
         assertTrue(attr.isValid())
 
-        //is required
+        //when
+        attr.setRequired(true)
+        attr.setValueAsText(validValue1AsText)
+        attr.setValueAsText("")
+
+        //then
+        assertEquals("Input Required", attr.getValidationMessage())
+        assertEquals(null, attr.getValue())
+        assertEquals(null, attr.getSavedValue())
+        assertEquals("", attr.getValueAsText())
+        assertFalse(attr.isValid())
+
     }
 }
