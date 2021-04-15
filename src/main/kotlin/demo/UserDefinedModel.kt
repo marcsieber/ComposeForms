@@ -8,7 +8,9 @@ class UserDefinedModel() : BaseFormModel(){
 
     init {
         setCurrentLanguageForAll(Locale.GERMAN)
+        setTitle("Demo Title")
     }
+
     //String
     val stringValue = createStringAttribute("Ich bin Text")
         .setLabelForLanguage(Locale.GERMAN,"deutscher String: ")
@@ -16,10 +18,10 @@ class UserDefinedModel() : BaseFormModel(){
         .setRequired(true)
         .setReadOnly(false)
         .setMinLength(2)
-        .setMaxLength(10)
+        .setMaxLength(20)
 
     //Numbers
-    val intValue1    = createIntegerAttribute()
+    val intValue1    = createIntegerAttribute(10)
         //.setLabel("Int: ")
         .setLabelForLanguage(Locale.GERMAN,"deutscher Int: ")
         .setLabelForLanguage(Locale.ENGLISH,"english Int: ")

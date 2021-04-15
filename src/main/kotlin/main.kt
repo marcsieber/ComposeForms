@@ -11,7 +11,7 @@ fun main() = Window(
 ) {
     MaterialTheme {
         val model = remember { UserDefinedModel() }
-        AppUI(model)
+        DemoUI(model)
     }
 }
 

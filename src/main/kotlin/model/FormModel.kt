@@ -12,5 +12,6 @@ interface FormModel {
     fun setCurrentLanguageForAll(lang : Locale)
     fun setChangedForAll()
     fun setValidForAll()
-
+    fun isValidForAll() : Boolean
+    fun isChangedForAll(): Boolean
 }
