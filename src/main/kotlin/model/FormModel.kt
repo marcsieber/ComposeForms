@@ -14,4 +14,5 @@ interface FormModel {
     fun setValidForAll()
     fun isValidForAll() : Boolean
     fun isChangedForAll(): Boolean
+    fun addAttribute(attr: Attribute<*,*>)
 }

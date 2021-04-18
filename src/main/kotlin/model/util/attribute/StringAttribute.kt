@@ -4,10 +4,17 @@ import model.FormModel
 import java.lang.NumberFormatException
 import kotlin.jvm.Throws
 
-class StringAttribute(model: FormModel, value : String?) : Attribute<StringAttribute, String>(model, value) {
+class StringAttribute(model: FormModel,
+                      value : String? = null,
+                      label: String = "",
+                      required: Boolean = false,
+                      readOnly: Boolean = false,
 
-    private var minLength = 0
-    private var maxLength = 1_000_000
+                      private var minLength: Int = 0,
+                      private var maxLength: Int = 1_000_000
+                      )
+    : Attribute<StringAttribute, String>(model = model, value = value, label = label, required = required, readOnly = readOnly) {
+
 
     //******************************************************************************************************
     //Validation

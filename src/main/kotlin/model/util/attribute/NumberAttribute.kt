@@ -3,21 +3,32 @@ package model.util.attribute
 import model.FormModel
 import kotlin.jvm.Throws
 
-abstract class NumberAttribute <N,T> (model: FormModel, value : T?) : Attribute<N,T>(model,value) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
+abstract class NumberAttribute <N,T> (
+    model: FormModel,
+    value : T? = null,
+    label: String = "",
+    required: Boolean = false,
+    readOnly: Boolean = false,
+
+    lowerBound : T? = null,
+    upperBound : T? = null,
+    private var stepSize :   T = 1 as T
+
+
+) : Attribute<N,T>(model = model, value = value, label = label, required = required, readOnly = readOnly) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
 
     //******************************************************************************************************
     //Optional extra-properties for NumberAttributes
 
     private lateinit var lowerBound : T
     private lateinit var upperBound : T
-    private var stepSize  = 1 as T
     private val stepStart: T = value ?: toDatatype("0")
 
     /**
      * Initialize LowerBound and UpperBound
      */
     init {
-        initializeLowerAndUpperBound()
+        initializeLowerAndUpperBound(lowerBound = lowerBound, upperBound = upperBound)
     }
 
     //******************************************************************************************************
@@ -113,28 +124,47 @@ abstract class NumberAttribute <N,T> (model: FormModel, value : T?) : Attribute<
      * This method sets the default values for the lowerBound and the upperBound depending on the
      * type of the NumberAttribute.
      */
-    private fun initializeLowerAndUpperBound(){
-        if (stepStart is Int){
-            this.lowerBound = Int.MIN_VALUE as T
-            this.upperBound = Int.MAX_VALUE as T
+    private fun initializeLowerAndUpperBound(lowerBound: T?, upperBound : T?){
+        if(lowerBound === null){
+            if (stepStart is Int){
+                this.lowerBound = Int.MIN_VALUE as T
+            }
+            if( stepStart is Short){
+                this.lowerBound = Short.MIN_VALUE as T
+            }
+            if( stepStart is Long){
+                this.lowerBound = Long.MIN_VALUE as T
+            }
+            if( stepStart is Double){
+                this.lowerBound = Double.MIN_VALUE as T
+            }
+            if( stepStart is Float){
+                this.lowerBound = Float.MIN_VALUE as T
+            }
+        }else{
+            this.lowerBound = lowerBound
         }
 
-        if( stepStart is Short){
-            this.lowerBound = Short.MIN_VALUE as T
-            this.upperBound = Short.MAX_VALUE as T
+        if(upperBound === null){
+            if (stepStart is Int){
+                this.upperBound = Int.MAX_VALUE as T
+            }
+            if( stepStart is Short){
+                this.upperBound = Short.MAX_VALUE as T
+            }
+            if( stepStart is Long){
+                this.upperBound = Long.MAX_VALUE as T
+            }
+            if( stepStart is Double){
+                this.upperBound = Double.MAX_VALUE as T
+            }
+            if( stepStart is Float){
+                this.upperBound = Float.MAX_VALUE as T
+            }
+        }else{
+            this.upperBound = upperBound
         }
-        if( stepStart is Long){
-            this.lowerBound = Long.MIN_VALUE as T
-            this.upperBound = Long.MAX_VALUE as T
-        }
-        if( stepStart is Double){
-            this.lowerBound = Double.MIN_VALUE as T
-            this.upperBound = Double.MAX_VALUE as T
-        }
-        if( stepStart is Float){
-            this.lowerBound = Float.MIN_VALUE as T
-            this.upperBound = Float.MAX_VALUE as T
-        }
+
     }
 
     //******************************************************************************************************

@@ -3,7 +3,18 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class DoubleAttribute(model: FormModel, value : Double?) : NumberAttribute<DoubleAttribute, Double>(model, value) {
+class DoubleAttribute(
+    model: FormModel,
+    value : Double? = null,
+    label: String = "",
+    required: Boolean = false,
+    readOnly: Boolean = false,
+
+    lowerBound : Double? = null,
+    upperBound : Double? = null,
+    stepSize :   Double = 1.0
+) : NumberAttribute<DoubleAttribute, Double>(model = model, value = value, label = label, required = required,
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize) {
 
     private var decimalPlaces = 1
 

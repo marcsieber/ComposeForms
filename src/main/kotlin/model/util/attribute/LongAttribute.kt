@@ -3,7 +3,19 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class LongAttribute(model: FormModel, value : Long?) : NumberAttribute<LongAttribute, Long>(model, value) {
+class LongAttribute(
+    model: FormModel,
+    value : Long? = null,
+    label: String = "",
+    required: Boolean = false,
+    readOnly: Boolean = false,
+
+    lowerBound : Long? = null,
+    upperBound : Long? = null,
+    stepSize :   Long = 1
+
+) : NumberAttribute<LongAttribute, Long>(model = model, value = value, label = label, required = required,
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize) {
     //******************************************************************************************************
     //Validation
 

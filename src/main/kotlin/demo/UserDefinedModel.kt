@@ -2,6 +2,8 @@ package demo
 
 import androidx.compose.runtime.mutableStateOf
 import model.BaseFormModel
+import model.FormModel
+import model.util.attribute.*
 import java.util.*
 
 class UserDefinedModel() : BaseFormModel(){
@@ -12,74 +14,79 @@ class UserDefinedModel() : BaseFormModel(){
     }
 
     //String
-    val stringValue = createStringAttribute("Ich bin Text")
-        .setLabelForLanguage(Locale.GERMAN,"deutscher String: ")
-        .setLabelForLanguage(Locale.ENGLISH,"english String: ")
-        .setRequired(true)
-        .setReadOnly(false)
-        .setMinLength(2)
-        .setMaxLength(20)
+    val stringValue = StringAttribute(
+        model = this,
+        value = "Ich bin Text",
+        required = true,
+        readOnly = false,
+        minLength = 2,
+        maxLength = 20,
+        label = "deutscher String",
+    )
 
     //Numbers
-    val intValue1    = createIntegerAttribute(50)
-        //.setLabel("Int: ")
-        .setLabelForLanguage(Locale.GERMAN,"deutscher Int: ")
-        .setLabelForLanguage(Locale.ENGLISH,"english Int: ")
-//        .setCurrentLanguage(Locale.GERMAN)  //TODO: make setCurrentLanguage protected
-        .setRequired(true)
-        .setReadOnly(false)
-        .setLowerBound(10)
-        .setUpperBound(20)
-        .setStepSize(2)
+    val intValue1    = IntegerAttribute(
+        model = this,
+        value = 10,
+        label = "deutscher Int:",
+        required = true,
+        readOnly = false,
+        lowerBound = 10,
+        upperBound = 20,
+        stepSize = 2
+    )
 
-    val intValue2    = createIntegerAttribute(15)
-        .setLabelForLanguage(Locale.GERMAN,"deutscher Int: ")
-        .setLabelForLanguage(Locale.ENGLISH,"english Int: ")
-        .setRequired(false)
-        .setReadOnly(false)
-        .setLowerBound(10)
-        .setUpperBound(20)
-        .setStepSize(1)
+    val intValue2    = IntegerAttribute(model = this,
+        value = 15,
+        required = false,
+        readOnly = false,
+        lowerBound = 10,
+        upperBound = 20,
+        stepSize = 1,
+        label = "deutscher int 2"
+    )
 
-    val shortValue = createShortAttribute(9)
-        .setLabelForLanguage(Locale.GERMAN,"deutscher Short: ")
-        .setLabelForLanguage(Locale.ENGLISH,"english Short: ")
-        .setRequired(true)
-        .setReadOnly(false)
-        .setLowerBound(0)
-        .setUpperBound(100)
-        .setStepSize(2)
+    val shortValue = ShortAttribute(model = this,
+        value = 9,
+        label = "deutscher Short",
+        required = true,
+        readOnly = false,
+        lowerBound = 0,
+        upperBound = 100,
+        stepSize = 2
+        )
 
-    val longValue = createLongAttribute(9)
-        .setLabelForLanguage(Locale.GERMAN,"deutscher Long: ")
-        .setLabelForLanguage(Locale.ENGLISH,"english Long: ")
-        .setRequired(true)
-        .setReadOnly(false)
-        .setLowerBound(0)
-        .setUpperBound(100)
-        .setStepSize(2)
+    val longValue = LongAttribute(model = this,
+        value = 9,
+        label = "deutscher Long",
+        required = true,
+        readOnly = false,
+        lowerBound = 0,
+        upperBound = 100,
+        stepSize = 2
+        )
 
-    val floatValue = createFloatAttribute(9.5f)
-        .setLabelForLanguage(Locale.GERMAN,"deutscher Float: ")
-        .setLabelForLanguage(Locale.ENGLISH,"english Float: ")
-        .setRequired(true)
-        .setReadOnly(false)
-        .setLowerBound(0f)
-        .setUpperBound(100f)
-        .setStepSize(3f)
+    val floatValue = FloatAttribute(
+        model = this,
+        value = 9.5f,
+        label = "deutscher float",
+        required = true,
+        readOnly = false,
+        lowerBound = 0f,
+        upperBound = 100f,
+        stepSize = 3f
+        )
 
-    val doubleValue = createDoubleAttribute(8.4)
-        .setLabelForLanguage(Locale.GERMAN,"deutscher Double: ")
-        .setLabelForLanguage(Locale.ENGLISH,"english Double: ")
-        .setRequired(true)
-        .setReadOnly(false)
-        .setLowerBound(4.9)
-        .setUpperBound(20.5)
-        .setStepSize(0.4)
-
-    val stringXValue = createStringAttribute("A".repeat(1_5))
-        .setLabelForLanguage(Locale.GERMAN,"Test string ")
-
+    val doubleValue = DoubleAttribute(
+        model = this,
+        value = 8.4,
+        label = "deutscher double",
+        required = true,
+        readOnly = false,
+        lowerBound = 4.9,
+        upperBound = 20.5,
+        stepSize = 0.4
+    )
 
     val dateValue   = mutableStateOf("01/05/2020")
     val booleanValue = mutableStateOf(true)

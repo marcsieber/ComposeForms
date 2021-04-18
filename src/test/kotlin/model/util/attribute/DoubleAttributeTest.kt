@@ -16,7 +16,7 @@ internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
     }
 
     init {
-        validValue1_uneven = 5.7
+        validValue1Uneven = 5.7
         validValue1AsText = "5.7"
 
         validValue2 = 7.7
@@ -48,7 +48,7 @@ internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
 
         notValidValueBecauseWrongStepAsText = "8"
 
-        valueWithCorrectStepSize = (validValue1_uneven-stepSizeCorrect_even)
+        valueWithCorrectStepSize = (validValue1Uneven-stepSizeCorrect_even)
 
     }
 
@@ -57,7 +57,7 @@ internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
     @BeforeEach
     fun setUpDoubleAtr(){
         //given
-        doubleAtr = DoubleAttribute(model, validValue1_uneven)
+        doubleAtr = DoubleAttribute(model, validValue1Uneven)
     }
 
     @Test

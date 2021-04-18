@@ -12,7 +12,7 @@ abstract class AttributeTest<T : Any> {
 
     var model = object: BaseFormModel() { }
 
-    lateinit var validValue1_uneven : T
+    lateinit var validValue1Uneven : T
     lateinit var validValue2 : T
     lateinit var validValue3 : T
     lateinit var validValue4 : T
@@ -30,7 +30,7 @@ abstract class AttributeTest<T : Any> {
     @BeforeEach
     fun setUp(){
         //given
-        attribute = provideAttribute(model, validValue1_uneven)
+        attribute = provideAttribute(model, validValue1Uneven)
     }
 
     @Test
@@ -69,9 +69,9 @@ abstract class AttributeTest<T : Any> {
         attribute.undo()
 
         //then
-        assertEquals(validValue1_uneven,         attribute.getValue())
-        assertEquals(validValue1_uneven,         attribute.getSavedValue())
-        assertEquals(validValue1_uneven.toString(), attribute.getValueAsText())
+        assertEquals(validValue1Uneven,         attribute.getValue())
+        assertEquals(validValue1Uneven,         attribute.getSavedValue())
+        assertEquals(validValue1Uneven.toString(), attribute.getValueAsText())
         assertFalse(attribute.isChanged())
 
         //when
@@ -198,28 +198,9 @@ abstract class AttributeTest<T : Any> {
     }
 
     @Test
-    fun testSetValid() {
-        //given
-        val valid = true
-        val notValid = false
-
-        //when
-        attribute.setValid(valid)
-
-        //then
-        assertEquals(valid, attribute.isValid())
-
-        //when
-        attribute.setValid(notValid)
-
-        //then
-        assertEquals(notValid, attribute.isValid())
-    }
-
-    @Test
     fun testSetValue() {
         //then
-        assertEquals(validValue1_uneven, attribute.getValue())
+        assertEquals(validValue1Uneven, attribute.getValue())
 
         //when
         attribute.setValueAsText(validValue2AsText)
@@ -247,7 +228,7 @@ abstract class AttributeTest<T : Any> {
     @Test
     fun testGetValue() {
         //then
-        assertEquals(validValue1_uneven, attribute.getValue())
+        assertEquals(validValue1Uneven, attribute.getValue())
     }
 
     @Test
@@ -269,7 +250,7 @@ abstract class AttributeTest<T : Any> {
     @Test
     fun testGetValueAsText() {
         //then
-        assertEquals(validValue1_uneven.toString(), attribute.getValueAsText())
+        assertEquals(validValue1Uneven.toString(), attribute.getValueAsText())
     }
 
     @Test
@@ -328,32 +309,13 @@ abstract class AttributeTest<T : Any> {
 
         //then
         assertEquals(readOnly, attribute.isReadOnly())
-        assertEquals(validValue1_uneven.toString(), attribute.getValueAsText())
+        assertEquals(validValue1Uneven.toString(), attribute.getValueAsText())
 
         //when
         attribute.setReadOnly(notReadOnly)
 
         //then
         assertEquals(notReadOnly, attribute.isReadOnly())
-    }
-
-    @Test
-    fun testIsValid() {
-        //given
-        val valid = true
-        val notValid = false
-
-        //when
-        attribute.setValid(valid)
-
-        //then
-        assertEquals(valid, attribute.isValid())
-
-        //when
-        attribute.setValid(notValid)
-
-        //then
-        assertEquals(notValid, attribute.isValid())
     }
 
     @Test

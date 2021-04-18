@@ -11,7 +11,7 @@ abstract class BaseFormModel : FormModel {
     //Properties
 
     private var title               = ""
-    private var allAttributes       = mutableStateListOf<Attribute<*,*>>()
+    protected var allAttributes       = mutableStateListOf<Attribute<*,*>>()
     private var changedForAll       = mutableStateOf(false)
     private val validForAll         = mutableStateOf(true)
     private var currentLanguage     = mutableStateOf<Locale?>(null)
@@ -65,11 +65,11 @@ abstract class BaseFormModel : FormModel {
      * @param value : Int
      * @return attr : IntegerAttribute
      */
-    fun createIntegerAttribute(value : Int? = null) : IntegerAttribute{
-        val attr = IntegerAttribute(this, value)
-        allAttributes.add(attr)
-        return attr
-    }
+//    fun createIntegerAttribute(value : Int? = null) : IntegerAttribute{
+//        val attr = IntegerAttribute(this, value)
+//        allAttributes.add(attr)
+//        return attr
+//    }
 
     /**
      * This method creates an Short attribute and the attribute is remembered.
@@ -172,4 +172,7 @@ abstract class BaseFormModel : FormModel {
         return currentLanguage.value == language
     }
 
+    override fun addAttribute(attr: Attribute<*, *>) {
+        allAttributes.add(attr)
+    }
 }

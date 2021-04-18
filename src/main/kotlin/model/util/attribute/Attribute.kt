@@ -5,7 +5,16 @@ import model.FormModel
 import java.util.*
 import kotlin.collections.HashMap
 
-abstract class Attribute <A,T> (private val model : FormModel, private var value : T?) where A : Attribute<A,T>, T : Any?{
+abstract class Attribute <A,T> (private val model : FormModel,
+                                private var value : T? = null,
+                                label: String = "",
+                                required: Boolean = false,
+                                readOnly: Boolean = false
+) where A : Attribute<A,T>, T : Any?{
+
+    init{
+        model.addAttribute(this)
+    }
 
     //******************************************************************************************************
     //Properties
@@ -13,9 +22,9 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
     private var savedValue          = value
     private val valueAsText         = mutableStateOf(value?.toString() ?: "")
 
-    private val label               = mutableStateOf("")
-    private val required            = mutableStateOf(false)
-    private val readOnly            = mutableStateOf(false)
+    private val label               = mutableStateOf(label)
+    private val required            = mutableStateOf(required)
+    private val readOnly            = mutableStateOf(readOnly)
     private val valid               = mutableStateOf(true)
     private val validationMessage   = mutableStateOf("")
     private val changed             = mutableStateOf(false)
@@ -31,22 +40,19 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
      * are changes in comparison to the savedValue and it calls setValue.
      * The new values are only set if the attribute is not readonly.
      * @param valueAsText : String
-     * @return the called instance : Attribute
      */
-    fun setValueAsText(valueAsText : String) : A{
+    fun setValueAsText(valueAsText : String){
         if(!isReadOnly()){
             this.valueAsText.value = valueAsText
             setChanged(valueAsText)
             checkAndSetValue( if(valueAsText.equals("")) null else valueAsText)
         }
-        return this as A
     }
 
     protected abstract fun checkAndSetValue(newVal: String?)
 
-    fun setLabel(label : String) : A{
+    fun setLabel(label : String){
         this.label.value = label
-        return this as A
     }
 
     /**
@@ -58,15 +64,13 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
      *
      * @param language : Locale
      * @param label : String
-     * @return the called instance : Attribute
      */
-    fun setLabelForLanguage(language : Locale, label : String) : A{
+    fun setLabelForLanguage(language : Locale, label : String){
         labels[language] = label
         if(labels.size == 1){
-            setLabel(label)
+            this.label.value = label
             setCurrentLanguage(language)
         }
-        return this as A
     }
 
     /**
@@ -79,26 +83,24 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
         setValue(null)
     }
 
-    fun setRequired(isRequired : Boolean) : A{
+    fun setRequired(isRequired : Boolean){
         this.required.value = isRequired
-        return this as A
     }
 
-    fun setReadOnly(isReadOnly : Boolean) : A{
+    fun setReadOnly(isReadOnly : Boolean){
         this.readOnly.value = isReadOnly
-        return this as A
     }
 
     /**
      * This method sets the valid value and calls setValidForAll()
-     * @param isvalid : Boolean
-     * @return the called instance : Attribute
+     * @param isValid : Boolean
      */
-    fun setValid(isValid : Boolean) : A{
+    protected fun setValid(isValid : Boolean){
         this.valid.value = isValid
         this.model.setValidForAll()
-        return this as A
     }
+
+
     //******************************************************************************************************
     //Internal Setter
 
@@ -129,12 +131,10 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
      * Default value if setLanguage is not called: @see setLabelForLanguage()
      *
      * @param language : Locale
-     * @return the called instance : Attribute
      */
-    internal fun setCurrentLanguage(language : Locale) : A{
+    internal fun setCurrentLanguage(language : Locale){
         label.value = labels.getOrDefault(language, "...")
         currentLanguage.value = language
-        return this as A
     }
 
     //******************************************************************************************************
@@ -161,7 +161,6 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
      * This method also calls setChangedForAll()
      *
      * @param newVal : String
-     * @return the called instance : Attribute
      */
     private fun setChanged(newVal: String) {
         this.changed.value = !newVal.equals(getSavedValue().toString()) && !(newVal.equals("") && getSavedValue() == null)
@@ -171,7 +170,6 @@ abstract class Attribute <A,T> (private val model : FormModel, private var value
     /**
      * This method sets the changed value and calls setChangedForAll()
      * @param isChanged : Boolean
-     * @return the called instance : Attribute
      */
     private fun setChanged(isChanged : Boolean) {
         this.changed.value = isChanged

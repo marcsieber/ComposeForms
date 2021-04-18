@@ -12,7 +12,7 @@ internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
     }
 
     init{
-        validValue1_uneven        = 5
+        validValue1Uneven        = 5
         validValue1AsText  = "5"
 
         validValue2        = 7
@@ -44,6 +44,6 @@ internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
 
         notValidValueBecauseWrongStepAsText = "8"
 
-        valueWithCorrectStepSize = (validValue1_uneven-stepSizeCorrect_even)
+        valueWithCorrectStepSize = (validValue1Uneven-stepSizeCorrect_even)
     }
 }

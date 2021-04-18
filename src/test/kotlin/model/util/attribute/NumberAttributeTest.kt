@@ -33,7 +33,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
     @BeforeEach
     fun setUpNumAtr(){
         //given
-        numAt = provideNumberAttribute(model, validValue1_uneven)
+        numAt = provideNumberAttribute(model, validValue1Uneven)
     }
 
     @Test
@@ -109,7 +109,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
 
         //then
         assertEquals(stepSizeCorrect_even, numAt.getStepSize(), "valid stepSize")
-        assertEquals(validValue1_uneven, numAt.getStepStart(), "correct stepStart")
+        assertEquals(validValue1Uneven, numAt.getStepStart(), "correct stepStart")
 
 
         //when
@@ -155,12 +155,12 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
     @Test
     fun testGetStepStart() {
         //then
-        assertEquals(validValue1_uneven, numAt.getStepStart())
+        assertEquals(validValue1Uneven, numAt.getStepStart())
 
         //when
         numAt.setValueAsText(validValue3AsText)
 
         //then
-        assertEquals(validValue1_uneven, numAt.getStepStart())
+        assertEquals(validValue1Uneven, numAt.getStepStart())
     }
 }

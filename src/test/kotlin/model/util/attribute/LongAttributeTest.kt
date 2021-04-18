@@ -1,9 +1,6 @@
 package model.util.attribute
 
 import model.BaseFormModel
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
 internal class LongAttributeTest : NumberAttributeTest<Long>(){
 
@@ -15,7 +12,7 @@ internal class LongAttributeTest : NumberAttributeTest<Long>(){
     }
 
     init{
-        validValue1_uneven        = 5
+        validValue1Uneven        = 5
         validValue1AsText         = "5"
 
         validValue2        = 7
@@ -47,6 +44,6 @@ internal class LongAttributeTest : NumberAttributeTest<Long>(){
 
         notValidValueBecauseWrongStepAsText = "8"
 
-        valueWithCorrectStepSize = (validValue1_uneven-stepSizeCorrect_even).toLong()
+        valueWithCorrectStepSize = (validValue1Uneven-stepSizeCorrect_even).toLong()
     }
 }
