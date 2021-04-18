@@ -1,13 +1,20 @@
 package ui
 
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.focus.focusOrder
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
@@ -16,6 +23,8 @@ import model.util.attribute.*
 
 
 class Form {
+
+    private var focusRequesters: MutableList<FocusRequester> = mutableListOf()
 
     @Composable
     fun of(model: FormModel){
@@ -26,7 +35,7 @@ class Form {
 
                 LazyColumn {
                     items(getAttributes()) { attribute ->
-                        attributeElement(attribute)
+                        AttributeElement(attribute)
                     }
                 }
 
@@ -55,7 +64,7 @@ class Form {
     }
 
     @Composable
-    private fun attributeElement(attr: Attribute<*,*>){
+    private fun AttributeElement(attr: Attribute<*,*>){
 
         Row(Modifier.fillMaxWidth(0.8f).padding(5.dp)
             ) {
@@ -63,23 +72,15 @@ class Form {
             Column() {
                 Row(Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween) {
-                    // Variante 1
                     when (attr) {
-                        is StringAttribute -> stringAttributeElement(attr)
-                        is LongAttribute -> longAttributeElement(attr)
-                        is IntegerAttribute -> integerAttributeElement(attr)
-                        is ShortAttribute -> shortAttributeElement(attr)
-                        is DoubleAttribute -> doubleAttributeElement(attr)
-                        is FloatAttribute -> floatAttributeElement(attr)
+                        is StringAttribute -> AttributeElement(attr)
+                        is LongAttribute -> AttributeElement(attr)
+                        is IntegerAttribute -> AttributeElement(attr)
+                        is ShortAttribute -> AttributeElement(attr)
+                        is DoubleAttribute -> AttributeElement(attr)
+                        is FloatAttribute -> AttributeElement(attr)
                     }
-
                 }
-
-                //Variante 2
-//        when(attr){
-//            is IntegerAttribute -> testAttributeElement(attr)
-//            is StringAttribute -> testAttributeElement(attr)
-//        }
 
                 Divider(Modifier.fillMaxWidth())
             }
@@ -89,70 +90,76 @@ class Form {
 
 
     @Composable
-    private fun testAttributeElement(intAttr: IntegerAttribute){
-        Text("Integer")
-    }
+    private fun InputField(attr: Attribute<*, *>, keyEvent: (KeyEvent) -> Boolean){
 
-    @Composable
-    private fun testAttributeElement(strAttr: StringAttribute){
-        Text("String")
-    }
+        attr.getValueAsText()
 
+        val focusRequester = remember { FocusRequester() }
+        val index = remember{ focusRequesters.size }
 
+        if(focusRequester !in focusRequesters) {
+            focusRequesters.add(focusRequester)
+        }
 
-    @Composable
-    private fun stringAttributeElement(strAttr: StringAttribute){
-        OutlinedTextField(          //stringValue
-            modifier = Modifier,
-            value = strAttr.getValueAsText(),
-            onValueChange = {strAttr.setValueAsText(it)},
-            label = {Text(strAttr.getLabel())} ,
-            readOnly = strAttr.isReadOnly(),
-            isError = !strAttr.isValid()
+        OutlinedTextField(
+            modifier = Modifier.focusModifier().focusOrder(focusRequester)
+                .onKeyEvent{event ->
+                    if(event.key == Key.Tab){
+                        focusRequesters[(index+1) % focusRequesters.size].requestFocus()
+                        return@onKeyEvent false
+                    }
+                    keyEvent(event)
+            },
+            value = attr.getValueAsText(),
+            onValueChange = {attr.setValueAsText(it)},
+            label = {Text(attr.getLabel())},
+            readOnly = attr.isReadOnly(),
+            isError = !attr.isValid(),
+            keyboardActions = KeyboardActions(
+                onNext = { focusRequesters[(index+1) % focusRequesters.size].requestFocus() }
+            )
         )
     }
 
     @Composable
-    private fun NumberAttributeElement(numAttr: NumberAttribute<*, *>){
-        OutlinedTextField(          //intValue1
-            modifier = Modifier.onKeyEvent{event ->
-                if (event.key == Key.DirectionUp) {
-//                    numAttr.setValueAsText( (numAttr.getValue().toDouble() + numAttr.getStepSize().toDouble()).toString())
+    private fun AttributeElement(strAttr: StringAttribute){
+        InputField(strAttr){return@InputField true}
+    }
+
+    @Composable
+    private fun AttributeElement(longAttr: LongAttribute){
+        InputField(longAttr)
+            {
+                if (it.key == Key.DirectionUp) {
+                    longAttr.setValueAsText( (longAttr.getValue() as Long + longAttr.getStepSize()).toString())
                 }
-                if(event.key == Key.DirectionDown){
-//                    numAttr.setValueAsText( (numAttr.getValue().toDouble() - numAttr.getStepSize().toDouble()).toString())
+                if(it.key == Key.DirectionDown){
+                    longAttr.setValueAsText( (longAttr.getValue() as Long - longAttr.getStepSize()).toString())
                 }
-                return@onKeyEvent true},
-            value = numAttr.getValueAsText(),
-            onValueChange = {numAttr.setValueAsText(it)},
-            label = {Text(numAttr.getLabel())},
-            readOnly = numAttr.isReadOnly(),
-            isError = !numAttr.isValid()
-        )
+                if(it.key == Key.Tab){
+//                    FocusRequester().requestFocus(FocusOrder().next)
+                }
+                return@InputField true
+        }
     }
 
     @Composable
-    private fun longAttributeElement(longAttr: LongAttribute){
-        NumberAttributeElement(longAttr)
+    private fun AttributeElement(intAttr: IntegerAttribute){
+        InputField(intAttr){ return@InputField true}
     }
 
     @Composable
-    private fun integerAttributeElement(intAttr: IntegerAttribute){
-        NumberAttributeElement(intAttr)
+    private fun AttributeElement(shortAttr: ShortAttribute){
+        InputField(shortAttr){ return@InputField true}
     }
 
     @Composable
-    private fun shortAttributeElement(shortAttr: ShortAttribute){
-        NumberAttributeElement(shortAttr)
+    private fun AttributeElement(floatAttr: FloatAttribute){
+        InputField(floatAttr){ return@InputField true}
     }
 
     @Composable
-    private fun floatAttributeElement(floatAttr: FloatAttribute){
-        NumberAttributeElement(floatAttr)
-    }
-
-    @Composable
-    private fun doubleAttributeElement(doubleAttr: DoubleAttribute){
-        NumberAttributeElement(doubleAttr)
+    private fun AttributeElement(doubleAttr: DoubleAttribute){
+        InputField(doubleAttr){ return@InputField true}
     }
 }

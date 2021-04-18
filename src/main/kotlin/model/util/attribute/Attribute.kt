@@ -42,6 +42,9 @@ abstract class Attribute <A,T> (private val model : FormModel,
      * @param valueAsText : String
      */
     fun setValueAsText(valueAsText : String){
+        if("\t" in valueAsText){
+            return
+        }
         if(!isReadOnly()){
             this.valueAsText.value = valueAsText
             setChanged(valueAsText)
