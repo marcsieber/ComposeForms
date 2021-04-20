@@ -187,22 +187,6 @@ abstract class NumberAttribute <N,T> (
         return stepStart
     }
 
-    //******************************************************************************************************
-    //Converter
-
-    /**
-     * This method converts the comma in number inputs into a point.
-     *
-     * @param newValueAsText : String
-     * @return newValueAsText : String
-     */
-    fun convertComma(newValueAsText : String) : String{
-        if(newValueAsText.contains(",")){
-            return newValueAsText.replace(",", ".")
-        }
-        return newValueAsText
-    }
-
     /**
      * This method casts the String castValue into the wished number type
      * @return castValue : wished number type

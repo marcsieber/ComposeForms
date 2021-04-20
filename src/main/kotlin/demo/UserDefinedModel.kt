@@ -85,7 +85,7 @@ class UserDefinedModel() : BaseFormModel(){
         readOnly = false,
         lowerBound = 4.9,
         upperBound = 20.5,
-        stepSize = 0.4
+        stepSize = 0.45
     )
 
     val dateValue   = mutableStateOf("01/05/2020")

@@ -12,14 +12,11 @@ class FloatAttribute(
 
     lowerBound : Float? = null,
     upperBound : Float? = null,
-    stepSize :   Float = 1f
-) : NumberAttribute<FloatAttribute, Float>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize) {
+    stepSize :   Float = 1f,
 
-    private var decimalPlaces = 1
-
-
-    //TODO: use decimalPlaces
+    decimalPlaces : Int = 2
+) : FloatingPointAttribute<FloatAttribute, Float>(model = model, value = value, label = label, required = required,
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, decimalPlaces = decimalPlaces) {
 
     //******************************************************************************************************
     //Validation
@@ -38,13 +35,20 @@ class FloatAttribute(
             setNullValue()
         } else {
             try {
-                validatedValue(newVal.toFloat())
+                val roundedVal = roundToDecimalPlaces(newVal.toFloat())
+                validatedValue(roundedVal)
                 setValid(true)
                 setValidationMessage("Valid Input")
-                setValue(newVal.toFloat())
+                try {
+                    setValue(roundedVal)
+                }catch(e: NumberFormatException){
+                    setValid(false)
+                    setValidationMessage("No Float")
+                    e.printStackTrace()
+                }
             } catch (e: NumberFormatException) {
                 setValid(false)
-                setValidationMessage("No Float")
+                setValidationMessage(e.message.toString())
                 e.printStackTrace()
             } catch (e: IllegalArgumentException) {
                 setValid(false)
@@ -52,18 +56,6 @@ class FloatAttribute(
                 e.printStackTrace()
             }
         }
-    }
-
-    //******************************************************************************************************
-    //Getter & Setter
-
-    fun setDecimalPlaces(decimalPlaces : Int) : FloatAttribute{
-        this.decimalPlaces = decimalPlaces
-        return this
-    }
-
-    fun getDecimalPlaces() : Int {
-        return decimalPlaces
     }
 
     override fun toDatatype(castValue: String): Float {

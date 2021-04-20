@@ -125,10 +125,10 @@ class Form {
         InputField(longAttr)
             {
                 if (it.key == Key.DirectionUp) {
-                    longAttr.setValueAsText( (longAttr.getValue() as Long + longAttr.getStepSize()).toString())
+                    longAttr.setValueAsTextFromKeyEvent( (longAttr.getValue() as Long + longAttr.getStepSize()).toString())
                 }
                 if(it.key == Key.DirectionDown){
-                    longAttr.setValueAsText( (longAttr.getValue() as Long - longAttr.getStepSize()).toString())
+                    longAttr.setValueAsTextFromKeyEvent( (longAttr.getValue() as Long - longAttr.getStepSize()).toString())
                 }
                 return@InputField true
         }
@@ -146,17 +146,24 @@ class Form {
 
     @Composable
     private fun AttributeElement(floatAttr: FloatAttribute){
-        InputField(floatAttr){ return@InputField true}
+        InputField(floatAttr){
+            if (it.key == Key.DirectionUp) {
+                floatAttr.setValueAsTextFromKeyEvent( (floatAttr.getValue() as Float + floatAttr.getStepSize()).toString())
+            }
+            if(it.key == Key.DirectionDown){
+                floatAttr.setValueAsTextFromKeyEvent( (floatAttr.getValue() as Float - floatAttr.getStepSize()).toString())
+            }
+            return@InputField true}
     }
 
     @Composable
     private fun AttributeElement(doubleAttr: DoubleAttribute){
         InputField(doubleAttr){
             if (it.key == Key.DirectionUp) {
-                doubleAttr.setValueAsText( (doubleAttr.getValue() as Double + doubleAttr.getStepSize()).toString())
+                doubleAttr.setValueAsTextFromKeyEvent( (doubleAttr.getValue() as Double + doubleAttr.getStepSize()).toString())
             }
             if(it.key == Key.DirectionDown){
-                doubleAttr.setValueAsText( (doubleAttr.getValue() as Double - doubleAttr.getStepSize()).toString())
+                doubleAttr.setValueAsTextFromKeyEvent( (doubleAttr.getValue() as Double - doubleAttr.getStepSize()).toString())
             }
             return@InputField true
         }

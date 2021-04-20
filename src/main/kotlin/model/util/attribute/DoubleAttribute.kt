@@ -12,14 +12,11 @@ class DoubleAttribute(
 
     lowerBound : Double? = null,
     upperBound : Double? = null,
-    stepSize :   Double = 1.0
-) : NumberAttribute<DoubleAttribute, Double>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize) {
+    stepSize :   Double = 1.0,
 
-    private var decimalPlaces = 1
-
-    //TODO: fix rounding on stepSize
-    //TODO: use decimalPlaces
+    decimalPlaces : Int = 2
+) : FloatingPointAttribute<DoubleAttribute, Double>(model = model, value = value, label = label, required = required,
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, decimalPlaces = decimalPlaces) {
 
     //******************************************************************************************************
     //Validation
@@ -38,13 +35,20 @@ class DoubleAttribute(
             setNullValue()
         } else {
             try {
-                validatedValue(newVal.toDouble())
+                val roundedVal = roundToDecimalPlaces(newVal.toDouble())
+                validatedValue(roundedVal)
                 setValid(true)
                 setValidationMessage("Valid Input")
-                setValue(newVal.toDouble())
+                try {
+                    setValue(roundedVal)
+                }catch(e: NumberFormatException){
+                    setValid(false)
+                    setValidationMessage("No Double")
+                    e.printStackTrace()
+                }
             } catch (e: NumberFormatException) {
                 setValid(false)
-                setValidationMessage("No Double")
+                setValidationMessage(e.message.toString())
                 e.printStackTrace()
             } catch (e: IllegalArgumentException) {
                 setValid(false)
@@ -52,18 +56,6 @@ class DoubleAttribute(
                 e.printStackTrace()
             }
         }
-    }
-
-    //******************************************************************************************************
-    //Getter & Setter
-
-    fun setDecimalPlaces(decimalPlaces : Int) : DoubleAttribute{
-        this.decimalPlaces = decimalPlaces
-        return this
-    }
-
-    fun getDecimalPlaces() : Int {
-        return decimalPlaces
     }
 
     override fun toDatatype(castValue: String): Double {

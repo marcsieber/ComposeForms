@@ -52,6 +52,24 @@ abstract class Attribute <A,T> (private val model : FormModel,
         }
     }
 
+    fun setValueAsTextFromKeyEvent(valueAsText : String){
+        println("Value before setValueAsTextFromKeyEvent: " + value)
+        if("\t" in valueAsText){
+            return
+        }
+        if(!isReadOnly()){
+            setChanged(valueAsText)
+            checkAndSetValue( if(valueAsText.equals("")) null else valueAsText)
+            println("Value after setValueAsTextFromKeyEvent: " + value)
+
+            if(isValid()){
+                this.valueAsText.value = getValue().toString()
+            }else{
+                this.valueAsText.value = valueAsText
+            }
+        }
+    }
+
     protected abstract fun checkAndSetValue(newVal: String?)
 
     fun setLabel(label : String){
