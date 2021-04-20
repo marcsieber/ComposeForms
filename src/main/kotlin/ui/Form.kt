@@ -1,17 +1,13 @@
 package ui
 
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.focus.focusOrder
+import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
@@ -92,8 +88,6 @@ class Form {
     @Composable
     private fun InputField(attr: Attribute<*, *>, keyEvent: (KeyEvent) -> Boolean){
 
-        attr.getValueAsText()
-
         val focusRequester = remember { FocusRequester() }
         val index = remember{ focusRequesters.size }
 
@@ -102,7 +96,9 @@ class Form {
         }
 
         OutlinedTextField(
-            modifier = Modifier.focusModifier().focusOrder(focusRequester)
+            modifier = Modifier
+                .focusModifier()
+                .focusOrder(focusRequester)
                 .onKeyEvent{event ->
                     if(event.key == Key.Tab){
                         focusRequesters[(index+1) % focusRequesters.size].requestFocus()
@@ -115,9 +111,7 @@ class Form {
             label = {Text(attr.getLabel())},
             readOnly = attr.isReadOnly(),
             isError = !attr.isValid(),
-            keyboardActions = KeyboardActions(
-                onNext = { focusRequesters[(index+1) % focusRequesters.size].requestFocus() }
-            )
+
         )
     }
 
@@ -135,9 +129,6 @@ class Form {
                 }
                 if(it.key == Key.DirectionDown){
                     longAttr.setValueAsText( (longAttr.getValue() as Long - longAttr.getStepSize()).toString())
-                }
-                if(it.key == Key.Tab){
-//                    FocusRequester().requestFocus(FocusOrder().next)
                 }
                 return@InputField true
         }
@@ -160,6 +151,14 @@ class Form {
 
     @Composable
     private fun AttributeElement(doubleAttr: DoubleAttribute){
-        InputField(doubleAttr){ return@InputField true}
+        InputField(doubleAttr){
+            if (it.key == Key.DirectionUp) {
+                doubleAttr.setValueAsText( (doubleAttr.getValue() as Double + doubleAttr.getStepSize()).toString())
+            }
+            if(it.key == Key.DirectionDown){
+                doubleAttr.setValueAsText( (doubleAttr.getValue() as Double - doubleAttr.getStepSize()).toString())
+            }
+            return@InputField true
+        }
     }
 }
