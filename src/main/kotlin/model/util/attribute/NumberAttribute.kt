@@ -46,10 +46,11 @@ abstract class NumberAttribute <N,T> (
             throw IllegalArgumentException("Validation mismatched (lowerBound/upperBound)")
         }
 
-        var moduloOfNewVal      = (newVal.toDouble() %  stepSize.toDouble())
-        var moduloOfStepStart   = (stepStart.toDouble() % stepSize.toDouble())
+        val epsilon = 0.00000001
+        val moduloOfNewVal      = ((newVal.toDouble()+(epsilon/10)) %  stepSize.toDouble())
+        var moduloOfStepStart   = ((stepStart.toDouble()+(epsilon/10)) % stepSize.toDouble())
 
-        if(moduloOfNewVal != moduloOfStepStart){
+        if( moduloOfNewVal !in moduloOfStepStart-epsilon..moduloOfStepStart+epsilon){
             throw IllegalArgumentException("Validation mismatched (stepsize)")
         }
     }
