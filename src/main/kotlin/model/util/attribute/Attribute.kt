@@ -103,12 +103,17 @@ abstract class Attribute <A,T> (private val model : FormModel,
 
     /**
      * This method sets the value null.
+     * If it is a SelectionAttribute the value is set to an emptySet<String>()
      * If it is a required field, valid is set false.
      */
-    protected fun setNullValue(){
+    protected fun setNullValue(valueIsASet: Boolean = false){
         setValid(!isRequired())
         setValidationMessage( if(isValid()) "Valid Input" else "Input Required")
-        setValue(null)
+        if(valueIsASet){
+            setValue(emptySet<String>() as T)
+        }else{
+            setValue(null)
+        }
     }
 
     fun setRequired(isRequired : Boolean){
@@ -191,7 +196,7 @@ abstract class Attribute <A,T> (private val model : FormModel,
      * @param newVal : String
      */
     private fun setChanged(newVal: String) {
-        this.changed.value = !newVal.equals(getSavedValue().toString()) && !(newVal.equals("") && getSavedValue() == null)
+        this.changed.value = !newVal.equals(getSavedValue().toString()) && !(newVal.equals("") && getSavedValue() == null) //todo add logic for emptySet (SelectionAttribute)
         this.model.setChangedForAll()
     }
 

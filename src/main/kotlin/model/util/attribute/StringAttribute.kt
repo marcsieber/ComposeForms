@@ -74,14 +74,12 @@ class StringAttribute(model: FormModel,
      *
      * @param maxLength : Int
      * @throws IllegalArgumentException
-     * @return the called instance : StringAttribute
      */
-    fun setMinLength(minLength : Int) : StringAttribute {
+    fun setMinLength(minLength : Int) {
         if(minLength >= 0){
             if(minLength < maxLength){
                 this.minLength = minLength
                 checkAndSetValue(getValueAsText())
-                return this
             }
             else{
                 throw IllegalArgumentException("minLength is not lower than maxLength")
@@ -97,14 +95,12 @@ class StringAttribute(model: FormModel,
      *
      * @param maxLength : Int
      * @throws IllegalArgumentException
-     * @return the called instance : StringAttribute
     */
-    fun setMaxLength(maxLength : Int) : StringAttribute {
+    fun setMaxLength(maxLength : Int) {
         if(maxLength >= 0){
             if(maxLength > minLength){
                 this.maxLength = maxLength
                 checkAndSetValue(getValueAsText())
-                return this
             }
             else{
                 throw IllegalArgumentException("maxLength is not greater than minLength")

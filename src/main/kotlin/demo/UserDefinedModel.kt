@@ -91,7 +91,8 @@ class UserDefinedModel() : BaseFormModel(){
     val booleanValue = mutableStateOf(true)
     val radioButtonValue = mutableStateOf(true)
 
-    val dropDownItems  = listOf("1","2","3","4")
+    //Selection
+    val dropDownItems  = setOf<String>("1","2","3","4")
     val dropDownOpen    = mutableStateOf(false)
     val dropDownSelIndex = mutableStateOf(0)
 

@@ -187,7 +187,7 @@ fun AppUI(model: UserDefinedModel) {
                     Box(
                         modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.TopStart)
                     ){
-                        Text(dropDownItems[dropDownSelIndex.value],
+                        Text(dropDownItems.elementAt(dropDownSelIndex.value),
                             modifier = Modifier.fillMaxWidth().clickable(onClick = {dropDownOpen.value = true}).background(
                                 Color.LightGray
                             ))

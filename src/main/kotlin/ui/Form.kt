@@ -168,4 +168,10 @@ class Form {
             return@InputField true
         }
     }
+
+    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute){ //todo
+        InputField(selectionAttribute){
+            return@InputField true
+        }
+    }
 }
