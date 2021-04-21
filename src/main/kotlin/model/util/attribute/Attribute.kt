@@ -52,6 +52,13 @@ abstract class Attribute <A,T> (private val model : FormModel,
         }
     }
 
+    /**
+     * This method should only be called after KeyEvents to avoid inaccuracies of double or float values.
+     * This method sets valueAsText to the new value, calls setChanged to look if there
+     * are changes in comparison to the savedValue and it calls setValue.
+     * The new values are only set if the attribute is not readonly.
+     * @param valueAsText : String
+     */
     fun setValueAsTextFromKeyEvent(valueAsText : String){
         println("Value before setValueAsTextFromKeyEvent: " + value)
         if("\t" in valueAsText){
