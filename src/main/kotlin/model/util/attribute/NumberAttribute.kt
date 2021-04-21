@@ -12,7 +12,8 @@ abstract class NumberAttribute <N,T> (
 
     lowerBound : T? = null,
     upperBound : T? = null,
-    private var stepSize :   T = 1 as T
+    private var stepSize :   T = 1 as T,
+    private var onlyStepValuesAreValid : Boolean = false
 
 
 ) : Attribute<N,T>(model = model, value = value, label = label, required = required, readOnly = readOnly) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
@@ -46,12 +47,14 @@ abstract class NumberAttribute <N,T> (
             throw IllegalArgumentException("Validation mismatched (lowerBound/upperBound)")
         }
 
-        val epsilon = 0.00000001
-        val moduloOfNewVal      = ((newVal.toDouble()+(epsilon/10)) %  stepSize.toDouble())
-        var moduloOfStepStart   = ((stepStart.toDouble()+(epsilon/10)) % stepSize.toDouble())
+        if(isOnlyStepValuesAreValid()){
+            val epsilon = 0.00000001
+            val moduloOfNewVal      = ((newVal.toDouble()+(epsilon/10)) %  stepSize.toDouble())
+            val moduloOfStepStart   = ((stepStart.toDouble()+(epsilon/10)) % stepSize.toDouble())
 
-        if( moduloOfNewVal !in moduloOfStepStart-epsilon..moduloOfStepStart+epsilon){
-            throw IllegalArgumentException("Validation mismatched (stepsize)")
+            if( moduloOfNewVal !in moduloOfStepStart-epsilon..moduloOfStepStart+epsilon){
+                throw IllegalArgumentException("Validation mismatched (stepsize)")
+            }
         }
     }
 
@@ -65,14 +68,12 @@ abstract class NumberAttribute <N,T> (
      *
      * @param lowerBound : T
      * @throws IllegalArgumentException
-     * @return the called instance : NumberAttribute
      */
-    fun setLowerBound(lowerBound : T) : N {
+    fun setLowerBound(lowerBound : T){
 
         if(lowerBound < upperBound) {
             this.lowerBound = lowerBound
             checkAndSetValue(getValueAsText())
-            return this as N
         }
         else {
             throw IllegalArgumentException("LowerBound is not lower than upperBound")
@@ -86,13 +87,11 @@ abstract class NumberAttribute <N,T> (
      *
      * @param upperBound : T
      * @throws IllegalArgumentException
-     * @return the called instance : NumberAttribute
      */
-    fun setUpperBound(upperBound : T) : N {
+    fun setUpperBound(upperBound : T){
         if(upperBound > lowerBound){
             this.upperBound = upperBound
             checkAndSetValue(getValueAsText())
-            return this as N
         }
         else {
             throw IllegalArgumentException("UpperBound is not greater than lowerBound")
@@ -106,16 +105,23 @@ abstract class NumberAttribute <N,T> (
      *
      * @param stepSize : T
      * @throws IllegalArgumentException
-     * @return the called instance : NumberAttribute
      */
-    fun setStepSize(stepSize: T) : N {
+    fun setStepSize(stepSize: T){
         if(stepSize.toDouble() > 0.0){
             this.stepSize = stepSize
             checkAndSetValue(getValueAsText())
-            return this as N
         }else{
             throw IllegalArgumentException("stepSize must be positive")
         }
+    }
+
+    /**
+     * The onlyStepValuesAreValid value is set and the current textValue is checked to see if it is still valid.
+     * @param onlyStepValuesAreValid: Boolean
+     */
+    fun setOnlyStepValuesAreValid(onlyStepValuesAreValid: Boolean){
+        this.onlyStepValuesAreValid = onlyStepValuesAreValid
+        checkAndSetValue(getValueAsText())
     }
 
     //******************************************************************************************************
@@ -185,6 +191,10 @@ abstract class NumberAttribute <N,T> (
 
     fun getStepStart() : T {
         return stepStart
+    }
+
+    fun isOnlyStepValuesAreValid() : Boolean{
+        return onlyStepValuesAreValid
     }
 
     /**

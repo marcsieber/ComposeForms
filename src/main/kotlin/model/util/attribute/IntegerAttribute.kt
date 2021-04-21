@@ -32,19 +32,35 @@ class IntegerAttribute(model: FormModel,
             setNullValue()
         } else {
             try {
-                validatedValue(newVal.toInt())
+                val intVal = convertStringToInt(newVal)
+                validatedValue(intVal)
                 setValid(true)
                 setValidationMessage("Valid Input")
-                setValue(Integer.valueOf(newVal))
+                setValue(intVal)
             } catch (e: NumberFormatException) {
                 setValid(false)
-                setValidationMessage("No Integer")
+                setValidationMessage(e.message.toString())
                 e.printStackTrace()
             } catch (e: IllegalArgumentException) {
                 setValid(false)
                 setValidationMessage(e.message.toString())
                 e.printStackTrace()
             }
+        }
+    }
+
+    /**
+     * This method converts a String into a Int.
+     * If this is not possible,  a Numberformatexception is thrown
+     * @param newVal : String
+     * @return newVal : Int
+     * @throws NumberFormatException
+     */
+    private fun convertStringToInt(newVal: String) : Int{
+        try{
+            return newVal.toInt()
+        }catch(e: NumberFormatException){
+            throw NumberFormatException("No Integer")
         }
     }
 

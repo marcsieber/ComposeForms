@@ -74,7 +74,8 @@ class UserDefinedModel() : BaseFormModel(){
         readOnly = false,
         lowerBound = 0f,
         upperBound = 100f,
-        stepSize = 3f
+        stepSize = 3f,
+        onlyStepValuesAreValid = true
         )
 
     val doubleValue = DoubleAttribute(

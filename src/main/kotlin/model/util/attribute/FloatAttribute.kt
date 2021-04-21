@@ -13,10 +13,11 @@ class FloatAttribute(
     lowerBound : Float? = null,
     upperBound : Float? = null,
     stepSize :   Float = 1f,
+    onlyStepValuesAreValid : Boolean = false,
 
     decimalPlaces : Int = 2
 ) : FloatingPointAttribute<FloatAttribute, Float>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, decimalPlaces = decimalPlaces) {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize,onlyStepValuesAreValid = onlyStepValuesAreValid, decimalPlaces = decimalPlaces) {
 
     //******************************************************************************************************
     //Validation
@@ -35,17 +36,12 @@ class FloatAttribute(
             setNullValue()
         } else {
             try {
-                val roundedVal = roundToDecimalPlaces(newVal.toFloat())
+                val floatVal = convertStringToFloat(newVal)
+                val roundedVal = roundToDecimalPlaces(floatVal)
                 validatedValue(roundedVal)
                 setValid(true)
                 setValidationMessage("Valid Input")
-                try {
-                    setValue(roundedVal)
-                }catch(e: NumberFormatException){
-                    setValid(false)
-                    setValidationMessage("No Float")
-                    e.printStackTrace()
-                }
+                setValue(roundedVal)
             } catch (e: NumberFormatException) {
                 setValid(false)
                 setValidationMessage(e.message.toString())
@@ -55,6 +51,21 @@ class FloatAttribute(
                 setValidationMessage(e.message.toString())
                 e.printStackTrace()
             }
+        }
+    }
+
+    /**
+     * This method converts a String into a Float.
+     * If this is not possible,  a Numberformatexception is thrown
+     * @param newVal : String
+     * @return newVal : Float
+     * @throws NumberFormatException
+     */
+    private fun convertStringToFloat(newVal: String) : Float{
+        try{
+            return newVal.toFloat()
+        }catch(e: NumberFormatException){
+            throw NumberFormatException("No Float")
         }
     }
 

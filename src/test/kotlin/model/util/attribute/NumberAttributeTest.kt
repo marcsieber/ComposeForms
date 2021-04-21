@@ -2,8 +2,7 @@ package model.util.attribute
 
 import model.BaseFormModel
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
@@ -94,6 +93,22 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
     }
 
     @Test
+    fun testSetOnlyStepValuesAreValid(){
+        //when
+        numAt.setStepSize(stepSizeCorrect_even)
+        numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+
+        //then
+        assertTrue(numAt.isValid())
+
+        //when
+        numAt.setOnlyStepValuesAreValid(true)
+
+        //then
+        assertFalse(numAt.isValid())
+    }
+
+    @Test
     fun testGetUpperBound() {
         //when
         numAt.setUpperBound(upperBound)
@@ -120,6 +135,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
 
         //when
         numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+        numAt.setOnlyStepValuesAreValid(true)
 
         //then
         Assertions.assertFalse(numAt.isValid(), "invalid value, because of stepSize")
@@ -162,5 +178,17 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
 
         //then
         assertEquals(validValue1Uneven, numAt.getStepStart())
+    }
+
+    @Test
+    fun testIsOnlyStepValuesAreValid(){
+        //then
+        assertFalse(numAt.isOnlyStepValuesAreValid())
+
+        //when
+        numAt.setOnlyStepValuesAreValid(true)
+
+        //then
+        assertTrue(numAt.isOnlyStepValuesAreValid())
     }
 }

@@ -13,10 +13,11 @@ class DoubleAttribute(
     lowerBound : Double? = null,
     upperBound : Double? = null,
     stepSize :   Double = 1.0,
+    onlyStepValuesAreValid : Boolean = false,
 
     decimalPlaces : Int = 2
 ) : FloatingPointAttribute<DoubleAttribute, Double>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, decimalPlaces = decimalPlaces) {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = false, decimalPlaces = decimalPlaces) {
 
     //******************************************************************************************************
     //Validation
@@ -35,17 +36,12 @@ class DoubleAttribute(
             setNullValue()
         } else {
             try {
-                val roundedVal = roundToDecimalPlaces(newVal.toDouble())
+                val doubleVal = convertStringToDouble(newVal)
+                val roundedVal = roundToDecimalPlaces(doubleVal)
                 validatedValue(roundedVal)
                 setValid(true)
                 setValidationMessage("Valid Input")
-                try {
-                    setValue(roundedVal)
-                }catch(e: NumberFormatException){
-                    setValid(false)
-                    setValidationMessage("No Double")
-                    e.printStackTrace()
-                }
+                setValue(roundedVal)
             } catch (e: NumberFormatException) {
                 setValid(false)
                 setValidationMessage(e.message.toString())
@@ -55,6 +51,21 @@ class DoubleAttribute(
                 setValidationMessage(e.message.toString())
                 e.printStackTrace()
             }
+        }
+    }
+
+    /**
+     * This method converts a String into a Double.
+     * If this is not possible,  a Numberformatexception is thrown
+     * @param newVal : String
+     * @return newVal : Double
+     * @throws NumberFormatException
+     */
+    private fun convertStringToDouble(newVal: String) : Double{
+        try{
+            return newVal.toDouble()
+        }catch(e: NumberFormatException){
+            throw NumberFormatException("No Double")
         }
     }
 

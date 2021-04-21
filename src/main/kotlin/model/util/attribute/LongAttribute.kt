@@ -33,10 +33,11 @@ class LongAttribute(
             setNullValue()
         } else {
             try {
-                validatedValue(newVal.toLong())
+                val longVal = convertStringToLong(newVal)
+                validatedValue(longVal)
                 setValid(true)
                 setValidationMessage("Valid Input")
-                setValue(newVal.toLong())
+                setValue(longVal)
             } catch (e: NumberFormatException) {
                 setValid(false)
                 setValidationMessage("No Long")
@@ -46,6 +47,21 @@ class LongAttribute(
                 setValidationMessage(e.message.toString())
                 e.printStackTrace()
             }
+        }
+    }
+
+    /**
+     * This method converts a String into a Long.
+     * If this is not possible,  a Numberformatexception is thrown
+     * @param newVal : String
+     * @return newVal : Long
+     * @throws NumberFormatException
+     */
+    private fun convertStringToLong(newVal: String) : Long{
+        try{
+            return newVal.toLong()
+        }catch(e: NumberFormatException){
+            throw NumberFormatException("No Long")
         }
     }
 

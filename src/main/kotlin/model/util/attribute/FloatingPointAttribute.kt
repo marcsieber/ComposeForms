@@ -13,10 +13,11 @@ abstract class FloatingPointAttribute <F,T> (
     lowerBound : T? = null,
     upperBound : T? = null,
     stepSize :   T = 1.0 as T,
+    onlyStepValuesAreValid : Boolean = false,
 
     private var decimalPlaces : Int = 2
 ) : NumberAttribute<F,T>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize) where F : FloatingPointAttribute<F,T>, T : Number, T : Comparable<T>{
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid) where F : FloatingPointAttribute<F,T>, T : Number, T : Comparable<T>{
 
     /**
      * This method rounds double numbers to the desired decimal places.

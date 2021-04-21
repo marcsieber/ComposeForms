@@ -34,10 +34,11 @@ class ShortAttribute(
             setNullValue()
         } else {
             try {
-                validatedValue(newVal.toShort())
+                val shortVal = convertStringToShort(newVal)
+                validatedValue(shortVal)
                 setValid(true)
                 setValidationMessage("Valid Input")
-                setValue(newVal.toShort())
+                setValue(shortVal)
             } catch (e: NumberFormatException) {
                 setValid(false)
                 setValidationMessage("No Short")
@@ -47,6 +48,21 @@ class ShortAttribute(
                 setValidationMessage(e.message.toString())
                 e.printStackTrace()
             }
+        }
+    }
+
+    /**
+     * This method converts a String into a Short.
+     * If this is not possible,  a Numberformatexception is thrown
+     * @param newVal : String
+     * @return newVal : Short
+     * @throws NumberFormatException
+     */
+    private fun convertStringToShort(newVal: String) : Short{
+        try{
+            return newVal.toShort()
+        }catch(e: NumberFormatException){
+            throw NumberFormatException("No Short")
         }
     }
 
