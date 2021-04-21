@@ -15,7 +15,7 @@ abstract class FloatingPointAttribute <F,T> (
     stepSize :   T = 1.0 as T,
     onlyStepValuesAreValid : Boolean = false,
 
-    private var decimalPlaces : Int = 2
+    private var decimalPlaces : Int = 8
 ) : NumberAttribute<F,T>(model = model, value = value, label = label, required = required,
     readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid) where F : FloatingPointAttribute<F,T>, T : Number, T : Comparable<T>{
 
@@ -43,7 +43,7 @@ abstract class FloatingPointAttribute <F,T> (
      * @param newVal : String
      * @throws NumberFormatException
      */
-    fun checkDecimalPlaces(newVal : String){ //Todo call method
+    protected fun checkDecimalPlaces(newVal : String){
         val splittedNumber = newVal.split(".")
         if(splittedNumber[1].length > getDecimalPlaces()){
             throw NumberFormatException("Too many decimal places")
@@ -71,9 +71,14 @@ abstract class FloatingPointAttribute <F,T> (
     //******************************************************************************************************
     //Getter & Setter
 
-    fun setDecimalPlaces(decimalPlaces : Int) : F {
-        this.decimalPlaces = decimalPlaces
-        return this as F
+    fun setDecimalPlaces(decimalPlaces : Int){
+        if(decimalPlaces >= 1){ //todo: define max decimal places
+            this.decimalPlaces = decimalPlaces
+            checkAndSetValue(getValueAsText())
+        }
+        else {
+            throw IllegalArgumentException("number of decimal Places must be positive")
+        }
     }
 
     fun getDecimalPlaces() : Int {

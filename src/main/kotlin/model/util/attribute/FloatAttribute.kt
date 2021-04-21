@@ -15,7 +15,7 @@ class FloatAttribute(
     stepSize :   Float = 1f,
     onlyStepValuesAreValid : Boolean = false,
 
-    decimalPlaces : Int = 2
+    decimalPlaces : Int = 8
 ) : FloatingPointAttribute<FloatAttribute, Float>(model = model, value = value, label = label, required = required,
     readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize,onlyStepValuesAreValid = onlyStepValuesAreValid, decimalPlaces = decimalPlaces) {
 
@@ -31,13 +31,16 @@ class FloatAttribute(
      * @throws NumberFormatException
      * @throws IllegalArgumentException
      */
-    override fun checkAndSetValue(newVal: String?) {
+    override fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean) {
         if(newVal == null){
             setNullValue()
         } else {
             try {
                 val floatVal = convertStringToFloat(newVal)
                 val roundedVal = roundToDecimalPlaces(floatVal)
+                if(!calledFromKeyEvent){
+                    checkDecimalPlaces(floatVal.toString())
+                }
                 validatedValue(roundedVal)
                 setValid(true)
                 setValidationMessage("Valid Input")

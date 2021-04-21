@@ -31,8 +31,6 @@ class UserDefinedModel() : BaseFormModel(){
         label = "deutscher Int:",
         required = true,
         readOnly = false,
-        lowerBound = 10,
-        upperBound = 20,
         stepSize = 2
     )
 

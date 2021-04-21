@@ -15,7 +15,7 @@ class DoubleAttribute(
     stepSize :   Double = 1.0,
     onlyStepValuesAreValid : Boolean = false,
 
-    decimalPlaces : Int = 2
+    decimalPlaces : Int = 8
 ) : FloatingPointAttribute<DoubleAttribute, Double>(model = model, value = value, label = label, required = required,
     readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = false, decimalPlaces = decimalPlaces) {
 
@@ -31,13 +31,16 @@ class DoubleAttribute(
      * @throws NumberFormatException
      * @throws IllegalArgumentException
      */
-    override fun checkAndSetValue(newVal: String?) {
+    override fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean) {
         if(newVal == null){
             setNullValue()
         } else {
             try {
                 val doubleVal = convertStringToDouble(newVal)
                 val roundedVal = roundToDecimalPlaces(doubleVal)
+                if(!calledFromKeyEvent){
+                    checkDecimalPlaces(doubleVal.toString())
+                }
                 validatedValue(roundedVal)
                 setValid(true)
                 setValidationMessage("Valid Input")

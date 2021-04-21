@@ -59,7 +59,7 @@ abstract class Attribute <A,T> (private val model : FormModel,
         }
         if(!isReadOnly()){
             setChanged(valueAsText)
-            checkAndSetValue( if(valueAsText.equals("")) null else valueAsText)
+            checkAndSetValue( if(valueAsText.equals("")) null else valueAsText, true)
             println("Value after setValueAsTextFromKeyEvent: " + value)
 
             if(isValid()){
@@ -70,7 +70,7 @@ abstract class Attribute <A,T> (private val model : FormModel,
         }
     }
 
-    protected abstract fun checkAndSetValue(newVal: String?)
+    protected abstract fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false)
 
     fun setLabel(label : String){
         this.label.value = label

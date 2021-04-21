@@ -32,7 +32,7 @@ class StringAttribute(model: FormModel,
      * @throws NumberFormatException
      * @throws IllegalArgumentException
      */
-    override fun checkAndSetValue(newVal : String?){
+    override fun checkAndSetValue(newVal : String?, calledFromKeyEvent : Boolean){
         if(newVal == null){
             setNullValue()
         } else {

@@ -1,6 +1,7 @@
 package model.util.attribute
 
 import model.BaseFormModel
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -71,6 +72,59 @@ internal class FloatAttributeTest : NumberAttributeTest<Float>() {
 
         assertEquals("6.3", floatAtr.getValueAsText())
 
-        // assertEquals(6.3, floatAtr.getValue()) //TODO: Fix rounding problems for float stepSize
+         assertEquals(6.3f, floatAtr.getValue())
+    }
+
+
+    @Test
+    fun testSetDecimalPlaces(){
+        //then
+        assertEquals(8, floatAtr.getDecimalPlaces())
+
+        //when
+        floatAtr.setDecimalPlaces(6)
+
+        //then
+        assertEquals(6, floatAtr.getDecimalPlaces())
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException::class.java){
+            //when
+            floatAtr.setDecimalPlaces(0)
+        }
+    }
+
+    @Test
+    fun testGetDecimalPlaces(){
+        //when
+        floatAtr.setDecimalPlaces(4)
+
+        //then
+        assertEquals(floatAtr.getDecimalPlaces(), 4)
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException::class.java){
+            //when
+            floatAtr.setDecimalPlaces(-1)
+        }
+
+        //then
+        assertEquals(floatAtr.getDecimalPlaces(), 4)
+    }
+
+    @Test
+    fun testCheckDecimalPlaces(){
+        //when
+        floatAtr.setValueAsText("4.1234567")
+
+        //then
+        assertEquals(4.1234567f, floatAtr.getValue())
+
+        //when
+        floatAtr.setDecimalPlaces(6)
+
+        //then
+        Assertions.assertFalse(floatAtr.isValid())
+        assertEquals("Too many decimal places", floatAtr.getValidationMessage())
     }
 }
