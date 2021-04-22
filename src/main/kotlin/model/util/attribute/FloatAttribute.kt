@@ -17,7 +17,7 @@ class FloatAttribute(
 
     decimalPlaces : Int = 8
 ) : FloatingPointAttribute<FloatAttribute, Float>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize,onlyStepValuesAreValid = onlyStepValuesAreValid, decimalPlaces = decimalPlaces) {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid, decimalPlaces = decimalPlaces) {
 
     //******************************************************************************************************
     //Validation
@@ -59,7 +59,7 @@ class FloatAttribute(
 
     /**
      * This method converts a String into a Float.
-     * If this is not possible,  a Numberformatexception is thrown
+     * If this is not possible, a NumberFormatException is thrown
      * @param newVal : String
      * @return newVal : Float
      * @throws NumberFormatException

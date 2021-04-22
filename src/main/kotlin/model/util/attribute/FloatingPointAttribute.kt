@@ -2,6 +2,8 @@ package model.util.attribute
 
 import model.FormModel
 import java.lang.NumberFormatException
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 abstract class FloatingPointAttribute <F,T> (
     model: FormModel,
@@ -25,15 +27,10 @@ abstract class FloatingPointAttribute <F,T> (
      * @return rounded value : Double
      */
     protected fun roundToDecimalPlaces(value: T) : T {
-        val decimalPlaceShifter = Math.pow(10.0,decimalPlaces.toDouble())
+        val decimalPlaceShifter = 10.0.pow(decimalPlaces.toDouble())
         val interimNum = value.toDouble() * decimalPlaceShifter
 
-        val roundedValue =
-            if(interimNum - interimNum.toInt() < 0.5){
-                (interimNum.toInt() / decimalPlaceShifter)
-            }else{
-                ((interimNum.toInt()+1) / decimalPlaceShifter)
-            }
+        val roundedValue = (interimNum.roundToInt() / decimalPlaceShifter) as T
 
         return roundedValue as T
     }
@@ -49,7 +46,6 @@ abstract class FloatingPointAttribute <F,T> (
             throw NumberFormatException("Too many decimal places")
         }
     }
-
 
     override fun toString(): String {
         return toString().format(String.format("%." + getDecimalPlaces() + "f"));

@@ -17,7 +17,7 @@ class DoubleAttribute(
 
     decimalPlaces : Int = 8
 ) : FloatingPointAttribute<DoubleAttribute, Double>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = false, decimalPlaces = decimalPlaces) {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid, decimalPlaces = decimalPlaces) {
 
     //******************************************************************************************************
     //Validation
@@ -39,6 +39,7 @@ class DoubleAttribute(
                 val doubleVal = convertStringToDouble(newVal)
                 val roundedVal = roundToDecimalPlaces(doubleVal)
                 if(!calledFromKeyEvent){
+                    println(doubleVal.toString())
                     checkDecimalPlaces(doubleVal.toString())
                 }
                 validatedValue(roundedVal)
@@ -59,7 +60,7 @@ class DoubleAttribute(
 
     /**
      * This method converts a String into a Double.
-     * If this is not possible,  a Numberformatexception is thrown
+     * If this is not possible, a NumberFormatException is thrown
      * @param newVal : String
      * @return newVal : Double
      * @throws NumberFormatException

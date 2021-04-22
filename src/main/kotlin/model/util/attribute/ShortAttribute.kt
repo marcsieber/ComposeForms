@@ -12,10 +12,11 @@ class ShortAttribute(
 
     lowerBound : Short? = null,
     upperBound : Short? = null,
-    stepSize :   Short = 1
+    stepSize :   Short = 1,
+    onlyStepValuesAreValid : Boolean = false
 
 ) : NumberAttribute<ShortAttribute, Short>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize)  {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid)  {
 
     //******************************************************************************************************
     //Validation
@@ -53,7 +54,7 @@ class ShortAttribute(
 
     /**
      * This method converts a String into a Short.
-     * If this is not possible,  a Numberformatexception is thrown
+     * If this is not possible, a NumberFormatException is thrown
      * @param newVal : String
      * @return newVal : Short
      * @throws NumberFormatException

@@ -51,7 +51,7 @@ class IntegerAttribute(model: FormModel,
 
     /**
      * This method converts a String into a Int.
-     * If this is not possible,  a Numberformatexception is thrown
+     * If this is not possible, a NumberFormatException is thrown
      * @param newVal : String
      * @return newVal : Int
      * @throws NumberFormatException
