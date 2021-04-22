@@ -100,9 +100,13 @@ class SelectionAttribute(model: FormModel,
      */
     fun deleteAPossibleSelection(selection: String){
         if(possibleSelections.contains(selection)){
-            this.possibleSelections.toMutableSet().remove(selection)
+            val listPos = this.possibleSelections.toMutableSet()
+            listPos.remove(selection)
+            setPossibleSelections(listPos)
             if(getValue()!!.contains(selection)){
-                getValue()!!.toMutableSet().remove(selection)
+                val listVal = getValue()!!.toMutableSet()
+                listVal.remove(selection)
+                setValue(listVal)
                 checkAndSetValue(getValue().toString())
             }
         }
