@@ -112,6 +112,21 @@ class SelectionAttribute(model: FormModel,
     }
 
 
+    fun addSelection(value: String){
+        var list = getValue() as Set<String>
+        list = list.toMutableSet()
+        list.add(value)
+        this.setValue(list)
+    }
+
+    fun removeSelection(value: String){
+        var list = getValue() as Set<String>
+        list = list.toMutableSet()
+        list.remove(value)
+        this.setValue(list)
+    }
+
+
     //******************************************************************************************************
     //Public Getter
 

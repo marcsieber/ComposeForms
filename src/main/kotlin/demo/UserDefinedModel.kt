@@ -87,6 +87,13 @@ class UserDefinedModel() : BaseFormModel(){
         stepSize = 0.45
     )
 
+    val list = setOf("Hallo", "Louisa")
+    val selectionValue = SelectionAttribute(
+        model = this,
+        value = setOf(),
+        possibleSelections = list
+    )
+
     val dateValue   = mutableStateOf("01/05/2020")
     val booleanValue = mutableStateOf(true)
     val radioButtonValue = mutableStateOf(true)
