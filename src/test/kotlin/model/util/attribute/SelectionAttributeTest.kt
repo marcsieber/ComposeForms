@@ -5,29 +5,7 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 
-internal class SelectionAttributeTest: AttributeTest<Set<String>>() {
-
-    override fun provideAttribute(model: BaseFormModel, value: Set<String>?): Attribute<*, Any> {
-        return SelectionAttribute(model, value!!) as Attribute<*, Any>
-    }
-
-    init{
-        validValue1Uneven = setOf<String>("") //todo: define
-        validValue1AsText  = validValue1Uneven.toString()
-
-        validValue2        = setOf<String>("") //todo: define
-        validValue2AsText  = validValue2.toString()
-
-        validValue3        = setOf<String>("") //todo: define
-        validValue3AsText  = validValue3.toString()
-
-        validValue4        = setOf<String>("") //todo: define
-        validValue4AsText  = validValue4.toString()
-
-        notValidValueAsText  = setOf<String>("").toString() //todo: define
-
-        validationMessage     = "" //todo: define
-    }
+class SelectionAttributeTest {
 
     lateinit var selAtr : SelectionAttribute
 

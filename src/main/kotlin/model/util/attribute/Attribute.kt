@@ -135,7 +135,7 @@ abstract class Attribute <A,T> (private val model : FormModel,
 
 
     //******************************************************************************************************
-    //Internal Setter
+    //Internal Setter //todo change internal
 
     /**
      * This method sets the savedValue to the current value

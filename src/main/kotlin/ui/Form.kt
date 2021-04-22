@@ -1,7 +1,6 @@
 package ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,6 +16,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import model.FormModel
 import model.util.attribute.*
@@ -29,36 +29,43 @@ class Form {
     @Composable
     fun of(model: FormModel){
         with(model) {
-            Column() {
-                Row() {
-                    Text(getTitle())
-                }
 
-                Row() {
-                    LazyColumn(Modifier.fillMaxHeight(0.7f)) {
-                        items(getAttributes()) { attribute ->
-                            AttributeElement(attribute)
+            Column() {
+                TopAppBar(
+                    backgroundColor = Color.LightGray,
+                    elevation = 100.dp
+                ){
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
+
+                        Text(getTitle())
+
+                        Row(){
+                            Button(
+                                modifier = Modifier.padding(4.dp),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
+                                enabled = isChangedForAll(),
+                                onClick = {
+                                    undoAll()
+                                }) {
+                                Text("Undo")
+                            }
+                            Button(
+                                modifier = Modifier.padding(4.dp),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
+                                enabled = isValidForAll() && isChangedForAll(),
+                                onClick = {
+                                    saveAll()
+                                }) {
+                                Text("Save")
+                            }
                         }
                     }
                 }
-
-                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-                    Button(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
-                        enabled = isChangedForAll(),
-                        onClick = {
-                            undoAll()
-                        }) {
-                        Text("Undo")
-                    }
-
-                    Button(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
-                        enabled = isValidForAll() && isChangedForAll(),
-                        onClick = {
-                            saveAll()
-                        }) {
-                        Text("Save")
+                Row() {
+                    LazyColumn(Modifier.fillMaxHeight()) {
+                        items(getAttributes()) { attribute ->
+                            AttributeElement(attribute)
+                        }
                     }
                 }
             }
@@ -177,41 +184,49 @@ class Form {
         }
     }
 
-    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute){ //todo
-//        val dropDownItems  = remember {setOf<String>("1","2","3","4")}
-        val dropDownOpen    = remember {mutableStateOf(false)}
-//        val dropDownSelIndex = remember {mutableStateOf(0)}
+    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute){ //todo: undo when dropdown is open
+        val dropDownIsOpen          = remember {mutableStateOf(false)}
+        val elementIsSelected       = remember{ mutableStateOf(false)}
+        val elementIsSelectedColor  = remember {if(elementIsSelected.value) Color.DarkGray else Color.LightGray}
+        val selectionString         = mutableStateOf(selectionAttribute.getValueAsText().substring(1, selectionAttribute.getValueAsText().length-1))
+        val label                   = selectionAttribute.getLabel()
 
-        Box(
-            modifier = Modifier.height(300.dp)
-        ){
-            Text(
-                selectionAttribute.getValue()?.joinToString(", ") ?: "",
-                modifier = Modifier.fillMaxWidth().clickable(onClick = {dropDownOpen.value = true}).background(
-                    Color.LightGray
-                ))
-            DropdownMenu(
-                expanded = dropDownOpen.value,
-                onDismissRequest = { dropDownOpen.value = false},
-                modifier = Modifier.fillMaxWidth().background(Color.LightGray),
-                content = {
-                    selectionAttribute.getPossibleSelections().forEachIndexed{ index, string ->
-                        var isSelected = remember{ mutableStateOf(selectionAttribute.getValue()?.contains(string) == true)}
-                        DropdownMenuItem(
-                            onClick = {if(!isSelected.value){
-                                selectionAttribute.addSelection(string)
-                            }else{
-                                selectionAttribute.removeSelection(string)
-                            }}){
-                            Text(modifier = Modifier.background(
-                                if (isSelected.value) Color.DarkGray else Color.LightGray
-                            ), text = string)
-                        }
+        Box( modifier = Modifier.height(300.dp).wrapContentSize(Alignment.TopStart)){
+            Column {
+                if(!selectionString.value.equals("")){
+                    Text(label, color = Color.DarkGray, modifier = Modifier.wrapContentSize().padding(4.dp), fontSize = LocalDensity.current.run { 24.toSp() })
+                }
+                OutlinedButton(
+                    modifier = Modifier.background(Color.LightGray),
+                    onClick = {dropDownIsOpen.value = true},
+                    shape = MaterialTheme.shapes.large
+                ){
+                    if(selectionString.value.equals("")){
+                        Text(label, color = Color.DarkGray)
+                    }else{
+                        Text(selectionString.value)
                     }
                 }
-            )
+                DropdownMenu( //todo: different colours, depending on whether the element is selected or not
+                    expanded = dropDownIsOpen.value,
+                    onDismissRequest = { dropDownIsOpen.value = false},
+                    modifier = Modifier.wrapContentSize(),
+                    content = {
+                        selectionAttribute.getPossibleSelections().forEachIndexed { index, string ->
+                            DropdownMenuItem(
+                                modifier = Modifier.background(elementIsSelectedColor),
+                                onClick = {
+                                    elementIsSelected.value = selectionAttribute.getValue()!!.contains(string)
+                                    if (!elementIsSelected.value) {
+                                        selectionAttribute.addUserSelection(string)
+                                    } else { selectionAttribute.removeUserSelection(string)}},
+                                content = {Text( text = string, modifier = Modifier.background(elementIsSelectedColor))}
+                            )
+                        }
+                    }
+                )
+            }
+
         }
-
-
     }
 }

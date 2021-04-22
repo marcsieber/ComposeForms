@@ -10,20 +10,77 @@ class SelectionAttribute(model: FormModel,
 
                          private var minNumberOfSelections : Int = 1,
                          private var maxNumberOfSelections : Int = Int.MAX_VALUE,
-                         private var possibleSelections : Set<String> = emptySet<String>()
+                         possibleSelections : Set<String>
 )
     : Attribute<SelectionAttribute, Set<String>>(model = model, value = value, label = label, required = required, readOnly = readOnly) {
+
+    //******************************************************************************************************
+    //Properties
+
+    private var possibleSelections = possibleSelections.toMutableSet()
 
     //******************************************************************************************************
     //Validation
 
     override fun checkAndSetValue(newVal: String?, calledFromKeyEvent: Boolean) {
-        val newValList = newVal?.toSet()
-        if(newValList == emptySet<String>()){
+        if(newVal == null || newVal.equals("[]")){
             setNullValue(valueIsASet = true)
         } else {
-            //todo validation
+            try{
+                val setVal = convertStringToSet(newVal!!)
+                //todo validation
+                setValid(true)
+                setValidationMessage("Valid Input")
+                setValue(setVal)
+            }  catch (e: NumberFormatException) {
+                setValid(false)
+                setValidationMessage(e.message.toString())
+                e.printStackTrace()
+            } catch (e: IllegalArgumentException) {
+                setValid(false)
+                setValidationMessage(e.message.toString())
+                e.printStackTrace()
+            }
         }
+    }
+
+    /**
+     * This method converts a String into a MutableSet<String>.
+     * If this is not possible,  a Numberformatexception is thrown
+     * @param newVal : String
+     * @return newVal : Double
+     * @throws NumberFormatException
+     */
+    fun convertStringToSet(newVal: String) : MutableSet<String>{
+        val set = newVal.substring(1,newVal.length-1).split(", ")
+        return set.toMutableSet()
+    }
+
+
+    //******************************************************************************************************
+    //Functions that are called on user actions
+
+    /**
+     * This function creates a new user set containing all the values already selected by the user plus the new value.
+     * The newly formed set is then passed to the setValueAsText function.
+     * @param value : String
+     */
+    fun addUserSelection(value: String){
+        var newSet = getValue() as Set<String>
+        newSet = newSet.toMutableSet()
+        newSet.add(value)
+        setValueAsText(newSet.toString())
+    }
+
+    /**
+     * This function creates a new user set containing all the values already selected by the user minus the new value.
+     * The newly formed set is then passed to the setValueAsText function.
+     * @param value : String
+     */
+    fun removeUserSelection(value: String){
+        val newSet : MutableSet<String> = getValue()!!.toMutableSet()
+        newSet.remove(value)
+        setValueAsText(newSet.toString())
     }
 
     //******************************************************************************************************
@@ -70,15 +127,15 @@ class SelectionAttribute(model: FormModel,
     }
 
     /**
-     * This method checks if the is not empty.
-     * If yes, the possibleSelections-set is set and the current textValue is checked to see if it is still valid.
+     * This method checks if the set of selections is not empty.
+     * If so, the possibleSelections-set is set and the current textValue is checked to see if it is still valid.
      *
      * @param selections : Int
      * @throws IllegalArgumentException
      */
     fun setPossibleSelections(selections : Set<String>){
         if(selections.size > 0){
-            this.possibleSelections = selections
+            this.possibleSelections = selections.toMutableSet() //todo: find out how .value can be used (change possibleSelections from var to val)
             checkAndSetValue(getValue().toString())
         }else{
             throw IllegalArgumentException("There are no selections in the set")
@@ -90,23 +147,22 @@ class SelectionAttribute(model: FormModel,
      * @param selection : String
      */
     fun addANewPossibleSelection(selection: String){
-        this.possibleSelections.toMutableSet().add(selection)
+        this.possibleSelections.add(selection)
     }
 
     /**
      * This method deletes a selection of the possibleSelections-set.
+     * It is checked whether this element is already selected by the user.
+     * If so, it is removed from the user value list and checked whether the newly created user value list is still valid.
+     *
      * @param selection : String
      * @throws IllegalArgumentException
      */
-    fun deleteAPossibleSelection(selection: String){
+    fun removeAPossibleSelection(selection: String){
         if(possibleSelections.contains(selection)){
-            val listPos = this.possibleSelections.toMutableSet()
-            listPos.remove(selection)
-            setPossibleSelections(listPos)
+            this.possibleSelections.remove(selection)
             if(getValue()!!.contains(selection)){
-                val listVal = getValue()!!.toMutableSet()
-                listVal.remove(selection)
-                setValue(listVal)
+                getValue()!!.toMutableSet().remove(selection)
                 checkAndSetValue(getValue().toString())
             }
         }
@@ -114,22 +170,6 @@ class SelectionAttribute(model: FormModel,
             throw IllegalArgumentException("There was no such selection in the possibleSelections-set")
         }
     }
-
-
-    fun addSelection(value: String){
-        var list = getValue() as Set<String>
-        list = list.toMutableSet()
-        list.add(value)
-        this.setValue(list)
-    }
-
-    fun removeSelection(value: String){
-        var list = getValue() as Set<String>
-        list = list.toMutableSet()
-        list.remove(value)
-        this.setValue(list)
-    }
-
 
     //******************************************************************************************************
     //Public Getter
