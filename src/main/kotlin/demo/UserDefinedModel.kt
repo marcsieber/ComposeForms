@@ -92,7 +92,8 @@ class UserDefinedModel() : BaseFormModel(){
         model = this,
         value = setOf(),
         possibleSelections = list,
-        label = "Selection-Label"
+        label = "Selection-Label",
+//        minNumberOfSelections = 2
     )
     init {
 

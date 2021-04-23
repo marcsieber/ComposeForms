@@ -184,7 +184,7 @@ class Form {
         }
     }
 
-    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute){ //todo: undo when dropdown is open
+    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute){ //todo: undo & save when dropdown is open
         val dropDownIsOpen          = remember {mutableStateOf(false)}
         val elementIsSelected       = remember{ mutableStateOf(false)}
         val elementIsSelectedColor  = remember {if(elementIsSelected.value) Color.DarkGray else Color.LightGray}

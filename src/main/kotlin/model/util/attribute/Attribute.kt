@@ -49,6 +49,8 @@ abstract class Attribute <A,T> (private val model : FormModel,
             this.valueAsText.value = valueAsText
             setChanged(valueAsText)
             checkAndSetValue( if(valueAsText.equals("")) null else valueAsText)
+        }else{
+            setValidationMessage("This is read only. The value was not set.")
         }
     }
 
@@ -60,14 +62,12 @@ abstract class Attribute <A,T> (private val model : FormModel,
      * @param valueAsText : String
      */
     fun setValueAsTextFromKeyEvent(valueAsText : String){
-        println("Value before setValueAsTextFromKeyEvent: " + value)
         if("\t" in valueAsText){
             return
         }
         if(!isReadOnly()){
             setChanged(valueAsText)
             checkAndSetValue( if(valueAsText.equals("")) null else valueAsText, true)
-            println("Value after setValueAsTextFromKeyEvent: " + value)
 
             if(isValid()){
                 this.valueAsText.value = getValue().toString()
@@ -116,8 +116,12 @@ abstract class Attribute <A,T> (private val model : FormModel,
         }
     }
 
+    /**
+     * The required value is set and the current textValue is checked to see if it is still valid.
+     */
     fun setRequired(isRequired : Boolean){
         this.required.value = isRequired
+        checkAndSetValue(getValueAsText())
     }
 
     fun setReadOnly(isReadOnly : Boolean){
@@ -191,12 +195,27 @@ abstract class Attribute <A,T> (private val model : FormModel,
     /**
      * Changed is true, if valueAsText and savedValue are not equal.
      * If valueAsText and savedValue are equal or if valueAsText is "" and savedValue is null changed is set false.
+     * If the attribute is a selectionAttribute, the order of the elements does not play a role for equality
      * This method also calls setChangedForAll()
      *
      * @param newVal : String
      */
     private fun setChanged(newVal: String) {
-        this.changed.value = !newVal.equals(getSavedValue().toString()) && !(newVal.equals("") && getSavedValue() == null) //todo add logic for emptySet (SelectionAttribute)
+        if(this is SelectionAttribute){
+            var set : Set<String>
+            if(newVal.equals("[]")){
+                set = emptySet()
+            }else{
+                set = newVal.substring(1,newVal.length-1).split(", ").toSet() //convert string to set
+            }
+            this.changed.value = !(set.equals(getSavedValue()))
+            if(!isChanged()){ // set value & savedValue to the new order, otherwise the user will be irritated if the order changes when undo is clicked
+                checkAndSetValue(newVal)
+                save()
+            }
+        }else{
+            this.changed.value = !newVal.equals(getSavedValue().toString()) && !(newVal.equals("") && getSavedValue() == null)
+        }
         this.model.setChangedForAll()
     }
 

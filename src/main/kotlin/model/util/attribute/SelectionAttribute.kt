@@ -27,8 +27,8 @@ class SelectionAttribute(model: FormModel,
             setNullValue(valueIsASet = true)
         } else {
             try{
-                val setVal = convertStringToSet(newVal!!)
-                //todo validation
+                val setVal = convertStringToSet(newVal)
+                //todo: validatedValue(setVal)
                 setValid(true)
                 setValidationMessage("Valid Input")
                 setValue(setVal)
@@ -51,9 +51,15 @@ class SelectionAttribute(model: FormModel,
      * @return newVal : Double
      * @throws NumberFormatException
      */
-    fun convertStringToSet(newVal: String) : MutableSet<String>{
+    private fun convertStringToSet(newVal: String) : MutableSet<String>{
         val set = newVal.substring(1,newVal.length-1).split(", ")
         return set.toMutableSet()
+    }
+
+    private fun validatedValue(newVal : MutableSet<String>){
+        if(!(newVal.size in minNumberOfSelections..maxNumberOfSelections)){
+            throw IllegalArgumentException("Validation mismatched (min/max number of selections)")
+        }
     }
 
 
@@ -61,15 +67,22 @@ class SelectionAttribute(model: FormModel,
     //Functions that are called on user actions
 
     /**
-     * This function creates a new user set containing all the values already selected by the user plus the new value.
+     * This function checks if the value is in the set of possible selections.
+     * If yes, it creates a new user set containing all the values already selected by the user plus the new value.
      * The newly formed set is then passed to the setValueAsText function.
      * @param value : String
      */
     fun addUserSelection(value: String){
-        var newSet = getValue() as Set<String>
-        newSet = newSet.toMutableSet()
-        newSet.add(value)
-        setValueAsText(newSet.toString())
+        if(possibleSelections.contains(value)){
+            var newSet = getValue() as Set<String>
+            newSet = newSet.toMutableSet()
+            newSet.add(value)
+            setValueAsText(newSet.toString())
+        }
+        else {
+            setValueAsText(getValue().toString())
+            throw IllegalArgumentException("There was no such selection to choose") //todo: delete? because it will be overwritten with "Valid Input"
+        }
     }
 
     /**

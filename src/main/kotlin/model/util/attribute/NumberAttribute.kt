@@ -41,7 +41,6 @@ abstract class NumberAttribute <N,T> (
      *
      * @throws IllegalArgumentException
      */
-    @Throws(IllegalArgumentException :: class)
     protected fun validatedValue(newVal: T){
         if  (!(newVal in lowerBound..upperBound)){
             throw IllegalArgumentException("Validation mismatched (lowerBound/upperBound)")
