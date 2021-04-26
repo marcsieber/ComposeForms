@@ -186,8 +186,6 @@ class Form {
 
     @Composable fun AttributeElement(selectionAttribute: SelectionAttribute){ //todo: undo & save when dropdown is open
         val dropDownIsOpen          = remember {mutableStateOf(false)}
-        val elementIsSelected       = remember{ mutableStateOf(false)}
-        val elementIsSelectedColor  = remember {if(elementIsSelected.value) Color.DarkGray else Color.LightGray}
         val selectionString         = mutableStateOf(selectionAttribute.getValueAsText().substring(1, selectionAttribute.getValueAsText().length-1))
         val label                   = selectionAttribute.getLabel()
 
@@ -207,17 +205,18 @@ class Form {
                         Text(selectionString.value)
                     }
                 }
-                DropdownMenu( //todo: different colours, depending on whether the element is selected or not
+                DropdownMenu(
                     expanded = dropDownIsOpen.value,
                     onDismissRequest = { dropDownIsOpen.value = false},
                     modifier = Modifier.wrapContentSize(),
                     content = {
                         selectionAttribute.getPossibleSelections().forEachIndexed { index, string ->
+                            val elementIsSelected       = selectionAttribute.getValue()!!.contains(string)
+                            val elementIsSelectedColor  = if(elementIsSelected) Color.DarkGray else Color.LightGray
                             DropdownMenuItem(
                                 modifier = Modifier.background(elementIsSelectedColor),
                                 onClick = {
-                                    elementIsSelected.value = selectionAttribute.getValue()!!.contains(string)
-                                    if (!elementIsSelected.value) {
+                                    if (!elementIsSelected) {
                                         selectionAttribute.addUserSelection(string)
                                     } else { selectionAttribute.removeUserSelection(string)}},
                                 content = {Text( text = string, modifier = Modifier.background(elementIsSelectedColor))}
