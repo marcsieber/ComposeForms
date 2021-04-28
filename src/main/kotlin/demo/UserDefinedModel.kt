@@ -37,7 +37,7 @@ class UserDefinedModel() : BaseFormModel(){
     val intValue2    = IntegerAttribute(model = this,
         value = 15,
         required = false,
-        readOnly = false,
+        readOnly = true,
         lowerBound = 10,
         upperBound = 20,
         stepSize = 1,
@@ -93,7 +93,8 @@ class UserDefinedModel() : BaseFormModel(){
         value = setOf(),
         possibleSelections = list,
         label = "Selection-Label",
-//        minNumberOfSelections = 2
+        minNumberOfSelections = 0,
+        maxNumberOfSelections = 2
     )
     init {
 

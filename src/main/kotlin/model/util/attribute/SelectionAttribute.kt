@@ -8,7 +8,7 @@ class SelectionAttribute(model: FormModel,
                          required: Boolean = false,
                          readOnly: Boolean = false,
 
-                         private var minNumberOfSelections : Int = 1,
+                         private var minNumberOfSelections : Int = 0,
                          private var maxNumberOfSelections : Int = Int.MAX_VALUE,
                          possibleSelections : Set<String>
 )
@@ -23,15 +23,17 @@ class SelectionAttribute(model: FormModel,
     //Validation
 
     override fun checkAndSetValue(newVal: String?, calledFromKeyEvent: Boolean) {
-        if(newVal == null || newVal.equals("[]")){
-            setNullValue(valueIsASet = true)
-        } else {
             try{
-                val setVal = convertStringToSet(newVal)
-                //todo: validatedValue(setVal)
-                setValid(true)
-                setValidationMessage("Valid Input")
-                setValue(setVal)
+                if(newVal == null || newVal.equals("[]")){
+                    setNullValue(valueIsASet = true)
+                    validatedValue(setOf<String>().toMutableSet())
+                }else{
+                    val setVal = convertStringToSet(newVal)
+                    setValid(true)
+                    setValidationMessage("Valid Input")
+                    setValue(setVal)
+                    validatedValue(setVal)
+                }
             }  catch (e: NumberFormatException) {
                 setValid(false)
                 setValidationMessage(e.message.toString())
@@ -41,7 +43,10 @@ class SelectionAttribute(model: FormModel,
                 setValidationMessage(e.message.toString())
                 e.printStackTrace()
             }
-        }
+    }
+
+    init{
+        checkAndSetValue(getValueAsText());
     }
 
     /**
@@ -56,10 +61,16 @@ class SelectionAttribute(model: FormModel,
         return set.toMutableSet()
     }
 
+    /**
+     * This method checks if the new value is greater than the minNumberOfSelections
+     * and lower than the maxNumberOfSelections.
+     * @param newVal : MutableSet<String>
+     * @throws IllegalArgumentException
+     */
     private fun validatedValue(newVal : MutableSet<String>){
-        if(!(newVal.size in minNumberOfSelections..maxNumberOfSelections)){
-            throw IllegalArgumentException("Validation mismatched (min/max number of selections)")
-        }
+            if (!(newVal.size in minNumberOfSelections..maxNumberOfSelections)) {
+                throw IllegalArgumentException("Validation mismatched (min/max number of selections)")
+            }
     }
 
 

@@ -1,5 +1,6 @@
 package ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -195,9 +196,11 @@ class Form {
                     Text(label, color = Color.DarkGray, modifier = Modifier.wrapContentSize().padding(4.dp), fontSize = LocalDensity.current.run { 24.toSp() })
                 }
                 OutlinedButton(
-                    modifier = Modifier.background(Color.LightGray),
+                    modifier = Modifier.height(50.dp),
                     onClick = {dropDownIsOpen.value = true},
-                    shape = MaterialTheme.shapes.large
+                    shape = MaterialTheme.shapes.large,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                    border = BorderStroke(1.dp, if(selectionAttribute.isValid()) Color.DarkGray else Color.Red)
                 ){
                     if(selectionString.value.equals("")){
                         Text(label, color = Color.DarkGray)
@@ -212,14 +215,15 @@ class Form {
                     content = {
                         selectionAttribute.getPossibleSelections().forEachIndexed { index, string ->
                             val elementIsSelected       = selectionAttribute.getValue()!!.contains(string)
-                            val elementIsSelectedColor  = if(elementIsSelected) Color.DarkGray else Color.LightGray
+                            val elementIsSelectedBackgroundColor  = if(elementIsSelected) Color.DarkGray else Color.LightGray
+                            val elementIsSelectedTextColor = if(elementIsSelected) Color.White else Color.Black
                             DropdownMenuItem(
-                                modifier = Modifier.background(elementIsSelectedColor),
+                                modifier = Modifier.background(elementIsSelectedBackgroundColor),
                                 onClick = {
                                     if (!elementIsSelected) {
                                         selectionAttribute.addUserSelection(string)
                                     } else { selectionAttribute.removeUserSelection(string)}},
-                                content = {Text( text = string, modifier = Modifier.background(elementIsSelectedColor))}
+                                content = {Text( text = string, modifier = Modifier.background(elementIsSelectedBackgroundColor), color = elementIsSelectedTextColor)}
                             )
                         }
                     }
