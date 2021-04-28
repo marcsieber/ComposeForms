@@ -20,11 +20,6 @@ class SelectionAttributeTest {
     }
 
     @Test
-    fun checkAndSetValue() {
-        //todo
-    }
-
-    @Test
     fun testAddUserSelection(){
         //then
         assertEquals("[]", selAtr.getValueAsText())
@@ -62,47 +57,216 @@ class SelectionAttributeTest {
 
     @Test
     fun testRemoveUserSelection(){
-        //todo
+        //then
+        assertEquals("[]", selAtr.getValueAsText())
+
+        //when
+        selAtr.removeUserSelection("ElementNotInList")
+
+        //then
+        assertEquals("[]", selAtr.getValueAsText())
+
+        //when
+        selAtr.addUserSelection("Element1")
+        selAtr.addUserSelection("Element2")
+
+        //then
+        assertEquals("[Element1, Element2]", selAtr.getValueAsText())
+
+        //when
+        selAtr.removeUserSelection("Element1")
+
+        //then
+        assertEquals("[Element2]", selAtr.getValueAsText())
     }
 
     @Test
-    fun setMinNumberOfSelections() {
-        //todo
+    fun testSetMinNumberOfSelections() {
+        //then
+        assertEquals(0, selAtr.getMinNumberOfSelections())
+        assertTrue(selAtr.isValid())
+
+        //when
+        selAtr.setMinNumberOfSelections(1)
+
+        //then
+        assertEquals(1, selAtr.getMinNumberOfSelections())
+        assertFalse(selAtr.isValid())
+
+        //when
+        selAtr.addUserSelection("Element1")
+
+        //then
+        assertTrue(selAtr.isValid())
+
+        //when
+        selAtr.setMaxNumberOfSelections(1)
+
+        //then
+        assertThrows(IllegalArgumentException ::class.java){
+            //when
+            selAtr.setMinNumberOfSelections(2)
+        }
+
+        //then
+        assertThrows(IllegalArgumentException ::class.java){
+            //when
+            selAtr.setMinNumberOfSelections(-1)
+        }
+
+        //when
+        selAtr.addUserSelection("Element2")
+
+        //then
+        assertFalse(selAtr.isValid())
+
+        //when
+        selAtr.setMaxNumberOfSelections(10)
+
+//        //then
+//        assertThrows(IllegalArgumentException ::class.java){
+//            //when
+//            selAtr.setMinNumberOfSelections(4)  //todo: min > Number of possible elements
+//        }
     }
 
     @Test
-    fun setMaxNumberOfSelections() {
-        //todo
+    fun testSetMaxNumberOfSelections() {
+        //then
+        assertEquals(Int.MAX_VALUE, selAtr.getMaxNumberOfSelections())
+        assertTrue(selAtr.isValid())
+
+        //when
+        selAtr.addUserSelection("Element1")
+        selAtr.addUserSelection("Element2")
+        selAtr.addANewPossibleSelection("Element3")
+        selAtr.addUserSelection("Element3")
+        selAtr.setMaxNumberOfSelections(2)
+
+        //then
+        assertEquals(2, selAtr.getMaxNumberOfSelections())
+        assertFalse(selAtr.isValid())
+
+        //when
+        selAtr.removeUserSelection("Element3")
+
+        //then
+        assertTrue(selAtr.isValid())
+
+        //when
+        selAtr.setMinNumberOfSelections(2)
+
+        //then
+        assertThrows(IllegalArgumentException ::class.java){
+            //when
+            selAtr.setMaxNumberOfSelections(1)
+        }
+
+        //then
+        assertThrows(IllegalArgumentException ::class.java){
+            //when
+            selAtr.setMinNumberOfSelections(-1)
+        }
+
+        //when
+        selAtr.addUserSelection("Element3")
+
+        //then
+        assertFalse(selAtr.isValid())
     }
 
     @Test
-    fun setPossibleSelections() {
-        //todo
+    fun testSetPossibleSelections() {
+        //then
+        assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
+
+        //when
+        selAtr.setPossibleSelections(setOf("A", "B", "C", "D"))
+
+        //then
+        assertEquals(setOf("A", "B", "C", "D"), selAtr.getPossibleSelections())
+
+        //when
+        selAtr.addANewPossibleSelection("E")
+
+        //then
+        assertEquals(setOf("A", "B", "C", "D", "E"), selAtr.getPossibleSelections())
     }
 
     @Test
-    fun addANewPossibleSelection() {
-        //todo
+    fun testAddANewPossibleSelection() {
+        //then
+        assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
+
+        //when
+        selAtr.addANewPossibleSelection("Element1")
+
+        //then
+        assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
+
+        //when
+        selAtr.addANewPossibleSelection("Element3")
+
+        //then
+        assertEquals(setOf("Element1", "Element2", "Element3"), selAtr.getPossibleSelections())
     }
 
     @Test
-    fun deleteAPossibleSelection() {
-        //todo
+    fun testRemoveAPossibleSelection() {
+        //then
+        assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
+
+        //then
+        assertThrows(IllegalArgumentException :: class.java){
+            //when
+            selAtr.removeAPossibleSelection("Element3")
+        }
+
+        //then
+        assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
+
+        //when
+        selAtr.removeAPossibleSelection("Element2")
+
+        //then
+        assertEquals(setOf("Element1"), selAtr.getPossibleSelections())
     }
 
     @Test
-    fun getMinNumberOfSelections() {
-        //todo
+    fun testGetMinNumberOfSelections() {
+        //then
+        assertEquals(0, selAtr.getMinNumberOfSelections())
+
+        //when
+        selAtr.setMinNumberOfSelections(1)
+
+        //then
+        assertEquals(1, selAtr.getMinNumberOfSelections())
     }
 
     @Test
-    fun getMaxNumberOfSelections() {
-        //todo
+    fun testGetMaxNumberOfSelections() {
+        //then
+        assertEquals(Int.MAX_VALUE, selAtr.getMaxNumberOfSelections())
+
+        //when
+        selAtr.setMaxNumberOfSelections(100)
+
+        //then
+        assertEquals(100, selAtr.getMaxNumberOfSelections())
     }
 
     @Test
-    fun getPossibleSelections() {
-        //todo
+    fun testGetPossibleSelections() {
+        //then
+        assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
+
+        //when
+        selAtr.addANewPossibleSelection("Element3")
+
+        //then
+        assertEquals(setOf("Element1", "Element2", "Element3"), selAtr.getPossibleSelections())
+
     }
 
     //****************************************************************************************************************
