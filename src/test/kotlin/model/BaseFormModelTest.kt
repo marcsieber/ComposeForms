@@ -1,7 +1,6 @@
 package model
 
-import model.util.attribute.Attribute
-import model.util.attribute.IntegerAttribute
+import model.util.attribute.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -112,7 +111,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateShortAttribute() {
         //when
-        val attribute = model.createShortAttribute(5)
+        val attribute = ShortAttribute(model, 5)
 
         //then
         assertEquals(5,attribute.getValue())
@@ -120,7 +119,7 @@ internal class BaseFormModelTest {
         assertEquals(5,attribute.getSavedValue())
 
         //when
-        val attributeDefaultVal = model.createShortAttribute()
+        val attributeDefaultVal = ShortAttribute(model)
 
         //then
         assertEquals(null, attributeDefaultVal.getValue())
@@ -129,7 +128,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateLongAttribute() {
         //when
-        val attribute = model.createLongAttribute(5)
+        val attribute = LongAttribute(model, 5)
 
         //then
         assertEquals(5,attribute.getValue())
@@ -137,7 +136,7 @@ internal class BaseFormModelTest {
         assertEquals(5,attribute.getSavedValue())
 
         //when
-        val attributeDefaultVal = model.createLongAttribute()
+        val attributeDefaultVal = LongAttribute(model)
 
         //then
         assertEquals(null, attributeDefaultVal.getValue())
@@ -146,7 +145,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateDoubleAttribute() {
         //when
-        val attribute = model.createDoubleAttribute(5.5)
+        val attribute = DoubleAttribute(model, 5.5)
 
         //then
         assertEquals(5.5,attribute.getValue())
@@ -154,7 +153,7 @@ internal class BaseFormModelTest {
         assertEquals(5.5,attribute.getSavedValue())
 
         //when
-        val attributeDefaultVal = model.createDoubleAttribute()
+        val attributeDefaultVal = DoubleAttribute(model)
 
         //then
         assertEquals(null, attributeDefaultVal.getValue())
@@ -163,7 +162,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateFloatAttribute() {
         //when
-        val attribute = model.createFloatAttribute(5.5f)
+        val attribute = FloatAttribute(model,5.5f)
 
         //then
         assertEquals(5.5f,attribute.getValue())
@@ -171,7 +170,7 @@ internal class BaseFormModelTest {
         assertEquals(5.5f,attribute.getSavedValue())
 
         //when
-        val attributeDefaultVal = model.createFloatAttribute()
+        val attributeDefaultVal = FloatAttribute(model)
 
         //then
         assertEquals(null, attributeDefaultVal.getValue())
@@ -180,7 +179,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateStringAttribute() {
         //when
-        val attribute = model.createStringAttribute("a")
+        val attribute = StringAttribute(model,"a")
 
         //then
         assertEquals("a", attribute.getValue())
@@ -188,7 +187,7 @@ internal class BaseFormModelTest {
         assertEquals("a", attribute.getSavedValue())
 
         //when
-        val attributeDefaultVal = model.createStringAttribute()
+        val attributeDefaultVal = StringAttribute(model)
 
         //then
         assertEquals(null, attributeDefaultVal.getValue())

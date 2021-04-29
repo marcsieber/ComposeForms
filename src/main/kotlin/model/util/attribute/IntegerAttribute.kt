@@ -3,17 +3,19 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class IntegerAttribute(model: FormModel,
-                       value : Int? = null,
-                       label: String = "",
-                       required: Boolean = false,
-                       readOnly: Boolean = false,
+class IntegerAttribute(model                    : FormModel,
+                       value                    : Int? = null,
+                       label                    : String = "",
+                       required                 : Boolean = false,
+                       readOnly                 : Boolean = false,
 
-                       lowerBound : Int? = null,
-                       upperBound : Int? = null,
-                       stepSize :   Int = 1
+                       lowerBound               : Int? = null,
+                       upperBound               : Int? = null,
+                       stepSize                 : Int = 1,
+                       onlyStepValuesAreValid   : Boolean = false
+
 ) : NumberAttribute<IntegerAttribute, Int>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize) {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid) {
 
     //******************************************************************************************************
     //Validation

@@ -3,17 +3,16 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class ShortAttribute(
-    model: FormModel,
-    value : Short? = null,
-    label: String = "",
-    required: Boolean = false,
-    readOnly: Boolean = false,
+class ShortAttribute(   model                   : FormModel,
+                        value                   : Short? = null,
+                        label                   : String = "",
+                        required                : Boolean = false,
+                        readOnly                : Boolean = false,
 
-    lowerBound : Short? = null,
-    upperBound : Short? = null,
-    stepSize :   Short = 1,
-    onlyStepValuesAreValid : Boolean = false
+                        lowerBound              : Short? = null,
+                        upperBound              : Short? = null,
+                        stepSize                :   Short = 1,
+                        onlyStepValuesAreValid  : Boolean = false
 
 ) : NumberAttribute<ShortAttribute, Short>(model = model, value = value, label = label, required = required,
     readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid)  {

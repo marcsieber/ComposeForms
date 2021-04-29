@@ -5,11 +5,12 @@ import model.FormModel
 import java.util.*
 import kotlin.collections.HashMap
 
-abstract class Attribute <A,T> (private val model : FormModel,
-                                private var value : T? = null,
-                                label: String = "",
-                                required: Boolean = false,
-                                readOnly: Boolean = false
+abstract class Attribute <A,T> (private val model   : FormModel,
+                                private var value   : T?,
+                                label               : String,
+                                required            : Boolean,
+                                readOnly            : Boolean
+
 ) where A : Attribute<A,T>, T : Any?{
 
     init{

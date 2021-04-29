@@ -2,17 +2,17 @@ package model.util.attribute
 
 import model.FormModel
 
-class SelectionAttribute(model: FormModel,
-                         value : Set<String> = emptySet<String>(),
-                         label: String = "",
-                         required: Boolean = false,
-                         readOnly: Boolean = false,
+class SelectionAttribute(model                              : FormModel,
+                         value                              : Set<String> = emptySet<String>(),
+                         label                              : String = "",
+                         required                           : Boolean = false,
+                         readOnly                           : Boolean = false,
 
-                         private var minNumberOfSelections : Int = 0,
-                         private var maxNumberOfSelections : Int = Int.MAX_VALUE,
-                         possibleSelections : Set<String>
-)
-    : Attribute<SelectionAttribute, Set<String>>(model = model, value = value, label = label, required = required, readOnly = readOnly) {
+                         private var minNumberOfSelections  : Int = 0,
+                         private var maxNumberOfSelections  : Int = Int.MAX_VALUE,
+                         possibleSelections                 : Set<String>
+
+) : Attribute<SelectionAttribute, Set<String>>(model = model, value = value, label = label, required = required, readOnly = readOnly) {
 
     //******************************************************************************************************
     //Properties

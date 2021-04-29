@@ -3,19 +3,19 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class FloatAttribute(
-    model: FormModel,
-    value : Float? = null,
-    label: String = "",
-    required: Boolean = false,
-    readOnly: Boolean = false,
+class FloatAttribute(   model                   : FormModel,
+                        value                   : Float? = null,
+                        label                   : String = "",
+                        required                : Boolean = false,
+                        readOnly                : Boolean = false,
 
-    lowerBound : Float? = null,
-    upperBound : Float? = null,
-    stepSize :   Float = 1f,
-    onlyStepValuesAreValid : Boolean = false,
+                        lowerBound              : Float? = null,
+                        upperBound              : Float? = null,
+                        stepSize                : Float = 1f,
+                        onlyStepValuesAreValid  : Boolean = false,
 
-    decimalPlaces : Int = 8
+                        decimalPlaces           : Int = 8
+
 ) : FloatingPointAttribute<FloatAttribute, Float>(model = model, value = value, label = label, required = required,
     readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid, decimalPlaces = decimalPlaces) {
 
