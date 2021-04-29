@@ -123,11 +123,11 @@ class SelectionAttributeTest {
         //when
         selAtr.setMaxNumberOfSelections(10)
 
-//        //then
-//        assertThrows(IllegalArgumentException ::class.java){
-//            //when
-//            selAtr.setMinNumberOfSelections(4)  //todo: min > Number of possible elements
-//        }
+        //then
+        assertThrows(IllegalArgumentException ::class.java){
+            //when
+            selAtr.setMinNumberOfSelections(4)  //minSel > Number of possible elements
+        }
     }
 
     @Test
@@ -191,6 +191,24 @@ class SelectionAttributeTest {
 
         //then
         assertEquals(setOf("A", "B", "C", "D", "E"), selAtr.getPossibleSelections())
+
+        //when
+        selAtr.setMinNumberOfSelections(5)
+        selAtr.addUserSelection("A")
+        selAtr.addUserSelection("B")
+        selAtr.addUserSelection("C")
+        selAtr.addUserSelection("D")
+        selAtr.addUserSelection("E")
+
+        //then
+        assertEquals(5, selAtr.getMinNumberOfSelections())
+        assertTrue(selAtr.isValid())
+
+        //then
+        assertThrows(IllegalArgumentException ::class.java){
+            //when
+            selAtr.setPossibleSelections(setOf("A", "B", "C", "D")) //minSel > Number of possible elements
+        }
     }
 
     @Test
@@ -230,6 +248,21 @@ class SelectionAttributeTest {
 
         //then
         assertEquals(setOf("Element1"), selAtr.getPossibleSelections())
+
+        //when
+        selAtr.addANewPossibleSelection("Element2")
+        selAtr.setMinNumberOfSelections(2)
+
+        //then
+        assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
+        assertEquals(2, selAtr.getMinNumberOfSelections())
+
+        //then
+        assertThrows(IllegalArgumentException :: class.java){
+            //when
+            selAtr.removeAPossibleSelection("Element2") //minSel > Number of possible elements
+        }
+
     }
 
     @Test

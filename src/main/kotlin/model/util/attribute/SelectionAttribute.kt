@@ -79,7 +79,7 @@ class SelectionAttribute(model: FormModel,
      */
     private fun validatedValue(newVal : MutableSet<String>){
             if (!(newVal.size in minNumberOfSelections..maxNumberOfSelections)) {
-                throw IllegalArgumentException("Validation mismatched (min/max number of selections)")
+                throw IllegalArgumentException("Validation mismatched (min/max number of selections)") //todo message statt Exception
             }
     }
 
@@ -121,7 +121,8 @@ class SelectionAttribute(model: FormModel,
     //Setter
 
     /**
-     * This method checks if the given value for minNumberOfSelections is positive and not greather than the maxNumberOfSelections value.
+     * This method checks if the given value for minNumberOfSelections is positive, lower than the possible selections size
+     * and not greater than the maxNumberOfSelections value
      * If yes, minNumberOfSelections is set and the current textValue is checked to see if it is still valid.
      *
      * @param minSel : Int
@@ -129,11 +130,15 @@ class SelectionAttribute(model: FormModel,
      */
     fun setMinNumberOfSelections(minSel : Int) {
         if(minSel >= 1){
-            if(minSel <= maxNumberOfSelections){
-                this.minNumberOfSelections = minSel
-                checkAndSetValue(getValue().toString())
+            if(minSel <= possibleSelections.size){
+                if(minSel <= maxNumberOfSelections){
+                    this.minNumberOfSelections = minSel
+                    checkAndSetValue(getValue().toString())
+                }else{
+                    throw IllegalArgumentException("MinNumberOfSelections is not lower than maxNumberOfSelections")
+                }
             }else{
-                throw IllegalArgumentException("MinNumberOfSelections is not lower than maxNumberOfSelections")
+                throw IllegalArgumentException("MinNumberOfSelections is higher than the number of possible elements to select")
             }
         }else{
             throw IllegalArgumentException("MinNumberOfSelections must be positive")
@@ -161,7 +166,7 @@ class SelectionAttribute(model: FormModel,
     }
 
     /**
-     * This method checks if the set of selections is not empty.
+     * This method checks if the set of selections is not empty and if the set of selections size is higher than minNumberOfSelections.
      * If so, the possibleSelections-set is set and the current textValue is checked to see if it is still valid.
      *
      * @param selections : Int
@@ -169,8 +174,12 @@ class SelectionAttribute(model: FormModel,
      */
     fun setPossibleSelections(selections : Set<String>){
         if(selections.size > 0){
-            this.possibleSelections = selections.toMutableSet() //todo: find out how .value can be used (change possibleSelections from var to val)
-            checkAndSetValue(getValue().toString())
+            if(selections.size >= minNumberOfSelections){
+                this.possibleSelections = selections.toMutableSet() //todo: find out how .value can be used (change possibleSelections from var to val)
+                checkAndSetValue(getValue().toString())
+            }else{
+                throw IllegalArgumentException("The number of possible elements to select is lower than minNumberOfSelections")
+            }
         }else{
             throw IllegalArgumentException("There are no selections in the set")
         }
@@ -186,7 +195,7 @@ class SelectionAttribute(model: FormModel,
 
     /**
      * This method deletes a selection of the possibleSelections-set.
-     * It is checked whether this element is already selected by the user.
+     * It is checked whether this element is already selected by the user and if the minNumberOfSelections is low enough to delete an element.
      * If so, it is removed from the user value list and checked whether the newly created user value list is still valid.
      *
      * @param selection : String
@@ -194,10 +203,14 @@ class SelectionAttribute(model: FormModel,
      */
     fun removeAPossibleSelection(selection: String){
         if(possibleSelections.contains(selection)){
-            this.possibleSelections.remove(selection)
-            if(getValue()!!.contains(selection)){
-                getValue()!!.toMutableSet().remove(selection)
-                checkAndSetValue(getValue().toString())
+            if(possibleSelections.size > minNumberOfSelections){
+                this.possibleSelections.remove(selection)
+                if(getValue()!!.contains(selection)){
+                    getValue()!!.toMutableSet().remove(selection)
+                    checkAndSetValue(getValue().toString())
+                }
+            }else{
+                throw IllegalArgumentException("The number of possible elements to select would be lower than minNumberOfSelections after removing an element")
             }
         }
         else{
