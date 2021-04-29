@@ -3,23 +3,15 @@ package demo
 import java.lang.reflect.Method
 
 interface ILabel{
-    fun getLabelInLanguage(label: Labels, lang: String): String
-}
-
-enum class Labels(val english: String, val deutsch: String): ILabel {
-    intLabel1("Good Morning", "Guten Tag"),
-    intLabel2("eng", "deutsch"),
-    stringLabel1("String end", "String de");
-
-
-    override fun getLabelInLanguage(label: Labels, lang: String): String {
+    fun getLabelInLanguage(label: Labels, lang: String): String {
 
         val methodsUnfiltered: Array<Method> = Labels::class.java.methods
 
         val methodsFiltered: List<Method> = methodsUnfiltered.filter {
             it.name.startsWith("get")
-            && it.declaringClass.name.endsWith("Labels")
-            && !it.name.equals("getLabelInLanguage") //TODO: take name of this method by runtime
+                    && it.declaringClass.name.endsWith("Labels")
+                    && !it.name.equals("getLabelInLanguage")//TODO: take name of this method by runtime
+                    //&& !it.name.equals("getLanguages")//TODO: take name of this method by runtime
         }
 
         val methodMap = methodsFiltered.map { it.name.removePrefix("get") to it }.toMap()
@@ -31,9 +23,25 @@ enum class Labels(val english: String, val deutsch: String): ILabel {
         }else{
             throw IllegalArgumentException("Language not found")
         }
-
-
     }
+
+    fun getLanguages(): List<String> {
+
+        val methodsUnfiltered: Array<Method> = Labels::class.java.methods
+
+        val methodsFiltered: List<Method> = methodsUnfiltered.filter {
+            it.name.startsWith("get")
+                    && it.declaringClass.name.endsWith("Labels")
+                    && !it.name.equals("getLabelInLanguage") //TODO: take name of this method by runtime
+        }
+        return methodsFiltered.map {it.name.removePrefix("get")}
+    }
+}
+
+enum class Labels(val english: String, val deutsch: String): ILabel {
+    intLabel1("Good Morning", "Guten Tag"),
+    intLabel2("eng", "deutsch"),
+    stringLabel1("String end", "String de");
 }
 
 
