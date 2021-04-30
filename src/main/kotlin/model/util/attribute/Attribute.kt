@@ -5,11 +5,12 @@ import model.FormModel
 import java.util.*
 import kotlin.collections.HashMap
 
-abstract class Attribute <A,T> (private val model   : FormModel,
-                                private var value   : T?,
-                                label               : String,
-                                required            : Boolean,
-                                readOnly            : Boolean
+abstract class Attribute <A,T> (private val model       : FormModel,
+                                private var value       : T?,
+                                label                   : String,
+                                required                : Boolean,
+                                readOnly                : Boolean,
+                                var onChangeListeners   : List<(T?) -> Unit>
 
 ) where A : Attribute<A,T>, T : Any?{
 
@@ -180,6 +181,7 @@ abstract class Attribute <A,T> (private val model   : FormModel,
 
     protected fun setValue(value: T?) {
         this.value = value
+        onChangeListeners.forEach{it(value)}
     }
 
     protected fun setValidationMessage(message : String){

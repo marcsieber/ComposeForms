@@ -73,7 +73,14 @@ class UserDefinedModel() : BaseFormModel(){
         lowerBound = 0f,
         upperBound = 100f,
         stepSize = 3f,
-        onlyStepValuesAreValid = true
+        onlyStepValuesAreValid = true,
+        onChangeListeners = listOf({
+            if(it == 12.5f){
+                shortValue.setLabel("Haha")
+            }},
+            {
+                longValue.setReadOnly(it == 12.5f)
+            })
         )
 
     val doubleValue = DoubleAttribute(
@@ -84,7 +91,12 @@ class UserDefinedModel() : BaseFormModel(){
         readOnly = false,
         lowerBound = 4.9,
         upperBound = 20.5,
-        stepSize = 0.45
+        stepSize = 0.45,
+        onChangeListeners = listOf {
+            if (it == 8.85) {
+                selectionValue.addANewPossibleSelection("Neues Element")
+            }
+        }
     )
 
     val list = setOf("Hallo", "Louisa", "Steve")
@@ -96,9 +108,6 @@ class UserDefinedModel() : BaseFormModel(){
         minNumberOfSelections = 0,
         maxNumberOfSelections = 2
     )
-    init {
-
-    }
 
     val dateValue   = mutableStateOf("01/05/2020")
     val booleanValue = mutableStateOf(true)

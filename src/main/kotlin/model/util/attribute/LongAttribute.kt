@@ -8,6 +8,7 @@ class LongAttribute(model                   : FormModel,
                     label                   : String = "",
                     required                : Boolean = false,
                     readOnly                : Boolean = false,
+                    onChangeListeners       : List<(Long?) -> Unit> = emptyList(),
 
                     lowerBound              : Long? = null,
                     upperBound              : Long? = null,
@@ -15,7 +16,8 @@ class LongAttribute(model                   : FormModel,
                     onlyStepValuesAreValid  : Boolean = false
 
 ) : NumberAttribute<LongAttribute, Long>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid) {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid,
+    onChangeListeners = onChangeListeners) {
     //******************************************************************************************************
     //Validation
 

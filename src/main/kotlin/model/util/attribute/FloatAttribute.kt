@@ -8,6 +8,7 @@ class FloatAttribute(   model                   : FormModel,
                         label                   : String = "",
                         required                : Boolean = false,
                         readOnly                : Boolean = false,
+                        onChangeListeners       : List<(Float?) -> Unit> = emptyList(),
 
                         lowerBound              : Float? = null,
                         upperBound              : Float? = null,
@@ -17,7 +18,8 @@ class FloatAttribute(   model                   : FormModel,
                         decimalPlaces           : Int = 8
 
 ) : FloatingPointAttribute<FloatAttribute, Float>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid, decimalPlaces = decimalPlaces) {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid,
+    decimalPlaces = decimalPlaces, onChangeListeners = onChangeListeners) {
 
     //******************************************************************************************************
     //Validation

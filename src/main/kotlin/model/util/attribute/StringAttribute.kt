@@ -9,11 +9,12 @@ class StringAttribute(model                 : FormModel,
                       label                 : String = "",
                       required              : Boolean = false,
                       readOnly              : Boolean = false,
+                      onChangeListeners     : List<(String?) -> Unit> = emptyList(),
 
                       private var minLength : Int = 0,
                       private var maxLength : Int = 1_000_000
 
-) : Attribute<StringAttribute, String>(model = model, value = value, label = label, required = required, readOnly = readOnly) {
+) : Attribute<StringAttribute, String>(model = model, value = value, label = label, required = required, readOnly = readOnly, onChangeListeners = onChangeListeners) {
 
 
     //******************************************************************************************************

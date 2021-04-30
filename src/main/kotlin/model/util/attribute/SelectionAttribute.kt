@@ -7,12 +7,14 @@ class SelectionAttribute(model                              : FormModel,
                          label                              : String = "",
                          required                           : Boolean = false,
                          readOnly                           : Boolean = false,
+                         onChangeListeners                  : List<(Set<String>?) -> Unit> = emptyList(),
 
                          private var minNumberOfSelections  : Int = 0,
                          private var maxNumberOfSelections  : Int = Int.MAX_VALUE,
                          possibleSelections                 : Set<String>
 
-) : Attribute<SelectionAttribute, Set<String>>(model = model, value = value, label = label, required = required, readOnly = readOnly) {
+) : Attribute<SelectionAttribute, Set<String>>(model = model, value = value, label = label, required = required, readOnly = readOnly,
+    onChangeListeners = onChangeListeners) {
 
     //******************************************************************************************************
     //Properties

@@ -8,6 +8,7 @@ class ShortAttribute(   model                   : FormModel,
                         label                   : String = "",
                         required                : Boolean = false,
                         readOnly                : Boolean = false,
+                        onChangeListeners       : List<(Short?) -> Unit> = emptyList(),
 
                         lowerBound              : Short? = null,
                         upperBound              : Short? = null,
@@ -15,7 +16,8 @@ class ShortAttribute(   model                   : FormModel,
                         onlyStepValuesAreValid  : Boolean = false
 
 ) : NumberAttribute<ShortAttribute, Short>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid)  {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid,
+    onChangeListeners = onChangeListeners)  {
 
     //******************************************************************************************************
     //Validation

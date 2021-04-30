@@ -1,20 +1,21 @@
 package model.util.attribute
 
 import model.FormModel
-import kotlin.jvm.Throws
 
 abstract class NumberAttribute <N,T> (  model                               : FormModel,
                                         value                               : T?,
                                         label                               : String,
                                         required                            : Boolean,
                                         readOnly                            : Boolean,
+                                        onChangeListeners                   : List<(T?) -> Unit>,
 
                                         lowerBound                          : T?,
                                         upperBound                          : T?,
                                         private var stepSize                : T,
                                         private var onlyStepValuesAreValid  : Boolean
 
-) : Attribute<N,T>(model = model, value = value, label = label, required = required, readOnly = readOnly) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
+) : Attribute<N,T>(model = model, value = value, label = label, required = required, readOnly = readOnly,
+    onChangeListeners = onChangeListeners) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
 
     //******************************************************************************************************
     //Optional extra-properties for NumberAttributes
