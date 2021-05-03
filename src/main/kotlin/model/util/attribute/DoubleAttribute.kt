@@ -3,21 +3,23 @@ package model.util.attribute
 import model.FormModel
 import java.lang.NumberFormatException
 
-class DoubleAttribute(
-    model: FormModel,
-    value : Double? = null,
-    label: String = "",
-    required: Boolean = false,
-    readOnly: Boolean = false,
+class DoubleAttribute(  model                   : FormModel,
+                        value                   : Double? = null,
+                        label                   : String = "",
+                        required                : Boolean = false,
+                        readOnly                : Boolean = false,
+                        onChangeListeners       : List<(Double?) -> Unit> = emptyList(),
 
-    lowerBound : Double? = null,
-    upperBound : Double? = null,
-    stepSize :   Double = 1.0,
-    onlyStepValuesAreValid : Boolean = false,
+                        lowerBound              : Double? = null,
+                        upperBound              : Double? = null,
+                        stepSize                : Double = 1.0,
+                        onlyStepValuesAreValid  : Boolean = false,
 
-    decimalPlaces : Int = 8
+                        decimalPlaces           : Int = 8
+
 ) : FloatingPointAttribute<DoubleAttribute, Double>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid, decimalPlaces = decimalPlaces) {
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid,
+    decimalPlaces = decimalPlaces, onChangeListeners = onChangeListeners) {
 
     //******************************************************************************************************
     //Validation

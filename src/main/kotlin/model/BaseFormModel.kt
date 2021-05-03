@@ -57,74 +57,10 @@ abstract class BaseFormModel : FormModel {
         allAttributes.forEach{attribute -> attribute.setCurrentLanguage(lang) }
     }
 
-    //******************************************************************************************************
-    //Methods to add attributes to model (must-do)
-
-    /**
-     * This method creates an integer attribute and the attribute is remembered.
-     * @param value : Int
-     * @return attr : IntegerAttribute
-     */
-//    fun createIntegerAttribute(value : Int? = null) : IntegerAttribute{
-//        val attr = IntegerAttribute(this, value)
-//        allAttributes.add(attr)
-//        return attr
-//    }
-
-    /**
-     * This method creates an Short attribute and the attribute is remembered.
-     * @param value : Short
-     * @return attr : ShortAttribute
-     */
-    fun createShortAttribute(value : Short? = null) : ShortAttribute {
-        val attr = ShortAttribute(this, value)
-        allAttributes.add(attr)
-        return attr
+    override fun validateAll() {
+        allAttributes.forEach{it.revalidate()}
     }
 
-    /**
-     * This method creates an Long attribute and the attribute is remembered.
-     * @param value : Long
-     * @return attr : LongAttribute
-     */
-    fun createLongAttribute(value : Long? = null) : LongAttribute {
-        val attr = LongAttribute(this, value)
-        allAttributes.add(attr)
-        return attr
-    }
-
-    /**
-     * This method creates an Double attribute and the attribute is remembered.
-     * @param value : Double
-     * @return attr : DoubleAttribute
-     */
-    fun createDoubleAttribute(value : Double? = null) : DoubleAttribute{
-        val attr = DoubleAttribute(this, value)
-        allAttributes.add(attr)
-        return attr
-    }
-
-    /**
-     * This method creates an Float attribute and the attribute is remembered.
-     * @param value : Float
-     * @return attr : FloatAttribute
-     */
-    fun createFloatAttribute(value : Float? = null) : FloatAttribute {
-        val attr = FloatAttribute(this, value)
-        allAttributes.add(attr)
-        return attr
-    }
-
-    /**
-     * This method creates an String attribute and the attribute is remembered.
-     * @param value : String
-     * @return attr : StringAttribute
-     */
-    fun createStringAttribute(value : String? = null) : StringAttribute{
-        val attr = StringAttribute(this, value)
-        allAttributes.add(attr)
-        return attr
-    }
 
     //******************************************************************************************************
     //Setter

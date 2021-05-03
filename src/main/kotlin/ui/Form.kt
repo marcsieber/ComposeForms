@@ -1,5 +1,6 @@
 package ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,6 +19,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import model.FormModel
 import model.util.attribute.*
 
@@ -126,8 +128,14 @@ class Form {
             label = {Text(attr.getLabel())},
             readOnly = attr.isReadOnly(),
             isError = !attr.isValid(),
-
         )
+        Column {
+            if(!attr.isValid()){
+                for(msg in attr.getErrorMessages()){
+                    Text(msg, color = Color.Red, fontSize = 12.sp, modifier = Modifier.padding(4.dp) )
+                }
+            }
+        }
     }
 
     @Composable
@@ -184,22 +192,22 @@ class Form {
         }
     }
 
-    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute){ //todo: undo when dropdown is open
+    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute){ //todo: undo & save when dropdown is open
         val dropDownIsOpen          = remember {mutableStateOf(false)}
-        val elementIsSelected       = remember{ mutableStateOf(false)}
-        val elementIsSelectedColor  = remember {if(elementIsSelected.value) Color.DarkGray else Color.LightGray}
         val selectionString         = mutableStateOf(selectionAttribute.getValueAsText().substring(1, selectionAttribute.getValueAsText().length-1))
         val label                   = selectionAttribute.getLabel()
 
         Box( modifier = Modifier.height(300.dp).wrapContentSize(Alignment.TopStart)){
             Column {
                 if(!selectionString.value.equals("")){
-                    Text(label, color = Color.DarkGray, modifier = Modifier.wrapContentSize().padding(4.dp), fontSize = LocalDensity.current.run { 24.toSp() })
+                    Text(label, color = Color.DarkGray, modifier = Modifier.wrapContentSize().padding(4.dp), fontSize = 12.sp)
                 }
                 OutlinedButton(
-                    modifier = Modifier.background(Color.LightGray),
+                    modifier = Modifier.height(50.dp),
                     onClick = {dropDownIsOpen.value = true},
-                    shape = MaterialTheme.shapes.large
+                    shape = MaterialTheme.shapes.large,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                    border = BorderStroke(1.dp, if(selectionAttribute.isValid()) Color.DarkGray else Color.Red)
                 ){
                     if(selectionString.value.equals("")){
                         Text(label, color = Color.DarkGray)
@@ -207,20 +215,22 @@ class Form {
                         Text(selectionString.value)
                     }
                 }
-                DropdownMenu( //todo: different colours, depending on whether the element is selected or not
+                DropdownMenu(
                     expanded = dropDownIsOpen.value,
                     onDismissRequest = { dropDownIsOpen.value = false},
                     modifier = Modifier.wrapContentSize(),
                     content = {
                         selectionAttribute.getPossibleSelections().forEachIndexed { index, string ->
+                            val elementIsSelected       = selectionAttribute.getValue()!!.contains(string)
+                            val elementIsSelectedBackgroundColor  = if(elementIsSelected) Color.DarkGray else Color.LightGray
+                            val elementIsSelectedTextColor = if(elementIsSelected) Color.White else Color.Black
                             DropdownMenuItem(
-                                modifier = Modifier.background(elementIsSelectedColor),
+                                modifier = Modifier.background(elementIsSelectedBackgroundColor),
                                 onClick = {
-                                    elementIsSelected.value = selectionAttribute.getValue()!!.contains(string)
-                                    if (!elementIsSelected.value) {
+                                    if (!elementIsSelected) {
                                         selectionAttribute.addUserSelection(string)
                                     } else { selectionAttribute.removeUserSelection(string)}},
-                                content = {Text( text = string, modifier = Modifier.background(elementIsSelectedColor))}
+                                content = {Text( text = string, modifier = Modifier.background(elementIsSelectedBackgroundColor), color = elementIsSelectedTextColor)}
                             )
                         }
                     }

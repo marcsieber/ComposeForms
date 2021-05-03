@@ -5,21 +5,23 @@ import java.lang.NumberFormatException
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-abstract class FloatingPointAttribute <F,T> (
-    model: FormModel,
-    value : T? = null,
-    label: String = "",
-    required: Boolean = false,
-    readOnly: Boolean = false,
+abstract class FloatingPointAttribute <F,T> (   model                       : FormModel,
+                                                value                       : T?,
+                                                label                       : String,
+                                                required                    : Boolean,
+                                                readOnly                    : Boolean,
+                                                onChangeListeners           : List<(T?) -> Unit>,
 
-    lowerBound : T? = null,
-    upperBound : T? = null,
-    stepSize :   T = 1.0 as T,
-    onlyStepValuesAreValid : Boolean = false,
+                                                lowerBound                  : T?,
+                                                upperBound                  : T?,
+                                                stepSize                    : T,
+                                                onlyStepValuesAreValid      : Boolean,
 
-    private var decimalPlaces : Int = 8
+                                                private var decimalPlaces   : Int
+
 ) : NumberAttribute<F,T>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid) where F : FloatingPointAttribute<F,T>, T : Number, T : Comparable<T>{
+    readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid,
+    onChangeListeners = onChangeListeners) where F : FloatingPointAttribute<F,T>, T : Number, T : Comparable<T>{
 
     /**
      * This method rounds double numbers to the desired decimal places.
