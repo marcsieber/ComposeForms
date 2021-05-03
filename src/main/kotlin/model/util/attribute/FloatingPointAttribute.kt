@@ -1,6 +1,5 @@
 package model.util.attribute
 
-import demo.Labels
 import model.FormModel
 import model.util.ILabel
 import java.lang.NumberFormatException

@@ -373,27 +373,22 @@ class SelectionAttributeTest {
         assertFalse(selAtr.isChanged())
     }
 
-//    @Test
-//    fun testSetCurrentLanguage() {
-//        //given
-//        val defaultLabel = "..."
-//        val label = "LABEL"
-//        val lang = Locale.GERMAN
-//
-//        //when
-//        selAtr.setCurrentLanguage(lang)
-//
-//        //then
-//        assertEquals(defaultLabel, selAtr.getLabel())
-//        assertTrue(selAtr.isCurrentLanguage(lang))
-//
-//        //when
-//        selAtr.setLabelForLanguage(Locale.GERMAN, label)
-//
-//        //then
-//        assertEquals(label, selAtr.getLabel())
-//        assertTrue(selAtr.isCurrentLanguage(lang))
-//    }
+    @Test
+    fun testSetCurrentLanguage() {
+        //when
+        selAtr.setCurrentLanguage("test")
+
+        //then
+        assertEquals(Labels.TEST.test, selAtr.getLabel())
+        assertTrue(selAtr.isCurrentLanguage("test"))
+
+        //when
+        selAtr.setCurrentLanguage("eng")
+
+        //then
+        assertEquals(Labels.TEST.eng, selAtr.getLabel())
+        assertTrue(selAtr.isCurrentLanguage("eng"))
+    }
 
     @Test
     fun testSetValueAsText() {
@@ -416,54 +411,28 @@ class SelectionAttributeTest {
         assertEquals(setOf("Element1"),selAtr.getValue())
     }
 
-//    @Test
-//    fun testSetLabel() {
-//        //given
-//        val label = "Name: "
-//
-//        //when
-//        selAtr.setLabel(label)
-//
-//        //then
-//        assertEquals(label, selAtr.getLabel())
-//    }
 
-//    @Test
-//    fun setLabelForLanguage() {
-//        //when
-//        selAtr.setLabelForLanguage(Locale.GERMAN, "Hallo")
-//        selAtr.setLabelForLanguage(Locale.ENGLISH, "Hi")
-//
-//        //then
-//        assertEquals("Hallo", selAtr.getLabel())
-//
-//        //when
-//        selAtr.setCurrentLanguage(Locale.ENGLISH)
-//
-//        //then
-//        assertEquals("Hi", selAtr.getLabel())
-//    }
+    @Test
+    fun testSetRequired() {
+        val label = Labels.TEST.test
+        val required = true
+        val notRequired = false
 
-//    @Test
-//    fun testSetRequired() {
-//        val label = "Name: "
-//        val required = true
-//        val notRequired = false
-//
-//        //when
-//        selAtr.setLabel(label)
-//        selAtr.setRequired(required)
-//
-//        //then
-//        assertEquals(required, selAtr.isRequired())
-//        assertEquals(label + "*", selAtr.getLabel())
-//
-//        //when
-//        selAtr.setRequired(notRequired)
-//
-//        //then
-//        assertEquals(notRequired, selAtr.isRequired())
-//    }
+        //when
+        selAtr.setRequired(required)
+        selAtr.setCurrentLanguage("test")
+
+        //then
+        assertEquals(required, selAtr.isRequired())
+        assertEquals(label + "*", selAtr.getLabel())
+
+        //when
+        selAtr.setRequired(notRequired)
+
+        //then
+        assertEquals(notRequired, selAtr.isRequired())
+        assertEquals(label, selAtr.getLabel())
+    }
 
     @Test
     fun testSetReadOnly() {
@@ -543,30 +512,18 @@ class SelectionAttributeTest {
         assertEquals("[]", selAtr.getValueAsText())
     }
 
-//    @Test
-//    fun testIsCurrentLanguage() {
-//        //given
-//        val lang = Locale.GERMAN
-//
-//        //when
-//        selAtr.setCurrentLanguage(lang)
-//
-//        //then
-//        assertTrue(selAtr.isCurrentLanguage(lang))
-//        assertFalse(selAtr.isCurrentLanguage(Locale.ENGLISH))
-//    }
+    @Test
+    fun testIsCurrentLanguage() {
+        //given
+        val lang = "eng"
 
-//    @Test
-//    fun testGetLabel() {
-//        //given
-//        val label = "Name: "
-//
-//        //when
-//        selAtr.setLabel(label)
-//
-//        //then
-//        assertEquals(label,selAtr.getLabel())
-//    }
+        //when
+        selAtr.setCurrentLanguage(lang)
+
+        //then
+        assertTrue(selAtr.isCurrentLanguage(lang))
+        assertFalse(selAtr.isCurrentLanguage("test"))
+    }
 
     @Test
     fun testIsRequired() {

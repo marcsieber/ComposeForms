@@ -1,18 +1,16 @@
 package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
-import demo.Labels
 import model.FormModel
 import model.util.ILabel
 import model.validators.ValidationResult
-import java.util.*
 
 abstract class Attribute <A,T,L> (private val model       : FormModel,
-                                private var value       : T?,
-                                label                   : L,
-                                required                : Boolean,
-                                readOnly                : Boolean,
-                                var onChangeListeners   : List<(T?) -> Unit>
+                                  private var value       : T?,
+                                  label                   : L,
+                                  required                : Boolean,
+                                  readOnly                : Boolean,
+                                  var onChangeListeners   : List<(T?) -> Unit>
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
 
@@ -85,10 +83,6 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
 
     protected abstract fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false)
 
-    fun setLabel(label : String){
-        this.labelAsText.value =  ""
-    }
-
     /**
      * This method sets the value null.
      * If it is a SelectionAttribute the value is set to an emptySet<String>()
@@ -153,12 +147,10 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      * When setCurrentLanguage(language) is called, the label is set to the label name in the language.
      * If no label name has been defined in this language yet, the label name will be set to "...".
      *
-     * Default value if setLanguage is not called: @see setLabelForLanguage()
-     *
-     * @param language : Locale
+     * @param language : String
      */
     internal fun setCurrentLanguage(language : String){
-        labelAsText.value = label.getLabelInLanguage(this.label as Labels, language)
+        labelAsText.value = label.getLabelInLanguage(this.label, language)
         currentLanguage = language
     }
 

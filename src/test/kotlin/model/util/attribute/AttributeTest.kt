@@ -1,6 +1,7 @@
 package model.util.attribute
 
 import model.BaseFormModel
+import model.util.Labels
 
 import org.junit.jupiter.api.Test
 
@@ -88,27 +89,22 @@ abstract class AttributeTest<T : Any> {
         assertFalse(attribute.isChanged())
     }
 
-//    @Test
-//    fun testSetCurrentLanguage() {
-//        //given
-//        val defaultLabel = "..."
-//        val label = "LABEL"
-//        val lang = Locale.GERMAN
-//
-//        //when
-//        attribute.setCurrentLanguage(lang)
-//
-//        //then
-//        assertEquals(defaultLabel, attribute.getLabel())
-//        assertTrue(attribute.isCurrentLanguage(lang))
-//
-//        //when
-//        attribute.setLabelForLanguage(Locale.GERMAN, label)
-//
-//        //then
-//        assertEquals(label, attribute.getLabel())
-//        assertTrue(attribute.isCurrentLanguage(lang))
-//    }
+    @Test
+    fun testSetCurrentLanguage() {
+        //when
+        attribute.setCurrentLanguage("test")
+
+        //then
+        assertEquals(Labels.TEST.test, attribute.getLabel())
+        assertTrue(attribute.isCurrentLanguage("test"))
+
+        //when
+        attribute.setCurrentLanguage("eng")
+
+        //then
+        assertEquals(Labels.TEST.eng, attribute.getLabel())
+        assertTrue(attribute.isCurrentLanguage("eng"))
+    }
 
     @Test
     fun testSetValueAsText() {
@@ -129,54 +125,27 @@ abstract class AttributeTest<T : Any> {
         assertEquals(notValidValueAsText,   attribute.getValueAsText())
     }
 
-//    @Test
-//    fun testSetLabel() {
-//        //given
-//        val label = "Name: "
-//
-//        //when
-//        attribute.setLabel(label)
-//
-//        //then
-//        assertEquals(label, attribute.getLabel())
-//    }
+    @Test
+    fun testSetRequired() {
+        val label = Labels.TEST.test
+        val required = true
+        val notRequired = false
 
-//    @Test
-//    fun setLabelForLanguage() {
-//        //when
-//        attribute.setLabelForLanguage(Locale.GERMAN, "Hallo")
-//        attribute.setLabelForLanguage(Locale.ENGLISH, "Hi")
-//
-//        //then
-//        assertEquals("Hallo", attribute.getLabel())
-//
-//        //when
-//        attribute.setCurrentLanguage(Locale.ENGLISH)
-//
-//        //then
-//        assertEquals("Hi", attribute.getLabel())
-//    }
+        //when
+        attribute.setRequired(required)
+        attribute.setCurrentLanguage("test")
 
-//    @Test
-//    fun testSetRequired() {
-//        val label = "Name: "
-//        val required = true
-//        val notRequired = false
-//
-//        //when
-//        attribute.setLabel(label)
-//        attribute.setRequired(required)
-//
-//        //then
-//        assertEquals(required, attribute.isRequired())
-//        assertEquals(label + "*", attribute.getLabel())
-//
-//        //when
-//        attribute.setRequired(notRequired)
-//
-//        //then
-//        assertEquals(notRequired, attribute.isRequired())
-//    }
+        //then
+        assertEquals(required, attribute.isRequired())
+        assertEquals(label + "*", attribute.getLabel())
+
+        //when
+        attribute.setRequired(notRequired)
+
+        //then
+        assertEquals(notRequired, attribute.isRequired())
+        assertEquals(label, attribute.getLabel())
+    }
 
     @Test
     fun testSetReadOnly() {
@@ -253,30 +222,18 @@ abstract class AttributeTest<T : Any> {
         assertEquals(validValue1Uneven.toString(), attribute.getValueAsText())
     }
 
-//    @Test
-//    fun testIsCurrentLanguage() {
-//        //given
-//        val lang = Locale.GERMAN
-//
-//        //when
-//        attribute.setCurrentLanguage(lang)
-//
-//        //then
-//        assertTrue(attribute.isCurrentLanguage(lang))
-//        assertFalse(attribute.isCurrentLanguage(Locale.ENGLISH))
-//    }
+    @Test
+    fun testIsCurrentLanguage() {
+        //given
+        val lang = "eng"
 
-//    @Test
-//    fun testGetLabel() {
-//        //given
-//        val label = "Name: "
-//
-//        //when
-//        attribute.setLabel(label)
-//
-//        //then
-//        assertEquals(label,attribute.getLabel())
-//    }
+        //when
+        attribute.setCurrentLanguage(lang)
+
+        //then
+        assertTrue(attribute.isCurrentLanguage(lang))
+        assertFalse(attribute.isCurrentLanguage("test"))
+    }
 
     @Test
     fun testIsRequired() {

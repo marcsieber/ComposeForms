@@ -6,9 +6,9 @@ interface ILabel{
 
     fun getLabelInLanguage(label: Enum<*>, lang: String): String {
 
-        val methodMap = getMethods().map { it.name.removePrefix("get") to it }.toMap()
+        val methodMap = getMethods().map { it.name.removePrefix("get").toLowerCase() to it }.toMap()
 
-        if (methodMap.containsKey(lang)) {
+        if (methodMap.containsKey(lang.toLowerCase())) {
             return methodMap[lang]!!.invoke(label) as String
         } else {
             throw IllegalArgumentException("Language not found")

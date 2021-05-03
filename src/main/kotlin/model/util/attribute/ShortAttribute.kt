@@ -13,7 +13,7 @@ class ShortAttribute<L>(   model                   : FormModel,
 
                         lowerBound              : Short? = null,
                         upperBound              : Short? = null,
-                        stepSize                :   Short = 1,
+                        stepSize                : Short = 1,
                         onlyStepValuesAreValid  : Boolean = false
 
 ) : NumberAttribute<ShortAttribute<L>, Short, L>(model = model, value = value, label = label, required = required,

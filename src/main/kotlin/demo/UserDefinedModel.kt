@@ -94,7 +94,7 @@ class UserDefinedModel() : BaseFormModel(){
         onlyStepValuesAreValid = true,
         onChangeListeners = listOf({
             if(it == 12.5f){
-                shortValue.setLabel("Haha")
+                println("NO CHANGE OF LABEL POSSIBLE") //TODO what do you want to test?
             }},
             {
                 longValue.setReadOnly(it == 12.5f)
