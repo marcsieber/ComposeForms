@@ -128,46 +128,45 @@ abstract class NumberAttribute <N,T,L> (model                               : Fo
     //Private Setter
 
     /**
+     * get min value of T as T
+     */
+    private fun getLowerBoundOfT(): T{
+        return when (stepStart) {
+            is Int -> Int.MIN_VALUE as T
+            is Short -> Short.MIN_VALUE as T
+            is Long -> Long.MIN_VALUE as T
+            is Double -> Double.MIN_VALUE as T
+            is Float -> Float.MIN_VALUE as T
+            else -> 0 as T
+        }
+    }
+
+    /**
+     * Get max value of T as T
+     */
+    private fun getUpperBoundOfT(): T{
+        return when (stepStart) {
+            is Int -> Int.MAX_VALUE as T
+            is Short -> Short.MAX_VALUE as T
+            is Long -> Long.MAX_VALUE as T
+            is Double -> Double.MAX_VALUE as T
+            is Float -> Float.MAX_VALUE as T
+            else -> 0 as T
+        }
+    }
+    /**
      * This method sets the default values for the lowerBound and the upperBound depending on the
      * type of the NumberAttribute.
      */
     private fun initializeLowerAndUpperBound(lowerBound: T?, upperBound : T?){
         if(lowerBound === null){
-            if (stepStart is Int){
-                this.lowerBound = Int.MIN_VALUE as T
-            }
-            if( stepStart is Short){
-                this.lowerBound = Short.MIN_VALUE as T
-            }
-            if( stepStart is Long){
-                this.lowerBound = Long.MIN_VALUE as T
-            }
-            if( stepStart is Double){
-                this.lowerBound = Double.MIN_VALUE as T
-            }
-            if( stepStart is Float){
-                this.lowerBound = Float.MIN_VALUE as T
-            }
+            this.lowerBound = getLowerBoundOfT()
         }else{
             this.lowerBound = lowerBound
         }
 
         if(upperBound === null){
-            if (stepStart is Int){
-                this.upperBound = Int.MAX_VALUE as T
-            }
-            if( stepStart is Short){
-                this.upperBound = Short.MAX_VALUE as T
-            }
-            if( stepStart is Long){
-                this.upperBound = Long.MAX_VALUE as T
-            }
-            if( stepStart is Double){
-                this.upperBound = Double.MAX_VALUE as T
-            }
-            if( stepStart is Float){
-                this.upperBound = Float.MAX_VALUE as T
-            }
+            this.upperBound = getUpperBoundOfT()
         }else{
             this.upperBound = upperBound
         }
