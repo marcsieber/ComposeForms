@@ -1,11 +1,12 @@
 package model.util.attribute
 
 import model.FormModel
+import model.util.ILabel
 import java.lang.NumberFormatException
 
-class ShortAttribute(   model                   : FormModel,
+class ShortAttribute<L>(   model                   : FormModel,
                         value                   : Short? = null,
-                        label                   : String = "",
+                        label                   : L,
                         required                : Boolean = false,
                         readOnly                : Boolean = false,
                         onChangeListeners       : List<(Short?) -> Unit> = emptyList(),
@@ -15,9 +16,10 @@ class ShortAttribute(   model                   : FormModel,
                         stepSize                :   Short = 1,
                         onlyStepValuesAreValid  : Boolean = false
 
-) : NumberAttribute<ShortAttribute, Short>(model = model, value = value, label = label, required = required,
+) : NumberAttribute<ShortAttribute<L>, Short, L>(model = model, value = value, label = label, required = required,
     readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid,
-    onChangeListeners = onChangeListeners)  {
+    onChangeListeners = onChangeListeners)
+        where L: Enum<*>, L : ILabel{
 
     //******************************************************************************************************
     //Validation

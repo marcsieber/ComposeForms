@@ -2,19 +2,35 @@ package demo
 
 import androidx.compose.runtime.mutableStateOf
 import model.BaseFormModel
-import model.FormModel
 import model.util.attribute.*
 import model.validators.StringValidator
 import java.util.*
+import kotlin.concurrent.thread
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 class UserDefinedModel() : BaseFormModel(){
 
     init {
-        setCurrentLanguageForAll(Locale.GERMAN)
         setTitle("Demo Title")
     }
 
     val strValidator = StringValidator(5, 10, onChange = { validateAll() })
+
+
+    val s = StringAttribute(
+        model = this,
+        value = "Test-Label",
+        label = Labels.intLabel1
+    )
+
+    val d = DoubleAttribute(
+        model = this,
+        value = 0.0,
+        onlyStepValuesAreValid = true,
+        stepSize = 0.2,
+        label = Labels.intLabel2
+    )
 
     //String
     val stringValue = StringAttribute(
@@ -22,15 +38,15 @@ class UserDefinedModel() : BaseFormModel(){
         value = "Ich bin Text",
         required = true,
         readOnly = false,
-        label = "deutscher String",
-        validators = listOf(strValidator)
+        validators = listOf(strValidator),
+        label = Labels.stringLabel1,
     )
 
     //Numbers
     val intValue1    = IntegerAttribute(
         model = this,
         value = 10,
-        label = "deutscher Int:",
+        label = Labels.intLabel2,
         required = true,
         readOnly = false,
         stepSize = 2
@@ -43,12 +59,12 @@ class UserDefinedModel() : BaseFormModel(){
         lowerBound = 10,
         upperBound = 20,
         stepSize = 1,
-        label = "deutscher int 2"
+        label = Labels.intLabel2
     )
 
     val shortValue = ShortAttribute(model = this,
         value = 9,
-        label = "deutscher Short",
+        label = Labels.intLabel2,
         required = true,
         readOnly = false,
         lowerBound = 0,
@@ -58,7 +74,7 @@ class UserDefinedModel() : BaseFormModel(){
 
     val longValue = LongAttribute(model = this,
         value = 9,
-        label = "deutscher Long",
+        label = Labels.intLabel2,
         required = true,
         readOnly = false,
         lowerBound = 0,
@@ -69,7 +85,7 @@ class UserDefinedModel() : BaseFormModel(){
     val floatValue = FloatAttribute(
         model = this,
         value = 9.5f,
-        label = "deutscher float",
+        label = Labels.intLabel2,
         required = true,
         readOnly = false,
         lowerBound = 0f,
@@ -88,7 +104,7 @@ class UserDefinedModel() : BaseFormModel(){
     val doubleValue = DoubleAttribute(
         model = this,
         value = 8.4,
-        label = "deutscher double",
+        label = Labels.intLabel2,
         required = true,
         readOnly = false,
         lowerBound = 4.9,
@@ -106,10 +122,20 @@ class UserDefinedModel() : BaseFormModel(){
         model = this,
         value = setOf(),
         possibleSelections = list,
-        label = "Selection-Label",
+        label = Labels.intLabel2,
         minNumberOfSelections = 0,
         maxNumberOfSelections = 2
     )
+
+    init{
+        setCurrentLanguageForAll("English")
+//        println("ILabel languages" + ILabel.getLanguages())
+
+        println("All languages:")
+//        Labels.getLanguages()
+        Labels.getLanguages().forEach{ println(it)}
+        println("-------")
+    }
 
     val dateValue   = mutableStateOf("01/05/2020")
     val booleanValue = mutableStateOf(true)
@@ -122,11 +148,13 @@ class UserDefinedModel() : BaseFormModel(){
 
 
     init{
-        Thread {
-            println("start thread")
+        thread {
             Thread.sleep(3000)
-            println("sleep done")
-            strValidator.overrideStringValidator(15,20,"Length must be between 15 and 20 characters")
-        }.start()
+//            this.labels = label2
+            this.setCurrentLanguageForAll("Deutsch")
+            println("test")
+        }
     }
+
+
 }

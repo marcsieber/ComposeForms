@@ -1,11 +1,12 @@
 package model.util.attribute
 
 import model.FormModel
+import model.util.ILabel
 import java.lang.NumberFormatException
 
-class FloatAttribute(   model                   : FormModel,
+class FloatAttribute<L>(   model                   : FormModel,
                         value                   : Float? = null,
-                        label                   : String = "",
+                        label                   : L,
                         required                : Boolean = false,
                         readOnly                : Boolean = false,
                         onChangeListeners       : List<(Float?) -> Unit> = emptyList(),
@@ -17,9 +18,10 @@ class FloatAttribute(   model                   : FormModel,
 
                         decimalPlaces           : Int = 8
 
-) : FloatingPointAttribute<FloatAttribute, Float>(model = model, value = value, label = label, required = required,
+) : FloatingPointAttribute<FloatAttribute<L>, Float,L>(model = model, value = value, label = label, required = required,
     readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid,
-    decimalPlaces = decimalPlaces, onChangeListeners = onChangeListeners) {
+    decimalPlaces = decimalPlaces, onChangeListeners = onChangeListeners)
+        where L: Enum<*>, L : ILabel{
 
     //******************************************************************************************************
     //Validation

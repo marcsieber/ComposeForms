@@ -1,13 +1,15 @@
 package model.util.attribute
 
+import demo.Labels
 import model.FormModel
+import model.util.ILabel
 import java.lang.NumberFormatException
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-abstract class FloatingPointAttribute <F,T> (   model                       : FormModel,
+abstract class FloatingPointAttribute <F,T,L> (   model                       : FormModel,
                                                 value                       : T?,
-                                                label                       : String,
+                                                label                       : L,
                                                 required                    : Boolean,
                                                 readOnly                    : Boolean,
                                                 onChangeListeners           : List<(T?) -> Unit>,
@@ -19,9 +21,9 @@ abstract class FloatingPointAttribute <F,T> (   model                       : Fo
 
                                                 private var decimalPlaces   : Int
 
-) : NumberAttribute<F,T>(model = model, value = value, label = label, required = required,
+) : NumberAttribute<F,T,L>(model = model, value = value, label = label, required = required,
     readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid,
-    onChangeListeners = onChangeListeners) where F : FloatingPointAttribute<F,T>, T : Number, T : Comparable<T>{
+    onChangeListeners = onChangeListeners) where F : FloatingPointAttribute<F,T,L>, T : Number, T : Comparable<T>, L: Enum<*>, L : ILabel{
 
     /**
      * This method rounds double numbers to the desired decimal places.

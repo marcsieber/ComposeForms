@@ -20,6 +20,7 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("org.junit.jupiter:junit-jupiter:5.7.1")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
 
 tasks {

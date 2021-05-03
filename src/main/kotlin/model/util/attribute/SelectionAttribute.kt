@@ -1,20 +1,22 @@
 package model.util.attribute
 
 import model.FormModel
+import model.util.ILabel
 
-class SelectionAttribute(model                              : FormModel,
-                         value                              : Set<String> = emptySet<String>(),
-                         label                              : String = "",
-                         required                           : Boolean = false,
-                         readOnly                           : Boolean = false,
-                         onChangeListeners                  : List<(Set<String>?) -> Unit> = emptyList(),
+class SelectionAttribute<L>(model                              : FormModel,
+                            value                              : Set<String> = emptySet<String>(),
+                            label                              : L,
+                            required                           : Boolean = false,
+                            readOnly                           : Boolean = false,
+                            onChangeListeners                  : List<(Set<String>?) -> Unit> = emptyList(),
 
-                         private var minNumberOfSelections  : Int = 0,
-                         private var maxNumberOfSelections  : Int = Int.MAX_VALUE,
-                         possibleSelections                 : Set<String>
+                            private var minNumberOfSelections  : Int = 0,
+                            private var maxNumberOfSelections  : Int = Int.MAX_VALUE,
+                            possibleSelections                 : Set<String>
 
-) : Attribute<SelectionAttribute, Set<String>>(model = model, value = value, label = label, required = required, readOnly = readOnly,
-    onChangeListeners = onChangeListeners) {
+) : Attribute<SelectionAttribute<L>, Set<String>, L>(model = model, value = value, label = label, required = required, readOnly = readOnly,
+    onChangeListeners = onChangeListeners)
+        where L: Enum<*>, L : ILabel{
 
     //******************************************************************************************************
     //Properties

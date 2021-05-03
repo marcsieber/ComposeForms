@@ -5,16 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import model.util.attribute.*
 import java.util.*
 
-abstract class BaseFormModel : FormModel {
+abstract class BaseFormModel() : FormModel {
 
     //******************************************************************************************************
     //Properties
 
     private var title               = ""
-    protected var allAttributes       = mutableStateListOf<Attribute<*,*>>()
+    protected var allAttributes     = mutableStateListOf<Attribute<*,*,*>>()
     private var changedForAll       = mutableStateOf(false)
     private val validForAll         = mutableStateOf(true)
-    private var currentLanguage     = mutableStateOf<Locale?>(null)
+    private var currentLanguage     = mutableStateOf<String>("")
 
 
     //******************************************************************************************************
@@ -52,7 +52,7 @@ abstract class BaseFormModel : FormModel {
      * This method sets the currentLanguage for all attributes
      * @param lang : Locale
      */
-    override fun setCurrentLanguageForAll(lang: Locale){
+    override fun setCurrentLanguageForAll(lang: String){
         currentLanguage.value = lang
         allAttributes.forEach{attribute -> attribute.setCurrentLanguage(lang) }
     }
@@ -70,7 +70,7 @@ abstract class BaseFormModel : FormModel {
      * If yes, changedForAll is set true. If not, changedForAll is set false.
      */
     override fun setChangedForAll(){
-        changedForAll.value = allAttributes.stream().anyMatch(Attribute<*,*>::isChanged)
+        changedForAll.value = allAttributes.stream().anyMatch(Attribute<*,*,*>::isChanged)
     }
 
     /**
@@ -78,7 +78,7 @@ abstract class BaseFormModel : FormModel {
      * If yes, changed is set true. If not, changed is set false.
      */
     override fun setValidForAll(){
-        validForAll.value = allAttributes.stream().allMatch(Attribute<*,*>::isValid)
+        validForAll.value = allAttributes.stream().allMatch(Attribute<*,*,*>::isValid)
     }
 
     override fun setTitle(title: String){
@@ -88,7 +88,7 @@ abstract class BaseFormModel : FormModel {
     //******************************************************************************************************
     //Getter
 
-    override fun getAttributes(): List<Attribute<*,*>> {
+    override fun getAttributes(): List<Attribute<*,*,*>> {
         return allAttributes
     }
 
@@ -104,11 +104,11 @@ abstract class BaseFormModel : FormModel {
         return validForAll.value
     }
 
-    fun isCurrentLanguageForAll(language : Locale) : Boolean{
+    fun isCurrentLanguageForAll(language : String) : Boolean{
         return currentLanguage.value == language
     }
 
-    override fun addAttribute(attr: Attribute<*, *>) {
+    override fun addAttribute(attr: Attribute<*,*,*>) {
         allAttributes.add(attr)
     }
 }

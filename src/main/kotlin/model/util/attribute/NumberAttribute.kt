@@ -1,10 +1,12 @@
 package model.util.attribute
 
 import model.FormModel
+import model.util.ILabel
+import kotlin.jvm.Throws
 
-abstract class NumberAttribute <N,T> (  model                               : FormModel,
+abstract class NumberAttribute <N,T,L> (model                               : FormModel,
                                         value                               : T?,
-                                        label                               : String,
+                                        label                               : L,
                                         required                            : Boolean,
                                         readOnly                            : Boolean,
                                         onChangeListeners                   : List<(T?) -> Unit>,
@@ -14,8 +16,8 @@ abstract class NumberAttribute <N,T> (  model                               : Fo
                                         private var stepSize                : T,
                                         private var onlyStepValuesAreValid  : Boolean
 
-) : Attribute<N,T>(model = model, value = value, label = label, required = required, readOnly = readOnly,
-    onChangeListeners = onChangeListeners) where N : NumberAttribute<N,T>, T : Number, T : Comparable<T> {
+) : Attribute<N,T,L>(model = model, value = value, label = label, required = required, readOnly = readOnly,
+    onChangeListeners = onChangeListeners) where N : NumberAttribute<N,T,L>, T : Number, T : Comparable<T>, L: Enum<*>, L : ILabel{
 
     //******************************************************************************************************
     //Optional extra-properties for NumberAttributes

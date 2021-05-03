@@ -76,7 +76,7 @@ class Form {
     }
 
     @Composable
-    private fun AttributeElement(attr: Attribute<*,*>){
+    private fun AttributeElement(attr: Attribute<*,*,*>){
 
         Row(Modifier.fillMaxWidth(0.8f).padding(5.dp)
             ) {
@@ -103,7 +103,7 @@ class Form {
 
 
     @Composable
-    private fun InputField(attr: Attribute<*, *>, keyEvent: (KeyEvent) -> Boolean){
+    private fun InputField(attr: Attribute<*,*,*>, keyEvent: (KeyEvent) -> Boolean){
 
         val focusRequester = remember { FocusRequester() }
         val index = remember{ focusRequesters.size }
@@ -139,12 +139,12 @@ class Form {
     }
 
     @Composable
-    private fun AttributeElement(strAttr: StringAttribute){
+    private fun AttributeElement(strAttr: StringAttribute<*>){
         InputField(strAttr){return@InputField true}
     }
 
     @Composable
-    private fun AttributeElement(longAttr: LongAttribute){
+    private fun AttributeElement(longAttr: LongAttribute<*>){
         InputField(longAttr)
             {
                 if (it.key == Key.DirectionUp) {
@@ -158,17 +158,17 @@ class Form {
     }
 
     @Composable
-    private fun AttributeElement(intAttr: IntegerAttribute){
+    private fun AttributeElement(intAttr: IntegerAttribute<*>){
         InputField(intAttr){ return@InputField true}
     }
 
     @Composable
-    private fun AttributeElement(shortAttr: ShortAttribute){
+    private fun AttributeElement(shortAttr: ShortAttribute<*>){
         InputField(shortAttr){ return@InputField true}
     }
 
     @Composable
-    private fun AttributeElement(floatAttr: FloatAttribute){
+    private fun AttributeElement(floatAttr: FloatAttribute<*>){
         InputField(floatAttr){
             if (it.key == Key.DirectionUp) {
                 floatAttr.setValueAsTextFromKeyEvent( (floatAttr.getValue() as Float + floatAttr.getStepSize()).toString())
@@ -180,7 +180,7 @@ class Form {
     }
 
     @Composable
-    private fun AttributeElement(doubleAttr: DoubleAttribute){
+    private fun AttributeElement(doubleAttr: DoubleAttribute<*>){
         InputField(doubleAttr){
             if (it.key == Key.DirectionUp) {
                 doubleAttr.setValueAsTextFromKeyEvent( (doubleAttr.getValue() as Double + doubleAttr.getStepSize()).toString())
@@ -192,7 +192,7 @@ class Form {
         }
     }
 
-    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute){ //todo: undo & save when dropdown is open
+    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute<*>){ //todo: undo & save when dropdown is open
         val dropDownIsOpen          = remember {mutableStateOf(false)}
         val selectionString         = mutableStateOf(selectionAttribute.getValueAsText().substring(1, selectionAttribute.getValueAsText().length-1))
         val label                   = selectionAttribute.getLabel()

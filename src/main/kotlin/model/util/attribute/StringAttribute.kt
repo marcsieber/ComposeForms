@@ -1,20 +1,23 @@
 package model.util.attribute
 
 import model.FormModel
+import model.util.ILabel
 import model.validators.Validator
 import java.lang.NumberFormatException
 import kotlin.jvm.Throws
 
-class StringAttribute(model                 : FormModel,
-                      value                 : String? = null,
-                      label                 : String = "",
-                      required              : Boolean = false,
-                      readOnly              : Boolean = false,
-                      onChangeListeners     : List<(String?) -> Unit> = emptyList(),
+class StringAttribute<L>(model                 : FormModel,
+                         value                 : String? = null,
+                         label                 : L,
+                         required              : Boolean = false,
+                         readOnly              : Boolean = false,
+                         onChangeListeners     : List<(String?) -> Unit> = emptyList(),
 
-                      private val validators            : List<Validator<String>> = emptyList()
+                         private val validators            : List<Validator<String>> = emptyList()
 
-) : Attribute<StringAttribute, String>(model = model, value = value, label = label, required = required, readOnly = readOnly, onChangeListeners = onChangeListeners) {
+) : Attribute<StringAttribute<L>, String, L>(model = model, value = value, label = label, required = required,
+    readOnly = readOnly, onChangeListeners = onChangeListeners)
+        where L: Enum<*>, L : ILabel{
 
 
     //******************************************************************************************************

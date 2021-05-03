@@ -1,11 +1,12 @@
 package model.util.attribute
 
 import model.FormModel
+import model.util.ILabel
 import java.lang.NumberFormatException
 
-class IntegerAttribute(model                    : FormModel,
+class IntegerAttribute<L>(model                    : FormModel,
                        value                    : Int? = null,
-                       label                    : String = "",
+                       label                    : L,
                        required                 : Boolean = false,
                        readOnly                 : Boolean = false,
                        onChangeListeners        : List<(Int?) -> Unit> = emptyList(),
@@ -15,9 +16,10 @@ class IntegerAttribute(model                    : FormModel,
                        stepSize                 : Int = 1,
                        onlyStepValuesAreValid   : Boolean = false
 
-) : NumberAttribute<IntegerAttribute, Int>(model = model, value = value, label = label, required = required,
+) : NumberAttribute<IntegerAttribute<L>, Int, L>(model = model, value = value, label = label, required = required,
     readOnly = readOnly, lowerBound = lowerBound, upperBound = upperBound, stepSize = stepSize, onlyStepValuesAreValid = onlyStepValuesAreValid,
-    onChangeListeners = onChangeListeners) {
+    onChangeListeners = onChangeListeners)
+        where L: Enum<*>, L : ILabel{
 
     //******************************************************************************************************
     //Validation

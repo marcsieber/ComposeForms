@@ -1,19 +1,20 @@
 package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
+import demo.Labels
 import model.FormModel
+import model.util.ILabel
 import model.validators.ValidationResult
 import java.util.*
-import kotlin.collections.HashMap
 
-abstract class Attribute <A,T> (private val model       : FormModel,
+abstract class Attribute <A,T,L> (private val model       : FormModel,
                                 private var value       : T?,
-                                label                   : String,
+                                label                   : L,
                                 required                : Boolean,
                                 readOnly                : Boolean,
                                 var onChangeListeners   : List<(T?) -> Unit>
 
-) where A : Attribute<A,T>, T : Any?{
+) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
 
     init{
         model.addAttribute(this)
@@ -25,14 +26,14 @@ abstract class Attribute <A,T> (private val model       : FormModel,
     private var savedValue          = value
     private val valueAsText         = mutableStateOf(value?.toString() ?: "")
 
-    private val label               = mutableStateOf(label)
+    private val label               = label
+    private val labelAsText         = mutableStateOf("")
     private val required            = mutableStateOf(required)
     private val readOnly            = mutableStateOf(readOnly)
     private val valid               = mutableStateOf(true)
     private val validationMessage   = mutableStateOf("")
     private val changed             = mutableStateOf(false)
-    private val labels              = HashMap<Locale,String>()
-    private val currentLanguage     = mutableStateOf<Locale?>(null)
+    private var currentLanguage     = ""
 
     protected val validationResults = mutableStateOf<List<ValidationResult>>(emptyList())
 
@@ -85,25 +86,7 @@ abstract class Attribute <A,T> (private val model       : FormModel,
     protected abstract fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false)
 
     fun setLabel(label : String){
-        this.label.value = label
-    }
-
-    /**
-     * setLabelForLanguage is needed if the app should support multiple languages.
-     * The language and the corresponding label name for this attribute is stored.
-     *
-     * If (at the beginning) no language is selected (call of setCurrentLanguage),
-     * the label of the first language that is set will be used.
-     *
-     * @param language : Locale
-     * @param label : String
-     */
-    fun setLabelForLanguage(language : Locale, label : String){
-        labels[language] = label
-        if(labels.size == 1){
-            this.label.value = label
-            setCurrentLanguage(language)
-        }
+        this.labelAsText.value =  ""
     }
 
     /**
@@ -174,9 +157,9 @@ abstract class Attribute <A,T> (private val model       : FormModel,
      *
      * @param language : Locale
      */
-    internal fun setCurrentLanguage(language : Locale){
-        label.value = labels.getOrDefault(language, "...")
-        currentLanguage.value = language
+    internal fun setCurrentLanguage(language : String){
+        labelAsText.value = label.getLabelInLanguage(this.label as Labels, language)
+        currentLanguage = language
     }
 
     //******************************************************************************************************
@@ -254,8 +237,8 @@ abstract class Attribute <A,T> (private val model       : FormModel,
      * @param language : Locale
      * @return Boolean
      */
-    fun isCurrentLanguage(language : Locale) : Boolean{
-        return currentLanguage.value == language
+    fun isCurrentLanguage(language : String) : Boolean{
+        return currentLanguage == language
     }
 
     /**
@@ -263,9 +246,9 @@ abstract class Attribute <A,T> (private val model       : FormModel,
      */
     fun getLabel() : String{
         return if(isRequired()){
-            label.value + "*"
+            labelAsText.value + "*"
         } else{
-            label.value
+            labelAsText.value
         }
     }
 
