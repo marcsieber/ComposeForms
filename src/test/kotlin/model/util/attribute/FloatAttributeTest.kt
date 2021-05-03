@@ -1,6 +1,7 @@
 package model.util.attribute
 
 import model.BaseFormModel
+import model.util.Labels
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -8,12 +9,12 @@ import org.junit.jupiter.api.Test
 
 internal class FloatAttributeTest : NumberAttributeTest<Float>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: Float?): Attribute<*, Any> {
-        return FloatAttribute(model, value) as Attribute<*, Any>
+    override fun provideAttribute(model: BaseFormModel, value: Float?): Attribute<*, Any,*> {
+        return FloatAttribute(model, value, Labels.TEST) as Attribute<*, Any,*>
     }
 
-    override fun provideNumberAttribute(model: BaseFormModel, value: Float?): NumberAttribute<*, Float> {
-        return FloatAttribute(model, value)
+    override fun provideNumberAttribute(model: BaseFormModel, value: Float?): NumberAttribute<*, Float,*> {
+        return FloatAttribute(model, value, Labels.TEST)
     }
 
     init {
@@ -53,12 +54,12 @@ internal class FloatAttributeTest : NumberAttributeTest<Float>() {
 
     }
 
-    lateinit var floatAtr : FloatAttribute
+    lateinit var floatAtr : FloatAttribute<Labels>
 
     @BeforeEach
     fun setUpFloatAtr(){
         //given
-        floatAtr = FloatAttribute(model, validValue1Uneven)
+        floatAtr = FloatAttribute(model, validValue1Uneven, Labels.TEST)
     }
 
     @Test

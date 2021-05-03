@@ -1,6 +1,7 @@
 package model.util.attribute
 
 import model.BaseFormModel
+import model.util.Labels
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -11,12 +12,12 @@ import java.lang.NumberFormatException
 
 internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: Double?): Attribute<*, Any> {
-        return DoubleAttribute(model, value) as Attribute<*, Any>
+    override fun provideAttribute(model: BaseFormModel, value: Double?): Attribute<*, Any,*> {
+        return DoubleAttribute(model, value, Labels.TEST) as Attribute<*, Any,*>
     }
 
-    override fun provideNumberAttribute(model: BaseFormModel, value: Double?): NumberAttribute<*, Double> {
-        return DoubleAttribute(model, value)
+    override fun provideNumberAttribute(model: BaseFormModel, value: Double?): NumberAttribute<*, Double,*> {
+        return DoubleAttribute(model, value, Labels.TEST)
     }
 
     init {
@@ -56,12 +57,12 @@ internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
 
     }
 
-    lateinit var doubleAtr : DoubleAttribute
+    lateinit var doubleAtr : DoubleAttribute<Labels>
 
     @BeforeEach
     fun setUpDoubleAtr(){
         //given
-        doubleAtr = DoubleAttribute(model, validValue1Uneven)
+        doubleAtr = DoubleAttribute(model, validValue1Uneven, Labels.TEST)
     }
 
     @Test

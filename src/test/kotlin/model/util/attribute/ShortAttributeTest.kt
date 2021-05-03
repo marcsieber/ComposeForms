@@ -1,14 +1,15 @@
 package model.util.attribute
 
 import model.BaseFormModel
+import model.util.Labels
 
 internal class ShortAttributeTest : NumberAttributeTest<Short>(){
 
-    override fun provideAttribute(model: BaseFormModel, value: Short?): Attribute<*, Any> {
-        return ShortAttribute(model, value) as Attribute<*, Any>
+    override fun provideAttribute(model: BaseFormModel, value: Short?): Attribute<*, Any,*> {
+        return ShortAttribute(model, value, Labels.TEST) as Attribute<*, Any,*>
     }
-    override fun provideNumberAttribute(model: BaseFormModel, value: Short?): NumberAttribute<*, Short> {
-        return ShortAttribute(model, value)
+    override fun provideNumberAttribute(model: BaseFormModel, value: Short?): NumberAttribute<*, Short,*> {
+        return ShortAttribute(model, value, Labels.TEST)
     }
 
     init{
