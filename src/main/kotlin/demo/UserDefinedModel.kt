@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import model.BaseFormModel
 import model.FormModel
 import model.util.attribute.*
+import model.validators.StringValidator
 import java.util.*
 
 class UserDefinedModel() : BaseFormModel(){
@@ -13,15 +14,16 @@ class UserDefinedModel() : BaseFormModel(){
         setTitle("Demo Title")
     }
 
+    val strValidator = StringValidator(5, 10, onChange = { validateAll() })
+
     //String
     val stringValue = StringAttribute(
         model = this,
         value = "Ich bin Text",
         required = true,
         readOnly = false,
-        minLength = 2,
-        maxLength = 20,
         label = "deutscher String",
+        validators = listOf(strValidator)
     )
 
     //Numbers
@@ -118,4 +120,13 @@ class UserDefinedModel() : BaseFormModel(){
     val dropDownOpen    = mutableStateOf(false)
     val dropDownSelIndex = mutableStateOf(0)
 
+
+    init{
+        Thread {
+            println("start thread")
+            Thread.sleep(3000)
+            println("sleep done")
+            strValidator.overrideStringValidator(15,20,"Length must be between 15 and 20 characters")
+        }.start()
+    }
 }

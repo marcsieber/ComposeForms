@@ -57,6 +57,10 @@ abstract class BaseFormModel : FormModel {
         allAttributes.forEach{attribute -> attribute.setCurrentLanguage(lang) }
     }
 
+    override fun validateAll() {
+        allAttributes.forEach{it.revalidate()}
+    }
+
 
     //******************************************************************************************************
     //Setter

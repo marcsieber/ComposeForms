@@ -1,6 +1,7 @@
 package model.util.attribute
 
 import model.FormModel
+import model.validators.Validator
 import java.lang.NumberFormatException
 import kotlin.jvm.Throws
 
@@ -11,8 +12,7 @@ class StringAttribute(model                 : FormModel,
                       readOnly              : Boolean = false,
                       onChangeListeners     : List<(String?) -> Unit> = emptyList(),
 
-                      private var minLength : Int = 0,
-                      private var maxLength : Int = 1_000_000
+                      private val validators            : List<Validator<String>> = emptyList()
 
 ) : Attribute<StringAttribute, String>(model = model, value = value, label = label, required = required, readOnly = readOnly, onChangeListeners = onChangeListeners) {
 
@@ -57,69 +57,10 @@ class StringAttribute(model                 : FormModel,
      * @throws IllegalArgumentException
      */
     @Throws(IllegalArgumentException :: class)
-    private fun validatedValue(newVal: String){
-        if (newVal.length < minLength){
-            throw IllegalArgumentException("Validation mismatched (minLength)")
+    fun validatedValue(newVal: String?) {
+
+        if (newVal != null) {
+            validationResults.value = validators.map { it.validateUserInput(newVal) }
         }
-        if (newVal.length > maxLength){
-            throw IllegalArgumentException("Validation mismatched (maxLength)")
-        }
-    }
-
-    //******************************************************************************************************
-    //Setter
-
-    /**
-     * This method checks if the given value for minLength is positive and below the maxLength value.
-     * If yes, the minLength is set and the current textValue is checked to see if it is still valid.
-     *
-     * @param maxLength : Int
-     * @throws IllegalArgumentException
-     */
-    fun setMinLength(minLength : Int) {
-        if(minLength >= 0){
-            if(minLength < maxLength){
-                this.minLength = minLength
-                checkAndSetValue(getValueAsText())
-            }
-            else{
-                throw IllegalArgumentException("minLength is not lower than maxLength")
-            }
-        }else{
-            throw IllegalArgumentException("minLength must be positive")
-        }
-    }
-
-    /**
-     * This method checks if the given value for maxLength is positive and above the minLength value.
-     * If yes, the maxLength is set and the current textValue is checked to see if it is still valid.
-     *
-     * @param maxLength : Int
-     * @throws IllegalArgumentException
-    */
-    fun setMaxLength(maxLength : Int) {
-        if(maxLength >= 0){
-            if(maxLength > minLength){
-                this.maxLength = maxLength
-                checkAndSetValue(getValueAsText())
-            }
-            else{
-                throw IllegalArgumentException("maxLength is not greater than minLength")
-            }
-        }else{
-            throw IllegalArgumentException("maxLength must be grater than 0")
-        }
-    }
-
-
-    //******************************************************************************************************
-    //Getter
-
-    fun getMinLength() : Int {
-        return minLength
-    }
-
-    fun getMaxLength() : Int {
-        return maxLength
     }
 }

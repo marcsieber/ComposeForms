@@ -2,6 +2,7 @@ package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
 import model.FormModel
+import model.validators.ValidationResult
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -32,6 +33,8 @@ abstract class Attribute <A,T> (private val model       : FormModel,
     private val changed             = mutableStateOf(false)
     private val labels              = HashMap<Locale,String>()
     private val currentLanguage     = mutableStateOf<Locale?>(null)
+
+    protected val validationResults = mutableStateOf<List<ValidationResult>>(emptyList())
 
 
     //******************************************************************************************************
@@ -266,6 +269,10 @@ abstract class Attribute <A,T> (private val model       : FormModel,
         }
     }
 
+    fun getErrorMessages(): List<String>{
+        return validationResults.value.filter{!it.result}.map{it.validationMessage}
+    }
+
     fun isRequired() : Boolean{
         return required.value
     }
@@ -275,6 +282,7 @@ abstract class Attribute <A,T> (private val model       : FormModel,
     }
 
     fun isValid() : Boolean{
+//        return validationResults.value.all{it.result} // TODO: Change when all validators are in the validator package instead of the attribute
         return valid.value
     }
 
@@ -284,6 +292,10 @@ abstract class Attribute <A,T> (private val model       : FormModel,
 
     fun isChanged() : Boolean{
         return changed.value
+    }
+
+    fun revalidate(){
+        checkAndSetValue(this.valueAsText.value)
     }
 
 }
