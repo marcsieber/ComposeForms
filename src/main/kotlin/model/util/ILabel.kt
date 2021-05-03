@@ -9,7 +9,7 @@ interface ILabel{
         val methodMap = getMethods().map { it.name.removePrefix("get").toLowerCase() to it }.toMap()
 
         if (methodMap.containsKey(lang.toLowerCase())) {
-            return methodMap[lang]!!.invoke(label) as String
+            return methodMap[lang.toLowerCase()]!!.invoke(label) as String
         } else {
             throw IllegalArgumentException("Language not found")
         }
