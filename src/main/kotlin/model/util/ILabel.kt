@@ -17,7 +17,7 @@ interface ILabel{
 
     fun getLanguagesDynamic(): List<String> {
         val methodsFiltered = getMethods()
-        return methodsFiltered.map { it.name.removePrefix("get") }
+        return methodsFiltered.map { it.name.removePrefix("get").toLowerCase() }
     }
 
     private fun getMethods(): List<Method> {
@@ -26,7 +26,8 @@ interface ILabel{
 
         return methodsUnfiltered.filter {
             it.name.startsWith("get")
-                    && it.declaringClass.name.endsWith("Labels")
+                    && !it.declaringClass.name.contains("Object")
+                    && !it.declaringClass.name.contains("Enum")
                     && !it.name.equals("getLanguagesDynamic")//TODO: take name of this method by runtime
                     && !it.name.equals("getLabelInLanguage")//TODO: take name of this method by runtime
         }
