@@ -1,10 +1,7 @@
-import org.jetbrains.compose.compose
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 
 plugins {
     kotlin("jvm") version "1.4.30"
-    id("org.jetbrains.compose") version "0.3.0"
     id("jacoco")
     id("org.sonarqube") version "3.1"
 }
@@ -19,11 +16,8 @@ repositories {
 }
 
 dependencies {
-    implementation(compose.desktop.currentOs)
     implementation("org.junit.jupiter:junit-jupiter:5.7.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("ch.fhnw.forms.common")
-
 }
 
 tasks {
@@ -35,13 +29,6 @@ tasks {
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "11"
 }
-
-compose.desktop {
-    application {
-        mainClass = "MainKt"
-    }
-}
-
 
 tasks{
     jacocoTestReport {
