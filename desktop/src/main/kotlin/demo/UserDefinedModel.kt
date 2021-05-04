@@ -4,10 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import model.BaseFormModel
 import model.util.attribute.*
 import model.validators.StringValidator
-import java.util.*
 import kotlin.concurrent.thread
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 class UserDefinedModel() : BaseFormModel(){
 

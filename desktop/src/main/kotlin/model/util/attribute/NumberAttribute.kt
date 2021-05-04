@@ -2,7 +2,6 @@ package model.util.attribute
 
 import model.FormModel
 import model.util.ILabel
-import kotlin.jvm.Throws
 
 abstract class NumberAttribute <N,T,L> (model                               : FormModel,
                                         value                               : T?,

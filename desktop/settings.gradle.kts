@@ -6,5 +6,5 @@ pluginManagement {
     }
     
 }
-rootProject.name = "Compose"
+rootProject.name = "Desktop"
 
