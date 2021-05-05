@@ -7,4 +7,7 @@ pluginManagement {
 
 }
 
-rootProject.name = "ch.fhnw.forms.desktop"
+rootProject.name = 'ComposeForms'
+
+include 'common'
+include 'desktop'

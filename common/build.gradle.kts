@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.4.30"
+    id("org.jetbrains.compose") version "0.3.0"
     id("jacoco")
     id("org.sonarqube") version "3.1"
 }
@@ -16,6 +17,7 @@ repositories {
 }
 
 dependencies {
+    implementation(compose.desktop.currentOs)
     implementation("org.junit.jupiter:junit-jupiter:5.7.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 }

@@ -1,6 +1,6 @@
 package demo
 
-import ch.fhnw.forms.common
+import model.util.ILabel
 
 enum class Labels(val english: String, val deutsch: String): ILabel {
     intLabel1("Good Morning", "Guten Tag"),
