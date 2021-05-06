@@ -148,12 +148,13 @@ class Form {
     private fun AttributeElement(longAttr: LongAttribute<*>){
         InputField(longAttr)
             {
-                if (it.key == Key.DirectionUp) {
-                    longAttr.setValueAsTextFromKeyEvent( (longAttr.getValue() as Long + longAttr.getStepSize()).toString())
-                }
-                if(it.key == Key.DirectionDown){
-                    longAttr.setValueAsTextFromKeyEvent( (longAttr.getValue() as Long - longAttr.getStepSize()).toString())
-                }
+//                if (it.key == Key.DirectionUp) {
+//                    longAttr.setValueAsTextFromKeyEvent( (longAttr.getValue() as Long + longAttr.validators.
+//                    getStepSize()).toString())
+//                }
+//                if(it.key == Key.DirectionDown){
+//                    longAttr.setValueAsTextFromKeyEvent( (longAttr.getValue() as Long - longAttr.getStepSize()).toString())
+//                }
                 return@InputField true
         }
     }
@@ -171,24 +172,24 @@ class Form {
     @Composable
     private fun AttributeElement(floatAttr: FloatAttribute<*>){
         InputField(floatAttr){
-            if (it.key == Key.DirectionUp) {
-                floatAttr.setValueAsTextFromKeyEvent( (floatAttr.getValue() as Float + floatAttr.getStepSize()).toString())
-            }
-            if(it.key == Key.DirectionDown){
-                floatAttr.setValueAsTextFromKeyEvent( (floatAttr.getValue() as Float - floatAttr.getStepSize()).toString())
-            }
+//            if (it.key == Key.DirectionUp) {
+//                floatAttr.setValueAsTextFromKeyEvent( (floatAttr.getValue() as Float + floatAttr.getStepSize()).toString())
+//            }
+//            if(it.key == Key.DirectionDown){
+//                floatAttr.setValueAsTextFromKeyEvent( (floatAttr.getValue() as Float - floatAttr.getStepSize()).toString())
+//            }
             return@InputField true}
     }
 
     @Composable
     private fun AttributeElement(doubleAttr: DoubleAttribute<*>){
         InputField(doubleAttr){
-            if (it.key == Key.DirectionUp) {
-                doubleAttr.setValueAsTextFromKeyEvent( (doubleAttr.getValue() as Double + doubleAttr.getStepSize()).toString())
-            }
-            if(it.key == Key.DirectionDown){
-                doubleAttr.setValueAsTextFromKeyEvent( (doubleAttr.getValue() as Double - doubleAttr.getStepSize()).toString())
-            }
+//            if (it.key == Key.DirectionUp) {
+//                doubleAttr.setValueAsTextFromKeyEvent( (doubleAttr.getValue() as Double + doubleAttr.getStepSize()).toString())
+//            }
+//            if(it.key == Key.DirectionDown){
+//                doubleAttr.setValueAsTextFromKeyEvent( (doubleAttr.getValue() as Double - doubleAttr.getStepSize()).toString())
+//            }
             return@InputField true
         }
     }
@@ -198,28 +199,45 @@ class Form {
         val selectionString         = mutableStateOf(selectionAttribute.getValueAsText().substring(1, selectionAttribute.getValueAsText().length-1))
         val label                   = selectionAttribute.getLabel()
 
-        Box( modifier = Modifier.height(300.dp).wrapContentSize(Alignment.TopStart)){
-            Column {
-                if(!selectionString.value.equals("")){
-                    Text(label, color = Color.DarkGray, modifier = Modifier.wrapContentSize().padding(4.dp), fontSize = 12.sp)
+        Row {
+            Box(modifier = Modifier.height(300.dp).wrapContentSize(Alignment.TopStart)) {
+                Column {
+                    if (!selectionString.value.equals("")) {
+                        Text(
+                            label,
+                            color = Color.DarkGray,
+                            modifier = Modifier.wrapContentSize().padding(4.dp),
+                            fontSize = 12.sp
+                        )
+                    }
+                    OutlinedButton(
+                        modifier = Modifier.height(50.dp),
+                        onClick = { dropDownIsOpen.value = true },
+                        shape = MaterialTheme.shapes.large,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                        border = BorderStroke(1.dp, if (selectionAttribute.isValid()) Color.DarkGray else Color.Red)
+                    ) {
+                        if (selectionString.value.equals("")) {
+                            Text(label, color = Color.DarkGray)
+                        } else {
+                            Text(selectionString.value)
+                        }
+                    }
+                    DropDownMenu(
+                        dropDownIsOpen, selectionAttribute.getPossibleSelections(), selectionAttribute.getValue()!!,
+                        selectionAttribute::addUserSelection, selectionAttribute::removeUserSelection
+                    )
+
                 }
-                OutlinedButton(
-                    modifier = Modifier.height(50.dp),
-                    onClick = {dropDownIsOpen.value = true},
-                    shape = MaterialTheme.shapes.large,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    border = BorderStroke(1.dp, if(selectionAttribute.isValid()) Color.DarkGray else Color.Red)
-                ){
-                    if(selectionString.value.equals("")){
-                        Text(label, color = Color.DarkGray)
-                    }else{
-                        Text(selectionString.value)
+
+            }
+            Column {
+                if (!selectionAttribute.isValid()) {
+                    for (msg in selectionAttribute.getErrorMessages()) {
+                        Text(msg, color = Color.Red, fontSize = 12.sp, modifier = Modifier.padding(4.dp))
                     }
                 }
-                DropDownMenu(dropDownIsOpen, selectionAttribute.getPossibleSelections(), selectionAttribute.getValue()!!,
-                selectionAttribute::addUserSelection, selectionAttribute::removeUserSelection)
             }
-
         }
     }
 

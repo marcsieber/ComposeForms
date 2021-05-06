@@ -2,12 +2,12 @@ package model.util.attribute
 
 import model.BaseFormModel
 import model.util.Labels
+import model.validators.semanticValidators.SelectionValidator
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import java.lang.IllegalArgumentException
-import java.util.*
 
 class SelectionAttributeTest {
 
@@ -82,16 +82,22 @@ class SelectionAttributeTest {
     }
 
     @Test
-    fun testSetMinNumberOfSelections() {
+    fun testSelectionValidator_MinNumberOfSelections() {
+        //given
+        val selVal = SelectionValidator(0)
+        selAtr.addValidator(selVal)
+
         //then
-        assertEquals(0, selAtr.getMinNumberOfSelections())
+        assertEquals(0, selVal.getMinNumberOfSelections())
         assertTrue(selAtr.isValid())
+        assertEquals(emptySet<String>(), selAtr.getValue())
 
         //when
-        selAtr.setMinNumberOfSelections(1)
+        selVal.overrideSelectionValidator(1)
 
         //then
-        assertEquals(1, selAtr.getMinNumberOfSelections())
+        assertEquals(1, selVal.getMinNumberOfSelections())
+        assertEquals(0, selAtr.getValue()!!.size)
         assertFalse(selAtr.isValid())
 
         //when
@@ -101,18 +107,18 @@ class SelectionAttributeTest {
         assertTrue(selAtr.isValid())
 
         //when
-        selAtr.setMaxNumberOfSelections(1)
+        selVal.overrideSelectionValidator(maxNumberOfSelections = 1)
 
         //then
         assertThrows(IllegalArgumentException ::class.java){
             //when
-            selAtr.setMinNumberOfSelections(2)
+            selVal.overrideSelectionValidator(minNumberOfSelections = 2)
         }
 
         //then
         assertThrows(IllegalArgumentException ::class.java){
             //when
-            selAtr.setMinNumberOfSelections(-1)
+            selVal.overrideSelectionValidator(minNumberOfSelections = -1)
         }
 
         //when
@@ -122,19 +128,23 @@ class SelectionAttributeTest {
         assertFalse(selAtr.isValid())
 
         //when
-        selAtr.setMaxNumberOfSelections(10)
+        selVal.overrideSelectionValidator(maxNumberOfSelections = 10)
 
         //then
         assertThrows(IllegalArgumentException ::class.java){
             //when
-            selAtr.setMinNumberOfSelections(4)  //minSel > Number of possible elements
+            selVal.overrideSelectionValidator(4)  //minSel > Number of possible elements
         }
     }
 
     @Test
     fun testSetMaxNumberOfSelections() {
+        //given
+        val selVal = SelectionValidator()
+        selAtr.addValidator(selVal)
+
         //then
-        assertEquals(Int.MAX_VALUE, selAtr.getMaxNumberOfSelections())
+        assertEquals(Int.MAX_VALUE, selVal.getMaxNumberOfSelections())
         assertTrue(selAtr.isValid())
 
         //when
@@ -142,10 +152,10 @@ class SelectionAttributeTest {
         selAtr.addUserSelection("Element2")
         selAtr.addANewPossibleSelection("Element3")
         selAtr.addUserSelection("Element3")
-        selAtr.setMaxNumberOfSelections(2)
+        selVal.overrideSelectionValidator(maxNumberOfSelections = 2)
 
         //then
-        assertEquals(2, selAtr.getMaxNumberOfSelections())
+        assertEquals(2, selVal.getMaxNumberOfSelections())
         assertFalse(selAtr.isValid())
 
         //when
@@ -155,18 +165,18 @@ class SelectionAttributeTest {
         assertTrue(selAtr.isValid())
 
         //when
-        selAtr.setMinNumberOfSelections(2)
+        selVal.overrideSelectionValidator(maxNumberOfSelections = 2)
 
         //then
         assertThrows(IllegalArgumentException ::class.java){
             //when
-            selAtr.setMaxNumberOfSelections(1)
+            selVal.overrideSelectionValidator(maxNumberOfSelections = 0)
         }
 
         //then
         assertThrows(IllegalArgumentException ::class.java){
             //when
-            selAtr.setMinNumberOfSelections(-1)
+            selVal.overrideSelectionValidator(-1)
         }
 
         //when
@@ -178,6 +188,10 @@ class SelectionAttributeTest {
 
     @Test
     fun testSetPossibleSelections() {
+        //given
+        val selVal = SelectionValidator()
+        selAtr.addValidator(selVal)
+
         //then
         assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
 
@@ -194,7 +208,7 @@ class SelectionAttributeTest {
         assertEquals(setOf("A", "B", "C", "D", "E"), selAtr.getPossibleSelections())
 
         //when
-        selAtr.setMinNumberOfSelections(5)
+        selVal.overrideSelectionValidator(5)
         selAtr.addUserSelection("A")
         selAtr.addUserSelection("B")
         selAtr.addUserSelection("C")
@@ -202,7 +216,8 @@ class SelectionAttributeTest {
         selAtr.addUserSelection("E")
 
         //then
-        assertEquals(5, selAtr.getMinNumberOfSelections())
+        assertEquals(5, selVal.getMinNumberOfSelections())
+        assertEquals(5, selAtr.getValue()!!.size)
         assertTrue(selAtr.isValid())
 
         //then
@@ -235,11 +250,9 @@ class SelectionAttributeTest {
         //then
         assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
 
-        //then
-        assertThrows(IllegalArgumentException :: class.java){
-            //when
-            selAtr.removeAPossibleSelection("Element3")
-        }
+        //when
+        selAtr.removeAPossibleSelection("Element3")
+
 
         //then
         assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
@@ -252,11 +265,12 @@ class SelectionAttributeTest {
 
         //when
         selAtr.addANewPossibleSelection("Element2")
-        selAtr.setMinNumberOfSelections(2)
+        val selVal = SelectionValidator(2)
+        selAtr.addValidator(selVal)
 
         //then
         assertEquals(setOf("Element1", "Element2"), selAtr.getPossibleSelections())
-        assertEquals(2, selAtr.getMinNumberOfSelections())
+        assertEquals(2, selVal.getMinNumberOfSelections())
 
         //then
         assertThrows(IllegalArgumentException :: class.java){
@@ -268,26 +282,34 @@ class SelectionAttributeTest {
 
     @Test
     fun testGetMinNumberOfSelections() {
+        //given
+        val selVal = SelectionValidator()
+        selAtr.addValidator(selVal)
+
         //then
-        assertEquals(0, selAtr.getMinNumberOfSelections())
+        assertEquals(0, selVal.getMinNumberOfSelections())
 
         //when
-        selAtr.setMinNumberOfSelections(1)
+        selVal.overrideSelectionValidator(1)
 
         //then
-        assertEquals(1, selAtr.getMinNumberOfSelections())
+        assertEquals(1, selVal.getMinNumberOfSelections())
     }
 
     @Test
     fun testGetMaxNumberOfSelections() {
+        //given
+        val selVal = SelectionValidator()
+        selAtr.addValidator(selVal)
+
         //then
-        assertEquals(Int.MAX_VALUE, selAtr.getMaxNumberOfSelections())
+        assertEquals(Int.MAX_VALUE, selVal.getMaxNumberOfSelections())
 
         //when
-        selAtr.setMaxNumberOfSelections(100)
+        selVal.overrideSelectionValidator(maxNumberOfSelections = 100)
 
         //then
-        assertEquals(100, selAtr.getMaxNumberOfSelections())
+        assertEquals(100, selVal.getMaxNumberOfSelections())
     }
 
     @Test
@@ -411,27 +433,21 @@ class SelectionAttributeTest {
         assertEquals(setOf("Element1"),selAtr.getValue())
     }
 
-
     @Test
     fun testSetRequired() {
-        val label = Labels.TEST.test
-        val required = true
-        val notRequired = false
 
         //when
-        selAtr.setRequired(required)
+        selAtr.setRequired(true)
         selAtr.setCurrentLanguage("test")
 
         //then
-        assertEquals(required, selAtr.isRequired())
-        assertEquals(label + "*", selAtr.getLabel())
+        assertEquals(true, selAtr.isRequired())
 
         //when
-        selAtr.setRequired(notRequired)
+        selAtr.setRequired(false)
 
         //then
-        assertEquals(notRequired, selAtr.isRequired())
-        assertEquals(label, selAtr.getLabel())
+        assertFalse(selAtr.isRequired())
     }
 
     @Test
@@ -468,11 +484,15 @@ class SelectionAttributeTest {
 
     @Test
     fun testSetValidationMessage() {
+        //given
+        val selVal = SelectionValidator()
+        selAtr.addValidator(selVal)
+
         //when
         selAtr.addUserSelection("Element1")
 
         //then
-        assertEquals("Valid Input", selAtr.getValidationMessage())
+        assertEquals(0, selAtr.getErrorMessages().size)
 
         //then
         assertThrows(IllegalArgumentException::class.java){
@@ -481,7 +501,7 @@ class SelectionAttributeTest {
         }
 
         //then
-        assertEquals("Valid Input", selAtr.getValidationMessage())
+        assertEquals(0, selAtr.getErrorMessages().size)
     }
 
     @Test
@@ -577,7 +597,7 @@ class SelectionAttributeTest {
         }
 
         //then
-        assertEquals("Valid Input", selAtr.getValidationMessage()) // "There was no such selection to choose" will be overwritten
+        assertEquals(0, selAtr.getErrorMessages().size) // "There was no such selection to choose" will be overwritten
     }
 
     @Test
@@ -621,7 +641,7 @@ class SelectionAttributeTest {
         }
 
         //then
-        assertEquals("Valid Input", selAtr.getValidationMessage())
+        assertEquals(0, selAtr.getErrorMessages().size)
         assertEquals(setOf("Element1"), selAtr.getValue())
         assertEquals(emptySet<String>(), selAtr.getSavedValue())
         assertEquals("[Element1]", selAtr.getValueAsText())
@@ -639,7 +659,7 @@ class SelectionAttributeTest {
         selAtr.setRequired(true)
 
         //then
-        assertEquals("Input Required", selAtr.getValidationMessage())
+        assertEquals("Input required", selAtr.getErrorMessages()[0])
         assertEquals(emptySet<String>(), selAtr.getValue())
         assertEquals(emptySet<String>(), selAtr.getSavedValue())
         assertEquals("[]", selAtr.getValueAsText())

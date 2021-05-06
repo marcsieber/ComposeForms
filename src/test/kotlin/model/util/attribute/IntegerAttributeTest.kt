@@ -26,7 +26,7 @@ internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
         validValue4AsText  = "14"
 
         notValidValueAsText     = "a"
-        validationMessage       = "No Integer"
+
 
         //For NumberAttribute
         upperBound                                      = 10

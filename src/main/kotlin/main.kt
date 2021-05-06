@@ -7,7 +7,7 @@ import demo.UserDefinedModel
 
 fun main() = Window(
     title = "Compose for Desktop",
-    size = IntSize(600, 800)
+    size = IntSize(600, 1000)
 ) {
     MaterialTheme {
         val model = remember { UserDefinedModel() }

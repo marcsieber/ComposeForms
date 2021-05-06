@@ -26,7 +26,6 @@ internal class ShortAttributeTest : NumberAttributeTest<Short>(){
         validValue4AsText  = "14"
 
         notValidValueAsText     = "a"
-        validationMessage       = "No Short"
 
         //For NumberAttribute
         upperBound          = 10

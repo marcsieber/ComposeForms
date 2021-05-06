@@ -2,21 +2,24 @@ package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
 import model.FormModel
+import model.converters.TypeConverter
 import model.util.ILabel
+import model.validators.RequiredValidator
+import model.validators.SyntaxValidator
 import model.validators.ValidationResult
+import model.validators.Validator
+import model.validators.semanticValidators.SemanticValidator
+import java.lang.NumberFormatException
 
 abstract class Attribute <A,T,L> (private val model       : FormModel,
                                   private var value       : T?,
                                   label                   : L,
                                   required                : Boolean,
                                   readOnly                : Boolean,
-                                  var onChangeListeners   : List<(T?) -> Unit>
+                                  var onChangeListeners   : List<(T?) -> Unit>,
+                                  var validators          : List<SemanticValidator<T>>
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
-
-    init{
-        model.addAttribute(this)
-    }
 
     //******************************************************************************************************
     //Properties
@@ -33,16 +36,34 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     private val changed             = mutableStateOf(false)
     private var currentLanguage     = ""
 
-    protected val validationResults = mutableStateOf<List<ValidationResult>>(emptyList())
+    private val listOfValidationResults  = mutableStateOf<List<ValidationResult>>(emptyList())
+    private val converter           = TypeConverter<T>()
+    abstract val typeT        : T
+    private val reqValidator        = RequiredValidator<T>(required)
+    private val syntaxValidator     = SyntaxValidator<T>()
 
+
+    /**
+     * The attribute is passed to its model and to its validators so that they can access values of the attribute.
+     */
+    init{
+        model.addAttribute(this)
+        validators.forEach{it.addAttribute(this)}
+        reqValidator.addAttribute(this)
+        syntaxValidator.addAttribute(this)
+        checkAndSetValue(getValueAsText())
+    }
 
     //******************************************************************************************************
     //Public Setter
 
     /**
-     * This method sets valueAsText to the new value, calls setChanged to look if there
-     * are changes in comparison to the savedValue and it calls setValue.
-     * The new values are only set if the attribute is not readonly.
+     * If the attribute is not readonly, valueAsText is set to the new value,
+     * then setChanged is called to look if there are changes in comparison to the savedValue
+     * and finally checkAndSetValue is called.
+     *
+     * If the input is a "Tab" nothing happens
+     *
      * @param valueAsText : String
      */
     fun setValueAsText(valueAsText : String){
@@ -52,17 +73,19 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         if(!isReadOnly()){
             this.valueAsText.value = valueAsText
             setChanged(valueAsText)
-            checkAndSetValue( if(valueAsText.equals("")) null else valueAsText)
-        }else{
-            setValidationMessage("This is read only. The value was not set.")
+            checkAndSetValue(valueAsText)
         }
     }
 
     /**
      * This method should only be called after KeyEvents to avoid inaccuracies of double or float values.
-     * This method sets valueAsText to the new value, calls setChanged to look if there
-     * are changes in comparison to the savedValue and it calls setValue.
-     * The new values are only set if the attribute is not readonly.
+     *
+     * If the attribute is not readonly, valueAsText is set to the new value,
+     * then setChanged is called to look if there are changes in comparison to the savedValue
+     * and finally checkAndSetValue is called.
+     *
+     * If the input is a "Tab" nothing happens
+     *
      * @param valueAsText : String
      */
     fun setValueAsTextFromKeyEvent(valueAsText : String){
@@ -71,7 +94,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         }
         if(!isReadOnly()){
             setChanged(valueAsText)
-            checkAndSetValue( if(valueAsText.equals("")) null else valueAsText, true)
+            checkAndSetValue(valueAsText, true)
 
             if(isValid()){
                 this.valueAsText.value = getValue().toString()
@@ -81,30 +104,29 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         }
     }
 
-    protected abstract fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false)
+//    /**
+//     * The required value is set and the current textValue is checked to see if it is still valid.
+//     */
+//    fun setRequired(isRequired : Boolean){
+//        this.required.value = isRequired
+//        checkAndSetValue(getValueAsText())
+//    }
 
     /**
-     * This method sets the value null.
-     * If it is a SelectionAttribute the value is set to an emptySet<String>()
-     * If it is a required field, valid is set false.
+     * This method overwrites the ReuiredValidator with the passed Boolean and required is set.
      */
-    protected fun setNullValue(valueIsASet: Boolean = false){
-        setValid(!isRequired())
-        setValidationMessage( if(isValid()) "Valid Input" else "Input Required")
-        if(valueIsASet){
-            setValue(emptySet<String>() as T)
-        }else{
-            setValue(null)
-        }
+    fun setRequired(isRequired: Boolean){
+        reqValidator.overrideRequiredValidator(isRequired)
+        this.required.value = reqValidator.isRequired() //TODO only call required (mutable state)
     }
 
     /**
-     * The required value is set and the current textValue is checked to see if it is still valid.
+     *
      */
-    fun setRequired(isRequired : Boolean){
-        this.required.value = isRequired
-        checkAndSetValue(getValueAsText())
+    fun isRequired(): Boolean { //private
+        return required.value
     }
+
 
     fun setReadOnly(isReadOnly : Boolean){
         this.readOnly.value = isReadOnly
@@ -118,7 +140,6 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         this.valid.value = isValid
         this.model.setValidForAll()
     }
-
 
     //******************************************************************************************************
     //Internal Setter //todo change internal
@@ -157,13 +178,16 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     //******************************************************************************************************
     //Protected Setter
 
+    /**
+     * If the new value is unequal to the set value, the new value is set
+     * and the changeListeners are informed about the value change.
+     * @param value: T?
+     */
     protected fun setValue(value: T?) {
-        this.value = value
-        onChangeListeners.forEach{it(value)}
-    }
-
-    protected fun setValidationMessage(message : String){
-        this.validationMessage.value = message
+        if(value != this.value){
+            this.value = value
+            onChangeListeners.forEach{it(value)}
+        }
     }
 
     //******************************************************************************************************
@@ -210,7 +234,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     }
 
     //******************************************************************************************************
-    //Public Getter
+    //Getter
 
     fun getValue() : T?{
         return value
@@ -233,44 +257,139 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         return currentLanguage == language
     }
 
-    /**
-     * @return the label-text: if the attribute is a required field, a "*" is added behind the labeltext
-     */
     fun getLabel() : String{
-        return if(isRequired()){
-            labelAsText.value + "*"
-        } else{
-            labelAsText.value
-        }
-    }
-
-    fun getErrorMessages(): List<String>{
-        return validationResults.value.filter{!it.result}.map{it.validationMessage}
-    }
-
-    fun isRequired() : Boolean{
-        return required.value
+        return labelAsText.value
     }
 
     fun isReadOnly() : Boolean{
         return readOnly.value
     }
 
-    fun isValid() : Boolean{
-//        return validationResults.value.all{it.result} // TODO: Change when all validators are in the validator package instead of the attribute
-        return valid.value
-    }
-
-    fun getValidationMessage() : String {
-        return validationMessage.value
-    }
-
     fun isChanged() : Boolean{
         return changed.value
     }
 
+
+
+
+    //******************************************************************************************************
+    //Validation
+
+    /**
+     * This method checks if the new input value is valid.
+     * If it is, the new value is set.
+     * If it isn't, setValid(false) is called.
+     *
+     * @param newVal : String
+     * @param calledFromKeyEvent : Boolean
+     * @throws NumberFormatException
+     * @throws IllegalArgumentException
+     */
+    protected fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false){
+        if(newVal == null || newVal.equals("") || newVal.equals("[]")){
+            if(this is SelectionAttribute){
+                checkRequiredValidators(emptySet(), "[]")
+                setValue(emptySet()) //TODO: only valid values in value (if(isValid()) ...), no solution yet for the situation with minNumberOfElements > 1 (only SelectionAttribute)
+            }else{
+                checkRequiredValidators(null, "")
+                if(isValid()){setValue(null)}
+            }
+        } else {
+            checkSyntaxValidators(newVal)
+            if(this is SelectionAttribute){ //TODO: only valid values in value (if(isValid()) ...), no solution yet for the situation with minNumberOfElements > 1 (only SelectionAttribute)
+                val typeValue = convert(newVal)
+                if(!calledFromKeyEvent){ checkAllValidators(typeValue, newVal) }
+                setValue(typeValue)
+            }
+            else{
+                if(isValid()){
+                    val typeValue = convert(newVal)
+                    if(!calledFromKeyEvent){ checkAllValidators(typeValue, newVal) }
+                    if(isValid()) setValue(typeValue)
+                }
+            }
+        }
+    }
+
+    /**
+     * Add a new validator to the attribute
+     *
+     * @param validator
+     */
+    fun addValidator(validator : SemanticValidator<T>){
+        val tempList = validators.toMutableList()
+        tempList.add(validator)
+        validators = tempList
+        validator.addAttribute(this)
+    }
+
+
+    /**
+     * call checkAndSetValue to check if the user input is valid
+     */
     fun revalidate(){
         checkAndSetValue(this.valueAsText.value)
+    }
+
+    /**
+     * This method returns the validationMessages of all invalid validation results
+     *
+     * @return List<String>
+     */
+    fun getErrorMessages(): List<String>{
+        return listOfValidationResults.value.filter{!it.result}.map{it.validationMessage}
+    }
+
+    fun isValid() : Boolean{
+        return valid.value
+    }
+
+    /**
+     * sets the listOfValidationResults checks if all results are true and calls setValid.
+     */
+    fun setListOfValidationResults(listOfValidationResults: List<ValidationResult>){
+        this.listOfValidationResults.value = listOfValidationResults
+        setValid(this.getListOfValidationResults().all { it.result })
+    }
+
+    fun getListOfValidationResults() : List<ValidationResult>{
+        return listOfValidationResults.value
+    }
+
+    //Check validators:
+
+    /**
+     * This method checks, if the value is valid regarding all validators of this attribute.
+     * The result is recorded in the validationResults
+     */
+    fun checkAllValidators(newVal: T, newValAsText : String) {
+        setListOfValidationResults(validators.map { it.validateUserInput(newVal, newValAsText) })
+    }
+
+    /**
+     * This method checks, if the value is valid regarding all required validators of this attribute.
+     * The result is recorded in the validationResults
+     */
+    fun checkRequiredValidators(newVal : T?, newValAsText : String?){
+        setListOfValidationResults(listOf(reqValidator.validateUserInput(newVal, newValAsText)))
+        println("List: " + listOfValidationResults)
+    }
+
+    /**
+     *
+     */
+    fun checkSyntaxValidators(newValAsText : String){
+        setListOfValidationResults(listOf(syntaxValidator.validateUserInput(typeT, newValAsText)))
+    }
+
+    //Convert:
+
+    /**
+     *
+     */
+    fun convert(newValAsText: String) : T {
+        println(typeT is Float)
+        return converter.convertStringToType(newValAsText, typeT)
     }
 
 }

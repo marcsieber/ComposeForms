@@ -1,6 +1,7 @@
 package model.util.attribute
 
 import model.BaseFormModel
+import model.validators.semanticValidators.NumberValidator
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -36,159 +37,601 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
     }
 
     @Test
-    fun testSetLowerBound() {
-        //when
-        numAt.setUpperBound(upperBound)
+    fun testNumberValidator_LowerBound() {
 
-        //then
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+        if(numAt is DoubleAttribute){
+            //given
+            val numValidator = NumberValidator(upperBound = upperBound as Double)
+            (numAt as DoubleAttribute).addValidator(numValidator)
+
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Double)
+            }
+            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
+
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Double)
+            }
+            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
+
             //when
-            numAt.setLowerBound(lowerBoundWrong_becauseGreaterThanUpperBound)
-        }
+            numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Double)
 
-        //then
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            //then
+            Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
+
+        }
+        if(numAt is FloatAttribute){
+            //given
+            val numValidator = NumberValidator(upperBound = upperBound as Float)
+            (numAt as FloatAttribute).addValidator(numValidator)
+
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Float)
+            }
+            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
+
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Float)
+            }
+            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
+
             //when
-            numAt.setLowerBound(lowerBoundWrong_becauseSameAsUpperBound)
+            numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Float)
+
+            //then
+            Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
+
         }
+        if(numAt is IntegerAttribute) {
+            //given
+            val numValidator = NumberValidator(upperBound = upperBound as Int)
+            (numAt as IntegerAttribute).addValidator(numValidator)
 
-        //when
-        numAt.setLowerBound(lowerBoundCorrect)
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Int)
+            }
+            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
 
-        //then
-        Assertions.assertSame(lowerBoundCorrect, numAt.getLowerBound())
-    }
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Int)
+            }
+            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
 
-    @Test
-    fun testGetLowerBound() {
-        //when
-        numAt.setLowerBound(lowerBound)
-
-        //then
-        Assertions.assertSame(lowerBound, numAt.getLowerBound())
-    }
-
-    @Test
-    fun testSetUpperBound() {
-        //when
-        numAt.setLowerBound(lowerBound)
-
-        //then
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
             //when
-            numAt.setUpperBound(upperBoundWrong_becauseLowerThanLowerBound)
-        }
+            numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Int)
 
-        //then
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            //then
+            Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
+
+        }
+        if(numAt is LongAttribute){
+            //given
+            val numValidator = NumberValidator(upperBound = upperBound as Long)
+            (numAt as LongAttribute).addValidator(numValidator)
+
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Long)
+            }
+            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
+
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Long)
+            }
+            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
+
             //when
-            numAt.setUpperBound(upperBoundWrong_becauseSameAsLowerBound)
+            numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Long)
+
+            //then
+            Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
+
         }
+        if(numAt is ShortAttribute){
+            //given
+            val numValidator = NumberValidator(upperBound = upperBound as Short)
+            (numAt as ShortAttribute).addValidator(numValidator)
 
-        //when
-        numAt.setUpperBound(upperBoundCorrect)
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Short)
+            }
+            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
 
-        //then
-        Assertions.assertEquals(upperBoundCorrect, numAt.getUpperBound(), "correct upperBound")
-    }
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Short)
+            }
+            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertEquals(upperBound, numValidator.getUpperBound())
 
-    @Test
-    fun testSetOnlyStepValuesAreValid(){
-        //when
-        numAt.setStepSize(stepSizeCorrect_even)
-        numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
-
-        //then
-        assertTrue(numAt.isValid())
-
-        //when
-        numAt.setOnlyStepValuesAreValid(true)
-
-        //then
-        assertFalse(numAt.isValid())
-    }
-
-    @Test
-    fun testGetUpperBound() {
-        //when
-        numAt.setUpperBound(upperBound)
-
-        //then
-        Assertions.assertSame(upperBound, numAt.getUpperBound())
-    }
-
-    @Test
-    fun testSetStepSize() {
-        //when
-        numAt.setStepSize(stepSizeCorrect_even)
-
-        //then
-        assertEquals(stepSizeCorrect_even, numAt.getStepSize(), "valid stepSize")
-        assertEquals(validValue1Uneven, numAt.getStepStart(), "correct stepStart")
-
-
-        //when
-        numAt.setValueAsText(valueWithCorrectStepSize.toString())
-
-        //then
-        assertTrue(numAt.isValid(), "valid value")
-
-        //when
-        numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
-        numAt.setOnlyStepValuesAreValid(true)
-
-        //then
-        Assertions.assertFalse(numAt.isValid(), "invalid value, because of stepSize")
-
-        //then
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
             //when
-            numAt.setStepSize(stepSizeWrong_because0)
-        }
+            numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Short)
 
-        //then
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            //then
+            Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
+
+        }
+    }
+
+    @Test
+    fun testNumberValidator_UpperBound(){
+        if(numAt is DoubleAttribute){
+            //given
+            val numValidator = NumberValidator(lowerBound = lowerBound as Double)
+            (numAt as DoubleAttribute).addValidator(numValidator)
+
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Double)
+            }
+            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Double)
+            }
+            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
             //when
-            numAt.setStepSize(stepSizeWrong_because0)
-        }
+            numValidator.overrideNumberValidator(upperBound = upperBoundCorrect as Double)
 
-        //then
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            //then
+            Assertions.assertSame(upperBoundCorrect, numValidator.getUpperBound())
+
+        }
+        if(numAt is FloatAttribute){
+            //given
+            val numValidator = NumberValidator(lowerBound = lowerBound as Float)
+            (numAt as FloatAttribute).addValidator(numValidator)
+
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Float)
+            }
+            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Float)
+            }
+            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
             //when
-            numAt.setStepSize(stepSizeWrong_becauseNegative)
+            numValidator.overrideNumberValidator(upperBound = upperBoundCorrect as Float)
+
+            //then
+            Assertions.assertSame(upperBoundCorrect, numValidator.getUpperBound())
+
+
+        }
+        if(numAt is IntegerAttribute) {
+            //given
+            val numValidator = NumberValidator(lowerBound = lowerBound as Int)
+            (numAt as IntegerAttribute).addValidator(numValidator)
+
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Int)
+            }
+            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Int)
+            }
+            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
+            //when
+            numValidator.overrideNumberValidator(upperBound = upperBoundCorrect as Int)
+
+            //then
+            Assertions.assertSame(upperBoundCorrect, numValidator.getUpperBound())
+
+
+        }
+        if(numAt is LongAttribute){
+            //given
+            val numValidator = NumberValidator(lowerBound = lowerBound as Long)
+            (numAt as LongAttribute).addValidator(numValidator)
+
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Long)
+            }
+            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Long)
+            }
+            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
+            //when
+            numValidator.overrideNumberValidator(upperBound = upperBoundCorrect as Long)
+
+            //then
+            Assertions.assertSame(upperBoundCorrect, numValidator.getUpperBound())
+
+        }
+        if(numAt is ShortAttribute){
+            //given
+            val numValidator = NumberValidator(lowerBound = lowerBound as Short)
+            (numAt as ShortAttribute).addValidator(numValidator)
+
+            //then
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Short)
+            }
+            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
+            assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Short)
+            }
+            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertEquals(lowerBound, numValidator.getLowerBound())
+
+            //when
+            numValidator.overrideNumberValidator(upperBound = upperBoundCorrect as Short)
+
+            //then
+            Assertions.assertSame(upperBoundCorrect, numValidator.getUpperBound())
+
         }
     }
 
-    @Test
-    fun testGetStepSize() {
-        //when
-        numAt.setStepSize(stepSizeCorrect_even)
 
-        //then
-        assertEquals(stepSizeCorrect_even, numAt.getStepSize(), "valid stepSize")
+    @Test
+    fun testNumberValidator_OnlyStepSizValid(){
+
+        if(numAt is DoubleAttribute){
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Double, stepStart = validValue1Uneven as Double)
+            (numAt as DoubleAttribute).addValidator(numValidator)
+
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+
+            //then
+            assertTrue(numAt.isValid())
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize())
+
+            //when
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            assertFalse(numAt.isValid())
+            assertEquals(true, numValidator.isOnlyStepValuesAreValid())
+
+        }
+        if(numAt is FloatAttribute){
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Float, stepStart = validValue1Uneven as Float)
+            (numAt as FloatAttribute).addValidator(numValidator)
+
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+
+            //then
+            assertTrue(numAt.isValid())
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize())
+
+            //when
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            assertFalse(numAt.isValid())
+            assertEquals(true, numValidator.isOnlyStepValuesAreValid())
+
+        }
+        if(numAt is IntegerAttribute) {
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Int, stepStart = validValue1Uneven as Int)
+            (numAt as IntegerAttribute).addValidator(numValidator)
+
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+
+            //then
+            assertTrue(numAt.isValid())
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize())
+
+            //when
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            assertFalse(numAt.isValid())
+            assertEquals(true, numValidator.isOnlyStepValuesAreValid())
+        }
+        if(numAt is LongAttribute){
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Long, stepStart = validValue1Uneven as Long)
+            (numAt as LongAttribute).addValidator(numValidator)
+
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+
+            //then
+            assertTrue(numAt.isValid())
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize())
+
+            //when
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            assertFalse(numAt.isValid())
+            assertEquals(true, numValidator.isOnlyStepValuesAreValid())
+
+        }
+        if(numAt is ShortAttribute){
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Short, stepStart = validValue1Uneven as Short)
+            (numAt as ShortAttribute).addValidator(numValidator)
+
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+
+            //then
+            assertTrue(numAt.isValid())
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize())
+
+            //when
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            assertFalse(numAt.isValid())
+            assertEquals(true, numValidator.isOnlyStepValuesAreValid())
+        }
     }
 
+    //    @Test
+//    fun testSetStepSize() {
+//        //when
+//        numAt.setStepSize(stepSizeCorrect_even)
+//
+//        //then
+//        assertEquals(stepSizeCorrect_even, numAt.getStepSize(), "valid stepSize")
+//        assertEquals(validValue1Uneven, numAt.getStepStart(), "correct stepStart")
+//
+//
+//        //when
+//        numAt.setValueAsText(valueWithCorrectStepSize.toString())
+//
+//        //then
+//        assertTrue(numAt.isValid(), "valid value")
+//
+//        //when
+//        numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+//        numAt.setOnlyStepValuesAreValid(true)
+//
+//        //then
+//        Assertions.assertFalse(numAt.isValid(), "invalid value, because of stepSize")
+//
+//        //then
+//        Assertions.assertThrows(IllegalArgumentException::class.java) {
+//            //when
+//            numAt.setStepSize(stepSizeWrong_because0)
+//        }
+//
+//
+//        //then
+//        Assertions.assertThrows(IllegalArgumentException::class.java) {
+//            //when
+//            numAt.setStepSize(stepSizeWrong_becauseNegative)
+//        }
+//    }
+
     @Test
-    fun testGetStepStart() {
-        //then
-        assertEquals(validValue1Uneven, numAt.getStepStart())
+    fun testNumberValidator_StepSize(){
 
-        //when
-        numAt.setValueAsText(validValue3AsText)
+        if(numAt is DoubleAttribute){
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Double, stepStart = validValue1Uneven as Double)
+            (numAt as DoubleAttribute).addValidator(numValidator)
 
-        //then
-        assertEquals(validValue1Uneven, numAt.getStepStart())
-    }
+            //then
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize(), "valid stepSize")
+            assertEquals(validValue1Uneven, numValidator.getStepStart(), "correct stepStart")
 
-    @Test
-    fun testIsOnlyStepValuesAreValid(){
-        //then
-        assertFalse(numAt.isOnlyStepValuesAreValid())
+            //when
+            numAt.setValueAsText(valueWithCorrectStepSize.toString())
 
-        //when
-        numAt.setOnlyStepValuesAreValid(true)
+            //then
+            assertTrue(numAt.isValid(), "valid value")
 
-        //then
-        assertTrue(numAt.isOnlyStepValuesAreValid())
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            Assertions.assertFalse(numAt.isValid(), "invalid value, because of stepSize")
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_because0 as Double)
+            }
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_becauseNegative as Double)
+            }
+        }
+        if(numAt is FloatAttribute){
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Float, stepStart = validValue1Uneven as Float)
+            (numAt as FloatAttribute).addValidator(numValidator)
+
+            //then
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize(), "valid stepSize")
+            assertEquals(validValue1Uneven, numValidator.getStepStart(), "correct stepStart")
+
+            //when
+            numAt.setValueAsText(valueWithCorrectStepSize.toString())
+
+            //then
+            assertTrue(numAt.isValid(), "valid value")
+
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            Assertions.assertFalse(numAt.isValid(), "invalid value, because of stepSize")
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_because0 as Float)
+            }
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_becauseNegative as Float)
+            }
+
+        }
+        if(numAt is IntegerAttribute) {
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Int, stepStart = validValue1Uneven as Int)
+            (numAt as IntegerAttribute).addValidator(numValidator)
+
+            //then
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize(), "valid stepSize")
+            assertEquals(validValue1Uneven, numValidator.getStepStart(), "correct stepStart")
+
+            //when
+            numAt.setValueAsText(valueWithCorrectStepSize.toString())
+
+            //then
+            assertTrue(numAt.isValid(), "valid value")
+
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            Assertions.assertFalse(numAt.isValid(), "invalid value, because of stepSize")
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_because0 as Int)
+            }
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_becauseNegative as Int)
+            }
+        }
+        if(numAt is LongAttribute){
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Long, stepStart = validValue1Uneven as Long)
+            (numAt as LongAttribute).addValidator(numValidator)
+
+            //then
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize(), "valid stepSize")
+            assertEquals(validValue1Uneven, numValidator.getStepStart(), "correct stepStart")
+
+            //when
+            numAt.setValueAsText(valueWithCorrectStepSize.toString())
+
+            //then
+            assertTrue(numAt.isValid(), "valid value")
+
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            Assertions.assertFalse(numAt.isValid(), "invalid value, because of stepSize")
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_because0 as Long)
+            }
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_becauseNegative as Long)
+            }
+
+        }
+        if(numAt is ShortAttribute){
+            //given
+            val numValidator = NumberValidator(stepSize = stepSizeCorrect_even as Short, stepStart = validValue1Uneven as Short)
+            (numAt as ShortAttribute).addValidator(numValidator)
+
+            //then
+            assertEquals(stepSizeCorrect_even, numValidator.getStepSize(), "valid stepSize")
+            assertEquals(validValue1Uneven, numValidator.getStepStart(), "correct stepStart")
+
+            //when
+            numAt.setValueAsText(valueWithCorrectStepSize.toString())
+
+            //then
+            assertTrue(numAt.isValid(), "valid value")
+
+            //when
+            numAt.setValueAsText(notValidValueBecauseWrongStepAsText)
+            numValidator.overrideNumberValidator(onlyStepValuesAreValid = true)
+
+            //then
+            Assertions.assertFalse(numAt.isValid(), "invalid value, because of stepSize")
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_because0 as Short)
+            }
+
+            //then
+            Assertions.assertThrows(IllegalArgumentException::class.java) {
+                //when
+                numValidator.overrideNumberValidator(stepSize = stepSizeWrong_becauseNegative as Short)
+            }
+        }
     }
 }

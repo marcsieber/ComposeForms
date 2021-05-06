@@ -3,11 +3,8 @@ package demo
 import androidx.compose.runtime.mutableStateOf
 import model.BaseFormModel
 import model.util.attribute.*
-import model.validators.StringValidator
-import java.util.*
+import model.validators.semanticValidators.*
 import kotlin.concurrent.thread
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 class UserDefinedModel() : BaseFormModel(){
 
@@ -15,83 +12,76 @@ class UserDefinedModel() : BaseFormModel(){
         setTitle("Demo Title")
     }
 
-    val strValidator = StringValidator(5, 10, onChange = { validateAll() })
+    val strValidator = StringValidator(5, 10)
+    val customValidator = CustomValidator<String>({value -> value!!.length in 3..5}, "Message")
 
 
     val s = StringAttribute(
         model = this,
         value = "Test-Label",
-        label = Labels.intLabel1
+        label = Labels.stringLabel
     )
 
     val d = DoubleAttribute(
         model = this,
         value = 0.0,
-        onlyStepValuesAreValid = true,
-        stepSize = 0.2,
-        label = Labels.intLabel2
+//        onlyStepValuesAreValid = true,
+//        stepSize = 0.2,
+        label = Labels.doubleLabel
     )
 
     //String
     val stringValue = StringAttribute(
         model = this,
         value = "Ich bin Text",
-        required = true,
         readOnly = false,
-        validators = listOf(strValidator),
-        label = Labels.stringLabel1,
+        required = true,
+        validators = listOf(StringValidator(3)),
+        label = Labels.stringLabel,
+        onChangeListeners = listOf {
+            if (it.equals("Ich")) {
+                customValidator.overrideCustomValidator(validationMessage = "Neue Message")
+            }
+        }
     )
 
     //Numbers
     val intValue1    = IntegerAttribute(
         model = this,
         value = 10,
-        label = Labels.intLabel2,
-        required = true,
+        label = Labels.intLabel,
         readOnly = false,
-        stepSize = 2
+        validators = listOf(NumberValidator(0, 10, 2, 4, true, "LowerBound ist bei 0, upperBound bei 10, es sind nur 2er-Schritte zugelassen"))
     )
 
     val intValue2    = IntegerAttribute(model = this,
         value = 15,
         required = false,
         readOnly = true,
-        lowerBound = 10,
-        upperBound = 20,
-        stepSize = 1,
-        label = Labels.intLabel2
+        label = Labels.intLabel
     )
 
     val shortValue = ShortAttribute(model = this,
         value = 9,
-        label = Labels.intLabel2,
-        required = true,
+        label = Labels.shortLabel,
         readOnly = false,
-        lowerBound = 0,
-        upperBound = 100,
-        stepSize = 2
+        validators = listOf(NumberValidator(0,100,2, 9))
         )
 
     val longValue = LongAttribute(model = this,
         value = 9,
-        label = Labels.intLabel2,
-        required = true,
+        label = Labels.longLabel,
         readOnly = false,
-        lowerBound = 0,
-        upperBound = 100,
-        stepSize = 2
+        validators = listOf(NumberValidator(0, 100, 2))
         )
 
     val floatValue = FloatAttribute(
         model = this,
         value = 9.5f,
-        label = Labels.intLabel2,
+        label = Labels.floatLabel,
         required = true,
         readOnly = false,
-        lowerBound = 0f,
-        upperBound = 100f,
-        stepSize = 3f,
-        onlyStepValuesAreValid = true,
+        validators = listOf(NumberValidator(0f, 100f, 3f, 9.5f, true)) ,
         onChangeListeners = listOf({
             if(it == 12.5f){
                 println("NO CHANGE OF LABEL POSSIBLE") //TODO what do you want to test?
@@ -103,13 +93,11 @@ class UserDefinedModel() : BaseFormModel(){
 
     val doubleValue = DoubleAttribute(
         model = this,
-        value = 8.4,
-        label = Labels.intLabel2,
+        value = 7.7,
+        label = Labels.doubleLabel,
         required = true,
         readOnly = false,
-        lowerBound = 4.9,
-        upperBound = 20.5,
-        stepSize = 0.45,
+        validators = listOf(FloatingPointValidator(2, "Nur 2 Nachkommastellen")),
         onChangeListeners = listOf {
             if (it == 8.85) {
                 selectionValue.addANewPossibleSelection("Neues Element")
@@ -117,22 +105,18 @@ class UserDefinedModel() : BaseFormModel(){
         }
     )
 
-    val list = setOf("Hallo", "Louisa", "Steve")
+    val list = setOf("Hallo", "Louisa", "Steve", "Eintrag")
     val selectionValue = SelectionAttribute(
         model = this,
         value = setOf(),
         possibleSelections = list,
-        label = Labels.intLabel2,
-        minNumberOfSelections = 0,
-        maxNumberOfSelections = 2
+        label = Labels.selectionLabel,
+        validators = listOf(SelectionValidator(0,2))
     )
 
     init{
         setCurrentLanguageForAll("English")
-//        println("ILabel languages" + ILabel.getLanguages())
-
         println("All languages:")
-//        Labels.getLanguages()
         Labels.getLanguages().forEach{ println(it)}
         println("-------")
     }
@@ -152,9 +136,9 @@ class UserDefinedModel() : BaseFormModel(){
             Thread.sleep(3000)
 //            this.labels = label2
             this.setCurrentLanguageForAll("Deutsch")
+            strValidator.overrideStringValidator(15,20,"Length must be between 15 and 20 characters")
             println("test")
         }
     }
-
 
 }

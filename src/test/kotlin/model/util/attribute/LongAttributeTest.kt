@@ -26,7 +26,7 @@ internal class LongAttributeTest : NumberAttributeTest<Long>(){
         validValue4AsText  = "14"
 
         notValidValueAsText     = "a"
-        validationMessage       = "No Long"
+
 
         //For NumberAttribute
         upperBound          = 10

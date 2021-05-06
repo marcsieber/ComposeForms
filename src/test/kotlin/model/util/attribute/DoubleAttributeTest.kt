@@ -2,13 +2,13 @@ package model.util.attribute
 
 import model.BaseFormModel
 import model.util.Labels
+import model.validators.semanticValidators.FloatingPointValidator
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.lang.NumberFormatException
+import java.lang.IllegalArgumentException
 
 internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
 
@@ -34,7 +34,6 @@ internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
         validValue4AsText = "14.7"
 
         notValidValueAsText = "a"
-        validationMessage = "No Double"
 
         //For NumberAttribute
         upperBound = 10.0
@@ -66,68 +65,47 @@ internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
     }
 
     @Test
-    fun testConvertComma(){
-        //when
-        doubleAtr.setStepSize(0.1)
-        doubleAtr.setValueAsText("6.3")
+    fun testFloatingPointValidator_DecimalPlaces(){
+
+        //given
+        val fpVal = FloatingPointValidator<Double>(8)
+        doubleAtr.addValidator(fpVal)
 
         //then
-        assertEquals(0.1, doubleAtr.getStepSize())
-
-        assertEquals("6.3", doubleAtr.getValueAsText())
-
-        assertEquals(6.3, doubleAtr.getValue())
-    }
-
-    @Test
-    fun testSetDecimalPlaces(){
-        //then
-        assertEquals(8, doubleAtr.getDecimalPlaces())
+        assertEquals(8, fpVal.getDecimalPlaces())
 
         //when
-        doubleAtr.setDecimalPlaces(6)
+        fpVal.overrideSelectionValidator(6)
 
         //then
-        assertEquals(6, doubleAtr.getDecimalPlaces())
+        assertEquals(6, fpVal.getDecimalPlaces())
 
         //then
         Assertions.assertThrows(IllegalArgumentException::class.java){
             //when
-            doubleAtr.setDecimalPlaces(0)
-        }
-    }
-
-    @Test
-    fun testGetDecimalPlaces(){
-        //when
-        doubleAtr.setDecimalPlaces(4)
-
-        //then
-        assertEquals(doubleAtr.getDecimalPlaces(), 4)
-
-        //then
-        Assertions.assertThrows(IllegalArgumentException::class.java){
-            //when
-            doubleAtr.setDecimalPlaces(-1)
+            fpVal.overrideSelectionValidator(0)
         }
 
-        //then
-        assertEquals(doubleAtr.getDecimalPlaces(), 4)
-    }
-
-    @Test
-    fun testCheckDecimalPlaces(){
         //when
-        doubleAtr.setValueAsText("4.1234567")
-
-        //then
-        assertEquals(4.1234567, doubleAtr.getValue())
-
-        //when
-        doubleAtr.setDecimalPlaces(6)
+        fpVal.overrideSelectionValidator(2)
+        doubleAtr.setValueAsText("3.123")
 
         //then
         assertFalse(doubleAtr.isValid())
-        assertEquals("Too many decimal places", doubleAtr.getValidationMessage())
     }
+
+
+//    @Test
+//    fun testConvertComma(){
+//        //when
+//        doubleAtr.setStepSize(0.1)
+//        doubleAtr.setValueAsText("6.3")
+//
+//        //then
+//        assertEquals(0.1, doubleAtr.getStepSize())
+//
+//        assertEquals("6.3", doubleAtr.getValueAsText())
+//
+//        assertEquals(6.3, doubleAtr.getValue())
+//    }
 }

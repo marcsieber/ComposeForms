@@ -2,12 +2,12 @@ package model.util.attribute
 
 import model.BaseFormModel
 import model.util.Labels
+import model.validators.RequiredValidator
 
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
-import java.util.*
 
 abstract class AttributeTest<T : Any> {
 
@@ -22,7 +22,6 @@ abstract class AttributeTest<T : Any> {
     lateinit var validValue3AsText : String
     lateinit var validValue4AsText : String
     lateinit var notValidValueAsText : String
-    lateinit var validationMessage : String
 
     lateinit var attribute : Attribute<*,*,*>
 
@@ -46,15 +45,20 @@ abstract class AttributeTest<T : Any> {
         assertEquals(   validValue2AsText,    attribute.getValueAsText())
         assertFalse(attribute.isChanged())
 
-        //when
-        attribute.setValueAsText(notValidValueAsText)
-        attribute.save()
 
-        //then
-        assertEquals( notValidValueAsText, attribute.getValueAsText())
-        assertEquals(     validValue2,          attribute.getValue())
-        assertEquals(     validValue2,          attribute.getSavedValue())
-        assertFalse(attribute.isChanged())
+        if(attribute !is StringAttribute) { //type string is always correct, if no validator is used
+
+            //when
+            attribute.setValueAsText(notValidValueAsText)
+            attribute.save()
+
+            //then
+            assertEquals(notValidValueAsText, attribute.getValueAsText())
+            assertEquals(validValue2, attribute.getValue())
+            assertEquals(validValue2, attribute.getSavedValue())
+            assertFalse(attribute.isChanged())
+
+        }
 
         //when
         attribute.setValueAsText(validValue3AsText)
@@ -115,37 +119,159 @@ abstract class AttributeTest<T : Any> {
         assertEquals(validValue2AsText, attribute.getValueAsText())
         assertEquals(validValue2,attribute.getValue())
 
-        //when
-        attribute.setValueAsText(notValidValueAsText)
+        if(attribute !is StringAttribute) { //type string is always correct
+            //when
+            attribute.setValueAsText(notValidValueAsText)
 
-        //then
-        assertFalse(attribute.isValid())
-        assertEquals(validationMessage,    attribute.getValidationMessage())
-        assertEquals(validValue2,              attribute.getValue())
-        assertEquals(notValidValueAsText,   attribute.getValueAsText())
+            //then
+            assertFalse(attribute.isValid())
+            assertEquals("This is not the correct input type",    attribute.getErrorMessages()[0])
+            assertEquals(validValue2,              attribute.getValue())
+            assertEquals(notValidValueAsText,   attribute.getValueAsText())
+        }
     }
-
     @Test
     fun testSetRequired() {
-        val label = Labels.TEST.test
-        val required = true
-        val notRequired = false
-
         //when
-        attribute.setRequired(required)
-        attribute.setCurrentLanguage("test")
+        attribute.setRequired(true)
 
         //then
-        assertEquals(required, attribute.isRequired())
-        assertEquals(label + "*", attribute.getLabel())
+        assertTrue(attribute.isRequired())
 
         //when
-        attribute.setRequired(notRequired)
+        attribute.setRequired(false)
 
         //then
-        assertEquals(notRequired, attribute.isRequired())
-        assertEquals(label, attribute.getLabel())
+        assertFalse(attribute.isRequired())
     }
+
+//    @Test
+//    fun testRequiredValidator() {
+//
+//        if(attribute is DoubleAttribute){
+//
+//            //given
+//            var reqValidator = RequiredValidator<Double>(true)
+//            (attribute as DoubleAttribute).addValidator(reqValidator)
+//
+//            //when
+//            attribute.setValueAsText("")
+//
+//            //then
+//            assertTrue(attribute.isRequired())
+//            assertFalse(attribute.isValid())
+//
+//            //when
+//            reqValidator.overrideRequiredValidator(false)
+//
+//            //then
+//            assertFalse(attribute.isRequired())
+//            assertTrue(attribute.isValid())
+//
+//        }
+//        if(attribute is FloatAttribute){
+//
+//            //given
+//            var reqValidator = RequiredValidator<Float>(true)
+//            (attribute as FloatAttribute).addValidator(reqValidator)
+//
+//            //when
+//            attribute.setValueAsText("")
+//
+//            //then
+//            assertTrue(attribute.isRequired())
+//            assertFalse(attribute.isValid())
+//
+//            //when
+//            reqValidator.overrideRequiredValidator(false)
+//
+//            //then
+//            assertFalse(attribute.isRequired())
+//            assertTrue(attribute.isValid())
+//
+//
+//        }
+//        if(attribute is IntegerAttribute) {
+//
+//            //given
+//            var reqValidator = RequiredValidator<Int>(true)
+//            (attribute as IntegerAttribute).addValidator(reqValidator)
+//
+//            //when
+//            attribute.setValueAsText("")
+//
+//            //then
+//            assertTrue(attribute.isRequired())
+//            assertFalse(attribute.isValid())
+//
+//            //when
+//            reqValidator.overrideRequiredValidator(false)
+//
+//            //then
+//            assertFalse(attribute.isRequired())
+//            assertTrue(attribute.isValid())
+//        }
+//        if(attribute is LongAttribute){
+//
+//            //given
+//            var reqValidator = RequiredValidator<Long>(true)
+//            (attribute as LongAttribute).addValidator(reqValidator)
+//
+//            //when
+//            attribute.setValueAsText("")
+//
+//            //then
+//            assertTrue(attribute.isRequired())
+//            assertFalse(attribute.isValid())
+//
+//            //when
+//            reqValidator.overrideRequiredValidator(false)
+//
+//            //then
+//            assertFalse(attribute.isRequired())
+//            assertTrue(attribute.isValid())
+//        }
+//        if(attribute is ShortAttribute){
+//
+//            //given
+//            var reqValidator = RequiredValidator<Short>(true)
+//            (attribute as ShortAttribute).addValidator(reqValidator)
+//
+//            //when
+//            attribute.setValueAsText("")
+//
+//            //then
+//            assertTrue(attribute.isRequired())
+//            assertFalse(attribute.isValid())
+//
+//            //when
+//            reqValidator.overrideRequiredValidator(false)
+//
+//            //then
+//            assertFalse(attribute.isRequired())
+//            assertTrue(attribute.isValid())
+//        }
+//        if(attribute is StringAttribute){
+//
+//            //given
+//            var reqValidator = RequiredValidator<String>(true)
+//            (attribute as StringAttribute).addValidator(reqValidator)
+//
+//            //when
+//            attribute.setValueAsText("")
+//
+//            //then
+//            assertTrue(attribute.isRequired())
+//            assertFalse(attribute.isValid())
+//
+//            //when
+//            reqValidator.overrideRequiredValidator(false)
+//
+//            //then
+//            assertFalse(attribute.isRequired())
+//            assertTrue(attribute.isValid())
+//        }
+//    }
 
     @Test
     fun testSetReadOnly() {
@@ -176,7 +302,6 @@ abstract class AttributeTest<T : Any> {
 
         //then
         assertEquals(validValue2, attribute.getValue())
-
     }
 
     @Test
@@ -185,13 +310,16 @@ abstract class AttributeTest<T : Any> {
         attribute.setValueAsText(validValue2AsText)
 
         //then
-        assertEquals("Valid Input", attribute.getValidationMessage())
+        assertEquals(0, attribute.getErrorMessages().size)
 
-        //when
-        attribute.setValueAsText(notValidValueAsText)
+        if(attribute !is StringAttribute) { //type string is always correct
 
-        //then
-        assertEquals(validationMessage, attribute.getValidationMessage())
+            //when
+            attribute.setValueAsText(notValidValueAsText)
+
+            //then
+            assertEquals("This is not the correct input type", attribute.getErrorMessages()[0])
+        }
     }
 
     @Test
@@ -277,11 +405,13 @@ abstract class AttributeTest<T : Any> {
 
     @Test
     fun testGetValidationMessage() {
-        //when
-        attribute.setValueAsText(notValidValueAsText)
+        if(attribute !is StringAttribute) { //type string is always correct
+            //when
+            attribute.setValueAsText(notValidValueAsText)
 
-        //then
-        assertEquals(validationMessage, attribute.getValidationMessage())
+            //then
+            assertEquals("This is not the correct input type", attribute.getErrorMessages()[0])
+        }
     }
 
     @Test
@@ -318,7 +448,7 @@ abstract class AttributeTest<T : Any> {
         attr.setValueAsText("")
 
         //then
-        assertEquals("Valid Input", attr.getValidationMessage())
+        assertEquals(0, attr.getErrorMessages().size)
         assertEquals(null, attr.getValue())
         assertEquals(null, attr.getSavedValue())
         assertEquals("", attr.getValueAsText())
@@ -326,12 +456,13 @@ abstract class AttributeTest<T : Any> {
 
         //when
         attr.setRequired(true)
+
         attr.setValueAsText(validValue1AsText)
         attr.setValueAsText("")
 
         //then
-        assertEquals("Input Required", attr.getValidationMessage())
-        assertEquals(null, attr.getValue())
+        assertEquals("Input required", attr.getErrorMessages()[0])
+        assertEquals(validValue1Uneven, attr.getValue(), "Non-valid values are not set in the value")
         assertEquals(null, attr.getSavedValue())
         assertEquals("", attr.getValueAsText())
         assertFalse(attr.isValid())
