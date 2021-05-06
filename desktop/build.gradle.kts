@@ -1,52 +1,75 @@
 import org.jetbrains.compose.compose
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    kotlin("jvm") version "1.4.30"
-    id("org.jetbrains.compose") version "0.3.0"
-    id("jacoco")
-    id("org.sonarqube") version "3.1"
+//    kotlin("jvm") version "1.4.30"
+    kotlin("multiplatform")
+    id("org.jetbrains.compose")
+//    id("jacoco")
+//    id("org.sonarqube") version "3.1"
 }
 
 group = "ch.fhnw"
 version = "1.0.0"
 
-repositories {
-    jcenter()
-    mavenCentral()
-    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
-}
+kotlin {
 
-dependencies {
-    implementation(project(":common"))
-    implementation(compose.desktop.currentOs)
-    implementation("org.junit.jupiter:junit-jupiter:5.7.1")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-}
-
-tasks {
-    test {
-        useJUnitPlatform()
+    jvm {
+        withJava()
     }
-}
 
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "11"
+    sourceSets {
+        named("jvmMain") {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(project(":common"))
+            }
+        }
+    }
 }
 
 compose.desktop {
     application {
         mainClass = "MainKt"
-    }
-}
 
-
-tasks{
-    jacocoTestReport {
-        reports {
-            xml.isEnabled = true
-            csv.isEnabled = false
-            html.destination = file("${buildDir}/jacocoHtml")
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "KotlinMultiplatformComposeDesktopApplication"
+            packageVersion = "1.0.0"
         }
     }
 }
+
+//dependencies {
+////    implementation(project(":common"))
+////    implementation(compose.desktop.currentOs)
+//    implementation("org.junit.jupiter:junit-jupiter:5.7.1")
+////    implementation("org.jetbrains.kotlin:kotlin-reflect")
+//}
+//
+//tasks {
+//    test {
+//        useJUnitPlatform()
+//    }
+//}
+//
+//tasks.withType<KotlinCompile>() {
+//    kotlinOptions.jvmTarget = "11"
+//}
+//
+//compose.desktop {
+//    application {
+//        mainClass = "MainKt"
+//    }
+//}
+//
+//
+//tasks{
+//    jacocoTestReport {
+//        reports {
+//            xml.isEnabled = true
+//            csv.isEnabled = false
+//            html.destination = file("${buildDir}/jacocoHtml")
+//        }
+//    }
+//}
