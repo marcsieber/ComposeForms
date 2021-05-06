@@ -1,8 +1,11 @@
+package ch.fhnw.forms.desktop
+
 import androidx.compose.desktop.Window
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.IntSize
-import demo.UserDefinedModel
+import ch.fhnw.forms.desktop.demo.DemoUI
+import ch.fhnw.forms.desktop.demo.UserDefinedModel
 
 
 fun main() = Window(

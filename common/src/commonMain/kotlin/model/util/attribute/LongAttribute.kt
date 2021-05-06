@@ -2,7 +2,6 @@ package model.util.attribute
 
 import model.FormModel
 import model.util.ILabel
-import java.lang.NumberFormatException
 
 class LongAttribute<L>(model                   : FormModel,
                     value                   : Long? = null,

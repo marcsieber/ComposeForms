@@ -2,7 +2,6 @@ package model.util.attribute
 
 import model.FormModel
 import model.util.ILabel
-import java.lang.NumberFormatException
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -51,7 +50,8 @@ abstract class FloatingPointAttribute <F,T,L> (   model                       : 
     }
 
     override fun toString(): String {
-        return toString().format(String.format("%." + getDecimalPlaces() + "f"));
+        return ""
+        //return toString().format(String.format("%." + getDecimalPlaces() + "f"));
     }
 
     /**

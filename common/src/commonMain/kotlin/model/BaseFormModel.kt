@@ -3,7 +3,7 @@ package model
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import model.util.attribute.*
-import java.util.*
+
 
 abstract class BaseFormModel() : FormModel {
 
@@ -70,7 +70,7 @@ abstract class BaseFormModel() : FormModel {
      * If yes, changedForAll is set true. If not, changedForAll is set false.
      */
     override fun setChangedForAll(){
-        changedForAll.value = allAttributes.stream().anyMatch(Attribute<*,*,*>::isChanged)
+        changedForAll.value = allAttributes.any(Attribute<*,*,*>::isChanged)
     }
 
     /**
@@ -78,7 +78,7 @@ abstract class BaseFormModel() : FormModel {
      * If yes, changed is set true. If not, changed is set false.
      */
     override fun setValidForAll(){
-        validForAll.value = allAttributes.stream().allMatch(Attribute<*,*,*>::isValid)
+        validForAll.value = allAttributes.all(Attribute<*,*,*>::isValid)
     }
 
     override fun setTitle(title: String){

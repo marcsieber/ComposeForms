@@ -3,8 +3,6 @@ package model.util.attribute
 import model.FormModel
 import model.util.ILabel
 import model.validators.Validator
-import java.lang.NumberFormatException
-import kotlin.jvm.Throws
 
 class StringAttribute<L>(model                 : FormModel,
                          value                 : String? = null,

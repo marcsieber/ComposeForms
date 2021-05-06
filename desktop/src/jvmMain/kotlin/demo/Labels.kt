@@ -1,4 +1,4 @@
-package demo
+package ch.fhnw.forms.desktop.demo
 
 import model.util.ILabel
 

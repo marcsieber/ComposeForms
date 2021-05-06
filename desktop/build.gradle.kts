@@ -2,7 +2,7 @@ import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-//    kotlin("jvm") version "1.4.30"
+//    kotlin("jvm") //version "1.4.30"
     kotlin("multiplatform")
     id("org.jetbrains.compose")
 //    id("jacoco")
@@ -13,11 +13,7 @@ group = "ch.fhnw"
 version = "1.0.0"
 
 kotlin {
-
-    jvm {
-        withJava()
-    }
-
+    jvm {}
     sourceSets {
         named("jvmMain") {
             dependencies {
@@ -26,15 +22,23 @@ kotlin {
             }
         }
     }
+
+//    sourceSets.main {
+//        kotlin.srcDirs("src/jvmMain/kotlin")
+//        dependencies {
+//            implementation(compose.desktop.currentOs)
+//            implementation(project(":common"))
+//        }
+//    }
 }
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "ch.fhnw.forms.desktop.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "KotlinMultiplatformComposeDesktopApplication"
+            packageName = "ch.fhnw.forms.desktop"
             packageVersion = "1.0.0"
         }
     }
@@ -55,12 +59,6 @@ compose.desktop {
 //
 //tasks.withType<KotlinCompile>() {
 //    kotlinOptions.jvmTarget = "11"
-//}
-//
-//compose.desktop {
-//    application {
-//        mainClass = "MainKt"
-//    }
 //}
 //
 //

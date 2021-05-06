@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     kotlin("multiplatform") //version "1.4.30"
     id("org.jetbrains.compose") //version "0.3.0"
+
 //    id("jacoco")
 //    id("org.sonarqube") version "3.1"
 }
