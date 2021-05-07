@@ -26,12 +26,14 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
 
     private var savedValue          = value
     private val valueAsText         = mutableStateOf(value?.toString() ?: "")
+    private val rightTrackValue     = mutableStateOf(value)
 
     private val label               = label
     private val labelAsText         = mutableStateOf("")
     private val required            = mutableStateOf(required)
     private val readOnly            = mutableStateOf(readOnly)
     private val valid               = mutableStateOf(true)
+    private val rightTrackValid     = mutableStateOf(true)
     private val validationMessage   = mutableStateOf("")
     private val changed             = mutableStateOf(false)
     private var currentLanguage     = ""
@@ -104,14 +106,6 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         }
     }
 
-//    /**
-//     * The required value is set and the current textValue is checked to see if it is still valid.
-//     */
-//    fun setRequired(isRequired : Boolean){
-//        this.required.value = isRequired
-//        checkAndSetValue(getValueAsText())
-//    }
-
     /**
      * This method overwrites the ReuiredValidator with the passed Boolean and required is set.
      */
@@ -139,6 +133,18 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     protected fun setValid(isValid : Boolean){
         this.valid.value = isValid
         this.model.setValidForAll()
+    }
+
+    fun setRightTrackValue(newVal : T?){
+        this.rightTrackValue.value = newVal
+    }
+
+    fun getRightTrackValue() : T? {
+        return rightTrackValue.value
+    }
+
+    fun isRightTrackValid() : Boolean {
+        return rightTrackValid.value
     }
 
     //******************************************************************************************************
@@ -276,9 +282,9 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     //Validation
 
     /**
-     * This method checks if the new input value is valid.
-     * If it is, the new value is set.
-     * If it isn't, setValid(false) is called.
+     * This method checks if the new input value is valid and rightTrackValid.
+     * If it is valid, the value is set to the new input value.
+     * If it is rightTrackValid, the rightTrackValue is set to the new input value.
      *
      * @param newVal : String
      * @param calledFromKeyEvent : Boolean
@@ -287,25 +293,32 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      */
     protected fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false){
         if(newVal == null || newVal.equals("") || newVal.equals("[]")){
-            if(this is SelectionAttribute){
-                checkRequiredValidators(emptySet(), "[]")
-                setValue(emptySet()) //TODO: only valid values in value (if(isValid()) ...), no solution yet for the situation with minNumberOfElements > 1 (only SelectionAttribute)
-            }else{
-                checkRequiredValidators(null, "")
-                if(isValid()){setValue(null)}
+            var nullValue : T?  = null
+            var nullValueAsText = ""
+            if(this is SelectionAttribute){ nullValue       = emptySet<String>() as T
+                                            nullValueAsText = "[]"
             }
-        } else {
+
+            checkRequiredValidators(nullValue, nullValueAsText)
+            if(isValid()){
+                setValue(nullValue)
+            }
+            if(isRightTrackValid()){
+                setRightTrackValue(nullValue)
+            }
+        }
+        else {
             checkSyntaxValidators(newVal)
-            if(this is SelectionAttribute){ //TODO: only valid values in value (if(isValid()) ...), no solution yet for the situation with minNumberOfElements > 1 (only SelectionAttribute)
+            if(isValid()){
                 val typeValue = convert(newVal)
-                if(!calledFromKeyEvent){ checkAllValidators(typeValue, newVal) }
-                setValue(typeValue)
-            }
-            else{
+                if(!calledFromKeyEvent){
+                    checkAllValidators(typeValue, newVal)
+                }
                 if(isValid()){
-                    val typeValue = convert(newVal)
-                    if(!calledFromKeyEvent){ checkAllValidators(typeValue, newVal) }
-                    if(isValid()) setValue(typeValue)
+                    setValue(typeValue)
+                }
+                if(isRightTrackValid()) {
+                    setRightTrackValue(typeValue)
                 }
             }
         }
@@ -350,6 +363,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     fun setListOfValidationResults(listOfValidationResults: List<ValidationResult>){
         this.listOfValidationResults.value = listOfValidationResults
         setValid(this.getListOfValidationResults().all { it.result })
+        rightTrackValid.value = this.getListOfValidationResults().all{ it.rightTrackResult }
     }
 
     fun getListOfValidationResults() : List<ValidationResult>{

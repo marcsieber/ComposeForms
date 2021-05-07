@@ -98,7 +98,17 @@ class SelectionAttributeTest {
         //then
         assertEquals(1, selVal.getMinNumberOfSelections())
         assertEquals(0, selAtr.getValue()!!.size)
-        assertFalse(selAtr.isValid())
+        assertTrue(selAtr.isValid()) //If not required: 0 elements are valid
+        assertTrue(selAtr.isRightTrackValid())
+
+        //when
+        selAtr.setRequired(true)
+
+        //then
+        assertEquals(1, selVal.getMinNumberOfSelections())
+        assertEquals(0, selAtr.getValue()!!.size)
+        assertFalse(selAtr.isValid()) //If required: 0 elements are not valid
+        assertFalse(selAtr.isRightTrackValid())
 
         //when
         selAtr.addUserSelection("Element1")

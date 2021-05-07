@@ -13,7 +13,7 @@ class UserDefinedModel() : BaseFormModel(){
     }
 
     val strValidator = StringValidator(5, 10)
-    val customValidator = CustomValidator<String>({value -> value!!.length in 3..5}, "Message")
+    val customValidator = CustomValidator<String>({value -> value!!.length in 3..5}, validationMessage = "Message")
 
 
     val s = StringAttribute(

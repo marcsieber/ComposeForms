@@ -2,6 +2,7 @@ package model.util.attribute
 
 import model.FormModel
 import model.util.ILabel
+import model.util.Utilities
 import model.validators.semanticValidators.SemanticValidator
 
 class SelectionAttribute<L>(model                              : FormModel,
@@ -37,7 +38,7 @@ class SelectionAttribute<L>(model                              : FormModel,
      */
     fun addUserSelection(value: String){
         if(possibleSelections.contains(value)){
-            var newSet = getValue() as Set<String>
+            var newSet = Utilities<Set<String>>().stringToSetConverter(getValueAsText())
             newSet = newSet.toMutableSet()
             newSet.add(value)
             setValueAsText(newSet.toString())
@@ -48,13 +49,14 @@ class SelectionAttribute<L>(model                              : FormModel,
         }
     }
 
+
     /**
      * This function creates a new user set containing all the values already selected by the user minus the new value.
      * The newly formed set is then passed to the setValueAsText function.
      * @param value : String
      */
     fun removeUserSelection(value: String){
-        val newSet : MutableSet<String> = getValue()!!.toMutableSet()
+        val newSet : MutableSet<String> = Utilities<Set<String>>().stringToSetConverter(getValueAsText())!!.toMutableSet()
         newSet.remove(value)
         setValueAsText(newSet.toString())
     }
@@ -113,4 +115,5 @@ class SelectionAttribute<L>(model                              : FormModel,
     fun getPossibleSelections() : Set<String> {
         return possibleSelections
     }
+
 }

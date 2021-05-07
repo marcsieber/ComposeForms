@@ -42,9 +42,10 @@ class FloatingPointValidator<T>(    private var decimalPlaces   : Int = 10,
 
     override fun validateUserInput(value: T?, valueAsText : String?): ValidationResult {
         val splittedNumber = valueAsText!!.split(".")
-        val isValid = if(splittedNumber.size == 2) splittedNumber[1].length <= decimalPlaces else true
+        val isValid = if(splittedNumber.size == 2) splittedNumber[1].length <= decimalPlaces else splittedNumber.size == 1
+        val rightTrackValid = isValid
 
-        return ValidationResult(isValid, validationMessage)
+        return ValidationResult(isValid, rightTrackValid, validationMessage)
     }
 
     override fun checkAndSetDevValues() {

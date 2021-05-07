@@ -48,7 +48,8 @@ class StringValidator(private var minLength         : Int = 0,
 
     override fun validateUserInput(value: String?, valueAsText : String?): ValidationResult {
         val isValid = value!!.length in minLength..maxLength
-        return ValidationResult(result = isValid, validationMessage = validationMessage)
+        val rightTrackValid = value!!.length <= maxLength
+        return ValidationResult(result = isValid, rightTrackResult = rightTrackValid, validationMessage = validationMessage)
     }
 
     override fun checkAndSetDevValues(){

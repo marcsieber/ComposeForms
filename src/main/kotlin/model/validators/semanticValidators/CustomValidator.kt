@@ -4,6 +4,7 @@ import model.validators.ValidationResult
 import model.validators.Validator
 
 open class CustomValidator<T>(  private var validationFunction  : (T?) -> Boolean,
+                                private var rightTrackFunction  : (T?) -> Boolean = {validationFunction(it)},
                                 validationMessage               : String)
 
     : SemanticValidator<T>(validationMessage = validationMessage) {
@@ -32,7 +33,8 @@ open class CustomValidator<T>(  private var validationFunction  : (T?) -> Boolea
 
     override fun validateUserInput(value: T?, valueAsText : String?): ValidationResult {
         val res = validationFunction(value)
-        return ValidationResult(res, validationMessage)
+        val rightTrackValid = rightTrackFunction(value)
+        return ValidationResult(res, rightTrackValid, validationMessage)
     }
 
     //not needed

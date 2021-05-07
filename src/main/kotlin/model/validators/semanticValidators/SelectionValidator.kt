@@ -15,7 +15,6 @@ class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
 
     init{
         init()
-        changeRequiredDependingOnMinNumberOfSelections()
     }
 
     /**
@@ -50,7 +49,8 @@ class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
 
     override fun validateUserInput(value: Set<String>?, valueAsText: String?): ValidationResult {
         val isValid = value!!.size in minNumberOfSelections..maxNumberOfSelections
-        return ValidationResult(isValid, validationMessage)
+        val rightTrackValid = value!!.size <= maxNumberOfSelections
+        return ValidationResult(isValid, rightTrackValid, validationMessage)
     }
 
     override fun checkAndSetDevValues() {
@@ -99,7 +99,6 @@ class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
     override fun setValues(){
         if(minNumberOfSelectionsCache != null){
             this.minNumberOfSelections = minNumberOfSelectionsCache!!
-            changeRequiredDependingOnMinNumberOfSelections()            //TODO: Good decision?
         }
         if(maxNumberOfSelectionsCache != null){
             this.maxNumberOfSelections = maxNumberOfSelectionsCache!!
@@ -113,21 +112,6 @@ class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
         this.minNumberOfSelectionsCache = null
         this.maxNumberOfSelectionsCache = null
         this.validationMessageCache = null
-    }
-
-    //******************************************************************************************************
-    //Extra
-
-    /**
-     * This method sets required to true or false depending on the value of minNumberOfSelections.
-     */
-    private fun changeRequiredDependingOnMinNumberOfSelections(){
-        if(minNumberOfSelections > 0){
-            attributes.forEach{it.setRequired(true)}
-        }
-        if(minNumberOfSelections == 0){
-            attributes.forEach{it.setRequired(false)}
-        }
     }
 
     //******************************************************************************************************

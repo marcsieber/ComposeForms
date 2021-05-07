@@ -25,7 +25,7 @@ class SyntaxValidator<T>( validationMessage   : String = ""
         }catch(e : NumberFormatException){
             isValid = false
         }
-        return ValidationResult(isValid, validationMessage)
+        return ValidationResult(isValid, isValid, validationMessage)
     }
 
     //******************************************************************************************************

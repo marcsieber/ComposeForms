@@ -12,23 +12,31 @@ class Utilities<T> {
             is Long -> value.toLong() as T
             is Double -> value.toDouble() as T
             is Float -> value.toFloat() as T
-            is Set<*> -> convertStringToSet(value) as T
+            is Set<*> -> stringToSetConverter(value) as T
             else -> value as T
         }
     }
 
     /**
-     * This method converts a String into a MutableSet<String>.
-     * If this is not possible,  a Numberformatexception is thrown
-     * @param newVal : String
-     * @return newVal : Double
+     * This method converts a String into a Set<String>.
+     * If this is not possible, a Numberformatexception is thrown
+     * @param valAsText : String
+     * @return set : Set<String>
      * @throws NumberFormatException
      */
-    private fun convertStringToSet(newVal: String) : MutableSet<String>{
-        val set = newVal.substring(1,newVal.length-1).split(", ")
-        return set.toMutableSet()
+    fun stringToSetConverter(valAsText : String) : Set<String>{
+        var set : Set<String>
+        if(valAsText.equals("[]")){
+            set = emptySet()
+        }else{
+            try {
+                set = valAsText.substring(1,valAsText.length-1).split(", ").toSet() //convert string to set
+            }catch (e: NumberFormatException){
+                throw NumberFormatException("The String " + valAsText + " is not convertable into a set.")
+            }
+        }
+        return set
     }
-
 
     /**
      * get min value of T as T

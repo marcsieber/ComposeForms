@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.FormModel
+import model.util.Utilities
 import model.util.attribute.*
 
 
@@ -108,14 +109,24 @@ class Form {
 
         val focusRequester = remember { FocusRequester() }
         val index = remember{ focusRequesters.size }
+//        var isError = remember{!attr.isValid()}
 
         if(focusRequester !in focusRequesters) {
             focusRequesters.add(focusRequester)
         }
 
+//        val focusState = remember { mutableStateOf(FocusState.Inactive)} //Todo: Find out how to get info if textfield is focused. Then show the correct errorMessages.
+
         OutlinedTextField(
             modifier = Modifier
-                .focusModifier()
+//                .focusModifier().onFocusEvent { focS ->
+//                    println("change focus " + focS)
+//                    if(focS == FocusState.Active){
+//                        isError = !attr.isRightTrackValid()
+//                    } else {
+//                        isError = !attr.isValid()
+//                    }
+//                }
                 .focusOrder(focusRequester)
                 .onKeyEvent{event ->
                     if(event.key == Key.Tab){
@@ -128,7 +139,8 @@ class Form {
             onValueChange = {attr.setValueAsText(it)},
             label = {Text(attr.getLabel())},
             readOnly = attr.isReadOnly(),
-            isError = !attr.isValid(),
+//            isError = isError
+            isError = !attr.isValid()
         )
         Column {
             if(!attr.isValid()){
@@ -224,7 +236,7 @@ class Form {
                         }
                     }
                     DropDownMenu(
-                        dropDownIsOpen, selectionAttribute.getPossibleSelections(), selectionAttribute.getValue()!!,
+                        dropDownIsOpen, selectionAttribute.getPossibleSelections(), Utilities<Set<String>>().stringToSetConverter(selectionAttribute.getValueAsText()),
                         selectionAttribute::addUserSelection, selectionAttribute::removeUserSelection
                     )
 

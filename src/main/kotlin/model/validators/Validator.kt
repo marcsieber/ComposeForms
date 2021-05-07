@@ -18,7 +18,7 @@ abstract class Validator<T>(var validationMessage : String) {
      *
      * @param value
      * @param valueAsText
-     * @return ValidationResult(isValid, validationMesssage)
+     * @return ValidationResult
      */
     abstract fun validateUserInput(value : T?, valueAsText : String?) : ValidationResult
 

@@ -73,6 +73,7 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
 
     override fun validateUserInput(value: T?, valueAsText : String?): ValidationResult {
         var isValid = value!! in lowerBound!!..upperBound!!
+        val rightTrackValid = value!! <= upperBound!!
 
         if(onlyStepValuesAreValid){
             val epsilon = 0.00000001
@@ -84,7 +85,7 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
             }
         }
 
-        return ValidationResult(isValid, validationMessage)
+        return ValidationResult(isValid, rightTrackValid, validationMessage)
     }
 
     override fun checkAndSetDevValues() {
