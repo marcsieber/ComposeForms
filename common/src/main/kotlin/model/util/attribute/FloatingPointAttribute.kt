@@ -50,8 +50,7 @@ abstract class FloatingPointAttribute <F,T,L> (   model                       : 
     }
 
     override fun toString(): String {
-        return ""
-        //return toString().format(String.format("%." + getDecimalPlaces() + "f"));
+        return toString().format(String.format("%." + getDecimalPlaces() + "f"));
     }
 
     /**

@@ -8,7 +8,7 @@ import model.util.attribute.StringAttribute
 
 @Composable
 fun App() {
-    var text by remember { mutableStateOf("Hello, its running!") }
+    var text by remember { mutableStateOf("Hello, its running again!") }
 
 
     MaterialTheme {
