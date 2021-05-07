@@ -2,9 +2,6 @@ package model.util.attribute
 
 import model.FormModel
 import model.util.ILabel
-import model.validators.ValidationResult
-import model.validators.Validator
-import model.validators.semanticValidators.SelectionValidator
 import model.validators.semanticValidators.SemanticValidator
 
 class SelectionAttribute<L>(model                              : FormModel,
@@ -28,12 +25,6 @@ class SelectionAttribute<L>(model                              : FormModel,
     //Properties
 
     private var possibleSelections = possibleSelections.toMutableSet()
-
-
-    //******************************************************************************************************
-    //Extra functions
-
-
 
     //******************************************************************************************************
     //Functions that are called on user actions
@@ -82,7 +73,7 @@ class SelectionAttribute<L>(model                              : FormModel,
     fun setPossibleSelections(selections : Set<String>){
         if(selections.size > 0){
             this.possibleSelections = selections.toMutableSet() //todo: find out how .value can be used (change possibleSelections from var to val)
-            validators.forEach{it.checkDevValues()}
+            validators.forEach{it.checkAndSetDevValues()}
             checkAndSetValue(getValue().toString())
         }else{
             throw IllegalArgumentException("There are no selections in the set")
@@ -108,7 +99,7 @@ class SelectionAttribute<L>(model                              : FormModel,
     fun removeAPossibleSelection(selection: String){
         if(possibleSelections.contains(selection)){
             this.possibleSelections.remove(selection)
-            validators.forEach{it.checkDevValues()}
+            validators.forEach{it.checkAndSetDevValues()}
             if(getValue()!!.contains(selection)){
                 getValue()!!.toMutableSet().remove(selection)
                 checkAndSetValue(getValue().toString())

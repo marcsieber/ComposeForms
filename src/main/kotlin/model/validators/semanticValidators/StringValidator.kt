@@ -1,7 +1,6 @@
 package model.validators.semanticValidators
 
 import model.validators.ValidationResult
-import model.validators.Validator
 
 class StringValidator(private var minLength         : Int = 0,
                       private var maxLength         : Int = 1_000_000,
@@ -9,14 +8,19 @@ class StringValidator(private var minLength         : Int = 0,
 
     : SemanticValidator<String>(validationMessage = validationMessage) {
 
+    private var minLengthCache : Int?               = minLength
+    private var maxLengthCache: Int?                = maxLength
+    private var validationMessageCache : String?    = validationMessage
+
     init{
         init()
     }
 
     /**
      * This method can be used to overwrite a StringValidator that has already been set.
-     * Only values that are not null will overwrite old values.
-     * CheckDevValues() is called and the existing user inputs are checked again to see if they are still valid.
+     * Only parameter that are not null will overwrite the old values.
+     * CheckDevValues() is called to check if the parameters make sense. If yes the values are set.
+     * Finally the existing user inputs are checked again to see if they are still valid.
      *
      * @param minLength
      * @param maxLength
@@ -24,15 +28,15 @@ class StringValidator(private var minLength         : Int = 0,
      */
     fun overrideStringValidator(minLength: Int? = null, maxLength: Int? = null, validationMessage: String? = null){
         if(minLength != null){
-            this.minLength = minLength
+            this.minLengthCache = minLength
         }
         if(maxLength != null){
-            this.maxLength = maxLength
+            this.maxLengthCache = maxLength
         }
         if(validationMessage != null){
-            this.validationMessage = validationMessage
+            this.validationMessageCache = validationMessage
         }
-        checkDevValues()
+        checkAndSetDevValues()
         attributes.forEach{it.revalidate()}
     }
 
@@ -44,8 +48,27 @@ class StringValidator(private var minLength         : Int = 0,
         return ValidationResult(result = isValid, validationMessage = validationMessage)
     }
 
+    override fun checkAndSetDevValues(){
+        if(minLengthCache != null && minLengthCache!! < 0){
+            deleteCaches()
+            throw IllegalArgumentException("minLength must be positive")
+        }
+        if(maxLengthCache != null && maxLengthCache!! < 1){
+            deleteCaches()
+            throw IllegalArgumentException("maxLength must be at least 1")
+        }
+        if(    (minLengthCache != null && maxLengthCache != null && minLengthCache!! > maxLengthCache!!)
+            || (minLengthCache != null && maxLengthCache == null && minLengthCache!! > maxLength)
+            || (minLengthCache == null && maxLengthCache != null && minLength > maxLengthCache!!)){
+            deleteCaches()
+            throw IllegalArgumentException("minLength is greater than maxLength")
+        }
+        setValues()
+        deleteCaches()
+    }
+
     //******************************************************************************************************
-    //Exceptions & validation messages
+    //Protected
 
     override fun setDefaultValidationMessage(){
         val ending = " characters."
@@ -63,24 +86,24 @@ class StringValidator(private var minLength         : Int = 0,
         }
     }
 
-     override fun checkDevValues(){
-        if(minLength >= 0){
-            if(minLength < maxLength){
-                if(maxLength >= 0){
-                    if(maxLength < minLength){
-                        throw IllegalArgumentException("maxLength is not greater than minLength")
-                    }
-                }else{
-                    throw IllegalArgumentException("maxLength must be grater than 0")
-                }
-            }
-            else{
-                throw IllegalArgumentException("minLength is not lower than maxLength")
-            }
-        }else{
-            throw IllegalArgumentException("minLength must be positive")
+    override fun setValues() {
+        if(minLengthCache != null){
+            this.minLength = minLengthCache!!
+        }
+        if(maxLengthCache != null){
+            this.maxLength = maxLengthCache!!
+        }
+        if(validationMessageCache != null){
+            this.validationMessage = validationMessageCache!!
         }
     }
+
+    override fun deleteCaches() {
+        this.minLengthCache = null
+        this.maxLengthCache = null
+        this.validationMessageCache = null
+    }
+
 
     //******************************************************************************************************
     //Getter

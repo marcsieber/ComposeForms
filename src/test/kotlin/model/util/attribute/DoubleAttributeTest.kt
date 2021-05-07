@@ -38,12 +38,10 @@ internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
         //For NumberAttribute
         upperBound = 10.0
         lowerBoundWrong_becauseGreaterThanUpperBound = 11.0
-        lowerBoundWrong_becauseSameAsUpperBound = 10.0
         lowerBoundCorrect = 0.0
 
         lowerBound = 10.0
         upperBoundWrong_becauseLowerThanLowerBound = 9.0
-        upperBoundWrong_becauseSameAsLowerBound = 10.0
         upperBoundCorrect = 14.0
 
         stepSizeCorrect_even = 2.0

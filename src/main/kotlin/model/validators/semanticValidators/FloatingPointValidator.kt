@@ -1,12 +1,14 @@
 package model.validators.semanticValidators
 
 import model.validators.ValidationResult
-import model.validators.Validator
 
 class FloatingPointValidator<T>(    private var decimalPlaces   : Int = 10,
                                     validationMessage           : String = ""
 
 ) : SemanticValidator<T>(validationMessage = validationMessage) where T : Number, T : Comparable<T>  {
+
+    private var decimalPlacesCache      : Int?      = decimalPlaces
+    private var validationMessageCache  : String?   = validationMessage
 
     init {
         init()
@@ -14,20 +16,21 @@ class FloatingPointValidator<T>(    private var decimalPlaces   : Int = 10,
 
     /**
      * This method can be used to overwrite a FloatingPointValidator that has already been set.
-     * Only values that are not null will overwrite old values.
-     * CheckDevValues() is called and the existing user inputs are checked again to see if they are still valid.
+     * Only parameter that are not null will overwrite the old values.
+     * CheckDevValues() is called to check if the parameters make sense. If yes the values are set.
+     * Finally the existing user inputs are checked again to see if they are still valid.
      *
      * @param decimalPlaces
      * @param validationMessage
      */
     fun overrideSelectionValidator(decimalPlaces: Int? = null, validationMessage: String? = null){
         if(decimalPlaces != null){
-            this.decimalPlaces = decimalPlaces
+            this.decimalPlacesCache = decimalPlaces
         }
         if(validationMessage != null){
-            this.validationMessage = validationMessage
+            this.validationMessageCache = validationMessage
         }
-        checkDevValues()
+        checkAndSetDevValues()
         attributes.forEach{it.revalidate()}
     }
 
@@ -41,17 +44,34 @@ class FloatingPointValidator<T>(    private var decimalPlaces   : Int = 10,
         return ValidationResult(isValid, validationMessage)
     }
 
+    override fun checkAndSetDevValues() {
+        if(decimalPlacesCache != null && decimalPlacesCache!! < 1){ //todo: define max decimal places
+            deleteCaches()
+            throw IllegalArgumentException("number of decimal Places must be positive")
+        }
+        setValues()
+        deleteCaches()
+    }
+
     //******************************************************************************************************
-    //Exceptions & validation messages
+    //Protected
 
     override fun setDefaultValidationMessage() {
         validationMessage = "Too many decimal places"
     }
 
-    override fun checkDevValues() {
-        if(decimalPlaces < 1){ //todo: define max decimal places
-            throw IllegalArgumentException("number of decimal Places must be positive")
+    override fun setValues(){
+        if(decimalPlacesCache != null){
+            this.decimalPlaces = decimalPlacesCache!!
         }
+        if(validationMessageCache != null){
+            this.validationMessage = validationMessageCache!!
+        }
+    }
+
+    override fun deleteCaches(){
+        this.decimalPlacesCache = null
+        this.validationMessageCache = null
     }
 
     //******************************************************************************************************

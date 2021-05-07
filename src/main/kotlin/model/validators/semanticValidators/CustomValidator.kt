@@ -35,12 +35,21 @@ open class CustomValidator<T>(  private var validationFunction  : (T?) -> Boolea
         return ValidationResult(res, validationMessage)
     }
 
+    //not needed
+    override fun checkAndSetDevValues(){}
+
     //******************************************************************************************************
     //Exceptions & validation messages
 
+    //not needed
     override fun setDefaultValidationMessage(){}
 
-    override fun checkDevValues(){}
+    //not needed
+    override fun setValues() {}
+
+    //not needed
+    override fun deleteCaches() {}
+
 
     //******************************************************************************************************
     //Getter
@@ -48,4 +57,5 @@ open class CustomValidator<T>(  private var validationFunction  : (T?) -> Boolea
     fun getValidationFunction() : (T?) -> Boolean {
         return validationFunction
     }
+
 }

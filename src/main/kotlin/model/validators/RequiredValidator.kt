@@ -6,12 +6,14 @@ class RequiredValidator<T>(private var isRequired           : Boolean = false,
 
 
     init {
-        init()
+        if(validationMessage.equals("")){
+            setDefaultValidationMessage()
+        }
     }
 
     /**
      * This method can be used to overwrite a RequiredValidator that has already been set.
-     * Only values that are not null will overwrite old values.
+     * Only parameters that are not null will overwrite old values.
      * The existing user inputs are checked again to see if they are still valid.
      *
      * @param isRequired
@@ -24,7 +26,6 @@ class RequiredValidator<T>(private var isRequired           : Boolean = false,
         if(validationMessage != null){
             this.validationMessage = validationMessage
         }
-        checkDevValues()
         attributes.forEach{it.revalidate()}
     }
 
@@ -43,14 +44,11 @@ class RequiredValidator<T>(private var isRequired           : Boolean = false,
     }
 
     //******************************************************************************************************
-    //Exceptions & validation messages
+    //Protected
 
     override fun setDefaultValidationMessage() {
         validationMessage = "Input required"
     }
-
-    override fun checkDevValues(){}
-
 
     //******************************************************************************************************
     //Getter

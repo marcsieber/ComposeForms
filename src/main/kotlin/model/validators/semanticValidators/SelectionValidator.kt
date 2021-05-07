@@ -2,7 +2,6 @@ package model.validators.semanticValidators
 
 import model.util.attribute.SelectionAttribute
 import model.validators.ValidationResult
-import model.validators.Validator
 
 class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
                             private var maxNumberOfSelections  : Int = Int.MAX_VALUE,
@@ -10,9 +9,9 @@ class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
 
     : SemanticValidator<Set<String>>(validationMessage = validationMessage){
 
-    private var minNumberOfSelectionsCache : Int? = null
-    private var maxNumberOfSelectionsCache : Int? = null
-    private var validationMessageCache     : String? = null
+    private var minNumberOfSelectionsCache : Int?       = minNumberOfSelections
+    private var maxNumberOfSelectionsCache : Int?       = maxNumberOfSelections
+    private var validationMessageCache     : String?    = validationMessage
 
     init{
         init()
@@ -21,8 +20,9 @@ class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
 
     /**
      * This method can be used to overwrite a SelectionValidator that has already been set.
-     * Only values that are not null will overwrite old values.
-     * CheckDevValues() is called and the existing user inputs are checked again to see if they are still valid.
+     * Only parameter that are not null will overwrite the old values.
+     * CheckDevValues() is called to check if the parameters make sense. If yes the values are set.
+     * Finally the existing user inputs are checked again to see if they are still valid.
      *
      * @param minNumberOfSelections
      * @param maxNumberOfSelections
@@ -38,8 +38,7 @@ class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
         if(validationMessage != null){
             this.validationMessageCache = validationMessage
         }
-        checkDevValues()
-        setValuesAndDeleteCaches()
+        checkAndSetDevValues()
         attributes.forEach{it.revalidate()}
     }
 
@@ -48,34 +47,28 @@ class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
 
     override fun validateUserInput(value: Set<String>?, valueAsText: String?): ValidationResult {
         val isValid = value!!.size in minNumberOfSelections..maxNumberOfSelections
-        println("SlectionValidation : " + isValid)
         return ValidationResult(isValid, validationMessage)
     }
 
-    //******************************************************************************************************
-    //Exceptions & validation messages
-
-    override fun setDefaultValidationMessage() {
-        validationMessage = "Between " + minNumberOfSelections + " and " + maxNumberOfSelections + " elements must be selected."
-    }
-
-    override fun checkDevValues() {
+    override fun checkAndSetDevValues() {
         if(maxNumberOfSelectionsCache != null && maxNumberOfSelectionsCache!! < 1){
-            setValuesAndDeleteCaches()
-            throw IllegalArgumentException("MaxNumberOfSelections must be positive")
+            deleteCaches()
+            throw IllegalArgumentException("MaxNumberOfSelections must at least 1")
         }
         if(minNumberOfSelectionsCache != null && minNumberOfSelectionsCache!! < 0) {
-            setValuesAndDeleteCaches()
+            deleteCaches()
             throw IllegalArgumentException("MinNumberOfSelections must be positive")
         }
-        if (minNumberOfSelectionsCache != null && minNumberOfSelectionsCache!! > maxNumberOfSelections) {
-            setValuesAndDeleteCaches()
-            throw IllegalArgumentException("MinNumberOfSelections is higher than maxNumberOfSelections")
+        if(    (minNumberOfSelectionsCache != null && maxNumberOfSelectionsCache != null && minNumberOfSelectionsCache!! > maxNumberOfSelectionsCache!!)
+            || (minNumberOfSelectionsCache != null && maxNumberOfSelectionsCache == null && minNumberOfSelectionsCache!! > maxNumberOfSelections)
+            || (minNumberOfSelectionsCache == null && maxNumberOfSelectionsCache != null && minNumberOfSelections > maxNumberOfSelectionsCache!!)){
+            deleteCaches()
+            throw IllegalArgumentException("MinNumberOfSelections is higher than MaxNumberOfSelections")
         }
         for(attr in attributes) {
             attr as SelectionAttribute
             if (minNumberOfSelectionsCache != null && minNumberOfSelectionsCache!! > attr.getPossibleSelections().size) {
-                setValuesAndDeleteCaches()
+                deleteCaches()
                 throw IllegalArgumentException("MinNumberOfSelections is higher than the number of possible elements to select")
             }
         }
@@ -87,28 +80,43 @@ class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
                 }
             }
         }
+        setValues()
+        deleteCaches()
     }
 
-    fun setValuesAndDeleteCaches(){
+    //******************************************************************************************************
+    //Protected
+
+    override fun setDefaultValidationMessage() {
+        validationMessage = "Between " + minNumberOfSelections + " and " + maxNumberOfSelections + " elements must be selected."
+    }
+
+    override fun setValues(){
         if(minNumberOfSelectionsCache != null){
             this.minNumberOfSelections = minNumberOfSelectionsCache!!
-            this.minNumberOfSelectionsCache = null
-            changeRequiredDependingOnMinNumberOfSelections()
+            changeRequiredDependingOnMinNumberOfSelections()            //TODO: Good decision?
         }
         if(maxNumberOfSelectionsCache != null){
             this.maxNumberOfSelections = maxNumberOfSelectionsCache!!
-            maxNumberOfSelectionsCache = null
         }
         if(validationMessageCache != null){
             this.validationMessage = validationMessageCache!!
-            validationMessageCache = null
         }
+    }
+
+    override fun deleteCaches(){
+        this.minNumberOfSelectionsCache = null
+        this.maxNumberOfSelectionsCache = null
+        this.validationMessageCache = null
     }
 
     //******************************************************************************************************
     //Extra
 
-    fun changeRequiredDependingOnMinNumberOfSelections(){
+    /**
+     * This method sets required to true or false depending on the value of minNumberOfSelections.
+     */
+    private fun changeRequiredDependingOnMinNumberOfSelections(){
         if(minNumberOfSelections > 0){
             attributes.forEach{it.setRequired(true)}
         }

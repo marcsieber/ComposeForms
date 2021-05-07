@@ -38,12 +38,10 @@ internal class FloatAttributeTest : NumberAttributeTest<Float>() {
         //For NumberAttribute
         upperBound = 10.0f
         lowerBoundWrong_becauseGreaterThanUpperBound = 11.0f
-        lowerBoundWrong_becauseSameAsUpperBound = 10.0f
         lowerBoundCorrect = 0.0f
 
         lowerBound = 10.0f
         upperBoundWrong_becauseLowerThanLowerBound = 9.0f
-        upperBoundWrong_becauseSameAsLowerBound = 10.0f
         upperBoundCorrect = 14.0f
 
         stepSizeCorrect_even = 2.0f

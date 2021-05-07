@@ -30,12 +30,10 @@ internal class ShortAttributeTest : NumberAttributeTest<Short>(){
         //For NumberAttribute
         upperBound          = 10
         lowerBoundWrong_becauseGreaterThanUpperBound    = 11
-        lowerBoundWrong_becauseSameAsUpperBound    = 10
         lowerBoundCorrect   = 0
 
         lowerBound          = 10
         upperBoundWrong_becauseLowerThanLowerBound    = 9
-        upperBoundWrong_becauseSameAsLowerBound    = 10
         upperBoundCorrect   = 14
 
         stepSizeCorrect_even = 2

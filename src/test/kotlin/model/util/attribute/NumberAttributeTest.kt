@@ -12,12 +12,10 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
 
     lateinit var upperBound : T
     lateinit var lowerBoundWrong_becauseGreaterThanUpperBound : T
-    lateinit var lowerBoundWrong_becauseSameAsUpperBound : T
     lateinit var lowerBoundCorrect : T
 
     lateinit var lowerBound : T
     lateinit var upperBoundWrong_becauseLowerThanLowerBound : T
-    lateinit var upperBoundWrong_becauseSameAsLowerBound : T
     lateinit var upperBoundCorrect : T
 
     lateinit var stepSizeCorrect_even : T
@@ -49,14 +47,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Double)
             }
-            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
-            assertEquals(upperBound, numValidator.getUpperBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Double)
-            }
-            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertNotEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
             assertEquals(upperBound, numValidator.getUpperBound())
 
             //when
@@ -76,14 +67,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Float)
             }
-            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
-            assertEquals(upperBound, numValidator.getUpperBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Float)
-            }
-            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertNotEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
             assertEquals(upperBound, numValidator.getUpperBound())
 
             //when
@@ -103,14 +87,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Int)
             }
-            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
-            assertEquals(upperBound, numValidator.getUpperBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Int)
-            }
-            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertNotEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
             assertEquals(upperBound, numValidator.getUpperBound())
 
             //when
@@ -130,14 +107,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Long)
             }
-            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
-            assertEquals(upperBound, numValidator.getUpperBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Long)
-            }
-            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertNotEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
             assertEquals(upperBound, numValidator.getUpperBound())
 
             //when
@@ -157,14 +127,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(lowerBoundWrong_becauseGreaterThanUpperBound as Short)
             }
-            assertEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
-            assertEquals(upperBound, numValidator.getUpperBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(lowerBoundWrong_becauseSameAsUpperBound as Short)
-            }
-            assertEquals(lowerBoundWrong_becauseSameAsUpperBound, numValidator.getLowerBound())
+            assertNotEquals(lowerBoundWrong_becauseGreaterThanUpperBound, numValidator.getLowerBound())
             assertEquals(upperBound, numValidator.getUpperBound())
 
             //when
@@ -188,14 +151,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Double)
             }
-            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
-            assertEquals(lowerBound, numValidator.getLowerBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Double)
-            }
-            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertNotEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
             assertEquals(lowerBound, numValidator.getLowerBound())
 
             //when
@@ -215,14 +171,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Float)
             }
-            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
-            assertEquals(lowerBound, numValidator.getLowerBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Float)
-            }
-            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertNotEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
             assertEquals(lowerBound, numValidator.getLowerBound())
 
             //when
@@ -243,14 +192,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Int)
             }
-            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
-            assertEquals(lowerBound, numValidator.getLowerBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Int)
-            }
-            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertNotEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
             assertEquals(lowerBound, numValidator.getLowerBound())
 
             //when
@@ -271,14 +213,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Long)
             }
-            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
-            assertEquals(lowerBound, numValidator.getLowerBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Long)
-            }
-            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertNotEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
             assertEquals(lowerBound, numValidator.getLowerBound())
 
             //when
@@ -298,14 +233,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
                 //when
                 numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseLowerThanLowerBound as Short)
             }
-            assertEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
-            assertEquals(lowerBound, numValidator.getLowerBound())
-
-            assertThrows(IllegalArgumentException::class.java) {
-                //when
-                numValidator.overrideNumberValidator(upperBound = upperBoundWrong_becauseSameAsLowerBound as Short)
-            }
-            assertEquals(upperBoundWrong_becauseSameAsLowerBound, numValidator.getUpperBound())
+            assertNotEquals(upperBoundWrong_becauseLowerThanLowerBound, numValidator.getUpperBound())
             assertEquals(lowerBound, numValidator.getLowerBound())
 
             //when

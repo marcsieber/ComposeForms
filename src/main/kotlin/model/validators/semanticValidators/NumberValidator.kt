@@ -12,6 +12,13 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
 
     ) : SemanticValidator<T>(validationMessage = validationMessage) where T : Number, T : Comparable<T>{
 
+    private var lowerBoundCache             : T?        = lowerBound
+    private var upperBoundCache             : T?        = upperBound
+    private var stepSizeCache               : T?        = stepSize
+    private var stepStartCache              : T?        = stepStart
+    private var onlyStepValuesAreValidCache : Boolean?  = onlyStepValuesAreValid
+    private var validationMessageCache      : String?   = validationMessage
+
     private lateinit var typeT : T
 
     init {
@@ -23,8 +30,9 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
 
     /**
      * This method can be used to overwrite a NumberValidator that has already been set.
-     * Only values that are not null will overwrite old values.
-     * The existing user inputs are checked again to see if they are still valid.
+     * Only parameter that are not null will overwrite the old values.
+     * CheckDevValues() is called to check if the parameters make sense. If yes the values are set.
+     * Finally the existing user inputs are checked again to see if they are still valid.
      *
      * @param lowerBound
      * @param upperBound
@@ -36,24 +44,24 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
     fun overrideNumberValidator(lowerBound: T? = null, upperBound: T? = null, stepSize: T? = null,
                                 stepStart: T? = null, onlyStepValuesAreValid: Boolean? = null, validationMessage: String? = null){
         if(lowerBound != null){
-            this.lowerBound = lowerBound
+            this.lowerBoundCache = lowerBound
         }
         if(upperBound != null){
-            this.upperBound = upperBound
+            this.upperBoundCache = upperBound
         }
         if(stepSize != null){
-            this.stepSize = stepSize
+            this.stepSizeCache = stepSize
         }
         if(stepStart != null){
-            this.stepStart = stepStart
+            this.stepStartCache = stepStart
         }
         if(onlyStepValuesAreValid != null){
-            this.onlyStepValuesAreValid = onlyStepValuesAreValid
+            this.onlyStepValuesAreValidCache = onlyStepValuesAreValid
         }
         if(validationMessage != null){
-            this.validationMessage = validationMessage
+            this.validationMessageCache = validationMessage
         }
-        checkDevValues()
+        checkAndSetDevValues()
         attributes.forEach{it.revalidate()}
     }
 
@@ -76,8 +84,23 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
         return ValidationResult(isValid, validationMessage)
     }
 
+    override fun checkAndSetDevValues() {
+        if(    (lowerBoundCache != null && upperBoundCache != null && lowerBoundCache!! > upperBoundCache!!)
+            || (lowerBoundCache != null && upperBoundCache == null && lowerBoundCache!! > upperBound!!)
+            || (lowerBoundCache == null && upperBoundCache != null && lowerBound!! > upperBoundCache!!)){
+            deleteCaches()
+            throw IllegalArgumentException("LowerBound is greater than upperBound")
+        }
+        if(stepSizeCache != null && stepSizeCache!! <= Utilities<T>().toDataType("0", typeT)){
+            deleteCaches()
+            throw IllegalArgumentException("stepSize must be positive")
+        }
+        setValues()
+        deleteCaches()
+    }
+
     //******************************************************************************************************
-    //Exceptions & validation messages
+    //Protected
 
     override fun setDefaultValidationMessage() {
         var firstPart = ""
@@ -99,14 +122,36 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
         validationMessage = firstPart + secondPart
     }
 
-    override fun checkDevValues() {
-        if(lowerBound!! >= upperBound!!) {
-            throw IllegalArgumentException("LowerBound is greater than upperBound")
+    override fun setValues(){
+        if(lowerBoundCache != null){
+            this.lowerBound = lowerBoundCache
         }
-        if(stepSize!! <= Utilities<T>().toDataType("0", typeT)){
-            throw IllegalArgumentException("stepSize must be positive")
+        if(upperBoundCache != null){
+            this.upperBound = upperBoundCache
+        }
+        if(stepSizeCache != null){
+            this.stepSize = stepSizeCache
+        }
+        if(stepStartCache != null){
+            this.stepStart = stepStartCache
+        }
+        if(onlyStepValuesAreValidCache != null){
+            this.onlyStepValuesAreValid = onlyStepValuesAreValidCache!!
+        }
+        if(validationMessageCache != null){
+            this.validationMessage = validationMessageCache!!
         }
     }
+
+    override fun deleteCaches(){
+        this.lowerBoundCache = null
+        this.upperBoundCache = null
+        this.stepSizeCache = null
+        this.stepStartCache = null
+        this.onlyStepValuesAreValidCache = null
+        this.validationMessageCache = null
+    }
+
 
     //******************************************************************************************************
     //Extra functions to initialize lower/upperBound

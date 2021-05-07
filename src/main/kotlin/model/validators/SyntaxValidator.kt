@@ -8,7 +8,9 @@ class SyntaxValidator<T>( validationMessage   : String = ""
 ) : Validator<T>(validationMessage = validationMessage) {
 
     init {
-        init()
+        if(validationMessage.equals("")){
+            setDefaultValidationMessage()
+        }
     }
 
     //******************************************************************************************************
@@ -27,16 +29,11 @@ class SyntaxValidator<T>( validationMessage   : String = ""
     }
 
     //******************************************************************************************************
-    //Exceptions & validation messages
+    //Protected
 
     override fun setDefaultValidationMessage() {
         validationMessage = "This is not the correct input type"
     }
-
-    override fun checkDevValues() {}
-
-    //******************************************************************************************************
-    //Getter
 
 
 }
