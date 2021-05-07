@@ -4,6 +4,8 @@ import model.validators.Validator
 
 abstract class SemanticValidator<T>(validationMessage : String) : Validator<T>(validationMessage = validationMessage) {
 
+    protected var validationMessageSetByDev : Boolean = !validationMessage.equals("")
+
     /**
      * The values to be set are first checked to see if they make sense. Then a default message is set if none was passed.
      */

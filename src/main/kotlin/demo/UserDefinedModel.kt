@@ -31,12 +31,13 @@ class UserDefinedModel() : BaseFormModel(){
     )
 
     //String
+    val strVal = StringValidator(5)
     val stringValue = StringAttribute(
         model = this,
         value = "Ich bin Text",
         readOnly = false,
         required = true,
-        validators = listOf(StringValidator(3)),
+        validators = listOf(strVal),
         label = Labels.stringLabel,
         onChangeListeners = listOf {
             if (it.equals("Ich")) {
@@ -51,7 +52,13 @@ class UserDefinedModel() : BaseFormModel(){
         value = 10,
         label = Labels.intLabel,
         readOnly = false,
-        validators = listOf(NumberValidator(0, 10, 2, 4, true, "LowerBound ist bei 0, upperBound bei 10, es sind nur 2er-Schritte zugelassen"))
+        validators = listOf(NumberValidator(0, 10, 2, 4, true, "LowerBound ist bei 0, upperBound bei 10, es sind nur 2er-Schritte zugelassen")),
+        onChangeListeners = listOf{
+            if(it == 4){
+                strVal.overrideStringValidator(8)
+            }
+
+        }
     )
 
     val intValue2    = IntegerAttribute(model = this,

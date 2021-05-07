@@ -24,7 +24,8 @@ abstract class Validator<T>(var validationMessage : String) {
 
 
     /**
-     * This method sets a default validation message depending on the set limits in the Validator.
+     * This method sets a default validation message depending on the set limits in the Validator
+     * if no validation message has been set by the developer.
      */
     abstract protected fun setDefaultValidationMessage()
 

@@ -18,6 +18,7 @@ class FloatingPointValidator<T>(    private var decimalPlaces   : Int = 10,
      * This method can be used to overwrite a FloatingPointValidator that has already been set.
      * Only parameter that are not null will overwrite the old values.
      * CheckDevValues() is called to check if the parameters make sense. If yes the values are set.
+     * The default validation message is adapted if no validation message has been set by the developer.
      * Finally the existing user inputs are checked again to see if they are still valid.
      *
      * @param decimalPlaces
@@ -29,8 +30,10 @@ class FloatingPointValidator<T>(    private var decimalPlaces   : Int = 10,
         }
         if(validationMessage != null){
             this.validationMessageCache = validationMessage
+            validationMessageSetByDev = !validationMessage.equals("")
         }
         checkAndSetDevValues()
+        setDefaultValidationMessage()
         attributes.forEach{it.revalidate()}
     }
 
@@ -57,7 +60,9 @@ class FloatingPointValidator<T>(    private var decimalPlaces   : Int = 10,
     //Protected
 
     override fun setDefaultValidationMessage() {
-        validationMessage = "Too many decimal places"
+        if(!validationMessageSetByDev){
+            validationMessage = "Too many decimal places"
+        }
     }
 
     override fun setValues(){

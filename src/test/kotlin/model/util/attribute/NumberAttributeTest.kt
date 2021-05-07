@@ -42,6 +42,11 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             val numValidator = NumberValidator(upperBound = upperBound as Double)
             (numAt as DoubleAttribute).addValidator(numValidator)
 
+            //when
+            numAt.setValueAsText((upperBound as Double + 1).toString())
+            //then
+            assertEquals("The number must not be more than " + upperBound + ". ", numAt.getErrorMessages()[0])
+
             //then
             assertThrows(IllegalArgumentException::class.java) {
                 //when
@@ -54,6 +59,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Double)
 
             //then
+            assertEquals("The number must be between " + lowerBoundCorrect + " and " + upperBound + ". ", numAt.getErrorMessages()[0])
             Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
 
         }
@@ -61,6 +67,12 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             //given
             val numValidator = NumberValidator(upperBound = upperBound as Float)
             (numAt as FloatAttribute).addValidator(numValidator)
+
+            //when
+            numAt.setValueAsText((upperBound as Float + 1).toString())
+            //then
+            assertEquals("The number must not be more than " + upperBound + ". ", numAt.getErrorMessages()[0])
+
 
             //then
             assertThrows(IllegalArgumentException::class.java) {
@@ -74,6 +86,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Float)
 
             //then
+            assertEquals("The number must be between " + lowerBoundCorrect + " and " + upperBound + ". ", numAt.getErrorMessages()[0])
             Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
 
         }
@@ -81,6 +94,12 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             //given
             val numValidator = NumberValidator(upperBound = upperBound as Int)
             (numAt as IntegerAttribute).addValidator(numValidator)
+
+            //when
+            numAt.setValueAsText((upperBound as Int + 1).toString())
+            //then
+            assertEquals("The number must not be more than " + upperBound + ". ", numAt.getErrorMessages()[0])
+
 
             //then
             assertThrows(IllegalArgumentException::class.java) {
@@ -94,6 +113,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Int)
 
             //then
+            assertEquals("The number must be between " + lowerBoundCorrect + " and " + upperBound + ". ", numAt.getErrorMessages()[0])
             Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
 
         }
@@ -101,6 +121,12 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             //given
             val numValidator = NumberValidator(upperBound = upperBound as Long)
             (numAt as LongAttribute).addValidator(numValidator)
+
+            //when
+            numAt.setValueAsText((upperBound as Long + 1).toString())
+            //then
+            assertEquals("The number must not be more than " + upperBound + ". ", numAt.getErrorMessages()[0])
+
 
             //then
             assertThrows(IllegalArgumentException::class.java) {
@@ -114,6 +140,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Long)
 
             //then
+            assertEquals("The number must be between " + lowerBoundCorrect + " and " + upperBound + ". ", numAt.getErrorMessages()[0])
             Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
 
         }
@@ -121,6 +148,12 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             //given
             val numValidator = NumberValidator(upperBound = upperBound as Short)
             (numAt as ShortAttribute).addValidator(numValidator)
+
+            //when
+            numAt.setValueAsText((upperBound as Short + 1).toString())
+            //then
+            assertEquals("The number must not be more than " + upperBound + ". ", numAt.getErrorMessages()[0])
+
 
             //then
             assertThrows(IllegalArgumentException::class.java) {
@@ -134,6 +167,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
             numValidator.overrideNumberValidator(lowerBound = lowerBoundCorrect as Short)
 
             //then
+            assertEquals("The number must be between " + lowerBoundCorrect + " and " + upperBound + ". ", numAt.getErrorMessages()[0])
             Assertions.assertSame(lowerBoundCorrect, numValidator.getLowerBound())
 
         }

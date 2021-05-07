@@ -32,6 +32,7 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
      * This method can be used to overwrite a NumberValidator that has already been set.
      * Only parameter that are not null will overwrite the old values.
      * CheckDevValues() is called to check if the parameters make sense. If yes the values are set.
+     * The default validation message is adapted if no validation message has been set by the developer.
      * Finally the existing user inputs are checked again to see if they are still valid.
      *
      * @param lowerBound
@@ -60,8 +61,10 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
         }
         if(validationMessage != null){
             this.validationMessageCache = validationMessage
+            validationMessageSetByDev = !validationMessage.equals("")
         }
         checkAndSetDevValues()
+        setDefaultValidationMessage()
         attributes.forEach{it.revalidate()}
     }
 
@@ -103,23 +106,25 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
     //Protected
 
     override fun setDefaultValidationMessage() {
-        var firstPart = ""
-        var secondPart = ""
-        if(lowerBound != Utilities<T>().getMinValueOfT(typeT) && upperBound != Utilities<T>().getMaxValueOfT(typeT)){
-             firstPart = "The number must be between " + lowerBound + " and " + upperBound + ". "
-        }
-        else if(lowerBound != Utilities<T>().getMinValueOfT(typeT)){
-            firstPart = "The number must be at least " + lowerBound + ". "
-        }
-        else if(upperBound != Utilities<T>().getMaxValueOfT(typeT)){
-            firstPart = "The number must not be more than " + upperBound + ". "
-        }
+        if(!validationMessageSetByDev){
+            var firstPart = ""
+            var secondPart = ""
+            if(lowerBound != Utilities<T>().getMinValueOfT(typeT) && upperBound != Utilities<T>().getMaxValueOfT(typeT)){
+                firstPart = "The number must be between " + lowerBound + " and " + upperBound + ". "
+            }
+            else if(lowerBound != Utilities<T>().getMinValueOfT(typeT)){
+                firstPart = "The number must be at least " + lowerBound + ". "
+            }
+            else if(upperBound != Utilities<T>().getMaxValueOfT(typeT)){
+                firstPart = "The number must not be more than " + upperBound + ". "
+            }
 
-        if(onlyStepValuesAreValid){
-            secondPart = "Only steps of " + stepSize + " are permitted, starting at " + stepStart + ". "
-        }
+            if(onlyStepValuesAreValid){
+                secondPart = "Only steps of " + stepSize + " are permitted, starting at " + stepStart + ". "
+            }
 
-        validationMessage = firstPart + secondPart
+            validationMessage = firstPart + secondPart
+        }
     }
 
     override fun setValues(){

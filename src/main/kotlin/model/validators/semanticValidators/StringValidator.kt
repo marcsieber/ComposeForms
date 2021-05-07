@@ -20,6 +20,7 @@ class StringValidator(private var minLength         : Int = 0,
      * This method can be used to overwrite a StringValidator that has already been set.
      * Only parameter that are not null will overwrite the old values.
      * CheckDevValues() is called to check if the parameters make sense. If yes the values are set.
+     * The default validation message is adapted if no validation message has been set by the developer.
      * Finally the existing user inputs are checked again to see if they are still valid.
      *
      * @param minLength
@@ -35,8 +36,10 @@ class StringValidator(private var minLength         : Int = 0,
         }
         if(validationMessage != null){
             this.validationMessageCache = validationMessage
+            validationMessageSetByDev = !validationMessage.equals("")
         }
         checkAndSetDevValues()
+        setDefaultValidationMessage()
         attributes.forEach{it.revalidate()}
     }
 
@@ -71,18 +74,20 @@ class StringValidator(private var minLength         : Int = 0,
     //Protected
 
     override fun setDefaultValidationMessage(){
-        val ending = " characters."
-        if(minLength == 0 && maxLength == 1_000_000){
-            validationMessage = ""
-        }
-        else if(minLength == 0 && maxLength != 1_000_000){
-            validationMessage = "The input must not contain more than " + maxLength + ending
-        }
-        else if(minLength != 0 && maxLength == 1_000_000){
-            validationMessage = "The input must not contain less than " + minLength + ending
-        }
-        else if(minLength != 0 && maxLength != 1_000_000){
-            validationMessage = "The input must contain between " + minLength + " and " + maxLength + ending
+        if(!validationMessageSetByDev){
+            val ending = " characters."
+            if(minLength == 0 && maxLength == 1_000_000){
+                validationMessage = ""
+            }
+            else if(minLength == 0 && maxLength != 1_000_000){
+                validationMessage = "The input must not contain more than " + maxLength + ending
+            }
+            else if(minLength != 0 && maxLength == 1_000_000){
+                validationMessage = "The input must not contain less than " + minLength + ending
+            }
+            else if(minLength != 0 && maxLength != 1_000_000){
+                validationMessage = "The input must contain between " + minLength + " and " + maxLength + ending
+            }
         }
     }
 
