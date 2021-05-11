@@ -18,8 +18,9 @@ class UserDefinedModel() : BaseFormModel(){
 
     val s = StringAttribute(
         model = this,
-        value = "Test-Label",
-        label = Labels.stringLabel
+        value = "",
+        label = Labels.stringLabel,
+        validators = listOf(RegexValidator<String>("^\\w+\\W\\w+\$", validationMessage = "Muss genau zwei Wörter sein"))
     )
 
     val d = DoubleAttribute(
