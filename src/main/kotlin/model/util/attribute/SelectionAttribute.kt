@@ -25,7 +25,7 @@ class SelectionAttribute<L>(model                              : FormModel,
     //******************************************************************************************************
     //Properties
 
-    private var possibleSelections = possibleSelections.toMutableSet()
+    private val possibleSelections : MutableSet<String> = possibleSelections.toMutableSet()
 
     //******************************************************************************************************
     //Functions that are called on user actions
@@ -45,7 +45,7 @@ class SelectionAttribute<L>(model                              : FormModel,
         }
         else {
             setValueAsText(getValue().toString())
-            throw IllegalArgumentException("There was no such selection to choose") //todo: delete? because it will be overwritten with "Valid Input"
+            throw IllegalArgumentException("There was no such selection to choose")
         }
     }
 
@@ -73,8 +73,9 @@ class SelectionAttribute<L>(model                              : FormModel,
      * @throws IllegalArgumentException
      */
     fun setPossibleSelections(selections : Set<String>){
-        if(selections.size > 0){
-            this.possibleSelections = selections.toMutableSet() //todo: find out how .value can be used (change possibleSelections from var to val)
+        if(selections.isNotEmpty()){
+            this.possibleSelections.clear()
+            this.possibleSelections.addAll(selections)
             validators.forEach{it.checkAndSetDevValues()}
             checkAndSetValue(getValue().toString())
         }else{

@@ -107,11 +107,11 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     }
 
     /**
-     * This method overwrites the ReuiredValidator with the passed Boolean and required is set.
+     * This method overwrites the RequiredValidator with the passed Boolean and required is set.
      */
     fun setRequired(isRequired: Boolean){
         reqValidator.overrideRequiredValidator(isRequired)
-        this.required.value = reqValidator.isRequired() //TODO only call required (mutable state)
+        this.required.value = reqValidator.isRequired()
     }
 
     /**
