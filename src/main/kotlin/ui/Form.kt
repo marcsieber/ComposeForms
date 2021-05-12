@@ -36,12 +36,12 @@ class Form {
 
             Column() {
                 TopAppBar(
-                    backgroundColor = Color.LightGray,
+                    backgroundColor = Color.Blue,
                     elevation = 100.dp
                 ){
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
 
-                        Text(getTitle())
+                        Text(getTitle(), color = Color.White)
 
                         Row(){
                             Button(
@@ -65,7 +65,7 @@ class Form {
                         }
                     }
                 }
-                Row() {
+                Row(modifier = Modifier.fillMaxSize().background(Color.White)) {
                     LazyColumn(Modifier.fillMaxHeight()) {
                         items(getAttributes()) { attribute ->
                             AttributeElement(attribute)
