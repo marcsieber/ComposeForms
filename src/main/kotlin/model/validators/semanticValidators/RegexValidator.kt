@@ -42,7 +42,30 @@ class RegexValidator<T>(private var regexPattern          : String,
             val softRegex = rightTrackRegexPattern!!.toRegex()
             isValidSoft = if (valueAsText != null) softRegex.matches(valueAsText) else regex.matches("")
         }else{
-            isValidSoft = isValid
+            if(isValid) {
+                isValidSoft = isValid
+            }else{
+                //try to go through regexString till all values are checked
+                var tempValid = false
+                var tempString = ""
+                for(char in regexPattern){
+                    tempString += char
+                    try {
+                        val tempRegex = tempString.toRegex()
+                        val tempResult = tempRegex.matches(valueAsText ?: "")
+
+                        if (tempResult) {
+                            tempValid = true
+                            break
+                        }
+                    }catch(e: Exception){
+                        println("Regex not working")
+                    }
+                }
+
+                isValidSoft = tempValid
+
+            }
         }
         return ValidationResult(result = isValid, rightTrackResult = isValidSoft, validationMessage = validationMessage)
     }

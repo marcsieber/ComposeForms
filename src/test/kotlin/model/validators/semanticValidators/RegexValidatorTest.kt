@@ -34,6 +34,29 @@ internal class RegexValidatorTest {
     }
 
     @Test
+    fun testRightTrackValidation(){
+        val pattern = "abc"
+        val regexValidator = RegexValidator<String>(pattern)
+
+        assertFalse(regexValidator.validateUserInput("", "ab").result)
+        assertTrue(regexValidator.validateUserInput("", "ab").rightTrackResult)
+
+
+        val pattern1 = "hal*o"
+        val regexValidator1 = RegexValidator<String>(pattern1)
+
+        assertFalse(regexValidator1.validateUserInput("", "halllll").result)
+        assertTrue(regexValidator1.validateUserInput("", "halllll").rightTrackResult)
+
+
+        val pattern2 = "te(s|ss)t"
+        val regexValidator2 = RegexValidator<String>(pattern2)
+
+        assertFalse(regexValidator2.validateUserInput("", "tess").result)
+        assertTrue(regexValidator2.validateUserInput("", "tess").rightTrackResult)
+    }
+
+    @Test
     fun validateUserInput() {
         //given
         val pattern = "AbC"
@@ -76,6 +99,5 @@ internal class RegexValidatorTest {
 
         //then
         assertEquals(pattern1, regexValidator1.getRegexPattern())
-
     }
 }
