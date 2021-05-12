@@ -2,6 +2,7 @@ package ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -117,7 +118,7 @@ class Form {
 
         val interactionSource = remember { MutableInteractionSource() }
         //val focused = true //interactionSource.collectIsFocusedAsState()
-        val error = if(!focuses[index].value) !attr.isValid() else !attr.isRightTrackValid()
+        val error = if(focuses.size > index && !focuses[index].value) !attr.isValid() else !attr.isRightTrackValid() //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
 
         OutlinedTextField(
             modifier = Modifier

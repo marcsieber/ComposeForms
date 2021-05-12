@@ -242,42 +242,21 @@ internal class BaseFormModelTest {
         assertFalse(model.isValidForAll())
     }
 
+    @Test
+    fun testSetCurrentLanguageForAll() {
+        //when
+        model.setCurrentLanguageForAll("test")
 
-    // TODO: Language is not implementet atm
-//    @Test
-//    fun testSetCurrentLanguageForAll() {
-//        //when
-//        model.setCurrentLanguageForAll(Locale.GERMAN)
-//
-//        //then
-//        assertTrue(model.isCurrentLanguageForAll(Locale.GERMAN))
-//        assertEquals("...", anzKinder.getLabel())
-//
-//        //when
-//        val attribute1 = IntegerAttribute(model = model, value = 9, label = "Name")
-////                .setLabel("Name")
-////                .setLabelForLanguage(Locale.GERMAN, "Nummer: ")
-////                .setLabelForLanguage(Locale.ENGLISH, "number: ")
-//
-//        //then
-//        assertEquals("Nummer: ", attribute1.getLabel())
-//
-//        //when
-//        val attribute2 = IntegerAttribute(model = model, value = 9)
-////                .setLabelForLanguage(Locale.GERMAN, "Nummer: ")
-////                .setLabelForLanguage(Locale.ENGLISH, "number: ")
-////                .setLabel("Name")
-//
-//        //then
-//        assertEquals("Name", attribute2.getLabel())
-//
-//        //when
-//        model.setCurrentLanguageForAll(Locale.ENGLISH)
-//
-//        //then
-//        assertTrue(model.isCurrentLanguageForAll(Locale.ENGLISH))
-//        assertEquals("number: ", attribute2.getLabel())
-//    }
+        //then
+        assertTrue(model.isCurrentLanguageForAll("test"))
+        assertEquals("Anzahl Kinder", anzKinder.getLabel())
+
+
+        //then
+        assertThrows(IllegalArgumentException::class.java) {
+            model.setCurrentLanguageForAll("de")
+        }
+    }
 
     @Test
     fun testSetTitle() {

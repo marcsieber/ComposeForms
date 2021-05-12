@@ -8,10 +8,6 @@ class Colors {
 
     companion object {
         fun getColor(colorString: String): Color {
-            println(colorString)
-            println(java.lang.Long.parseLong(colorString.subSequence(0, 2).toString(), 16).toFloat())
-            println(java.lang.Long.parseLong(colorString.subSequence(2, 4).toString(), 16).toFloat())
-            println(java.lang.Long.parseLong(colorString.subSequence(4, 6).toString(), 16).toFloat())
             val r = java.lang.Long.parseLong(colorString.subSequence(0, 2).toString(), 16).toFloat() / 255
             val g = java.lang.Long.parseLong(colorString.subSequence(2, 4).toString(), 16).toFloat() / 255
             val b = java.lang.Long.parseLong(colorString.subSequence(4, 6).toString(), 16).toFloat() / 255

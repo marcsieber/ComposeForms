@@ -24,12 +24,14 @@ interface ILabel{
 
         val methodsUnfiltered: Array<Method> = this::class.java.methods
 
+        val ownMethodNames = ILabel::class.java.methods.map{ it.name }
+
         return methodsUnfiltered.filter {
             it.name.startsWith("get")
                     && !it.declaringClass.name.contains("Object")
                     && !it.declaringClass.name.contains("Enum")
-                    && !it.name.equals("getLanguagesDynamic")//TODO: take name of this method by runtime
-                    && !it.name.equals("getLabelInLanguage")//TODO: take name of this method by runtime
+                    && !it.name.equals(ownMethodNames[0])
+                    && !it.name.equals(ownMethodNames[1])
         }
     }
 }
