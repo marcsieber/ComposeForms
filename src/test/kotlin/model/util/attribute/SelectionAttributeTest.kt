@@ -12,7 +12,11 @@ import java.lang.IllegalArgumentException
 class SelectionAttributeTest {
 
     lateinit var selAtr : SelectionAttribute<Labels>
-    var model = object: BaseFormModel() { }
+    var model = object: BaseFormModel() {
+        override fun getPossibleLanguages(): List<String> {
+            return emptyList()
+        }
+    }
 
     @BeforeEach
     fun setUpSelectionAttribute(){
