@@ -9,7 +9,11 @@ import org.junit.jupiter.api.BeforeEach
 
 internal class BaseFormModelTest {
 
-    var model = object: BaseFormModel(){}
+    var model = object: BaseFormModel(){
+        override fun getPossibleLanguages(): List<String> {
+            return Label.getLanguages()
+        }
+    }
 
     val ALTER = 50
     val ANZ_KINDER = 3
@@ -20,7 +24,13 @@ internal class BaseFormModelTest {
     enum class Label(val test: String): ILabel{
         ALTER("Alter"),
         ANZKINDER("Anzahl Kinder"),
-        TEST("")
+        TEST("");
+
+        companion object {
+            fun getLanguages(): List<String> {
+                return (demo.Labels.values()[0] as ILabel).getLanguagesDynamic()
+            }
+        }
     }
 
     @BeforeEach
@@ -327,12 +337,13 @@ internal class BaseFormModelTest {
         assertFalse(model.isValidForAll())
     }
 
-//    @Test
-//    fun testIsCurrentLanguageForAll() {
-//        //when
-//        model.setCurrentLanguageForAll("eng")
-//        //then
-//        assertTrue(model.isCurrentLanguageForAll("eng"))
-//
-//    }
+    @Test
+    fun testIsCurrentLanguageForAll() {
+        //when
+        model.setCurrentLanguageForAll("test")
+        //then
+        assertFalse(model.isCurrentLanguageForAll("eng"))
+        assertTrue(model.isCurrentLanguageForAll("test"))
+
+    }
 }

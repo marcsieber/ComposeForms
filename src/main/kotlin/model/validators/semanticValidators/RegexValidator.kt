@@ -13,9 +13,13 @@ class RegexValidator<T>(private var regexPattern          : String,
     }
 
     /**
-
+     * Overrides the properties with the given non null values
+     *
+     * @param regexPattern
+     * @param rightTrackRegexPattern
+     * @param validationMessage
      */
-    fun overrideRegexValidator(regexPattern: String? = null, rightTrackRegexPattern: String? = null ,validationMessage: String? = null){
+    fun overrideRegexValidator(regexPattern: String? = null, rightTrackRegexPattern: String? = null, validationMessage: String? = null){
         if(regexPattern != null){
             this.regexPattern = regexPattern
         }
@@ -37,37 +41,37 @@ class RegexValidator<T>(private var regexPattern          : String,
         val regex = regexPattern.toRegex()
         val isValid = if(valueAsText != null) regex.matches(valueAsText) else regex.matches("")
 
-        var isValidSoft: Boolean
+        val isValidSoft: Boolean
         if(rightTrackRegexPattern != null) {
             val softRegex = rightTrackRegexPattern!!.toRegex()
             isValidSoft = if (valueAsText != null) softRegex.matches(valueAsText) else regex.matches("")
         }else{
-            if(isValid) {
-                isValidSoft = isValid
-            }else{
-                //try to go through regexString till all values are checked
-                var tempValid = false
-                var tempString = ""
-                for(char in regexPattern){
-                    tempString += char
-                    try {
-                        val tempRegex = tempString.toRegex()
-                        val tempResult = tempRegex.matches(valueAsText ?: "")
-
-                        if (tempResult) {
-                            tempValid = true
-                            break
-                        }
-                    }catch(e: Exception){
-                        println("Regex not working")
-                    }
-                }
-
-                isValidSoft = tempValid
-
-            }
+            isValidSoft = regexOnRightTrackChecker(isValid, valueAsText)
         }
         return ValidationResult(result = isValid, rightTrackResult = isValidSoft, validationMessage = validationMessage)
+    }
+
+    private fun regexOnRightTrackChecker(isValid: Boolean, valueAsText: String?): Boolean {
+        if (isValid) {
+            return true
+        } else {
+            //try to go through regexString till all values are checked
+            var tempString = ""
+            for (char in regexPattern) {
+                tempString += char
+                try {
+                    val tempRegex = tempString.toRegex()
+                    val tempResult = tempRegex.matches(valueAsText ?: "")
+
+                    if (tempResult) {
+                        return true
+                    }
+                } catch (e: Exception) {
+                    println("Regex not working")
+                }
+            }
+        }
+        return false
     }
 
     //TODO: Do this in base class if it is always the same!

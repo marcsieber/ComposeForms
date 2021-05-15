@@ -86,7 +86,6 @@ class MountainServiceImpl() : MountainService {
         }
 
         open fun getReader(fileName: String): BufferedReader {
-//            return BufferedReader(InputStreamReader(javaClass.getResourceAsStream(fileName), StandardCharsets.UTF_8))
             return File(fileName).bufferedReader()
         }
 
