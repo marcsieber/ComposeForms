@@ -2,8 +2,6 @@ package ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,99 +10,25 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.FormModel
 import model.util.Utilities
 import model.util.attribute.*
-import ui.theme.Colors
+import ui.theme.ColorsUtil.Companion.get
+import ui.theme.DropdownColors
+import ui.theme.FormColors
 
 
 class Form {
 
-    private var focusRequesters: MutableList<FocusRequester> = mutableListOf()
-    private var focuses:         MutableList<MutableState<Boolean>> = mutableListOf()
-
     @Composable
     fun of(model: FormModel){
         with(model) {
-
             Column() {
-                TopAppBar(
-                    backgroundColor = Color.Blue,
-                    elevation = 100.dp
-                ){
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-                        Text(getTitle(), color = Color.White, fontSize = 22.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                header(model)
 
-                        Row(){
-                            Column() {
-                                val langDropDownIsOpen = remember { mutableStateOf(false) }
-                                OutlinedButton(
-                                    modifier = Modifier.padding(4.dp),
-                                    onClick = { langDropDownIsOpen.value = !langDropDownIsOpen.value },
-                                    shape = MaterialTheme.shapes.large,
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                                    border = BorderStroke(1.dp, Color.White)
-                                ) {
-                                    Text(getCurrentLanguage(), color = Color.White)
-                                }
-                                DropdownMenu(
-                                    expanded = langDropDownIsOpen.value,
-                                    onDismissRequest = { langDropDownIsOpen.value = false },
-                                    modifier = Modifier.wrapContentSize(),
-                                    content = {
-                                        getPossibleLanguages().forEachIndexed { index, string ->
-                                            val elementIsSelected = isCurrentLanguageForAll(string)
-                                            val elementIsSelectedBackgroundColor =
-                                                if (elementIsSelected) Color.DarkGray else Color.LightGray
-                                            val elementIsSelectedTextColor =
-                                                if (elementIsSelected) Color.White else Color.Black
-                                            DropdownMenuItem(
-                                                modifier = Modifier.background(elementIsSelectedBackgroundColor),
-                                                onClick = {
-                                                    setCurrentLanguageForAll(string)
-                                                },
-                                                content = {
-                                                    Text(
-                                                        text = string,
-                                                        modifier = Modifier.background(elementIsSelectedBackgroundColor),
-                                                        color = elementIsSelectedTextColor
-                                                    )
-                                                }
-                                            )
-                                        }
-                                    }
-                                )
-
-                            }
-                            Button(
-                                modifier = Modifier.padding(4.dp),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
-                                enabled = isChangedForAll(),
-                                onClick = {
-                                    undoAll()
-                                }) {
-                                Text("Undo")
-                            }
-                            Button(
-                                modifier = Modifier.padding(4.dp),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
-                                enabled = isValidForAll() && isChangedForAll(),
-                                onClick = {
-                                    saveAll()
-                                }) {
-                                Text("Save")
-                            }
-                        }
-                    }
-                }
-                Row(modifier = Modifier.fillMaxSize().background(Color.White)) {
+                Row(modifier = Modifier.fillMaxSize().background(get(FormColors.BODY_BACKGROUND))) {
                     LazyColumn(Modifier.fillMaxHeight()) {
                         items(getAttributes()) { attribute ->
                             AttributeElement(attribute)
@@ -143,58 +67,7 @@ class Form {
     }
 
 
-    @Composable
-    private fun InputField(attr: Attribute<*,*,*>, keyEvent: (KeyEvent) -> Boolean){
 
-        val focusRequester = remember { FocusRequester() }
-        val index = remember{ focusRequesters.size }
-        val focused = remember { mutableStateOf(false) }
-
-        if(focusRequester !in focusRequesters) {
-            focusRequesters.add(focusRequester)
-            focuses.add(focused)
-        }
-
-        val interactionSource = remember { MutableInteractionSource() }
-        //val focused = true //interactionSource.collectIsFocusedAsState()
-        val error = if(focuses.size > index && !focuses[index].value) !attr.isValid() else !attr.isRightTrackValid() //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
-
-        OutlinedTextField(
-            modifier = Modifier
-                .focusModifier().onFocusEvent { focS ->
-                    focuses[index].value = focS.isFocused
-                }
-                .focusOrder(focusRequester)
-                .onKeyEvent{event ->
-                    if(event.key == Key.Tab){
-                        focusRequesters[(index+1) % focusRequesters.size].requestFocus()
-                        for(i in 0 until focusRequesters.size){
-                            focuses[i].value = false
-                        }
-                        focuses[(index+1) % focusRequesters.size].value = true
-                        return@onKeyEvent false
-                    }
-                    keyEvent(event)
-            },
-            value = attr.getValueAsText(),
-            onValueChange = {attr.setValueAsText(it)},
-            label = {Text(attr.getLabel())},
-            readOnly = attr.isReadOnly(),
-            isError = error ,
-            interactionSource = interactionSource,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = if(!attr.isValid()) Color.Gray else Colors.getColor("2e7d32"),
-                focusedLabelColor = if(!attr.isValid()) Color.Gray else Color(0x2e, 0x7d, 0x32)
-            )
-        )
-        Column {
-            if(error){
-                for(msg in attr.getErrorMessages()){
-                    Text(msg, color = Color.Red, fontSize = 12.sp, modifier = Modifier.padding(4.dp) )
-                }
-            }
-        }
-    }
 
     @Composable
     private fun AttributeElement(strAttr: StringAttribute<*>){
@@ -262,7 +135,7 @@ class Form {
                     if (!selectionString.value.equals("")) {
                         Text(
                             label,
-                            color = Color.DarkGray,
+                            color = get(FormColors.LABEL),
                             modifier = Modifier.wrapContentSize().padding(4.dp),
                             fontSize = 12.sp
                         )
@@ -271,11 +144,11 @@ class Form {
                         modifier = Modifier.height(50.dp),
                         onClick = { dropDownIsOpen.value = true },
                         shape = MaterialTheme.shapes.large,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                        border = BorderStroke(1.dp, if (selectionAttribute.isValid()) Color.DarkGray else Color.Red)
+                        colors = ButtonDefaults.buttonColors(backgroundColor = DropdownColors.BUTTON_BACKGROUND.color),
+                        border = BorderStroke(1.dp, if (selectionAttribute.isValid()) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR))
                     ) {
                         if (selectionString.value.equals("")) {
-                            Text(label, color = Color.DarkGray)
+                            Text(label, color = get(FormColors.LABEL))
                         } else {
                             Text(selectionString.value)
                         }
@@ -291,7 +164,7 @@ class Form {
             Column {
                 if (!selectionAttribute.isValid()) {
                     for (msg in selectionAttribute.getErrorMessages()) {
-                        Text(msg, color = Color.Red, fontSize = 12.sp, modifier = Modifier.padding(4.dp))
+                        Text(msg, color = get(FormColors.ERROR), fontSize = 12.sp, modifier = Modifier.padding(4.dp))
                     }
                 }
             }
@@ -311,8 +184,8 @@ class Form {
             content = {
                 selections.forEachIndexed { index, string ->
                     val elementIsSelected       = currentSelectionValue.contains(string)
-                    val elementIsSelectedBackgroundColor  = if(elementIsSelected) Color.DarkGray else Color.LightGray
-                    val elementIsSelectedTextColor = if(elementIsSelected) Color.White else Color.Black
+                    val elementIsSelectedBackgroundColor  = if(elementIsSelected) get(DropdownColors.BACKGROUND_ELEMENT_SEL) else get(DropdownColors.BACKGROUND_ELEMENT_NOT_SEL)
+                    val elementIsSelectedTextColor = if(elementIsSelected) get(DropdownColors.TEXT_ELEMENT_SEL) else get(DropdownColors.TEXT_ELEMENT_NOT_SEL)
                     DropdownMenuItem(
                         modifier = Modifier.background(elementIsSelectedBackgroundColor),
                         onClick = {

@@ -29,11 +29,7 @@ class Utilities<T> {
         if(valAsText.equals("[]")){
             set = emptySet()
         }else{
-            try {
-                set = valAsText.substring(1,valAsText.length-1).split(", ").toSet() //convert string to set
-            }catch (e: NumberFormatException){
-                throw NumberFormatException("The String " + valAsText + " is not convertable into a set.")
-            }
+            set = valAsText.substring(1,valAsText.length-1).split(", ").toSet() //convert string to set
         }
         return set
     }
