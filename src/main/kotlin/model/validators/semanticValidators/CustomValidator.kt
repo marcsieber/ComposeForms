@@ -37,20 +37,27 @@ open class CustomValidator<T>(  private var validationFunction  : (T?) -> Boolea
         return ValidationResult(res, rightTrackValid, validationMessage)
     }
 
-    //not needed
-    override fun checkAndSetDevValues(){}
+
+    override fun checkAndSetDevValues(){
+        //no implementation in CustomValidator because we can't find out what the developer wants
+    }
 
     //******************************************************************************************************
     //Exceptions & validation messages
 
     //not needed
-    override fun setDefaultValidationMessage(){}
+    override fun setDefaultValidationMessage(){
+        //no implementation in CustomValidator because we can't find out what the developer wants
+    }
+
+    override fun setValues() {
+        //no implementation in CustomValidator because we do not use cache on CustomValidator
+    }
 
     //not needed
-    override fun setValues() {}
-
-    //not needed
-    override fun deleteCaches() {}
+    override fun deleteCaches() {
+        //no implementation in CustomValidator because we do not use cache on CustomValidator
+    }
 
 
     //******************************************************************************************************

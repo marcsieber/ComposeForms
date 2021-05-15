@@ -30,8 +30,6 @@ class UserDefinedModel() : BaseFormModel(){
     val d = DoubleAttribute(
         model = this,
         value = 0.0,
-//        onlyStepValuesAreValid = true,
-//        stepSize = 0.2,
         label = Labels.doubleLabel
     )
 
@@ -100,14 +98,8 @@ class UserDefinedModel() : BaseFormModel(){
         required = true,
         readOnly = false,
         validators = listOf(NumberValidator(0f, 100f, 3f, 9.5f, true)) ,
-        onChangeListeners = listOf({
-            if(it == 12.5f){
-                println("NO CHANGE OF LABEL POSSIBLE") //TODO what do you want to test?
-            }},
-            {
-                longValue.setReadOnly(it == 12.5f)
-            })
-        )
+        onChangeListeners = listOf { longValue.setReadOnly(it == 12.5f) }
+    )
 
     val doubleValue = DoubleAttribute(
         model = this,

@@ -293,34 +293,48 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      */
     protected fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false){
         if(newVal == null || newVal.equals("") || newVal.equals("[]")){
-            var nullValue : T?  = null
-            var nullValueAsText = ""
-            if(this is SelectionAttribute){ nullValue       = emptySet<String>() as T
-                                            nullValueAsText = "[]"
-            }
-
-            checkRequiredValidators(nullValue, nullValueAsText)
-            if(isValid()){
-                setValue(nullValue)
-            }
-            if(isRightTrackValid()){
-                setRightTrackValue(nullValue)
-            }
+            checkAndSetNullValue()
         }
         else {
-            checkSyntaxValidators(newVal)
-            if(isValid()){
-                val typeValue = convert(newVal)
-                if(!calledFromKeyEvent){
-                    checkAllValidators(typeValue, newVal)
-                }
-                if(isValid()){
-                    setValue(typeValue)
-                }
-                if(isRightTrackValid()) {
-                    setRightTrackValue(typeValue)
-                }
+            checkAndSetNonNullValue(newVal, calledFromKeyEvent)
+        }
+    }
+
+    /**
+     * Check and sets the non null values
+     */
+    private fun checkAndSetNonNullValue(newVal: String, calledFromKeyEvent: Boolean) {
+        checkSyntaxValidators(newVal)
+        if (isValid()) {
+            val typeValue = convert(newVal)
+            if (!calledFromKeyEvent) {
+                checkAllValidators(typeValue, newVal)
             }
+            if (isValid()) {
+                setValue(typeValue)
+            }
+            if (isRightTrackValid()) {
+                setRightTrackValue(typeValue)
+            }
+        }
+    }
+
+    /**
+     * Checks and sets the value to null
+     */
+    private fun checkAndSetNullValue() {
+        var nullValue: T? = null
+        var nullValueAsText = ""
+        if (this is SelectionAttribute) {
+            nullValue = emptySet<String>() as T
+            nullValueAsText = "[]"
+        }
+        checkRequiredValidators(nullValue, nullValueAsText)
+        if (isValid()) {
+            setValue(nullValue)
+        }
+        if (isRightTrackValid()) {
+            setRightTrackValue(nullValue)
         }
     }
 
