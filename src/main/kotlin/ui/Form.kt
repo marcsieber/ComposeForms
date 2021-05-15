@@ -41,7 +41,48 @@ class Form {
                 ){
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
 
-                        Text(getTitle(), color = Color.White)
+                        Column() {
+                            Text(getTitle(), color = Color.White)
+
+                            val langDropDownIsOpen = remember { mutableStateOf(false) }
+                            OutlinedButton(
+                                modifier = Modifier.height(50.dp),
+                                onClick = { langDropDownIsOpen.value = !langDropDownIsOpen.value },
+                                shape = MaterialTheme.shapes.large,
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                                border = BorderStroke(1.dp, Color.White)
+                            ) {
+                                Text(getCurrentLanguage(), color = Color.White)
+                            }
+                            DropdownMenu(
+                                expanded = langDropDownIsOpen.value,
+                                onDismissRequest = { langDropDownIsOpen.value = false },
+                                modifier = Modifier.wrapContentSize(),
+                                content = {
+                                    getPossibleLanguages().forEachIndexed { index, string ->
+                                        val elementIsSelected = isCurrentLanguageForAll(string)
+                                        val elementIsSelectedBackgroundColor =
+                                            if (elementIsSelected) Color.DarkGray else Color.LightGray
+                                        val elementIsSelectedTextColor =
+                                            if (elementIsSelected) Color.White else Color.Black
+                                        DropdownMenuItem(
+                                            modifier = Modifier.background(elementIsSelectedBackgroundColor),
+                                            onClick = {
+                                                setCurrentLanguageForAll(string)
+                                            },
+                                            content = {
+                                                Text(
+                                                    text = string,
+                                                    modifier = Modifier.background(elementIsSelectedBackgroundColor),
+                                                    color = elementIsSelectedTextColor
+                                                )
+                                            }
+                                        )
+                                    }
+                                }
+                            )
+
+                        }
 
                         Row(){
                             Button(

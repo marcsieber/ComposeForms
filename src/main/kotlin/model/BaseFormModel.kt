@@ -104,11 +104,15 @@ abstract class BaseFormModel() : FormModel {
         return validForAll.value
     }
 
-    fun isCurrentLanguageForAll(language : String) : Boolean{
+    override fun isCurrentLanguageForAll(language : String) : Boolean{
         return currentLanguage.value == language
     }
 
     override fun addAttribute(attr: Attribute<*,*,*>) {
         allAttributes.add(attr)
+    }
+
+    override fun getCurrentLanguage(): String {
+        return currentLanguage.value
     }
 }

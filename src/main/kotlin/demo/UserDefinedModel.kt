@@ -12,6 +12,10 @@ class UserDefinedModel() : BaseFormModel(){
         setTitle("Demo Title")
     }
 
+    override fun getPossibleLanguages(): List<String> {
+       return Labels.getLanguages()
+    }
+
     val strValidator = StringValidator(5, 10)
     val customValidator = CustomValidator<String>({value -> value!!.length in 3..5}, validationMessage = "Message")
 

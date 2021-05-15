@@ -10,9 +10,12 @@ interface FormModel {
     fun undoAll() : Boolean
     fun validateAll()
     fun setCurrentLanguageForAll(lang : String)
+    fun isCurrentLanguageForAll(lang: String): Boolean
+    fun getCurrentLanguage(): String
     fun setChangedForAll()
     fun setValidForAll()
     fun isValidForAll() : Boolean
     fun isChangedForAll(): Boolean
     fun addAttribute(attr: Attribute<*,*,*>)
+    fun getPossibleLanguages(): List<String>
 }
