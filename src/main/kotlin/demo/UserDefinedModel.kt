@@ -51,10 +51,16 @@ class UserDefinedModel() : BaseFormModel(){
         }
     )
 
+    val string = StringAttribute(
+        model = this,
+        value = "1234",
+        validators = listOf(StringValidator(minLength = 3, maxLength = 5)),
+        label = Labels.stringLabel
+    )
+
     //Numbers
     val intValue1    = IntegerAttribute(
         model = this,
-        value = 10,
         label = Labels.intLabel,
         readOnly = false,
         validators = listOf(NumberValidator(0, 10, 2, 4, true, "LowerBound ist bei 0, upperBound bei 10, es sind nur 2er-Schritte zugelassen")),
