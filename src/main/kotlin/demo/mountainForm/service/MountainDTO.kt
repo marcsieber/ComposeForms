@@ -15,17 +15,10 @@ class MountainDTO(args: List<String>) {
     private var prominencePoint: String = args[10]
     private var imageCaption: String    = args[11]
 
-    /**
-     * wird gebraucht, um das DTO in einen File zu schreiben
-     *
-     * @param delimiter das im File verwendete Trennzeichen
-     *
-     * @return die abzuspeichernde Zeile
-     */
     fun toLine(delimiter: String): String {
         return java.lang.String.join(
             delimiter,
-            java.lang.Long.toString(getId()!!),  // die Konvertierungen muessen uebereinstimmen
+            java.lang.Long.toString(getId()!!),
             getName(),
             java.lang.Double.toString(getHeight()),
             getType(),

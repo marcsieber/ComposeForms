@@ -15,7 +15,7 @@ class MountainPM(var service : MountainService) : BaseFormModel() {
 
     init {
         setTitle(if (isCurrentLanguageForAll("Berge")) "Demo Title" else "Mountains")
-        val id = Random().nextInt(231).toLong() // einen Mountain zufaellig auswaehlen
+        val id = Random().nextInt(231).toLong()
         currentMountain = service.get(id)
     }
 
