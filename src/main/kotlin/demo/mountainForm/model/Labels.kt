@@ -20,7 +20,7 @@ enum class Labels(val german : String, val english : String) : ILabel{
     // Needed to get Languages
     companion object {
         fun getLanguages(): List<String> {
-            return (Labels.values()[0] as ILabel).getLanguagesDynamic()
+            return (values()[0] as ILabel).getLanguagesDynamic()
         }
     }
 }

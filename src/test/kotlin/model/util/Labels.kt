@@ -5,7 +5,7 @@ enum class Labels(val test: String, val eng: String): ILabel {
 
     companion object {
         fun getLanguages(): List<String> {
-            return (demo.Labels.values()[0] as ILabel).getLanguagesDynamic()
+            return (values()[0] as ILabel).getLanguagesDynamic()
         }
     }
 }

@@ -2,8 +2,8 @@ import androidx.compose.desktop.Window
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.IntSize
-import demo.UserDefinedModel
-import demo.mountainForm.MountainApp
+import demo.personForm.PersonModel
+import ui.Form
 
 
 fun main() = Window(
@@ -12,9 +12,12 @@ fun main() = Window(
 ) {
     MaterialTheme {
 //        val model = remember { UserDefinedModel() }
-//        DemoUI(model)
+//        demo.playGroundForm.DemoUI(model)
 
-        MountainApp.createAppUI()
+//        MountainApp.createAppUI()
+
+        val model = remember { PersonModel() }
+        Form().of(model)
     }
 }
 

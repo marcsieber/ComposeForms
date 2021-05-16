@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -43,7 +44,7 @@ class Form {
     @Composable
     private fun AttributeElement(attr: Attribute<*,*,*>){
 
-        Row(Modifier.fillMaxWidth(0.8f).padding(5.dp)
+        Row(Modifier.fillMaxWidth().padding(5.dp)
             ) {
 
             Column(Modifier.fillMaxHeight()) {
@@ -130,7 +131,7 @@ class Form {
         val label                   = selectionAttribute.getLabel()
 
         Row {
-            Box(modifier = Modifier.height(300.dp).wrapContentSize(Alignment.TopStart)) {
+            Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
                 Column {
                     if (!selectionString.value.equals("")) {
                         Text(
@@ -143,7 +144,7 @@ class Form {
                     OutlinedButton(
                         modifier = Modifier.height(50.dp),
                         onClick = { dropDownIsOpen.value = true },
-                        shape = MaterialTheme.shapes.large,
+                        shape = RoundedCornerShape(12),
                         colors = ButtonDefaults.buttonColors(backgroundColor = DropdownColors.BUTTON_BACKGROUND.color),
                         border = BorderStroke(1.dp, if (selectionAttribute.isValid()) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR))
                     ) {

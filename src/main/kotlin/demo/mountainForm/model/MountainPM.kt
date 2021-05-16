@@ -14,7 +14,6 @@ class MountainPM(var service : MountainService) : BaseFormModel() {
     private var currentMountain: MountainDTO
 
     init {
-        setTitle(if (isCurrentLanguageForAll("Berge")) "Demo Title" else "Mountains")
         val id = Random().nextInt(231).toLong()
         currentMountain = service.get(id)
     }
@@ -36,6 +35,7 @@ class MountainPM(var service : MountainService) : BaseFormModel() {
 
     init {
         setCurrentLanguageForAll("german")
+        setTitle(if (isCurrentLanguageForAll("german")) "Berge" else "Mountains")
     }
 
     fun of(dto: MountainDTO): MountainPM {
