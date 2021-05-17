@@ -3,6 +3,7 @@ package model.validators.semanticValidators
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import java.lang.IllegalArgumentException
 
 internal class CustomValidatorTest {
 
@@ -12,6 +13,7 @@ internal class CustomValidatorTest {
         val f : (String?) -> Boolean = {it!!.length > 3}
         val f2: (String?) -> Boolean = {it!!.length > 1}
         val msg = "Lenght must be at least 4"
+        val msg1 = "Changed msg"
 
         //when
         val cv = CustomValidator<String>(f, validationMessage = msg)
@@ -23,6 +25,14 @@ internal class CustomValidatorTest {
         assertTrue(cv.validateUserInput("Ha", "Ha").result)
         assertTrue(cv.validateUserInput("Ha", "Ha").rightTrackResult)
 
+        cv.overrideCustomValidator(null, validationMessage = msg1)
+
+        //then
+        assertTrue(cv.validateUserInput("Hallo", "Hallo").result)
+        assertTrue(cv.validateUserInput("Hallo", "Hallo").rightTrackResult)
+        assertTrue(cv.validateUserInput("Ha", "Ha").result)
+        assertTrue(cv.validateUserInput("Ha", "Ha").rightTrackResult)
+        assertEquals(msg1, cv.validateUserInput("H", "H").validationMessage)
     }
 
     @Test
@@ -41,17 +51,26 @@ internal class CustomValidatorTest {
         assertFalse(cv.validateUserInput("Ha", "Ha").rightTrackResult)
 
 
-        //given
-        val f2 : (String?) -> Boolean = {it!!.length > 1}
-
         //when
-        val cv1 = CustomValidator<String>(f, f2,validationMessage = msg)
+        val cv2 = CustomValidator<String>(f, null, msg)
 
         //then
-        assertTrue(cv1.validateUserInput("Hallo", "Hallo").result)
-        assertTrue(cv1.validateUserInput("Hallo", "Hallo").rightTrackResult)
-        assertFalse(cv1.validateUserInput("Ha", "Ha").result)
-        assertTrue(cv1.validateUserInput("Ha", "Ha").rightTrackResult)
+        assertTrue(cv2.validateUserInput("Hallo", "Hallo").result)
+        assertTrue(cv2.validateUserInput("Hallo", "Hallo").rightTrackResult)
+        assertFalse(cv2.validateUserInput("Ha", "Ha").result)
+        assertFalse(cv2.validateUserInput("Ha", "Ha").rightTrackResult)
+
+        //given
+        val f3 : (String?) -> Boolean = {it!!.length > 1}
+
+        //when
+        val cv3 = CustomValidator<String>(f, f3,validationMessage = msg)
+
+        //then
+        assertTrue(cv3.validateUserInput("Hallo", "Hallo").result)
+        assertTrue(cv3.validateUserInput("Hallo", "Hallo").rightTrackResult)
+        assertFalse(cv3.validateUserInput("Ha", "Ha").result)
+        assertTrue(cv3.validateUserInput("Ha", "Ha").rightTrackResult)
 
 
     }
@@ -69,4 +88,5 @@ internal class CustomValidatorTest {
         assertEquals(f, cv.getValidationFunction())
         assertEquals(msg, cv.validationMessage)
     }
+
 }

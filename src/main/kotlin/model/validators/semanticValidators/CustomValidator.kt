@@ -45,7 +45,6 @@ open class CustomValidator<T>(  private var validationFunction  : (T?) -> Boolea
     //******************************************************************************************************
     //Exceptions & validation messages
 
-    //not needed
     override fun setDefaultValidationMessage(){
         //no implementation in CustomValidator because we can't find out what the developer wants
     }
@@ -54,7 +53,6 @@ open class CustomValidator<T>(  private var validationFunction  : (T?) -> Boolea
         //no implementation in CustomValidator because we do not use cache on CustomValidator
     }
 
-    //not needed
     override fun deleteCaches() {
         //no implementation in CustomValidator because we do not use cache on CustomValidator
     }
