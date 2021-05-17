@@ -14,7 +14,7 @@ abstract class BaseFormModel() : FormModel {
     protected var allAttributes     = mutableStateListOf<Attribute<*,*,*>>()
     private var changedForAll       = mutableStateOf(false)
     private val validForAll         = mutableStateOf(true)
-    private var currentLanguage     = mutableStateOf<String>("")
+    private var currentLanguage     = mutableStateOf<String>(getPossibleLanguages()[0])
 
 
     //******************************************************************************************************
@@ -110,6 +110,7 @@ abstract class BaseFormModel() : FormModel {
 
     override fun addAttribute(attr: Attribute<*,*,*>) {
         allAttributes.add(attr)
+        attr.setCurrentLanguage(getCurrentLanguage())
     }
 
     override fun getCurrentLanguage(): String {

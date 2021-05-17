@@ -34,7 +34,6 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     private val readOnly            = mutableStateOf(readOnly)
     private val valid               = mutableStateOf(true)
     private val rightTrackValid     = mutableStateOf(true)
-    private val validationMessage   = mutableStateOf("")
     private val changed             = mutableStateOf(false)
     private var currentLanguage     = ""
 
@@ -155,7 +154,6 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      * and makes the attribute "not changed" again.
      */
     internal fun save() : Boolean{
-        println("save")
         setSavedValue(getValue())
         setChanged(false)
         return true
@@ -400,7 +398,6 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      */
     fun checkRequiredValidators(newVal : T?, newValAsText : String?){
         setListOfValidationResults(listOf(reqValidator.validateUserInput(newVal, newValAsText)))
-        println("List: " + listOfValidationResults)
     }
 
     /**
@@ -416,7 +413,6 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      *
      */
     fun convert(newValAsText: String) : T {
-        println(typeT is Float)
         return converter.convertStringToType(newValAsText, typeT)
     }
 

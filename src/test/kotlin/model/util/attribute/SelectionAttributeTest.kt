@@ -485,7 +485,6 @@ class SelectionAttributeTest {
 
     @Test
     fun testSetValue() {
-        println(selAtr.getValue())
         //then
         assertEquals(emptySet<String>(), selAtr.getValue())
 

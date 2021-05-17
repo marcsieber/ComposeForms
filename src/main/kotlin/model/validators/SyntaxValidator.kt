@@ -3,9 +3,7 @@ package model.validators
 import model.util.Utilities
 import java.lang.NumberFormatException
 
-class SyntaxValidator<T>( validationMessage   : String = ""
-
-) : Validator<T>(validationMessage = validationMessage) {
+class SyntaxValidator<T>( validationMessage   : String = "") : Validator<T>(validationMessage = validationMessage) {
 
     init {
         if(validationMessage.equals("")){

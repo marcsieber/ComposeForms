@@ -44,8 +44,7 @@ class Form {
     @Composable
     private fun AttributeElement(attr: Attribute<*,*,*>){
 
-        Row(Modifier.fillMaxWidth().padding(5.dp)
-            ) {
+        Row(Modifier.fillMaxWidth().padding(5.dp)) {
 
             Column(Modifier.fillMaxHeight()) {
                 Row(Modifier.fillMaxWidth(),

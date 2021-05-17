@@ -33,7 +33,6 @@ class RequiredValidator<T>(private var isRequired           : Boolean = false,
     //Validation
 
     override fun validateUserInput(value: T?, valueAsText : String?): ValidationResult {
-        println("ValidateInput")
         val isValid : Boolean
         if(isRequired){
             isValid = (value != null && value != emptySet<String>() && value != "")

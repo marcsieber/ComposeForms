@@ -126,9 +126,6 @@ class UserDefinedModel() : BaseFormModel(){
 
     init{
         setCurrentLanguageForAll("English")
-        println("All languages:")
-        Labels.getLanguages().forEach{ println(it)}
-        println("-------")
     }
 
     val dateValue   = mutableStateOf("01/05/2020")
@@ -147,7 +144,6 @@ class UserDefinedModel() : BaseFormModel(){
 //            this.labels = label2
             this.setCurrentLanguageForAll("Deutsch")
             strValidator.overrideStringValidator(15,20,"Length must be between 15 and 20 characters")
-            println("test")
         }
     }
 
