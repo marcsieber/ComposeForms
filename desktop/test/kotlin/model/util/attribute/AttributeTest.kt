@@ -2,7 +2,6 @@ package model.util.attribute
 
 import model.BaseFormModel
 import model.util.Labels
-import model.validators.RequiredValidator
 
 import org.junit.jupiter.api.Test
 

@@ -3,7 +3,6 @@ package model.validators.semanticValidators
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import java.lang.IllegalArgumentException
 
 internal class CustomValidatorTest {
 
