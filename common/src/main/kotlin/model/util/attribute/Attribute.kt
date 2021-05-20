@@ -2,8 +2,8 @@ package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
 import model.FormModel
-import model.converters.TypeConverter
 import model.util.ILabel
+import model.util.Utilities
 import model.validators.RequiredValidator
 import model.validators.SyntaxValidator
 import model.validators.ValidationResult
@@ -37,7 +37,6 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     private var currentLanguage     = ""
 
     private val listOfValidationResults  = mutableStateOf<List<ValidationResult>>(emptyList())
-    private val converter           = TypeConverter<T>()
     abstract val typeT        : T
     private val reqValidator        = RequiredValidator<T>(required)
     private val syntaxValidator     = SyntaxValidator<T>()
@@ -412,7 +411,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      *
      */
     fun convert(newValAsText: String) : T {
-        return converter.convertStringToType(newValAsText, typeT)
+        return Utilities<T>().toDataType(newValAsText, typeT)
     }
 
 }
