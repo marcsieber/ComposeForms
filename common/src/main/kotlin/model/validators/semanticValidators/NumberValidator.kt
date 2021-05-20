@@ -77,8 +77,12 @@ class NumberValidator<T>(private var lowerBound              : T? = null,
 
         if(onlyStepValuesAreValid){
             val epsilon = 0.00000001
-            val moduloOfNewVal      = ((value.toDouble()+(epsilon/10)) %  stepSize!!.toDouble())
-            val moduloOfStepStart   = ((stepStart!!.toDouble()+(epsilon/10)) % stepSize!!.toDouble())
+            var dif = 0.0
+            if(value.toDouble() < 0){
+                dif = -(value.toDouble() * 2)
+            }
+            val moduloOfNewVal      = ((value.toDouble() + dif +(epsilon/10)) %  stepSize!!.toDouble())
+            val moduloOfStepStart   = ((stepStart!!.toDouble() + dif +(epsilon/10)) % stepSize!!.toDouble())
 
             if( moduloOfNewVal !in moduloOfStepStart-epsilon..moduloOfStepStart+epsilon){
                 isValid = false

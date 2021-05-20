@@ -42,8 +42,8 @@ class Utilities<T> {
             is Int -> Int.MIN_VALUE as T
             is Short -> Short.MIN_VALUE as T
             is Long -> Long.MIN_VALUE as T
-            is Double -> Double.MIN_VALUE as T
-            is Float -> Float.MIN_VALUE as T
+            is Double -> -Double.MAX_VALUE as T
+            is Float -> -Float.MAX_VALUE as T
             else -> 0 as T
         }
     }
