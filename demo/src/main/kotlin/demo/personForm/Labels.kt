@@ -8,7 +8,8 @@ enum class Labels(val deutsch : String, val english : String) : ILabel{
     GENDER("Geschlecht", "Gender"),
     AGE("Alter", "Age"),
     OCCUPATION("Beruf", "Occupation"),
-    TAXNUMBER("Steuer-Nummer", "Tax Number");
+    TAXNUMBER("Steuer-Nummer", "Tax Number"),
+    ID("ID", "ID");
 
     // Needed to get Languages
     companion object {

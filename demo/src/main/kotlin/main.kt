@@ -1,6 +1,7 @@
 import androidx.compose.desktop.Window
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.unit.IntSize
+import demo.userTesting.UserTestingApp
 import demo.zwischenprasentation.DemoApp
 
 
@@ -17,7 +18,9 @@ fun main() = Window(
 
 //        MountainApp.createAppUI()
 
-        DemoApp.createAppUI()
+//        DemoApp.createAppUI()
+
+        UserTestingApp().createAppUI()
     }
 }
 
