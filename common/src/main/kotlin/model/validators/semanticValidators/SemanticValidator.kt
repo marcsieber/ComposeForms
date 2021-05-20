@@ -29,10 +29,10 @@ abstract class SemanticValidator<T>(validationMessage : String) : Validator<T>(v
     /**
      * This method writes the temporary set caches into the values.
      */
-    abstract protected fun setValues()
+    protected abstract fun setValues()
 
     /**
      * This method sets all cache values to null.
      */
-    abstract protected fun deleteCaches()
+    protected abstract fun deleteCaches()
 }
