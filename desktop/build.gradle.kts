@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm")
     id("org.jetbrains.compose")
+    id("org.sonarqube") version "3.1"
 }
 
 group = "ch.fhnw"

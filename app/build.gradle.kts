@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("org.jetbrains.compose")
+    id("org.sonarqube") version "3.1"
 }
 
 android {
