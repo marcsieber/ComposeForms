@@ -49,6 +49,13 @@ internal class SelectionValidatorTest{
         //then
         assertTrue(selectionValidator.validateUserInput(set, set.toString()).result)
         assertTrue(selectionValidator.validateUserInput(set, set.toString()).rightTrackResult)
+
+
+        //when
+        selectionValidator.overrideSelectionValidator(maxNumberOfSelections = 2, validationMessage = "Own message")
+        //then
+        assertEquals("Own message", selectionValidator.validateUserInput(set, set.toString()).validationMessage)
+
     }
 
     @Test
