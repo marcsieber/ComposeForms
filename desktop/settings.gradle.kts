@@ -1,0 +1,1 @@
+rootProject.name = "ch.fhnw.forms.desktop"

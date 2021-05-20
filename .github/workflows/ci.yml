@@ -10,6 +10,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - run: ./gradlew test -i
-      - run: ./gradlew jacocoTestReport
-      - run: ./gradlew build sonarqube -Dsonar.projectKey=compose -Dsonar.host.url=http://138.68.97.60:9000 -Dsonar.login=${{secrets.SONAR_PASSWORD}} -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.coverage.jacoco.xmlReportPaths="build/reports/jacoco/test/*" -Dsonar.coverage.exclusions="src/main/kotlin/*.*,src/main/ui/**/*.*"
+      - run: ./gradlew common:test -i
+      - run: ./gradlew common:jacocoTestReport
+      - run: ./gradlew build app:sonarqube -Dsonar.projectKey=app -Dsonar.host.url=http://138.68.97.60:9000 -Dsonar.login=${{secrets.SONAR_PASSWORD}} -Dsonar.sources=src/main -Dsonar.coverage.exclusions="**.*"
+      - run: ./gradlew build desktop:sonarqube -Dsonar.projectKey=desktop -Dsonar.host.url=http://138.68.97.60:9000 -Dsonar.login=${{secrets.SONAR_PASSWORD}} -Dsonar.sources=src/main -Dsonar.coverage.exclusions="**.*"
+      - run: ./gradlew build common:sonarqube -Dsonar.projectKey=common -Dsonar.host.url=http://138.68.97.60:9000 -Dsonar.login=${{secrets.SONAR_PASSWORD}} -Dsonar.sources=src/main -Dsonar.tests=./src/test -Dsonar.coverage.jacoco.xmlReportPaths="/build/reports/jacoco/test/*"
