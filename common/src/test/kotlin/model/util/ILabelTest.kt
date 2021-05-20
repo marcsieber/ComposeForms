@@ -10,7 +10,8 @@ class ILabelTest {
     }
 
     enum class Labels(val eng: String, val de: String, private val fr: String) : ILabel{
-        TEST("eng", "de", "fr")
+        TEST("eng", "de", "fr"),
+        T2("me", "ich", "je")
     }
 
     @Test
@@ -33,5 +34,6 @@ class ILabelTest {
         assertTrue(Labels.TEST.getLanguagesDynamic().contains("eng"))
         assertTrue(Labels.TEST.getLanguagesDynamic().contains("de"))
         assertFalse(Labels.TEST.getLanguagesDynamic().contains("fr"))
+        assertEquals(listOf("eng", "de"),Labels.TEST.getLanguagesDynamic(), "fr is private!")
     }
 }
