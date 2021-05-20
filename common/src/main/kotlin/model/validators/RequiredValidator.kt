@@ -39,7 +39,7 @@ class RequiredValidator<T>(private var isRequired           : Boolean = false,
         }else{
             isValid = true
         }
-        return ValidationResult(result = isValid, rightTrackResult = isValid, validationMessage = validationMessage)
+        return ValidationResult(result = isValid, rightTrackResult = true, validationMessage = validationMessage)
     }
 
     //******************************************************************************************************
