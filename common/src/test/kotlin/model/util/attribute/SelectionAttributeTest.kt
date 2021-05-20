@@ -295,6 +295,20 @@ class SelectionAttributeTest {
     }
 
     @Test
+    fun testRemoveSelectedPossibleSelection(){
+        //given
+        selAtr.addUserSelection("Element1")
+        selAtr.addUserSelection("Element2")
+
+        //when
+        selAtr.removeAPossibleSelection("Element2")
+
+        //then
+        assertEquals(setOf("Element1"), selAtr.getPossibleSelections())
+        assertEquals(setOf("Element1"), selAtr.getValue())
+    }
+
+    @Test
     fun testGetMinNumberOfSelections() {
         //given
         val selVal = SelectionValidator()
@@ -336,7 +350,6 @@ class SelectionAttributeTest {
 
         //then
         assertEquals(setOf("Element1", "Element2", "Element3"), selAtr.getPossibleSelections())
-
     }
 
     //****************************************************************************************************************

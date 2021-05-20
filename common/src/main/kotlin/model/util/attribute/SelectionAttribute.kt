@@ -104,7 +104,7 @@ class SelectionAttribute<L>(model                              : FormModel,
             this.possibleSelections.remove(selection)
             validators.forEach{it.checkAndSetDevValues()}
             if(getValue()!!.contains(selection)){
-                getValue()!!.toMutableSet().remove(selection)
+                removeUserSelection(selection)
                 checkAndSetValue(getValue().toString())
             }
         }
