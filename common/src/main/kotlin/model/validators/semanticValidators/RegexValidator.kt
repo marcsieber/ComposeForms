@@ -41,16 +41,21 @@ class RegexValidator<T>(private var regexPattern          : String,
         val regex = regexPattern.toRegex()
         val isValid = if(valueAsText != null) regex.matches(valueAsText) else regex.matches("")
 
-        val isValidSoft: Boolean
-        if(rightTrackRegexPattern != null) {
+        val isValidSoft = if(rightTrackRegexPattern != null) {
             val softRegex = rightTrackRegexPattern!!.toRegex()
-            isValidSoft = if (valueAsText != null) softRegex.matches(valueAsText) else regex.matches("")
+            if (valueAsText != null) softRegex.matches(valueAsText) else regex.matches("")
         }else{
-            isValidSoft = regexOnRightTrackChecker(isValid, valueAsText)
+            regexOnRightTrackChecker(isValid, valueAsText)
         }
         return ValidationResult(result = isValid, rightTrackResult = isValidSoft, validationMessage = validationMessage)
     }
 
+    /**
+     * Check if the valueAsText is a sub element of the regex pattern, starting from the left side and increasing pattern
+     * length.
+     * @param isValid : Boolean if the full pattern check was valid. If true then the function immediately returns true
+     * @param valueAsText : String that will be checked against the sub patterns
+     */
     private fun regexOnRightTrackChecker(isValid: Boolean, valueAsText: String?): Boolean {
         if (isValid) {
             return true
