@@ -12,6 +12,9 @@ fun main() = Window(
 //        val model = remember { UserDefinedModel() }
 //        DemoUI(model)
 
+
+//        DemoUI(DemoModel())
+
 //        MountainApp.createAppUI()
 
         DemoApp.createAppUI()
