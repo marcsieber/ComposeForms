@@ -2,7 +2,7 @@ package model.convertables
 
 import java.util.regex.Pattern
 
-class CustomConvertable(private var replaceRegex : List<ReplacementPair>){
+class CustomConvertable(private var replaceRegex : List<ReplacementPair>, private var convertUserView : Boolean = false, private var convertImmediately : Boolean = false){
 
     fun convertUserInput(valueAsText : String): ConvertableResult {
         var isConvertable : Boolean
@@ -10,11 +10,18 @@ class CustomConvertable(private var replaceRegex : List<ReplacementPair>){
         replaceRegex.forEach{
             convertablePattern = Pattern.compile(it.convertable_regex)
             if(convertablePattern.matcher(valueAsText).matches()){
-                val convertIntoPattern = Pattern.compile(it.convert_into_regex)
-                return ConvertableResult(true, convertIntoPattern.toString())
+                val convertIntoPattern = convertablePattern.matcher(valueAsText).replaceAll(it.convert_into_regex)
+                println(convertIntoPattern)
+                return ConvertableResult(true, convertIntoPattern, convertUserView, convertImmediately)
             }
         }
-        return ConvertableResult(false, "")
+        return ConvertableResult(false, "", convertUserView, convertImmediately)
     }
 
+    //******************************************************************************************************
+    //Getter
+
+    fun getConvertUserView() : Boolean{
+        return convertUserView
+    }
 }

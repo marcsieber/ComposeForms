@@ -6,6 +6,7 @@ import model.convertables.CustomConvertable
 import model.convertables.ReplacementPair
 import model.util.attribute.*
 import model.validators.semanticValidators.*
+import java.time.LocalTime
 import kotlin.concurrent.thread
 
 class UserDefinedModel() : BaseFormModel(){
@@ -37,9 +38,34 @@ class UserDefinedModel() : BaseFormModel(){
             CustomConvertable(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
-        )))
+            ), convertUserView = true),
+            CustomConvertable(listOf(
+                ReplacementPair("\\d,\\d", "\\d.\\d")
+            ), convertUserView = true)
+        )
     )
 
+    val d2 = DoubleAttribute(
+        model = this,
+        value = 0.0,
+        label = Labels.doubleLabel,
+        convertables = listOf(
+            CustomConvertable(listOf(
+                ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
+            ), convertUserView = false)
+        )
+    )
+
+
+    val time = StringAttribute(
+        model = this,
+        label = Labels.timeLabel,
+        convertables = listOf(CustomConvertable(listOf(
+            ReplacementPair("now", LocalTime.now().toString())
+//            ReplacementPair("\\d{1,2}[:]\\d{0,2}\\{0,2}", "\\{2}:\\{2}")
+            ), convertUserView = true)
+        )
+    )
 
     //String
     val strVal = StringValidator(5)

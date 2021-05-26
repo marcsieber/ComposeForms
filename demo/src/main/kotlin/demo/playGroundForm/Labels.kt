@@ -10,7 +10,8 @@ enum class Labels(val english: String, val deutsch: String): ILabel {
     longLabel("English Long", "deutscher Long"),
     floatLabel("English Float", "deutscher Float"),
     doubleLabel("English Double", "deutscher Double"),
-    selectionLabel("English Selection", "deutsche Selektion");
+    selectionLabel("English Selection", "deutsche Selektion"),
+    timeLabel("Time", "Uhrzeit");
 
     // Needed to get Languages
     companion object {

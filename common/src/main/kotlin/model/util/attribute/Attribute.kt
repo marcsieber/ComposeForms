@@ -295,19 +295,19 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      * @throws NumberFormatException
      * @throws IllegalArgumentException
      */
-    protected fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false){
+    protected fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false, convertBecauseUnfocussed : Boolean = false){
         if(newVal == null || newVal.equals("") || newVal.equals("[]")){
             checkAndSetNullValue()
         }
         else {
-            checkAndSetNonNullValue(newVal, calledFromKeyEvent)
+            checkAndSetNonNullValue(newVal, calledFromKeyEvent, convertBecauseUnfocussed)
         }
     }
 
     /**
      * Check and sets the non null values
      */
-    private fun checkAndSetNonNullValue(newVal: String, calledFromKeyEvent: Boolean) {
+    private fun checkAndSetNonNullValue(newVal: String, calledFromKeyEvent: Boolean, convertBecauseUnfocussed : Boolean) {
         val convertedValueAsText : String
         checkAllConvertables(newVal)
         if(convertable.value){
@@ -323,6 +323,13 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
             }
             if (isValid()) {
                 setValue(typeValue)
+                if(!getConvertUserView().isNullOrEmpty()){
+                    println("Hallo")
+                    println(getConvertUserView())
+                    if(getConvertUserView()[0] && (getConvertImmediately()[0] || convertBecauseUnfocussed)){
+                        setValueAsText(getValue().toString())
+                    }
+                }
             }
             if (isRightTrackValid()) {
                 setRightTrackValue(typeValue)
@@ -454,6 +461,21 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertedValueAsText}
     }
 
+    fun getConvertUserView() : List<Boolean>{
+        return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertUserView}
+    }
+
+    fun getConvertImmediately() : List<Boolean>{
+        return listOfConvertableResults.value.filter{it.isConvertable}.map {it.convertImmediately}
+    }
+
+    /**
+     * This method calls setAndCheckValue with the parameter convertBecauseUnfocussed = true.
+     */
+    fun checkAndSetConvertableBecauseUnfocussedAttribute(){
+        checkAndSetValue(newVal = getValueAsText(), convertBecauseUnfocussed = true)
+    }
+
     //******************************************
     //Convert:
 
@@ -465,4 +487,6 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     fun convertStringToType(newValAsText: String) : T {
         return Utilities<T>().toDataType(newValAsText, typeT)
     }
+
+
 }

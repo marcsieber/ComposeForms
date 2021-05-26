@@ -47,6 +47,9 @@ fun InputField(attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> Boolean){
         modifier = Modifier
             .focusModifier().onFocusEvent { focS ->
                 focuses[index].value = focS.isFocused
+                if(!focS.isFocused){
+                    attr.checkAndSetConvertableBecauseUnfocussedAttribute() //setConvertables()
+                }
             }
             .focusOrder(focusRequester)
             .onKeyEvent{event ->
