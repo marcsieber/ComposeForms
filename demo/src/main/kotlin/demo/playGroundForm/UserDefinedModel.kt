@@ -2,6 +2,8 @@ package demo.playGroundForm
 
 import androidx.compose.runtime.mutableStateOf
 import model.BaseFormModel
+import model.convertables.CustomConvertable
+import model.convertables.ReplacementPair
 import model.util.attribute.*
 import model.validators.semanticValidators.*
 import kotlin.concurrent.thread
@@ -30,8 +32,14 @@ class UserDefinedModel() : BaseFormModel(){
     val d = DoubleAttribute(
         model = this,
         value = 0.0,
-        label = Labels.doubleLabel
+        label = Labels.doubleLabel,
+        convertables = listOf(
+            CustomConvertable(listOf(
+                ReplacementPair("eins", "1"),
+                ReplacementPair("zwei", "2")
+        )))
     )
+
 
     //String
     val strVal = StringValidator(5)
