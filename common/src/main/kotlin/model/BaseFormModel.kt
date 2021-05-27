@@ -118,4 +118,5 @@ abstract class BaseFormModel() : FormModel {
     override fun getCurrentLanguage(): String {
         return currentLanguage.value
     }
+
 }

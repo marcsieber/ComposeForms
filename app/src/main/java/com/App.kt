@@ -1,21 +1,20 @@
 package com.myapplication
 
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.*
-import model.util.attribute.StringAttribute
+import com.IApp
+import com.model.Model
+import com.ui.UI
 
-@Composable
-fun App() {
-    var text by remember { mutableStateOf("Hello, its running again!") }
+object App : IApp {
 
+    override fun initialize(activity: AppCompatActivity, savedInstanceState: Bundle?) {
+        Model.connectAndSubscribe()
+    }
 
-    MaterialTheme {
-        Button(onClick = {
-            text = "Hello, changed"
-        }) {
-            Text(text)
-        }
+    @Composable
+    override fun createAppUI() {
+        UI(Model)
     }
 }

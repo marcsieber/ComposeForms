@@ -32,7 +32,7 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
     fun connectAndSubscribe(subtopic: String = "",
                             onNewMessage: (String) -> Unit = {},
                             onConnectionFailed: () -> Unit = {},
-                            onConntected: () -> Unit = {}) {
+                            onConntected: () -> Unit = {}) { //TODO RENAME
         client.connectWith()
             .cleanStart(true)
             .keepAlive(30)
@@ -40,6 +40,7 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
             .whenComplete { _, throwable ->
                 if (throwable != null) {
                     println("connection failed")
+                    throwable.printStackTrace()
                     onConnectionFailed.invoke()
                 } else { //erst wenn die Connection aufgebaut ist, kann subscribed werden
                     println("Connected")
