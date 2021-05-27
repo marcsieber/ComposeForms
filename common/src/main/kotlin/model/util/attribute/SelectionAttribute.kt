@@ -1,6 +1,8 @@
 package model.util.attribute
 
 import model.FormModel
+import model.convertables.CustomConvertable
+import model.convertables.ReplacementPair
 import model.util.ILabel
 import model.util.Utilities
 import model.validators.semanticValidators.SemanticValidator
@@ -12,11 +14,12 @@ class SelectionAttribute<L>(model                              : FormModel,
                             readOnly                           : Boolean = false,
                             onChangeListeners                  : List<(Set<String>?) -> Unit> = emptyList(),
                             validators                         : List<SemanticValidator<Set<String>>> = mutableListOf(),
+                            convertables                       : List<CustomConvertable> = emptyList(),
 
                             possibleSelections                 : Set<String>
 
 ) : Attribute<SelectionAttribute<L>, Set<String>, L>(model = model, value = value, label = label, required = required, readOnly = readOnly,
-    onChangeListeners = onChangeListeners, validators = validators)
+    onChangeListeners = onChangeListeners, validators = validators, convertables = convertables)
         where L: Enum<*>, L : ILabel{
 
     override val typeT: Set<String>

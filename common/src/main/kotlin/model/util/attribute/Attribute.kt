@@ -2,12 +2,16 @@ package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
 import model.FormModel
+import model.convertables.ConvertableResult
+import model.convertables.CustomConvertable
+import model.convertables.ReplacementPair
 import model.util.ILabel
 import model.util.Utilities
 import model.validators.RequiredValidator
 import model.validators.SyntaxValidator
 import model.validators.ValidationResult
 import model.validators.semanticValidators.SemanticValidator
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert
 import java.lang.NumberFormatException
 
 abstract class Attribute <A,T,L> (private val model       : FormModel,
@@ -16,7 +20,8 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
                                   required                : Boolean,
                                   readOnly                : Boolean,
                                   var onChangeListeners   : List<(T?) -> Unit>,
-                                  var validators          : List<SemanticValidator<T>>
+                                  var validators          : List<SemanticValidator<T>>,
+                                  var convertables        : List<CustomConvertable>
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
 
@@ -33,6 +38,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     private val readOnly            = mutableStateOf(readOnly)
     private val valid               = mutableStateOf(true)
     private val rightTrackValid     = mutableStateOf(true)
+    private val convertable         = mutableStateOf(false)
     private val changed             = mutableStateOf(false)
     private var currentLanguage     = ""
 
@@ -40,6 +46,8 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     abstract val typeT        : T
     private val reqValidator        = RequiredValidator<T>(required)
     private val syntaxValidator     = SyntaxValidator<T>()
+
+    private val listOfConvertableResults = mutableStateOf<List<ConvertableResult>>(emptyList())
 
 
     /**
@@ -287,27 +295,41 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      * @throws NumberFormatException
      * @throws IllegalArgumentException
      */
-    protected fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false){
+    protected fun checkAndSetValue(newVal: String?, calledFromKeyEvent : Boolean = false, convertBecauseUnfocussed : Boolean = false){
         if(newVal == null || newVal.equals("") || newVal.equals("[]")){
             checkAndSetNullValue()
         }
         else {
-            checkAndSetNonNullValue(newVal, calledFromKeyEvent)
+            checkAndSetNonNullValue(newVal, calledFromKeyEvent, convertBecauseUnfocussed)
         }
     }
 
     /**
      * Check and sets the non null values
      */
-    private fun checkAndSetNonNullValue(newVal: String, calledFromKeyEvent: Boolean) {
-        checkSyntaxValidators(newVal)
+    private fun checkAndSetNonNullValue(newVal: String, calledFromKeyEvent: Boolean, convertBecauseUnfocussed : Boolean) {
+        val convertedValueAsText : String
+        checkAllConvertables(newVal)
+        if(convertable.value){
+            convertedValueAsText = getConvertedValueAsText()[0]
+        }else{
+            convertedValueAsText = newVal
+        }
+        checkSyntaxValidators(convertedValueAsText)
         if (isValid()) {
-            val typeValue = convert(newVal)
+            val typeValue = convertStringToType(convertedValueAsText)
             if (!calledFromKeyEvent) {
-                checkAllValidators(typeValue, newVal)
+                checkAllValidators(typeValue, convertedValueAsText)
             }
             if (isValid()) {
                 setValue(typeValue)
+                if(!getConvertUserView().isNullOrEmpty()){
+                    println("Hallo")
+                    println(getConvertUserView())
+                    if(getConvertUserView()[0] && (getConvertImmediately()[0] || convertBecauseUnfocussed)){
+                        setValueAsText(getValue().toString())
+                    }
+                }
             }
             if (isRightTrackValid()) {
                 setRightTrackValue(typeValue)
@@ -333,6 +355,9 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
             setRightTrackValue(nullValue)
         }
     }
+
+    //******************************************
+    //Functions in which vaidators are involved:
 
     /**
      * Add a new validator to the attribute
@@ -368,7 +393,8 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     }
 
     /**
-     * sets the listOfValidationResults checks if all results are true and calls setValid.
+     * This method sets the listOfValidationResults, checks if all results are true and calls setValid.
+     * @param listOfValidationResults
      */
     fun setListOfValidationResults(listOfValidationResults: List<ValidationResult>){
         this.listOfValidationResults.value = listOfValidationResults
@@ -405,13 +431,62 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         setListOfValidationResults(listOf(syntaxValidator.validateUserInput(typeT, newValAsText)))
     }
 
+
+    //******************************************
+    //Functions in which convertables are involved:
+
+    /**
+     * This method sets the listOfConvertableResults, checks if any result is convertable (true) and sets convertable.
+     * @param listOfConvertableResults
+     */
+    fun setListOfConvertableResults(listOfConvertableResults: List<ConvertableResult>){
+        this.listOfConvertableResults.value = listOfConvertableResults
+        this.convertable.value = (this.listOfConvertableResults.value.any { it.isConvertable })
+    }
+
+    /**
+     * This method checks, if the value is convertable regarding all convertables of this attribute.
+     * The result is recorded in the convertableResult
+     */
+    fun checkAllConvertables(newValAsText: String){
+        setListOfConvertableResults(convertables.map { it.convertUserInput(newValAsText)})
+    }
+
+    /**
+     * This method returns the convertedValueAsText of all convertable convertable results
+     *
+     * @return List<String>
+     */
+    fun getConvertedValueAsText(): List<String>{
+        return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertedValueAsText}
+    }
+
+    fun getConvertUserView() : List<Boolean>{
+        return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertUserView}
+    }
+
+    fun getConvertImmediately() : List<Boolean>{
+        return listOfConvertableResults.value.filter{it.isConvertable}.map {it.convertImmediately}
+    }
+
+    /**
+     * This method calls setAndCheckValue with the parameter convertBecauseUnfocussed = true.
+     */
+    fun checkAndSetConvertableBecauseUnfocussedAttribute(){
+        checkAndSetValue(newVal = getValueAsText(), convertBecauseUnfocussed = true)
+    }
+
+    //******************************************
     //Convert:
 
     /**
-     *
+     * This method converts a string into the type of the attribute.
+     * @param newValAsText : String
+     * @return typeT : T
      */
-    fun convert(newValAsText: String) : T {
+    fun convertStringToType(newValAsText: String) : T {
         return Utilities<T>().toDataType(newValAsText, typeT)
     }
+
 
 }
