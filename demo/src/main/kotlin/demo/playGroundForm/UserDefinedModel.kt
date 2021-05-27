@@ -30,17 +30,17 @@ class UserDefinedModel() : BaseFormModel(){
         validators = listOf(RegexValidator<String>("^\\w+\\W\\w+\$", validationMessage = "Muss genau zwei Wörter sein"))
     )
 
-    val d = DoubleAttribute(
+    val d1 = DoubleAttribute(
         model = this,
         value = 0.0,
-        label = Labels.doubleLabel,
+        label = Labels.convertOnUnfocussing,
         convertables = listOf(
             CustomConvertable(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
             ), convertUserView = true),
             CustomConvertable(listOf(
-                ReplacementPair("\\d,\\d", "\\d.\\d")
+                ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true)
         )
     )
@@ -48,8 +48,27 @@ class UserDefinedModel() : BaseFormModel(){
     val d2 = DoubleAttribute(
         model = this,
         value = 0.0,
-        label = Labels.doubleLabel,
+        label = Labels.convertImmediately,
         convertables = listOf(
+            CustomConvertable(listOf(
+                ReplacementPair("eins", "1"),
+                ReplacementPair("zwei", "2")
+            ), true, true),
+            CustomConvertable(listOf(
+                ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
+            ), convertUserView = true, true)
+        )
+    )
+
+    val d3 = DoubleAttribute(
+        model = this,
+        value = 0.0,
+        label = Labels.doNotConvert,
+        convertables = listOf(
+            CustomConvertable(listOf(
+                ReplacementPair("eins", "1"),
+                ReplacementPair("zwei", "2")
+            ), false),
             CustomConvertable(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = false)
@@ -62,7 +81,6 @@ class UserDefinedModel() : BaseFormModel(){
         label = Labels.timeLabel,
         convertables = listOf(CustomConvertable(listOf(
             ReplacementPair("now", LocalTime.now().toString())
-//            ReplacementPair("\\d{1,2}[:]\\d{0,2}\\{0,2}", "\\{2}:\\{2}")
             ), convertUserView = true)
         )
     )

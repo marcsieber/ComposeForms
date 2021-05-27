@@ -11,7 +11,10 @@ enum class Labels(val english: String, val deutsch: String): ILabel {
     floatLabel("English Float", "deutscher Float"),
     doubleLabel("English Double", "deutscher Double"),
     selectionLabel("English Selection", "deutsche Selektion"),
-    timeLabel("Time", "Uhrzeit");
+    timeLabel("Time", "Uhrzeit"),
+    convertImmediately("convert immediately", "sofort konvertieren"),
+    convertOnUnfocussing("convert on unfocussing", "bei Verlassen konvertieren"),
+    doNotConvert("do not convert user view", "User View nicht konvertieren");
 
     // Needed to get Languages
     companion object {
