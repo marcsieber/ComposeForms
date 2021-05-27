@@ -1,6 +1,8 @@
 package demo.playGroundForm
 
 import androidx.compose.runtime.mutableStateOf
+import communication.MqttConnector
+import communication.runEmbeddedMQServer
 import model.BaseFormModel
 import model.convertables.CustomConvertable
 import model.convertables.ReplacementPair
@@ -9,11 +11,33 @@ import model.validators.semanticValidators.*
 import java.time.LocalTime
 import kotlin.concurrent.thread
 
-class UserDefinedModel() : BaseFormModel(){
+class UserDefinedModel : BaseFormModel(){
+
+    val mqttBroker    = "localhost"
+    val mainTopic     = "/fhnwforms/"
+    val mqttConnector = MqttConnector(mqttBroker, mainTopic)
 
     init {
         setTitle("Demo Title")
+
+
+        runEmbeddedMQServer()
+        connectAndSubscribe()
     }
+
+    fun connectAndSubscribe(){
+        mqttConnector.connectAndSubscribe(onNewMessage =
+        {
+            println("Recieved: " + it)
+        },
+            onConntected = { publish() } )
+    }
+
+    fun publish(){
+        println("publishing message")
+        mqttConnector.publish("hello", onPublished = { println("message sent")}, onError = {println("ERROR: ")})
+    }
+
 
     override fun getPossibleLanguages(): List<String> {
        return Labels.getLanguages()

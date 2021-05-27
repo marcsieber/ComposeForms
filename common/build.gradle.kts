@@ -18,6 +18,7 @@ sourceSets{
             api(compose.desktop.currentOs)
             api("org.jetbrains.kotlin:kotlin-reflect")
             api("org.junit.jupiter:junit-jupiter:5.7.1")
+            api("com.hivemq:hivemq-mqtt-client:1.2.1")
         }
     }
 }

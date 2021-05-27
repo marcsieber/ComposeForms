@@ -15,6 +15,7 @@ sourceSets{
         dependencies {
             api(compose.desktop.currentOs)
             implementation(project(":common"))
+            implementation("com.hivemq:hivemq-community-edition-embedded:2021.1")
         }
     }
 }
