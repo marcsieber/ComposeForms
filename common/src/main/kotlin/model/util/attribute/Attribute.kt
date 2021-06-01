@@ -1,6 +1,7 @@
 package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
+import kotlinx.serialization.Serializable
 import model.FormModel
 import model.convertables.ConvertableResult
 import model.convertables.CustomConvertable
@@ -11,7 +12,6 @@ import model.validators.RequiredValidator
 import model.validators.SyntaxValidator
 import model.validators.ValidationResult
 import model.validators.semanticValidators.SemanticValidator
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert
 import java.lang.NumberFormatException
 
 abstract class Attribute <A,T,L> (private val model       : FormModel,
@@ -27,6 +27,8 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
 
     //******************************************************************************************************
     //Properties
+
+    private val id                  = getNextId()
 
     private var savedValue          = value
     private val valueAsText         = mutableStateOf(value?.toString() ?: "")
@@ -469,6 +471,10 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         return listOfConvertableResults.value.filter{it.isConvertable}.map {it.convertImmediately}
     }
 
+    fun getId(): Long{
+        return id
+    }
+
     /**
      * This method calls setAndCheckValue with the parameter convertBecauseUnfocussed = true.
      */
@@ -489,4 +495,10 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     }
 
 
+    companion object{
+        var id : Long = 0
+        fun getNextId(): Long{
+            return id++
+        }
+    }
 }

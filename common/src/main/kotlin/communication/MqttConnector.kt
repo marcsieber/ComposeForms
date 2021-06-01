@@ -3,8 +3,16 @@ package communication
 import com.hivemq.client.mqtt.datatypes.MqttQos
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import model.util.attribute.Attribute
 import java.nio.charset.StandardCharsets
 import java.util.*
+
+
+
+
 
 
 /**
@@ -29,10 +37,10 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
         .identifier(UUID.randomUUID().toString())
         .buildAsync()
 
-    fun connectAndSubscribe(subtopic: String = "",
+    fun connectAndSubscribe(subtopic: String = "#",
                             onNewMessage: (String) -> Unit = {},
                             onConnectionFailed: () -> Unit = {},
-                            onConntected: () -> Unit = {}) { //TODO RENAME
+                            onConnected: () -> Unit = {}) {
         client.connectWith()
             .cleanStart(true)
             .keepAlive(30)
@@ -44,8 +52,8 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
                     onConnectionFailed.invoke()
                 } else { //erst wenn die Connection aufgebaut ist, kann subscribed werden
                     println("Connected")
-                    subscribe(subtopic = "#", onNewMessage = onNewMessage)
-                    onConntected()
+                    subscribe(subtopic = subtopic, onNewMessage = onNewMessage)
+                    onConnected()
                 }
             }
     }
@@ -55,14 +63,16 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
             .topicFilter(maintopic + subtopic)
             .qos(qos)
             .noLocal(true)
-            .callback { onNewMessage.invoke(it.payloadAsString()) }
+            .callback {
+                onNewMessage.invoke(it.payloadAsString())
+            }
             .send()
     }
 
-    fun publish(message: String, subtopic: String = "", onPublished: () -> Unit = {}, onError: () -> Unit = {}) {
+    fun publish(message: DTOText, subtopic: String = "", onPublished: () -> Unit = {}, onError: () -> Unit = {}) {
         client.publishWith()
             .topic(maintopic + subtopic)
-            .payload(message.asPayload())
+            .payload(Json.encodeToString(message).asPayload())
             .qos(qos)
             .retain(false)
             .messageExpiryInterval(120)

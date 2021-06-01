@@ -4,7 +4,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
-    id("org.jetbrains.compose") //version "0.3.0"
+    kotlin("plugin.serialization") version("1.4.32")
+    id("org.jetbrains.compose")
     id("jacoco")
     id("org.sonarqube") version "3.1"
 }
@@ -16,9 +17,10 @@ sourceSets{
     named("main") {
         dependencies {
             api(compose.desktop.currentOs)
-            api("org.jetbrains.kotlin:kotlin-reflect")
+            api("org.jetbrains.kotlin:kotlin-reflect:1.4.32")
             api("org.junit.jupiter:junit-jupiter:5.7.1")
             api("com.hivemq:hivemq-mqtt-client:1.2.1")
+            api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
         }
     }
 }

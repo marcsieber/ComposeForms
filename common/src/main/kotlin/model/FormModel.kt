@@ -18,4 +18,8 @@ interface FormModel {
     fun isChangedForAll(): Boolean
     fun addAttribute(attr: Attribute<*,*,*>)
     fun getPossibleLanguages(): List<String>
+
+    fun getAttributeById(id: Long): Attribute<*,*,*>?{
+        return getAttributes().find{ it.getId() == id}
+    }
 }

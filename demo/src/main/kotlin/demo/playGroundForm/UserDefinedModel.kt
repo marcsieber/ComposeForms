@@ -1,8 +1,9 @@
 package demo.playGroundForm
 
 import androidx.compose.runtime.mutableStateOf
-import communication.MqttConnector
-import communication.runEmbeddedMQServer
+import communication.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import model.BaseFormModel
 import model.convertables.CustomConvertable
 import model.convertables.ReplacementPair
@@ -15,7 +16,8 @@ class UserDefinedModel : BaseFormModel(){
 
     val mqttBroker    = "localhost"
     val mainTopic     = "/fhnwforms/"
-    val mqttConnector = MqttConnector(mqttBroker, mainTopic)
+    val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
+    val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
 
     init {
         setTitle("Demo Title")
@@ -23,19 +25,37 @@ class UserDefinedModel : BaseFormModel(){
 
         runEmbeddedMQServer()
         connectAndSubscribe()
+
+    }
+
+    fun onReceivedText(string: String) {
+        val dtotext = Json.decodeFromString<DTOText>(string)
+        getAttributeById(dtotext.id)?.setValueAsText(dtotext.text)
+    }
+
+    fun onReceivedCommand(string: String) {
+        val commandDTO = Json.decodeFromString<DTOCommand>(string)
+
+        when(commandDTO.command){
+            Command.NEXT -> print("next")
+            Command.PREVIOUS -> print("previous")
+            Command.SAVE -> print("save")
+            Command.UNDO -> print("next")
+        }
     }
 
     fun connectAndSubscribe(){
-        mqttConnector.connectAndSubscribe(onNewMessage =
+        mqttConnectorText.connectAndSubscribe(subtopic = "text", onNewMessage =
         {
+            onReceivedText(it)
             println("Recieved: " + it)
-        },
-            onConntected = { publish() } )
-    }
+        })
 
-    fun publish(){
-        println("publishing message")
-        mqttConnector.publish("hello", onPublished = { println("message sent")}, onError = {println("ERROR: ")})
+//        mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage =
+//        {
+//            onReceivedCommand(it)
+//            println("Recieved: " + it)
+//        })
     }
 
 
