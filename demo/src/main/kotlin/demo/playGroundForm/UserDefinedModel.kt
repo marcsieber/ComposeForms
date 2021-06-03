@@ -2,6 +2,10 @@ package demo.playGroundForm
 
 import androidx.compose.runtime.mutableStateOf
 import communication.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import model.BaseFormModel
@@ -19,13 +23,20 @@ class UserDefinedModel : BaseFormModel(){
     val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
     val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
 
+    private val modelScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+
     init {
         setTitle("Demo Title")
 
+        startUp()
+    }
 
-        runEmbeddedMQServer()
-        connectAndSubscribe()
-
+    fun startUp(){
+        modelScope.launch {
+            runEmbeddedMQServer()
+            connectAndSubscribe()
+        }
     }
 
     fun onReceivedText(string: String) {
