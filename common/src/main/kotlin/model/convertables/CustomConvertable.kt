@@ -2,10 +2,9 @@ package model.convertables
 
 import java.util.regex.Pattern
 
-class CustomConvertable(private var replaceRegex : List<ReplacementPair>, private var convertUserView : Boolean = false, private var convertImmediately : Boolean = false){
+class CustomConvertable(private var replaceRegex : List<ReplacementPair>, private var convertUserView : Boolean = true, private var convertImmediately : Boolean = false){
 
     fun convertUserInput(valueAsText : String): ConvertableResult {
-        var isConvertable : Boolean
         var convertablePattern : Pattern
         replaceRegex.forEach{
             convertablePattern = Pattern.compile(it.convertable_regex)

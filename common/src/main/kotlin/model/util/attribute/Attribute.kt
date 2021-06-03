@@ -13,6 +13,7 @@ import model.validators.ValidationResult
 import model.validators.semanticValidators.SemanticValidator
 import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert
 import java.lang.NumberFormatException
+import java.util.*
 
 abstract class Attribute <A,T,L> (private val model       : FormModel,
                                   private var value       : T?,
@@ -22,6 +23,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
                                   var onChangeListeners   : List<(T?) -> Unit>,
                                   var validators          : List<SemanticValidator<T>>,
                                   var convertables        : List<CustomConvertable>
+//                                  var formatter           : Formatter
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
 
