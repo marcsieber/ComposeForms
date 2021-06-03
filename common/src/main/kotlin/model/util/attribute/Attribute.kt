@@ -13,6 +13,7 @@ import model.validators.SyntaxValidator
 import model.validators.ValidationResult
 import model.validators.semanticValidators.SemanticValidator
 import java.lang.NumberFormatException
+import java.util.*
 
 abstract class Attribute <A,T,L> (private val model       : FormModel,
                                   private var value       : T?,
@@ -22,6 +23,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
                                   var onChangeListeners   : List<(T?) -> Unit>,
                                   var validators          : List<SemanticValidator<T>>,
                                   var convertables        : List<CustomConvertable>
+//                                  var formatter           : Formatter
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
 
@@ -428,7 +430,8 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     }
 
     /**
-     *
+     * This method checks, if the value is valid regarding all syntax validators of this attribute.
+     * The result is recorded in the validationResults
      */
     fun checkSyntaxValidators(newValAsText : String){
         setListOfValidationResults(listOf(syntaxValidator.validateUserInput(typeT, newValAsText)))
@@ -464,10 +467,20 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertedValueAsText}
     }
 
+    /**
+     * This method returns the convertUserView values (true/false) for all convertable results
+     *
+     * @return List<Boolean>
+     */
     fun getConvertUserView() : List<Boolean>{
         return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertUserView}
     }
 
+    /**
+     * This method returns the convertImmediately values (true/false) for all convertable results
+     *
+     * @return List<Boolean>
+     */
     fun getConvertImmediately() : List<Boolean>{
         return listOfConvertableResults.value.filter{it.isConvertable}.map {it.convertImmediately}
     }

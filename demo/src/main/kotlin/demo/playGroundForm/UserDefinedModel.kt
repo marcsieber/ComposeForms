@@ -100,7 +100,7 @@ class UserDefinedModel : BaseFormModel(){
             CustomConvertable(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
-            ), convertUserView = true),
+            )),
             CustomConvertable(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true)
@@ -260,5 +260,11 @@ class UserDefinedModel : BaseFormModel(){
             strValidator.overrideStringValidator(15,20,"Length must be between 15 and 20 characters")
         }
     }
+
+
+//    Blalbla(
+//    Group(name = "HalloGroup", ([attribut, 2],[attr, 2],2),(6)),
+//    Group(name = "NextGroup", (2,4))
+//    )
 
 }

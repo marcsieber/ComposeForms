@@ -44,6 +44,7 @@ fun InputField(attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> Boolean){
     val error = if(focuses.size > index && !focuses[index].value) !attr.isValid() else !attr.isRightTrackValid() //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
 
     OutlinedTextField(
+        singleLine = true,
         modifier = Modifier
             .focusModifier().onFocusEvent { focS ->
                 if(focuses[index].value != focS.isFocused){

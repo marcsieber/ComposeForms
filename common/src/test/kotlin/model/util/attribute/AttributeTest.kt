@@ -1,6 +1,8 @@
 package model.util.attribute
 
 import model.BaseFormModel
+import model.convertables.CustomConvertable
+import model.convertables.ReplacementPair
 import model.util.Labels
 
 import org.junit.jupiter.api.Test
@@ -147,134 +149,6 @@ abstract class AttributeTest<T : Any> {
         //then
         assertFalse(attribute.isRequired())
     }
-
-//    @Test
-//    fun testRequiredValidator() {
-//
-//        if(attribute is DoubleAttribute){
-//
-//            //given
-//            var reqValidator = RequiredValidator<Double>(true)
-//            (attribute as DoubleAttribute).addValidator(reqValidator)
-//
-//            //when
-//            attribute.setValueAsText("")
-//
-//            //then
-//            assertTrue(attribute.isRequired())
-//            assertFalse(attribute.isValid())
-//
-//            //when
-//            reqValidator.overrideRequiredValidator(false)
-//
-//            //then
-//            assertFalse(attribute.isRequired())
-//            assertTrue(attribute.isValid())
-//
-//        }
-//        if(attribute is FloatAttribute){
-//
-//            //given
-//            var reqValidator = RequiredValidator<Float>(true)
-//            (attribute as FloatAttribute).addValidator(reqValidator)
-//
-//            //when
-//            attribute.setValueAsText("")
-//
-//            //then
-//            assertTrue(attribute.isRequired())
-//            assertFalse(attribute.isValid())
-//
-//            //when
-//            reqValidator.overrideRequiredValidator(false)
-//
-//            //then
-//            assertFalse(attribute.isRequired())
-//            assertTrue(attribute.isValid())
-//
-//
-//        }
-//        if(attribute is IntegerAttribute) {
-//
-//            //given
-//            var reqValidator = RequiredValidator<Int>(true)
-//            (attribute as IntegerAttribute).addValidator(reqValidator)
-//
-//            //when
-//            attribute.setValueAsText("")
-//
-//            //then
-//            assertTrue(attribute.isRequired())
-//            assertFalse(attribute.isValid())
-//
-//            //when
-//            reqValidator.overrideRequiredValidator(false)
-//
-//            //then
-//            assertFalse(attribute.isRequired())
-//            assertTrue(attribute.isValid())
-//        }
-//        if(attribute is LongAttribute){
-//
-//            //given
-//            var reqValidator = RequiredValidator<Long>(true)
-//            (attribute as LongAttribute).addValidator(reqValidator)
-//
-//            //when
-//            attribute.setValueAsText("")
-//
-//            //then
-//            assertTrue(attribute.isRequired())
-//            assertFalse(attribute.isValid())
-//
-//            //when
-//            reqValidator.overrideRequiredValidator(false)
-//
-//            //then
-//            assertFalse(attribute.isRequired())
-//            assertTrue(attribute.isValid())
-//        }
-//        if(attribute is ShortAttribute){
-//
-//            //given
-//            var reqValidator = RequiredValidator<Short>(true)
-//            (attribute as ShortAttribute).addValidator(reqValidator)
-//
-//            //when
-//            attribute.setValueAsText("")
-//
-//            //then
-//            assertTrue(attribute.isRequired())
-//            assertFalse(attribute.isValid())
-//
-//            //when
-//            reqValidator.overrideRequiredValidator(false)
-//
-//            //then
-//            assertFalse(attribute.isRequired())
-//            assertTrue(attribute.isValid())
-//        }
-//        if(attribute is StringAttribute){
-//
-//            //given
-//            var reqValidator = RequiredValidator<String>(true)
-//            (attribute as StringAttribute).addValidator(reqValidator)
-//
-//            //when
-//            attribute.setValueAsText("")
-//
-//            //then
-//            assertTrue(attribute.isRequired())
-//            assertFalse(attribute.isValid())
-//
-//            //when
-//            reqValidator.overrideRequiredValidator(false)
-//
-//            //then
-//            assertFalse(attribute.isRequired())
-//            assertTrue(attribute.isValid())
-//        }
-//    }
 
     @Test
     fun testSetReadOnly() {
@@ -470,4 +344,175 @@ abstract class AttributeTest<T : Any> {
         assertEquals("", attr.getValueAsText())
         assertFalse(attr.isValid())
     }
+
+    //***************************************************************************************
+    //testConvertable functions
+
+    @Test
+    fun testConvertableFunctionsInAttribute(){
+
+        if(attribute is StringAttribute) {
+            //given
+            val attr = StringAttribute(
+                model, label = Labels.TEST, convertables = listOf(
+                    CustomConvertable(
+                        listOf(
+                            ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
+                        ), convertUserView = true
+                    )
+                )
+            )
+
+            //when
+            attr.setValueAsText("1,3")
+
+            //then
+            assertEquals(false, attr.getConvertImmediately()[0])
+            assertEquals(true, attr.getConvertUserView()[0])
+            assertEquals("1.3", attr.getConvertedValueAsText()[0])
+
+            //when
+            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+
+            //then
+            assertEquals("1.3", attr.getValueAsText())
+
+        }
+
+        if(attribute is DoubleAttribute) {
+            //given
+            val attr = DoubleAttribute(
+                model,label =  Labels.TEST, convertables = listOf(
+                    CustomConvertable(
+                        listOf(
+                            ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
+                        ), convertUserView = true
+                    )
+                )
+            )
+
+            //when
+            attr.setValueAsText("1,3")
+
+            //then
+            assertEquals(false, attr.getConvertImmediately()[0])
+            assertEquals(true, attr.getConvertUserView()[0])
+            assertEquals("1.3", attr.getConvertedValueAsText()[0])
+
+            //when
+            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+
+            //then
+            assertEquals("1.3", attr.getValueAsText())
+        }
+
+        if(attribute is FloatAttribute) {
+            //given
+            val attr = FloatAttribute(
+                model,label =  Labels.TEST, convertables = listOf(
+                    CustomConvertable(
+                        listOf(
+                            ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
+                        ), convertUserView = true
+                    )
+                )
+            )
+
+            //when
+            attr.setValueAsText("1,3")
+
+            //then
+            assertEquals(false, attr.getConvertImmediately()[0])
+            assertEquals(true, attr.getConvertUserView()[0])
+            assertEquals("1.3", attr.getConvertedValueAsText()[0])
+
+            //when
+            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+
+            //then
+            assertEquals("1.3", attr.getValueAsText())
+        }
+
+        if(attribute is IntegerAttribute) {
+            //given
+            val attr = IntegerAttribute(
+                model,label =  Labels.TEST, convertables = listOf(
+                    CustomConvertable(
+                        listOf(
+                            ReplacementPair("eins", "1")
+                        ), convertUserView = true
+                    )
+                )
+            )
+
+            //when
+            attr.setValueAsText("eins")
+
+            //then
+            assertEquals(false, attr.getConvertImmediately()[0])
+            assertEquals(true, attr.getConvertUserView()[0])
+            assertEquals("1", attr.getConvertedValueAsText()[0])
+
+            //when
+            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+
+            //then
+            assertEquals("1", attr.getValueAsText())
+        }
+        if(attribute is LongAttribute) {
+            //given
+            val attr = LongAttribute(
+                model,label =  Labels.TEST, convertables = listOf(
+                    CustomConvertable(
+                        listOf(
+                            ReplacementPair("eins", "1")
+                        ), convertUserView = true
+                    )
+                )
+            )
+
+            //when
+            attr.setValueAsText("eins")
+
+            //then
+            assertEquals(false, attr.getConvertImmediately()[0])
+            assertEquals(true, attr.getConvertUserView()[0])
+            assertEquals("1", attr.getConvertedValueAsText()[0])
+
+            //when
+            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+
+            //then
+            assertEquals("1", attr.getValueAsText())
+        }
+        if(attribute is ShortAttribute) {
+            //given
+            val attr = ShortAttribute(
+                model,label =  Labels.TEST, convertables = listOf(
+                    CustomConvertable(
+                        listOf(
+                            ReplacementPair("eins", "1")
+                        ), convertUserView = true
+                    )
+                )
+            )
+
+            //when
+            attr.setValueAsText("eins")
+
+            //then
+            assertEquals(false, attr.getConvertImmediately()[0])
+            assertEquals(true, attr.getConvertUserView()[0])
+            assertEquals("1", attr.getConvertedValueAsText()[0])
+
+            //when
+            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+
+            //then
+            assertEquals("1", attr.getValueAsText())
+        }
+
+    }
+
+
 }
