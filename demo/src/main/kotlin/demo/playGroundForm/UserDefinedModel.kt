@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import model.BaseFormModel
 import model.convertables.CustomConvertable
@@ -67,6 +68,12 @@ class UserDefinedModel : BaseFormModel(){
             onReceivedCommand(it)
             println("Recieved: " + it)
         })
+    }
+
+    override fun attributeChanged(attr: Attribute<*, *, *>) {
+        val dtoText = DTOText(0, attr.getValueAsText())
+        val string = Json.encodeToString(dtoText)
+        mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { print("message sent") })
     }
 
 

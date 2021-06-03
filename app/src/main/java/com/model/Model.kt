@@ -3,10 +3,7 @@ package com.model
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import communication.Command
-import communication.DTOCommand
-import communication.DTOText
-import communication.MqttConnector
+import communication.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -24,6 +21,7 @@ object Model {
     var text by mutableStateOf("")
     var isValid by mutableStateOf(true)
     var isOnRightTrack by mutableStateOf(true)
+    var type by mutableStateOf(AttributeType.OTHER)
 
     var isConnected: Boolean = false
 
@@ -34,6 +32,7 @@ object Model {
             text = dtoText.text
             isOnRightTrack = dtoText.onRightTrack
             isValid = dtoText.isValid
+            type = dtoText.attrType
         }, onConnected = {isConnected = true})
 
         mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage = {})

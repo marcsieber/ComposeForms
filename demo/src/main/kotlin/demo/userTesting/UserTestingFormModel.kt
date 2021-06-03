@@ -1,6 +1,7 @@
 package demo.userTesting
 
 import model.BaseFormModel
+import model.util.attribute.Attribute
 import model.util.attribute.IntegerAttribute
 import model.util.attribute.SelectionAttribute
 import model.util.attribute.StringAttribute
@@ -10,6 +11,9 @@ import model.validators.semanticValidators.SelectionValidator
 import model.validators.semanticValidators.StringValidator
 
 class UserTestingFormModel : BaseFormModel() {
+
+    override fun attributeChanged(attr: Attribute<*, *, *>) {
+    }
 
     init {
         setCurrentLanguageForAll("english")

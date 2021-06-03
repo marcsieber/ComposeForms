@@ -1,10 +1,7 @@
 package demo.personForm
 
 import model.BaseFormModel
-import model.util.attribute.IntegerAttribute
-import model.util.attribute.LongAttribute
-import model.util.attribute.SelectionAttribute
-import model.util.attribute.StringAttribute
+import model.util.attribute.*
 import model.validators.semanticValidators.NumberValidator
 import model.validators.semanticValidators.StringValidator
 
@@ -28,5 +25,9 @@ class PersonModel() : BaseFormModel() {
     init {
         setCurrentLanguageForAll("deutsch")
         setTitle(if (isCurrentLanguageForAll("deutsch")) "Klienten" else "Clients")
+    }
+
+    override fun attributeChanged(attr: Attribute<*, *, *>) {
+
     }
 }

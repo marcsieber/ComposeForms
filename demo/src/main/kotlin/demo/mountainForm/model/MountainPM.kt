@@ -3,6 +3,7 @@ package demo.mountainForm.model
 import demo.mountainForm.service.MountainDTO
 import demo.mountainForm.service.MountainService
 import model.BaseFormModel
+import model.util.attribute.Attribute
 import model.util.attribute.DoubleAttribute
 import model.util.attribute.LongAttribute
 import model.util.attribute.StringAttribute
@@ -138,5 +139,7 @@ class MountainPM(var service : MountainService) : BaseFormModel() {
         return imageUrl
     }
 
+    override fun attributeChanged(attr: Attribute<*, *, *>) {
 
+    }
 }

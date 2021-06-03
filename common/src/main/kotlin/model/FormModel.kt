@@ -22,4 +22,6 @@ interface FormModel {
     fun getAttributeById(id: Long): Attribute<*,*,*>?{
         return getAttributes().find{ it.getId() == id}
     }
+
+    fun attributeChanged(attr: Attribute<*,*,*>)
 }

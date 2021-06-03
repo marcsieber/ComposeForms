@@ -83,6 +83,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
             this.valueAsText.value = valueAsText
             setChanged(valueAsText)
             checkAndSetValue(valueAsText)
+            model.attributeChanged(this)
         }
     }
 

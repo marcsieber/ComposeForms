@@ -7,6 +7,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.model.Model
+import communication.AttributeType
 import communication.Command
 
 @Composable
@@ -14,13 +15,7 @@ fun UI(model: Model) {
 
     with(model) {
         Column {
-            OutlinedTextField(
-                value = text,
-                onValueChange = {
-                    text = it
-                    publish()
-                }
-            )
+            InputField(type)
 
             Row{
                Button(onClick = { sendCommand(Command.PREVIOUS)}){
@@ -32,4 +27,17 @@ fun UI(model: Model) {
             }
         }
     }
+}
+
+
+@Composable
+fun InputField(attrType: AttributeType){
+    OutlinedTextField(
+        value = Model.text,
+        onValueChange = {
+            Model.text = it
+            Model.publish()
+        }
+    )
+
 }

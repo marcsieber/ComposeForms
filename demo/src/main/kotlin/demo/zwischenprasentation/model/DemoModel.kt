@@ -1,6 +1,7 @@
 package demo.zwischenprasentation.model
 
 import model.BaseFormModel
+import model.util.attribute.Attribute
 import model.util.attribute.IntegerAttribute
 import model.util.attribute.SelectionAttribute
 import model.util.attribute.StringAttribute
@@ -10,6 +11,10 @@ class DemoModel() : BaseFormModel() {
 
     init{
         setTitle("Demo App")
+    }
+
+    override fun attributeChanged(attr: Attribute<*, *, *>) {
+
     }
 
     val firstNameAttr = StringAttribute(value = "", model = this, label = Labels.FIRSTNAME)
