@@ -113,6 +113,11 @@ abstract class BaseFormModel() : FormModel {
         if(getCurrentLanguage() != ""){
             attr.setCurrentLanguage(getCurrentLanguage())
         }
+
+        //TODO: onChange private and setter / adder ?
+//        val list = attr.onChangeListeners.toMutableList()
+//        list.add { println(it) }
+//        attr.onChangeListeners = list.toList()
     }
 
     override fun getCurrentLanguage(): String {

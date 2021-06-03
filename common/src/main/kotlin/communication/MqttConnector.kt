@@ -69,10 +69,10 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
             .send()
     }
 
-    fun publish(message: DTOText, subtopic: String = "", onPublished: () -> Unit = {}, onError: () -> Unit = {}) {
+    fun publish(message: String, subtopic: String = "", onPublished: () -> Unit = {}, onError: () -> Unit = {}) {
         client.publishWith()
             .topic(maintopic + subtopic)
-            .payload(Json.encodeToString(message).asPayload())
+            .payload(message.asPayload())
             .qos(qos)
             .retain(false)
             .messageExpiryInterval(120)

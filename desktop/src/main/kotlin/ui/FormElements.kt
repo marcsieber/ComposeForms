@@ -46,9 +46,11 @@ fun InputField(attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> Boolean){
     OutlinedTextField(
         modifier = Modifier
             .focusModifier().onFocusEvent { focS ->
-                focuses[index].value = focS.isFocused
-                if(!focS.isFocused){
-                    attr.checkAndSetConvertableBecauseUnfocussedAttribute() //setConvertables()
+                if(focuses[index].value != focS.isFocused){
+                    if(!focS.isFocused){
+                        attr.checkAndSetConvertableBecauseUnfocussedAttribute() //setConvertables()
+                    }
+                    focuses[index].value = focS.isFocused
                 }
             }
             .focusOrder(focusRequester)

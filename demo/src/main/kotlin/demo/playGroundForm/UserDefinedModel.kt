@@ -37,10 +37,10 @@ class UserDefinedModel : BaseFormModel(){
         val commandDTO = Json.decodeFromString<DTOCommand>(string)
 
         when(commandDTO.command){
-            Command.NEXT -> print("next")
-            Command.PREVIOUS -> print("previous")
-            Command.SAVE -> print("save")
-            Command.UNDO -> print("next")
+            Command.NEXT -> println("next")
+            Command.PREVIOUS -> println("previous")
+            Command.SAVE -> println("save")
+            Command.UNDO -> println("next")
         }
     }
 
@@ -51,11 +51,11 @@ class UserDefinedModel : BaseFormModel(){
             println("Recieved: " + it)
         })
 
-//        mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage =
-//        {
-//            onReceivedCommand(it)
-//            println("Recieved: " + it)
-//        })
+        mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage =
+        {
+            onReceivedCommand(it)
+            println("Recieved: " + it)
+        })
     }
 
 
