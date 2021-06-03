@@ -9,8 +9,8 @@ enum class FormColors(val color : Color) {
     VALID(getColor("2e7d32")),
     RIGHTTRACK(Color.Gray),
 
-    HEADER_BACKGROUND(getColor("0E325E")),
-    HEADER_FONT(Color.White),
+    BACKGROUND_COLOR(getColor("0E325E")),
+    FONT_ON_BACKGOUND(Color.White),
     BODY_BACKGROUND(Color.White),
     LABEL(Color.DarkGray)
 }

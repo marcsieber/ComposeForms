@@ -72,8 +72,8 @@ class UserDefinedModel : BaseFormModel(){
 
 
     override fun attributeChanged(attr: Attribute<*, *, *>) {
-        val dtoText = DTOText(attr.getId(), attr.getValueAsText(), attr.isRightTrackValid(), attr.isValid(),
-            getAttributeType(attr), attr.isReadOnly())
+        val dtoText = DTOText(attr.getId(), attr.getValueAsText(), attr.getLabel(), attr.isRightTrackValid(), attr.isValid(),
+            getAttributeType(attr), attr.isReadOnly(), attr.getErrorMessages())
         val string = Json.encodeToString(dtoText)
         mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { print("message sent") })
     }

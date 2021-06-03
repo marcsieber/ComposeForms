@@ -11,7 +11,8 @@ import kotlinx.serialization.json.Json
 object Model {
 
     //broker.hivemq.com
-    val mqttBroker    = "192.168.0.94" // "broker.hivemq.com"
+//    val mqttBroker    = "192.168.0.94" // "broker.hivemq.com"
+    val mqttBroker    = "192.168.178.55" //ifconfig en0
     val mainTopic     = "/fhnwforms/"
     val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
     val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
@@ -19,9 +20,11 @@ object Model {
     var id : Long = 0
 
     var text by mutableStateOf("")
+    var label by mutableStateOf("")
     var isValid by mutableStateOf(true)
     var isOnRightTrack by mutableStateOf(true)
     var type by mutableStateOf(AttributeType.OTHER)
+    var errorMessages = mutableStateOf<List<String>>(emptyList())
 
     var isConnected: Boolean = false
 
@@ -30,9 +33,11 @@ object Model {
             val dtoText = Json.decodeFromString<DTOText>(it)
             id = dtoText.id
             text = dtoText.text
+            label = dtoText.label
             isOnRightTrack = dtoText.onRightTrack
             isValid = dtoText.isValid
             type = dtoText.attrType
+            errorMessages.value = dtoText.errorMessages
         }, onConnected = {isConnected = true})
 
         mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage = {})

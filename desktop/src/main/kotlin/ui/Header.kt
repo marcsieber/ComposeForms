@@ -20,11 +20,11 @@ import ui.theme.FormColors
 fun header(model : FormModel){
     with(model){
         TopAppBar(
-            backgroundColor = get(FormColors.HEADER_BACKGROUND),
+            backgroundColor = get(FormColors.BACKGROUND_COLOR),
             elevation = 100.dp
         ){
             Row(modifier = androidx.compose.ui.Modifier.fillMaxWidth(), horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween){
-                Text(getTitle(), color = get(FormColors.HEADER_FONT), fontSize = 22.sp, modifier = androidx.compose.ui.Modifier.align(
+                Text(getTitle(), color = get(FormColors.FONT_ON_BACKGOUND), fontSize = 22.sp, modifier = androidx.compose.ui.Modifier.align(
                     androidx.compose.ui.Alignment.CenterVertically))
 
                 Row(){
