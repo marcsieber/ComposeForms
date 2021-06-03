@@ -34,6 +34,5 @@ class ILabelTest {
         assertTrue(Labels.TEST.getLanguagesDynamic().contains("eng"))
         assertTrue(Labels.TEST.getLanguagesDynamic().contains("de"))
         assertFalse(Labels.TEST.getLanguagesDynamic().contains("fr"))
-        assertEquals(listOf("eng", "de"),Labels.TEST.getLanguagesDynamic(), "fr is private!")
     }
 }

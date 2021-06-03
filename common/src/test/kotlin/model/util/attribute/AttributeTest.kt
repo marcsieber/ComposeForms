@@ -349,7 +349,7 @@ abstract class AttributeTest<T : Any> {
     //testConvertable functions
 
     @Test
-    fun testCheckAndSetConvertableFunctionsInAttribute(){
+    fun testConvertableFunctionsInAttribute(){
 
         if(attribute is StringAttribute) {
             //given
