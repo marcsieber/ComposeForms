@@ -427,7 +427,8 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
     }
 
     /**
-     *
+     * This method checks, if the value is valid regarding all syntax validators of this attribute.
+     * The result is recorded in the validationResults
      */
     fun checkSyntaxValidators(newValAsText : String){
         setListOfValidationResults(listOf(syntaxValidator.validateUserInput(typeT, newValAsText)))
@@ -463,10 +464,20 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertedValueAsText}
     }
 
+    /**
+     * This method returns the convertUserView values (true/false) for all convertable results
+     *
+     * @return List<Boolean>
+     */
     fun getConvertUserView() : List<Boolean>{
         return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertUserView}
     }
 
+    /**
+     * This method returns the convertImmediately values (true/false) for all convertable results
+     *
+     * @return List<Boolean>
+     */
     fun getConvertImmediately() : List<Boolean>{
         return listOfConvertableResults.value.filter{it.isConvertable}.map {it.convertImmediately}
     }
