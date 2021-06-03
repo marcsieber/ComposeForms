@@ -70,12 +70,13 @@ class UserDefinedModel : BaseFormModel(){
         })
     }
 
+
     override fun attributeChanged(attr: Attribute<*, *, *>) {
-        val dtoText = DTOText(0, attr.getValueAsText())
+        val dtoText = DTOText(attr.getId(), attr.getValueAsText(), attr.isRightTrackValid(), attr.isValid(),
+            getAttributeType(attr), attr.isReadOnly())
         val string = Json.encodeToString(dtoText)
         mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { print("message sent") })
     }
-
 
     override fun getPossibleLanguages(): List<String> {
        return Labels.getLanguages()

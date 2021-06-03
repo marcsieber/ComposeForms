@@ -2,6 +2,10 @@ package model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import communication.AttributeType
+import communication.DTOText
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import model.util.attribute.*
 import java.util.*
 
@@ -117,6 +121,14 @@ abstract class BaseFormModel() : FormModel {
 
     override fun getCurrentLanguage(): String {
         return currentLanguage.value
+    }
+
+    override fun attributeChanged(attr: Attribute<*, *, *>) {
+
+    }
+
+    fun getAttributeType(attr: Attribute<*, *, *>): AttributeType {
+        return AttributeType.OTHER
     }
 
 }
