@@ -35,10 +35,10 @@ fun Header(model: Model){
     with(model){
         Row(verticalAlignment = Alignment.Top){
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                InputField(model, Model.type)
+                InputField(model, type)
                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(vertical = 12.dp)){
                     Column(modifier = Modifier.widthIn(max = 220.dp)) {
-                        for(msg in Model.errorMessages.value){
+                        for(msg in errorMessages.value){
                             Text(msg, color = get(FormColors.ERROR), fontSize = 16.sp)
                         }
                     }
@@ -76,10 +76,10 @@ fun InputField(model : Model, attrType: AttributeType){
     with(model) {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = Model.text,
+            value = text,
             onValueChange = {
-                Model.text = it
-                Model.publish()
+                text = it
+                publish()
             },
             label = { Text(label) }
         )
