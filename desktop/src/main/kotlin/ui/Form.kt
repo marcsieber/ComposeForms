@@ -32,7 +32,7 @@ class Form {
                 Row(modifier = Modifier.fillMaxSize().background(get(FormColors.BODY_BACKGROUND))) {
                     LazyColumn(Modifier.fillMaxHeight()) {
                         items(getAttributes()) { attribute ->
-                            AttributeElement(attribute)
+                            AttributeElement(model, attribute)
                         }
                     }
                 }
@@ -42,7 +42,7 @@ class Form {
     }
 
     @Composable
-    private fun AttributeElement(attr: Attribute<*,*,*>){
+    private fun AttributeElement(model: FormModel, attr: Attribute<*,*,*>){
 
         Row(Modifier.fillMaxWidth().padding(5.dp)) {
 
@@ -50,13 +50,13 @@ class Form {
                 Row(Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween) {
                     when (attr) {
-                        is StringAttribute -> AttributeElement(attr)
-                        is LongAttribute -> AttributeElement(attr)
-                        is IntegerAttribute -> AttributeElement(attr)
-                        is ShortAttribute -> AttributeElement(attr)
-                        is DoubleAttribute -> AttributeElement(attr)
-                        is FloatAttribute -> AttributeElement(attr)
-                        is SelectionAttribute -> AttributeElement(attr)
+                        is StringAttribute -> AttributeElement(model, attr)
+                        is LongAttribute -> AttributeElement(model, attr)
+                        is IntegerAttribute -> AttributeElement(model, attr)
+                        is ShortAttribute -> AttributeElement(model, attr)
+                        is DoubleAttribute -> AttributeElement(model, attr)
+                        is FloatAttribute -> AttributeElement(model, attr)
+                        is SelectionAttribute -> AttributeElement(model, attr)
                     }
                 }
 
@@ -70,13 +70,13 @@ class Form {
 
 
     @Composable
-    private fun AttributeElement(strAttr: StringAttribute<*>){
-        InputField(strAttr){return@InputField true}
+    private fun AttributeElement(model: FormModel, strAttr: StringAttribute<*>){
+        InputField(model, strAttr){return@InputField true}
     }
 
     @Composable
-    private fun AttributeElement(longAttr: LongAttribute<*>){
-        InputField(longAttr)
+    private fun AttributeElement(model: FormModel, longAttr: LongAttribute<*>){
+        InputField(model, longAttr)
             {
 //                if (it.key == Key.DirectionUp) {
 //                    longAttr.setValueAsTextFromKeyEvent( (longAttr.getValue() as Long + longAttr.validators.
@@ -90,18 +90,18 @@ class Form {
     }
 
     @Composable
-    private fun AttributeElement(intAttr: IntegerAttribute<*>){
-        InputField(intAttr){ return@InputField true}
+    private fun AttributeElement(model: FormModel, intAttr: IntegerAttribute<*>){
+        InputField(model, intAttr){ return@InputField true}
     }
 
     @Composable
-    private fun AttributeElement(shortAttr: ShortAttribute<*>){
-        InputField(shortAttr){ return@InputField true}
+    private fun AttributeElement(model: FormModel, shortAttr: ShortAttribute<*>){
+        InputField(model, shortAttr){ return@InputField true}
     }
 
     @Composable
-    private fun AttributeElement(floatAttr: FloatAttribute<*>){
-        InputField(floatAttr){
+    private fun AttributeElement(model: FormModel, floatAttr: FloatAttribute<*>){
+        InputField(model, floatAttr){
 //            if (it.key == Key.DirectionUp) {
 //                floatAttr.setValueAsTextFromKeyEvent( (floatAttr.getValue() as Float + floatAttr.getStepSize()).toString())
 //            }
@@ -112,8 +112,8 @@ class Form {
     }
 
     @Composable
-    private fun AttributeElement(doubleAttr: DoubleAttribute<*>){
-        InputField(doubleAttr){
+    private fun AttributeElement(model: FormModel, doubleAttr: DoubleAttribute<*>){
+        InputField(model, doubleAttr){
 //            if (it.key == Key.DirectionUp) {
 //                doubleAttr.setValueAsTextFromKeyEvent( (doubleAttr.getValue() as Double + doubleAttr.getStepSize()).toString())
 //            }

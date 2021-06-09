@@ -2,10 +2,8 @@ package model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.focus.FocusRequester
 import communication.AttributeType
-import communication.DTOText
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import model.util.attribute.*
 import java.util.*
 
@@ -127,6 +125,38 @@ abstract class BaseFormModel() : FormModel {
         return AttributeType.OTHER
     }
 
+    private var focusRequesters: MutableList<FocusRequester> = mutableListOf()
+    private var currentFocusIndex = mutableStateOf(0)
+
+    override fun getCurrentFocusIndex(): Int {
+        return currentFocusIndex.value
+    }
+
+    override fun setCurrentFocusIndex(index: Int) {
+        if(index != currentFocusIndex.value) {
+            currentFocusIndex.value = index
+            println("Focus index set: " + index)
+        }
+    }
+
+    override fun addFocusRequester(fr: FocusRequester): Int {
+        if(fr !in focusRequesters) {
+            focusRequesters.add(fr)
+            return focusRequesters.size
+        }
+
+        return -1
+    }
+
+    override fun focusNext() {
+        currentFocusIndex.value = (currentFocusIndex.value + 1) % focusRequesters.size
+        focusRequesters[currentFocusIndex.value].requestFocus()
+    }
+
+    override fun focusPrevious() {
+        currentFocusIndex.value = (currentFocusIndex.value - 1) % focusRequesters.size
+        focusRequesters[currentFocusIndex.value].requestFocus()
+    }
 
     /**
      * TODO: DO the things here instead of userdefined model

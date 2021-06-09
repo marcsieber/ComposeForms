@@ -19,49 +19,39 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import model.FormModel
 import model.util.attribute.Attribute
 import ui.theme.ColorsUtil.Companion.get
 import ui.theme.FormColors
 
 
-private var focusRequesters: MutableList<FocusRequester> = mutableListOf()
-private var focuses:         MutableList<MutableState<Boolean>> = mutableListOf()
-
 @Composable
-fun InputField(attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> Boolean){
+fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> Boolean){
 
     val focusRequester = remember { FocusRequester() }
-    val index = remember{ focusRequesters.size }
-    val focused = remember { mutableStateOf(false) }
 
-    if(focusRequester !in focusRequesters) {
-        focusRequesters.add(focusRequester)
-        focuses.add(focused)
-    }
-
+    val index = remember { model.addFocusRequester(focusRequester) }
     val interactionSource = remember { MutableInteractionSource() }
-    //val focused = true //interactionSource.collectIsFocusedAsState()
-    val error = if(focuses.size > index && !focuses[index].value) !attr.isValid() else !attr.isRightTrackValid() //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
+    val focused = model.getCurrentFocusIndex() == index
+    val error = if(!focused) !attr.isValid() else !attr.isRightTrackValid() //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
 
     OutlinedTextField(
         singleLine = true,
         modifier = Modifier
             .focusModifier().onFocusEvent { focS ->
-                if(focuses[index].value != focS.isFocused){
+                if(focused != focS.isFocused){
                     if(!focS.isFocused){
                         attr.checkAndSetConvertableBecauseUnfocussedAttribute() //setConvertables()
                     }
-                    focuses[index].value = focS.isFocused
+                }
+                if(focS.isFocused){
+                    model.setCurrentFocusIndex(index)
                 }
             }
             .focusOrder(focusRequester)
             .onKeyEvent{event ->
                 if(event.key == Key.Tab){
-                    focusRequesters[(index+1) % focusRequesters.size].requestFocus()
-                    for(i in 0 until focusRequesters.size){
-                        focuses[i].value = false
-                    }
-                    focuses[(index+1) % focusRequesters.size].value = true
+                    model.focusNext()
                     return@onKeyEvent false
                 }
                 keyEvent(event)

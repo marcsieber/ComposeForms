@@ -50,8 +50,8 @@ class UserDefinedModel : BaseFormModel(){
         val commandDTO = Json.decodeFromString<DTOCommand>(string)
 
         when(commandDTO.command){
-            Command.NEXT -> println("next")
-            Command.PREVIOUS -> println("previous")
+            Command.NEXT -> focusNext()
+            Command.PREVIOUS -> focusPrevious()
             Command.SAVE -> println("save")
             Command.UNDO -> println("next")
         }

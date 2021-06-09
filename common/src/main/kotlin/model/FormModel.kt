@@ -1,5 +1,6 @@
 package model
 
+import androidx.compose.ui.focus.FocusRequester
 import model.util.attribute.Attribute
 
 interface FormModel {
@@ -25,4 +26,11 @@ interface FormModel {
 
     fun attributeChanged(attr: Attribute<*,*,*>)
     fun validationChanged(attr: Attribute<*,*,*>)
+
+    fun addFocusRequester(fr: FocusRequester): Int
+    fun focusNext()
+    fun focusPrevious()
+    fun setCurrentFocusIndex(index: Int)
+    fun getCurrentFocusIndex(): Int
+
 }
