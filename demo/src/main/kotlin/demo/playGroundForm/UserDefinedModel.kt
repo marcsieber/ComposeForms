@@ -47,11 +47,18 @@ class UserDefinedModel : BaseFormModel(){
     }
 
     fun onReceivedCommand(string: String) {
+        println("Recieved: $string")
         val commandDTO = Json.decodeFromString<DTOCommand>(string)
 
         when(commandDTO.command){
             Command.NEXT -> focusNext()
             Command.PREVIOUS -> focusPrevious()
+            Command.REQUEST -> {
+                val attr: Attribute<*,*,*>? = getAttributeById(getCurrentFocusIndex())
+                if(attr != null) {
+                    attributeChanged(attr)
+                }
+            }
             Command.SAVE -> println("save")
             Command.UNDO -> println("next")
         }

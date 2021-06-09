@@ -36,7 +36,12 @@ object Model {
             id = dtoText.id
             text = dtoText.text
             label = dtoText.label
-        }, onConnected = {isConnected = true})
+        }, onConnected = {
+            isConnected = true
+            val dtoCommand = DTOCommand(Command.REQUEST)
+            val string = Json.encodeToString(dtoCommand)
+            mqttConnectorText.publish(subtopic = "command", message = string)
+        })
 
         mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage = {})
 

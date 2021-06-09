@@ -20,6 +20,7 @@ class DTOCommand(val command: Command)
 enum class Command(){
     NEXT,
     PREVIOUS,
+    REQUEST,
     SAVE,
     UNDO
 }
