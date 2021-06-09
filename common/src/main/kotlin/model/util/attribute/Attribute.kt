@@ -1,11 +1,9 @@
 package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
-import kotlinx.serialization.Serializable
 import model.FormModel
 import model.convertables.ConvertableResult
 import model.convertables.CustomConvertable
-import model.convertables.ReplacementPair
 import model.util.ILabel
 import model.util.Utilities
 import model.validators.RequiredValidator
@@ -13,7 +11,6 @@ import model.validators.SyntaxValidator
 import model.validators.ValidationResult
 import model.validators.semanticValidators.SemanticValidator
 import java.lang.NumberFormatException
-import java.util.*
 
 abstract class Attribute <A,T,L> (private val model       : FormModel,
                                   private var value       : T?,
@@ -488,7 +485,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         return listOfConvertableResults.value.filter{it.isConvertable}.map {it.convertImmediately}
     }
 
-    fun getId(): Long{
+    fun getId(): Int{
         return id
     }
 
@@ -513,8 +510,8 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
 
 
     companion object{
-        var id : Long = 0
-        fun getNextId(): Long{
+        var id : Int = 0
+        fun getNextId(): Int{
             return id++
         }
     }

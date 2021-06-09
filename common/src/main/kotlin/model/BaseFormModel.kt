@@ -136,13 +136,18 @@ abstract class BaseFormModel() : FormModel {
         if(index != currentFocusIndex.value) {
             currentFocusIndex.value = index
             println("Focus index set: " + index)
+            val attr: Attribute<*,*,*>? = getAttributeById(currentFocusIndex.value)
+            if(attr != null) {
+                attributeChanged(attr)
+            }
         }
+
     }
 
     override fun addFocusRequester(fr: FocusRequester): Int {
         if(fr !in focusRequesters) {
             focusRequesters.add(fr)
-            return focusRequesters.size
+            return focusRequesters.size -1
         }
 
         return -1
@@ -154,7 +159,7 @@ abstract class BaseFormModel() : FormModel {
     }
 
     override fun focusPrevious() {
-        currentFocusIndex.value = (currentFocusIndex.value - 1) % focusRequesters.size
+        currentFocusIndex.value = (currentFocusIndex.value + focusRequesters.size - 1) % focusRequesters.size
         focusRequesters[currentFocusIndex.value].requestFocus()
     }
 

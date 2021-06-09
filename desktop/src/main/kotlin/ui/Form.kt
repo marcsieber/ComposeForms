@@ -124,7 +124,7 @@ class Form {
         }
     }
 
-    @Composable fun AttributeElement(selectionAttribute: SelectionAttribute<*>){ //todo: undo & save when dropdown is open
+    @Composable fun AttributeElement(model: FormModel, selectionAttribute: SelectionAttribute<*>){ //todo: undo & save when dropdown is open
         val dropDownIsOpen          = remember {mutableStateOf(false)}
         val selectionString         = mutableStateOf(selectionAttribute.getValueAsText().substring(1, selectionAttribute.getValueAsText().length-1))
         val label                   = selectionAttribute.getLabel()

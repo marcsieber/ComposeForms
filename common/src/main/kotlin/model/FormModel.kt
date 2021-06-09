@@ -20,7 +20,7 @@ interface FormModel {
     fun addAttribute(attr: Attribute<*,*,*>)
     fun getPossibleLanguages(): List<String>
 
-    fun getAttributeById(id: Long): Attribute<*,*,*>?{
+    fun getAttributeById(id: Int): Attribute<*,*,*>?{
         return getAttributes().find{ it.getId() == id}
     }
 

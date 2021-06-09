@@ -19,7 +19,7 @@ object Model {
     val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
     val mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
 
-    var id : Long = 0
+    var id : Int = 0
 
     var text by mutableStateOf("")
     var label by mutableStateOf("")
@@ -50,12 +50,12 @@ object Model {
     }
 
     fun publish(){
-        val string = Json.encodeToString(DTOText(0, text, label))
-        mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { print("message sent") })
+        val string = Json.encodeToString(DTOText(id, text, label))
+        mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("message sent") })
     }
 
     fun sendCommand(command : Command){
         val string = Json.encodeToString(DTOCommand(command))
-        mqttConnectorCommand.publish(message = string, subtopic = "command", onPublished = { print("command sent") })
+        mqttConnectorCommand.publish(message = string, subtopic = "command", onPublished = { println("command sent") })
     }
 }
