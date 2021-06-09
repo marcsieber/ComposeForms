@@ -47,7 +47,6 @@ class UserDefinedModel : BaseFormModel(){
     }
 
     fun onReceivedCommand(string: String) {
-        println("Recieved: $string")
         val commandDTO = Json.decodeFromString<DTOCommand>(string)
 
         when(commandDTO.command){

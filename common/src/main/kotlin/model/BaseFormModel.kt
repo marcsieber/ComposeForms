@@ -140,8 +140,8 @@ abstract class BaseFormModel() : FormModel {
             if(attr != null) {
                 attributeChanged(attr)
             }
+            focusRequesters[currentFocusIndex.value].requestFocus()
         }
-
     }
 
     override fun addFocusRequester(fr: FocusRequester): Int {
@@ -154,13 +154,12 @@ abstract class BaseFormModel() : FormModel {
     }
 
     override fun focusNext() {
-        currentFocusIndex.value = (currentFocusIndex.value + 1) % focusRequesters.size
-        focusRequesters[currentFocusIndex.value].requestFocus()
+        setCurrentFocusIndex((currentFocusIndex.value + 1) % focusRequesters.size)
     }
 
     override fun focusPrevious() {
-        currentFocusIndex.value = (currentFocusIndex.value + focusRequesters.size - 1) % focusRequesters.size
-        focusRequesters[currentFocusIndex.value].requestFocus()
+        setCurrentFocusIndex((currentFocusIndex.value + focusRequesters.size - 1) % focusRequesters.size)
+
     }
 
     /**
