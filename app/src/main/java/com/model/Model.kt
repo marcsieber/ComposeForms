@@ -11,11 +11,13 @@ import kotlinx.serialization.json.Json
 object Model {
 
     //broker.hivemq.com
-//    val mqttBroker    = "192.168.0.94" // "broker.hivemq.com"
-    val mqttBroker    = "192.168.178.55" //ifconfig en0
+//    val mqttBroker    = "broker.hivemq.com"
+    val mqttBroker    = "192.168.0.94"
+//    val mqttBroker    = "192.168.178.55" //ifconfig en0
     val mainTopic     = "/fhnwforms/"
     val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
     val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
+    val mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
 
     var id : Long = 0
 
@@ -34,17 +36,21 @@ object Model {
             id = dtoText.id
             text = dtoText.text
             label = dtoText.label
-            isOnRightTrack = dtoText.onRightTrack
-            isValid = dtoText.isValid
-            type = dtoText.attrType
-            errorMessages.value = dtoText.errorMessages
         }, onConnected = {isConnected = true})
 
         mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage = {})
+
+        mqttConnectorValidation.connectAndSubscribe(subtopic = "validation", onNewMessage = {
+            val dtoValidation = Json.decodeFromString<DTOValidation>(it)
+            isOnRightTrack = dtoValidation.onRightTrack
+            isValid = dtoValidation.isValid
+            type = dtoValidation.attrType
+            errorMessages.value = dtoValidation.errorMessages
+        }, onConnected = {isConnected = true})
     }
 
     fun publish(){
-        val string = Json.encodeToString(DTOText(0, text))
+        val string = Json.encodeToString(DTOText(0, text, label))
         mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { print("message sent") })
     }
 

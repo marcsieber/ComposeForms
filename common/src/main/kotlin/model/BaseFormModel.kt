@@ -123,10 +123,6 @@ abstract class BaseFormModel() : FormModel {
         return currentLanguage.value
     }
 
-    override fun attributeChanged(attr: Attribute<*, *, *>) {
-
-    }
-
     fun getAttributeType(attr: Attribute<*, *, *>): AttributeType {
         return AttributeType.OTHER
     }

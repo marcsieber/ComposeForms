@@ -75,4 +75,7 @@ class UserTestingFormModel : BaseFormModel() {
 
 
 
+    override fun validationChanged(attr: Attribute<*, *, *>) {
+
+    }
 }

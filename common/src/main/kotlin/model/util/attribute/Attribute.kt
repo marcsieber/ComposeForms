@@ -77,7 +77,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
      *
      * @param valueAsText : String
      */
-    fun setValueAsText(valueAsText : String){
+    fun setValueAsText(valueAsText : String, doPublish: Boolean = true){
         if("\t" in valueAsText){
             return
         }
@@ -85,7 +85,9 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
             this.valueAsText.value = valueAsText
             setChanged(valueAsText)
             checkAndSetValue(valueAsText)
-            model.attributeChanged(this)
+            if(doPublish) {
+                model.attributeChanged(this)
+            }
         }
     }
 
@@ -405,6 +407,7 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         this.listOfValidationResults.value = listOfValidationResults
         setValid(this.getListOfValidationResults().all { it.result })
         rightTrackValid.value = this.getListOfValidationResults().all{ it.rightTrackResult }
+        model.validationChanged(this)
     }
 
     fun getListOfValidationResults() : List<ValidationResult>{

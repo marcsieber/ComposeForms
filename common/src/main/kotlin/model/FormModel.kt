@@ -24,4 +24,5 @@ interface FormModel {
     }
 
     fun attributeChanged(attr: Attribute<*,*,*>)
+    fun validationChanged(attr: Attribute<*,*,*>)
 }

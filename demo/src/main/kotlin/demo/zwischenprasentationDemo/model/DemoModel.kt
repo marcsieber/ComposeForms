@@ -11,4 +11,9 @@ class DemoModel() : BaseFormModel() {
     override fun getPossibleLanguages(): List<String> {
         return Labels.getLanguages()
     }
+
+
+    override fun validationChanged(attr: Attribute<*, *, *>) {
+
+    }
 }

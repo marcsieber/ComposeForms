@@ -23,6 +23,7 @@ class UserDefinedModel : BaseFormModel(){
     val mainTopic     = "/fhnwforms/"
     val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
     val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
+    val mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
 
     private val modelScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -68,14 +69,24 @@ class UserDefinedModel : BaseFormModel(){
             onReceivedCommand(it)
             println("Recieved: " + it)
         })
+
+        mqttConnectorValidation.connectAndSubscribe(subtopic = "validation", onNewMessage =
+        {
+        })
     }
 
 
     override fun attributeChanged(attr: Attribute<*, *, *>) {
-        val dtoText = DTOText(attr.getId(), attr.getValueAsText(), attr.getLabel(), attr.isRightTrackValid(), attr.isValid(),
-            getAttributeType(attr), attr.isReadOnly(), attr.getErrorMessages())
+        val dtoText = DTOText(attr.getId(), attr.getValueAsText(), attr.getLabel())
         val string = Json.encodeToString(dtoText)
-        mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { print("message sent") })
+        mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { print("text sent") })
+    }
+
+    override fun validationChanged(attr: Attribute<*, *, *>) {
+        val dtoValidation = DTOValidation(attr.isRightTrackValid(), attr.isValid(),
+            getAttributeType(attr), attr.isReadOnly(), attr.getErrorMessages())
+        val string = Json.encodeToString(dtoValidation)
+        mqttConnectorValidation.publish(message = string, subtopic = "validation", onPublished = { print("validation sent") })
     }
 
     override fun getPossibleLanguages(): List<String> {
