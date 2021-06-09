@@ -127,4 +127,12 @@ abstract class BaseFormModel() : FormModel {
         return AttributeType.OTHER
     }
 
+
+    /**
+     * TODO: DO the things here instead of userdefined model
+     */
+    override fun validationChanged(attr: Attribute<*, *, *>) {
+    }
+    override fun attributeChanged(attr: Attribute<*, *, *>) {
+    }
 }
