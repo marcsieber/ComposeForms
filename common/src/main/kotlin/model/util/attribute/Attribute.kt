@@ -262,6 +262,10 @@ abstract class Attribute <A,T,L> (private val model       : FormModel,
         return valueAsText.value
     }
 
+    open fun getPossibleSelections(): Set<String>{
+        return emptySet()
+    }
+
     /**
      * This method checks if the language is set as the current language
      * @param language : Locale

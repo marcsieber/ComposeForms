@@ -116,7 +116,7 @@ class SelectionAttribute<L>(model                              : FormModel,
     //******************************************************************************************************
     //Public Getter
 
-    fun getPossibleSelections() : Set<String> {
+    override fun getPossibleSelections() : Set<String> {
         return possibleSelections
     }
 

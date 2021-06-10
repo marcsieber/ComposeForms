@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-class DTOText(val id: Int, val text: String, val label: String, val attrType: AttributeType = AttributeType.OTHER,)
+class DTOText(val id: Int, val text: String, val label: String, val attrType: AttributeType = AttributeType.OTHER,
+             val possibleSelections: Set<String> = emptySet())
 
 @Serializable
 class DTOValidation(val onRightTrack: Boolean = true, val isValid: Boolean = true,

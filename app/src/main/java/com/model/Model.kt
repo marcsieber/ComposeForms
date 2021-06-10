@@ -23,6 +23,7 @@ object Model {
 
     var text by mutableStateOf("")
     var label by mutableStateOf("")
+    var possibleSelections by mutableStateOf(emptySet<String>())
     var isValid by mutableStateOf(true)
     var isOnRightTrack by mutableStateOf(true)
     var type by mutableStateOf(AttributeType.OTHER)
@@ -37,6 +38,7 @@ object Model {
             text = dtoText.text
             label = dtoText.label
             type = dtoText.attrType
+            possibleSelections = dtoText.possibleSelections
         }, onConnected = {
             isConnected = true
             val dtoCommand = DTOCommand(Command.REQUEST)
