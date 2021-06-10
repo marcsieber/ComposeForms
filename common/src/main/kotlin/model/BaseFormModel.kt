@@ -122,7 +122,16 @@ abstract class BaseFormModel() : FormModel {
     }
 
     fun getAttributeType(attr: Attribute<*, *, *>): AttributeType {
-        return AttributeType.OTHER
+        return when (attr){
+            is DoubleAttribute -> AttributeType.DOUBLE
+            is FloatAttribute -> AttributeType.FLOAT
+            is IntegerAttribute -> AttributeType.INTEGER
+            is LongAttribute -> AttributeType.LONG
+            is SelectionAttribute -> AttributeType.SELECTION
+            is ShortAttribute -> AttributeType.SHORT
+            is StringAttribute -> AttributeType.STRING
+            else -> AttributeType.OTHER
+        }
     }
 
     private var focusRequesters: MutableList<FocusRequester> = mutableListOf()
@@ -135,7 +144,6 @@ abstract class BaseFormModel() : FormModel {
     override fun setCurrentFocusIndex(index: Int) {
         if(index != currentFocusIndex.value) {
             currentFocusIndex.value = index
-            println("Focus index set: " + index)
             val attr: Attribute<*,*,*>? = getAttributeById(currentFocusIndex.value)
             if(attr != null) {
                 attributeChanged(attr)
@@ -147,6 +155,7 @@ abstract class BaseFormModel() : FormModel {
     override fun addFocusRequester(fr: FocusRequester): Int {
         if(fr !in focusRequesters) {
             focusRequesters.add(fr)
+//            if(focusRequesters.size == 1) fr.requestFocus()
             return focusRequesters.size -1
         }
 

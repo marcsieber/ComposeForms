@@ -83,16 +83,16 @@ class UserDefinedModel : BaseFormModel(){
 
 
     override fun attributeChanged(attr: Attribute<*, *, *>) {
-        val dtoText = DTOText(attr.getId(), attr.getValueAsText(), attr.getLabel())
+        val dtoText = DTOText(attr.getId(), attr.getValueAsText(), attr.getLabel(), getAttributeType(attr))
         val string = Json.encodeToString(dtoText)
-        mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { print("text sent") })
+        mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("Sent:" + string) })
     }
 
     override fun validationChanged(attr: Attribute<*, *, *>) {
         val dtoValidation = DTOValidation(attr.isRightTrackValid(), attr.isValid(),
-            getAttributeType(attr), attr.isReadOnly(), attr.getErrorMessages())
+            attr.isReadOnly(), attr.getErrorMessages())
         val string = Json.encodeToString(dtoValidation)
-        mqttConnectorValidation.publish(message = string, subtopic = "validation", onPublished = { print("validation sent") })
+        mqttConnectorValidation.publish(message = string, subtopic = "validation", onPublished = { println("validation sent") })
     }
 
     override fun getPossibleLanguages(): List<String> {

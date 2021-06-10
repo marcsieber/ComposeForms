@@ -36,6 +36,7 @@ object Model {
             id = dtoText.id
             text = dtoText.text
             label = dtoText.label
+            type = dtoText.attrType
         }, onConnected = {
             isConnected = true
             val dtoCommand = DTOCommand(Command.REQUEST)
@@ -49,7 +50,6 @@ object Model {
             val dtoValidation = Json.decodeFromString<DTOValidation>(it)
             isOnRightTrack = dtoValidation.onRightTrack
             isValid = dtoValidation.isValid
-            type = dtoValidation.attrType
             errorMessages.value = dtoValidation.errorMessages
         }, onConnected = {isConnected = true})
     }
