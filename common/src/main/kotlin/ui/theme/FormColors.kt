@@ -5,11 +5,12 @@ import ui.theme.ColorsUtil.Companion.getColor
 
 enum class FormColors(val color : Color) {
 
-    ERROR(Color.Red),
+    ERROR(getColor("9F2C13")),
     VALID(getColor("2e7d32")),
     RIGHTTRACK(Color.Gray),
 
     BACKGROUND_COLOR(getColor("0E325E")),
+    BACKGROUND_COLOR_LIGHT(getColor("ECEFF2")),
     FONT_ON_BACKGOUND(Color.White),
     BODY_BACKGROUND(Color.White),
     LABEL(Color.DarkGray)
@@ -18,9 +19,9 @@ enum class FormColors(val color : Color) {
 enum class DropdownColors(val color : Color) {
 
     BUTTON_BACKGROUND(Color.Transparent),
-    BACKGROUND_ELEMENT_SEL(Color.DarkGray),
-    BACKGROUND_ELEMENT_NOT_SEL(Color.Gray),
-    TEXT_ELEMENT_SEL(Color.White),
+    BACKGROUND_ELEMENT_SEL(getColor("E8E8E8")),
+    BACKGROUND_ELEMENT_NOT_SEL(getColor("F8F8F8")),
+    TEXT_ELEMENT_SEL(Color.Black),
     TEXT_ELEMENT_NOT_SEL(Color.Black)
 }
 

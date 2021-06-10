@@ -247,7 +247,7 @@ class UserDefinedModel : BaseFormModel(){
         }
     )
 
-    val list = setOf("Hallo", "Louisa", "Steve", "Eintrag")
+    val list = setOf("Hallo", "Louisa", "Steve", "Eintrag", "Eintrag564", "Hi", "Mann", "Frau")
     val selectionValue = SelectionAttribute(
         model = this,
         value = setOf(),

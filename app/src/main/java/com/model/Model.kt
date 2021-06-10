@@ -12,8 +12,8 @@ object Model {
 
     //broker.hivemq.com
 //    val mqttBroker    = "broker.hivemq.com"
-    val mqttBroker    = "192.168.0.94"
-//    val mqttBroker    = "192.168.178.55" //ifconfig en0
+//    val mqttBroker    = "192.168.0.94"
+    val mqttBroker    = "192.168.178.55" //ifconfig en0
     val mainTopic     = "/fhnwforms/"
     val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
     val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
@@ -50,6 +50,7 @@ object Model {
 
         mqttConnectorValidation.connectAndSubscribe(subtopic = "validation", onNewMessage = {
             val dtoValidation = Json.decodeFromString<DTOValidation>(it)
+            println("Valid: " + isValid + "; onRightTrack: " + isOnRightTrack + "; Error: " + errorMessages )
             isOnRightTrack = dtoValidation.onRightTrack
             isValid = dtoValidation.isValid
             errorMessages.value = dtoValidation.errorMessages

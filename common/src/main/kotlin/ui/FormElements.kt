@@ -64,11 +64,14 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
         isError = error ,
         interactionSource = interactionSource,
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = if(!attr.isValid()) Color.Gray else get(FormColors.VALID),
-            focusedLabelColor = if(!attr.isValid()) Color.Gray else get(FormColors.VALID),
+            focusedBorderColor = if(!attr.isValid()) get(FormColors.RIGHTTRACK) else get(FormColors.VALID),
+            focusedLabelColor = if(!attr.isValid()) get(FormColors.RIGHTTRACK)  else get(FormColors.VALID),
+            errorBorderColor = get(FormColors.ERROR),
+            errorLabelColor = get(FormColors.ERROR),
             disabledBorderColor = Color.Transparent, //readonly
-            disabledTextColor = Color.Black,        //readonly
-            disabledLabelColor = Color.Black        //readonly
+            disabledTextColor = Color.Black,         //readonly
+            disabledLabelColor = Color.Black,        //readonly
+            cursorColor = Color.Black
         )
     )
     Column {
