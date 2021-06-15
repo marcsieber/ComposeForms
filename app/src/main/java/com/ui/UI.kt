@@ -30,6 +30,11 @@ fun UI(model: Model) {
             Column (modifier = Modifier.padding(12.dp)){
                 when(type){
                     AttributeType.SELECTION -> SelectionContent(model)
+                    AttributeType.SHORT -> NumberContent(model)
+                    AttributeType.LONG -> NumberContent(model)
+                    AttributeType.INTEGER -> NumberContent(model)
+                    AttributeType.FLOAT -> NumberContent(model)
+                    AttributeType.DOUBLE -> NumberContent(model)
                 }
             }
         }
