@@ -2,6 +2,7 @@ package com.myapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.*
 import com.IApp
 import com.model.Model
@@ -13,6 +14,7 @@ object App : IApp {
         Model.connectAndSubscribe()
     }
 
+    @ExperimentalFoundationApi
     @Composable
     override fun createAppUI() {
         UI(Model)

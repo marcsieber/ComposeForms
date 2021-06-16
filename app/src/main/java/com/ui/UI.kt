@@ -1,5 +1,6 @@
 package com.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,6 +25,8 @@ import ui.theme.ColorsUtil
 import ui.theme.FormColors
 import ui.theme.ColorsUtil.Companion.get
 
+
+@ExperimentalFoundationApi
 @Composable
 fun UI(model: Model) {
     with(model) {
@@ -35,6 +39,7 @@ fun UI(model: Model) {
                     AttributeType.INTEGER -> NumberContent(model)
                     AttributeType.FLOAT -> NumberContent(model)
                     AttributeType.DOUBLE -> NumberContent(model)
+                    AttributeType.STRING -> DecisionContent(model)
                 }
             }
         }
@@ -44,7 +49,7 @@ fun UI(model: Model) {
 @Composable
 fun Header(model: Model){
     with(model){
-        Row(verticalAlignment = Alignment.Top, modifier = Modifier.background(get(FormColors.BACKGROUND_COLOR_LIGHT))){
+        Row(verticalAlignment = Alignment.Top, modifier = Modifier.background(get(FormColors.BACKGROUND_COLOR_LIGHT)).shadow(2.dp)){
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(12.dp)) {
                 InputField(model, type)
                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(vertical = 12.dp)){
@@ -58,7 +63,6 @@ fun Header(model: Model){
                         Text("Hier verbinden", fontSize = 14.sp)
                     }
                 }
-                Divider(color = get(FormColors.BACKGROUND_COLOR), thickness = 1.dp)
             }
         }
     }

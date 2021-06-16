@@ -5,13 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -48,6 +46,7 @@ fun SelectionContent(model: Model) {
             //Possible Selections
             Row(modifier = Modifier.fillMaxSize().padding(bottom = 12.dp, top = 12.dp), verticalAlignment = Alignment.Top){
                 LazyColumn(verticalArrangement = Arrangement.Top, modifier = Modifier.fillMaxHeight().padding(0.dp ,12.dp, 0.dp, 48.dp)) {
+                    filterPossibleSelections(searchString.value)
                     items(filteredListOfPossibleSelections.value){
                         Row(modifier = Modifier
                             .fillMaxWidth()
