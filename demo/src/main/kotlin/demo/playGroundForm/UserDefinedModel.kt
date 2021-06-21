@@ -6,12 +6,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import model.BaseFormModel
 import model.convertables.CustomConvertable
 import model.convertables.ReplacementPair
+import model.meanings.Currency
+import model.meanings.CustomMeaning
+import model.meanings.Percentage
 import model.util.attribute.*
 import model.validators.semanticValidators.*
 import java.time.LocalTime
@@ -49,7 +49,8 @@ class UserDefinedModel : BaseFormModel(){
         model = this,
         value = "",
         label = Labels.stringLabel,
-        validators = listOf(RegexValidator<String>("^\\w+\\W\\w+\$", validationMessage = "Muss genau zwei Wörter sein"))
+        validators = listOf(RegexValidator<String>("^\\w+\\W\\w+\$", validationMessage = "Muss genau zwei Wörter sein")),
+        meaning = CustomMeaning("m")
     )
 
     val d1 = DoubleAttribute(
@@ -64,7 +65,8 @@ class UserDefinedModel : BaseFormModel(){
             CustomConvertable(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true)
-        )
+        ),
+        meaning = CustomMeaning("g")
     )
 
     val d2 = DoubleAttribute(
@@ -79,7 +81,8 @@ class UserDefinedModel : BaseFormModel(){
             CustomConvertable(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true, true)
-        )
+        ),
+        meaning = Currency(java.util.Currency.getInstance("EUR"))
     )
 
     val d3 = DoubleAttribute(
@@ -94,7 +97,8 @@ class UserDefinedModel : BaseFormModel(){
             CustomConvertable(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = false)
-        )
+        ),
+        meaning = Percentage()
     )
 
 
