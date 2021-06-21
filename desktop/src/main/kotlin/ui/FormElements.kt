@@ -1,20 +1,16 @@
 package ui
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.FormModel
@@ -62,6 +58,7 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
               }
             },
         value = attr.getValueAsText(),
+        trailingIcon = {Text(attr.meaning.addMeaning(attr.getValueAsText()))},
         onValueChange = {attr.setValueAsText(it)},
         label = { Text( if(attr.isRequired()) attr.getLabel() + "*" else attr.getLabel()) },
         enabled = !attr.isReadOnly(),
