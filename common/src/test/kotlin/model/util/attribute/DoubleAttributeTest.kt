@@ -13,11 +13,11 @@ import java.lang.IllegalArgumentException
 internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
 
     override fun provideAttribute(model: BaseFormModel, value: Double?): Attribute<*, Any,*> {
-        return DoubleAttribute(model, value, Labels.TEST) as Attribute<*, Any,*>
+        return DoubleAttribute(model, Labels.TEST, value) as Attribute<*, Any,*>
     }
 
     override fun provideNumberAttribute(model: BaseFormModel, value: Double?): NumberAttribute<*, Double,*> {
-        return DoubleAttribute(model, value, Labels.TEST)
+        return DoubleAttribute(model, Labels.TEST, value)
     }
 
     init {
@@ -59,7 +59,7 @@ internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
     @BeforeEach
     fun setUpDoubleAtr(){
         //given
-        doubleAtr = DoubleAttribute(model, validValue1Uneven, Labels.TEST)
+        doubleAtr = DoubleAttribute(model, Labels.TEST, validValue1Uneven)
     }
 
     @Test

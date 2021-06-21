@@ -6,10 +6,10 @@ import model.util.Labels
 internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
 
     override fun provideAttribute(model: BaseFormModel, value: Int?): Attribute<*, Any,*> {
-        return IntegerAttribute(model, value, Labels.TEST) as Attribute<*, Any,*>
+        return IntegerAttribute(model, Labels.TEST, value) as Attribute<*, Any,*>
     }
     override fun provideNumberAttribute(model: BaseFormModel, value: Int?): NumberAttribute<*, Int,*> {
-        return IntegerAttribute(model, value, Labels.TEST)
+        return IntegerAttribute(model, Labels.TEST, value)
     }
 
     init{

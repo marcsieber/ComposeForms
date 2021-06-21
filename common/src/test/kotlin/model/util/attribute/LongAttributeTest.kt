@@ -6,10 +6,10 @@ import model.util.Labels
 internal class LongAttributeTest : NumberAttributeTest<Long>(){
 
     override fun provideAttribute(model: BaseFormModel, value: Long?): Attribute<*, Any,*> {
-        return LongAttribute(model, value, Labels.TEST) as Attribute<*, Any,*>
+        return LongAttribute(model, Labels.TEST, value) as Attribute<*, Any,*>
     }
     override fun provideNumberAttribute(model: BaseFormModel, value: Long?): NumberAttribute<*, Long,*> {
-        return LongAttribute(model, value, Labels.TEST)
+        return LongAttribute(model, Labels.TEST, value)
     }
 
     init{

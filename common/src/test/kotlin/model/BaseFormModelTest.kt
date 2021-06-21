@@ -127,7 +127,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateShortAttribute() {
         //when
-        val attribute = ShortAttribute(model, 5, label = Label.TEST)
+        val attribute = ShortAttribute(model, Label.TEST, 5)
 
         //then
         assertEquals(5,attribute.getValue())
@@ -144,7 +144,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateLongAttribute() {
         //when
-        val attribute = LongAttribute(model, 5, label = Label.TEST)
+        val attribute = LongAttribute(model, Label.TEST, 5)
 
         //then
         assertEquals(5,attribute.getValue())
@@ -161,7 +161,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateDoubleAttribute() {
         //when
-        val attribute = DoubleAttribute(model, 5.5, label = Label.TEST)
+        val attribute = DoubleAttribute(model, Label.TEST, 5.5)
 
         //then
         assertEquals(5.5,attribute.getValue())
@@ -178,7 +178,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateFloatAttribute() {
         //when
-        val attribute = FloatAttribute(model,5.5f, label = Label.TEST)
+        val attribute = FloatAttribute(model, Label.TEST, 5.5f)
 
         //then
         assertEquals(5.5f,attribute.getValue())
@@ -195,7 +195,7 @@ internal class BaseFormModelTest {
     @Test
     fun testCreateStringAttribute() {
         //when
-        val attribute = StringAttribute(model,"a", label = Label.TEST)
+        val attribute = StringAttribute(model, Label.TEST, "a")
 
         //then
         assertEquals("a", attribute.getValue())
@@ -203,7 +203,7 @@ internal class BaseFormModelTest {
         assertEquals("a", attribute.getSavedValue())
 
         //when
-        val attributeDefaultVal = StringAttribute(model, label = Label.TEST)
+        val attributeDefaultVal = StringAttribute(model, Label.TEST)
 
         //then
         assertEquals(null, attributeDefaultVal.getValue())
