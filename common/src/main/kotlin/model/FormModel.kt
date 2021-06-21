@@ -26,8 +26,9 @@ interface FormModel {
 
     fun attributeChanged(attr: Attribute<*,*,*>)
     fun validationChanged(attr: Attribute<*,*,*>)
+    fun textChanged(attr: Attribute<*,*,*>)
 
-    fun addFocusRequester(fr: FocusRequester): Int
+    fun addFocusRequester(fr: FocusRequester, attr: Attribute<*,*,*>): Int
     fun focusNext()
     fun focusPrevious()
     fun setCurrentFocusIndex(index: Int)

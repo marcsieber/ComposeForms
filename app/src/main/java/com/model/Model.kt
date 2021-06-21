@@ -18,6 +18,7 @@ object Model {
     val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
     val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
     val mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
+    val mqttConnectorAttribute = MqttConnector(mqttBroker, mainTopic)
 
     var id : Int = 0
 
@@ -32,10 +33,10 @@ object Model {
     var isConnected: Boolean = false
 
     fun connectAndSubscribe(){
-        mqttConnectorText.connectAndSubscribe(subtopic = "text", onNewMessage = {
-            val dtoText = Json.decodeFromString<DTOText>(it)
+        mqttConnectorAttribute.connectAndSubscribe(subtopic = "attribute", onNewMessage = {
+            println("ATTRIBUTE RECEIVED: $it")
+            val dtoText = Json.decodeFromString<DTOAttribute>(it)
             id = dtoText.id
-            text = dtoText.text
             label = dtoText.label
             type = dtoText.attrType
             possibleSelections = dtoText.possibleSelections
@@ -46,6 +47,13 @@ object Model {
             mqttConnectorText.publish(subtopic = "command", message = string)
         })
 
+        mqttConnectorText.connectAndSubscribe(subtopic = "text", onNewMessage = {
+            println("TEXT RECEIVED: $it")
+            val dtoText = Json.decodeFromString<DTOText>(it)
+            id = dtoText.id
+            text = dtoText.text
+        })
+
         mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage = {})
 
         mqttConnectorValidation.connectAndSubscribe(subtopic = "validation", onNewMessage = {
@@ -54,11 +62,15 @@ object Model {
             isOnRightTrack = dtoValidation.onRightTrack
             isValid = dtoValidation.isValid
             errorMessages.value = dtoValidation.errorMessages
+
+            println("RT: $isOnRightTrack")
+            println("VALID: $isValid")
+            println("errormsg: ${errorMessages.value}")
         }, onConnected = {isConnected = true})
     }
 
     fun publish(){
-        val string = Json.encodeToString(DTOText(id, text, label))
+        val string = Json.encodeToString(DTOText(id, text))
         mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("message sent") })
     }
 

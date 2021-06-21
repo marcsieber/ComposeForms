@@ -3,10 +3,12 @@ package communication
 
 import kotlinx.serialization.Serializable
 
+@Serializable
+class DTOAttribute(val id: Int, val label: String, val attrType: AttributeType = AttributeType.OTHER,
+                   val possibleSelections: Set<String> = emptySet())
 
 @Serializable
-class DTOText(val id: Int, val text: String, val label: String, val attrType: AttributeType = AttributeType.OTHER,
-             val possibleSelections: Set<String> = emptySet())
+class DTOText(val id: Int, val text: String)
 
 @Serializable
 class DTOValidation(val onRightTrack: Boolean = true, val isValid: Boolean = true,
