@@ -12,11 +12,11 @@ import java.lang.IllegalArgumentException
 internal class FloatAttributeTest : NumberAttributeTest<Float>() {
 
     override fun provideAttribute(model: BaseFormModel, value: Float?): Attribute<*, Any,*> {
-        return FloatAttribute(model, value, Labels.TEST) as Attribute<*, Any,*>
+        return FloatAttribute(model, Labels.TEST, value) as Attribute<*, Any,*>
     }
 
     override fun provideNumberAttribute(model: BaseFormModel, value: Float?): NumberAttribute<*, Float,*> {
-        return FloatAttribute(model, value, Labels.TEST)
+        return FloatAttribute(model, Labels.TEST, value)
     }
 
     init {
@@ -59,7 +59,7 @@ internal class FloatAttributeTest : NumberAttributeTest<Float>() {
     @BeforeEach
     fun setUpFloatAtr(){
         //given
-        floatAtr = FloatAttribute(model, validValue1Uneven, Labels.TEST)
+        floatAtr = FloatAttribute(model, Labels.TEST, validValue1Uneven)
     }
 
     @Test

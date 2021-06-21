@@ -11,7 +11,7 @@ import java.lang.IllegalArgumentException
 internal class StringAttributeTest: AttributeTest<String>() {
 
     override fun provideAttribute(model: BaseFormModel, value: String?): Attribute<*, Any, *> {
-        return StringAttribute(model, value, Labels.TEST) as Attribute<*, Any, *>
+        return StringAttribute(model, Labels.TEST, value) as Attribute<*, Any, *>
     }
 
     init{
@@ -36,7 +36,7 @@ internal class StringAttributeTest: AttributeTest<String>() {
     @BeforeEach
     fun setUpStringAtr(){
         //given
-        stringAtr = StringAttribute(model, validValue1Uneven, Labels.TEST)
+        stringAtr = StringAttribute(model, Labels.TEST, validValue1Uneven)
     }
 
     @Test

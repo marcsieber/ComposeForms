@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import model.FormModel
 import model.convertables.ConvertableResult
 import model.convertables.CustomConvertable
+import model.meanings.SemanticMeaning
 import model.util.ILabel
 import model.util.Utilities
 import model.validators.RequiredValidator
@@ -12,14 +13,18 @@ import model.validators.ValidationResult
 import model.validators.semanticValidators.SemanticValidator
 import java.lang.NumberFormatException
 
-abstract class Attribute <A,T,L> (private val model       : FormModel,
-                                  private var value       : T?,
+abstract class Attribute <A,T,L> (//required parameters
+                                  private val model       : FormModel,
                                   label                   : L,
+
+                                  //optional parameters
+                                  private var value       : T?,
                                   required                : Boolean,
                                   readOnly                : Boolean,
                                   var onChangeListeners   : List<(T?) -> Unit>,
                                   var validators          : List<SemanticValidator<T>>,
-                                  var convertables        : List<CustomConvertable>
+                                  var convertables        : List<CustomConvertable>,
+                                  var meaning             : SemanticMeaning<T>
 //                                  var formatter           : Formatter
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {

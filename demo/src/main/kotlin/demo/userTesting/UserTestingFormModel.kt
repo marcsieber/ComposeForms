@@ -20,21 +20,21 @@ class UserTestingFormModel : BaseFormModel() {
     }
 
     var id = IntegerAttribute(this,
-        -1,
         UserTestingLabels.ID,
+        -1,
         required = false,
         readOnly = true,
     )
     var vorname = StringAttribute(this,
-        "",
         UserTestingLabels.NAME,
+        "",
         true,
         validators = listOf(StringValidator(3, validationMessage = "Nicht so kurzer Namen du hast!"))
     )
 
     var nachname = StringAttribute(this,
-        "",
         UserTestingLabels.NACHNAME,
+        "",
         true,
     )
 
@@ -62,8 +62,8 @@ class UserTestingFormModel : BaseFormModel() {
     )
 
     var steuernummer = StringAttribute(this,
-        "",
         UserTestingLabels.STEURNUMMER,
+        "",
         validators = listOf(
             RegexValidator<String>("\\d{3}\\.\\d{4}\\.\\d{4}\\.\\d{2}")
         )

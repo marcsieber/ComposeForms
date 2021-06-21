@@ -3,22 +3,29 @@ package model.util.attribute
 import model.FormModel
 import model.convertables.CustomConvertable
 import model.convertables.ReplacementPair
+import model.meanings.Default
+import model.meanings.SemanticMeaning
 import model.util.ILabel
 import model.validators.semanticValidators.SemanticValidator
 
-class FloatAttribute<L>(model                   : FormModel,
-                        value                   : Float? = null,
-                        label                   : L,
-                        required                : Boolean = false,
-                        readOnly                : Boolean = false,
-                        onChangeListeners       : List<(Float?) -> Unit> = emptyList(),
-                        validators              : List<SemanticValidator<Float>> = mutableListOf(),
-                        convertables            : List<CustomConvertable> = emptyList(),
+class FloatAttribute<L>(    //required parameters
+                            model                   : FormModel,
+                            label                   : L,
 
-                        decimalPlaces           : Int = 8
+                            //optional parameters
+                            value                   : Float?                            = null,
+                            required                : Boolean                           = false,
+                            readOnly                : Boolean                           = false,
+                            onChangeListeners       : List<(Float?) -> Unit>            = emptyList(),
+                            validators              : List<SemanticValidator<Float>>    = mutableListOf(),
+                            convertables            : List<CustomConvertable>           = emptyList(),
+                            meaning                 : SemanticMeaning<Float>            = Default(),
+
+                            decimalPlaces           : Int                               = 8
 
 ) : FloatingPointAttribute<FloatAttribute<L>, Float,L>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, onChangeListeners = onChangeListeners, validators = validators, convertables = convertables, decimalPlaces = decimalPlaces)
+    readOnly = readOnly, onChangeListeners = onChangeListeners, validators = validators, convertables = convertables,
+    decimalPlaces = decimalPlaces, meaning = meaning)
         where L: Enum<*>, L : ILabel{
 
     override val typeT: Float

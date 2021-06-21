@@ -16,7 +16,7 @@ class PersonModel() : BaseFormModel() {
         return Labels.getLanguages()
     }
 
-    val id          = IntegerAttribute(this, 1, label = Labels.ID, readOnly = true)
+    val id          = IntegerAttribute(this, label = Labels.ID, 1, readOnly = true)
     val firstName   = StringAttribute(this, label = Labels.FIRSTNAME, validators = listOf(StringValidator(minLength = 5, maxLength = 10)))
     val lastName    = StringAttribute(this, label = Labels.LASTNAME)
     val occupation  = StringAttribute(this, label = Labels.OCCUPATION, onChangeListeners = listOf{taxNumber.setRequired(it != null)})
