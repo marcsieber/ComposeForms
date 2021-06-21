@@ -81,6 +81,7 @@ abstract class Attribute <A,T,L> (//required parameters
      */
     fun setValueAsText(valueAsText : String, doPublish: Boolean = true){
         if("\t" in valueAsText){
+            println("TAB ENTFERNT")
             return
         }
         if(!isReadOnly()){
@@ -88,7 +89,7 @@ abstract class Attribute <A,T,L> (//required parameters
             setChanged(valueAsText)
             checkAndSetValue(valueAsText)
             if(doPublish) {
-                model.attributeChanged(this)
+                model.textChanged(this)
             }
         }
     }

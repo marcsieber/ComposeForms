@@ -25,10 +25,10 @@ abstract class BaseFormModel() : FormModel {
 
     val mqttBroker    = "localhost"
     val mainTopic     = "/fhnwforms/"
-    val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
-    val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
-    val mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
-    val mqttConnectorAttribute = MqttConnector(mqttBroker, mainTopic)
+    open val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
+    open val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
+    open val mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
+    open val mqttConnectorAttribute = MqttConnector(mqttBroker, mainTopic)
 
     //******************************************************************************************************
     //Functions called on user actions
@@ -159,7 +159,9 @@ abstract class BaseFormModel() : FormModel {
             if(attr != null) {
                 sendAll(attr)
             }
-            focusRequesters[currentFocusIndex.value].first.requestFocus()
+            if(currentFocusIndex.value < focusRequesters.size) {
+                focusRequesters[currentFocusIndex.value].first.requestFocus()
+            }
         }
     }
 
@@ -180,7 +182,6 @@ abstract class BaseFormModel() : FormModel {
 
     override fun focusPrevious() {
         setCurrentFocusIndex((currentFocusIndex.value + focusRequesters.size - 1) % focusRequesters.size)
-
     }
 
     override fun textChanged(attr: Attribute<*,*,*>){
@@ -194,7 +195,7 @@ abstract class BaseFormModel() : FormModel {
     override fun attributeChanged(attr: Attribute<*, *, *>) {
         val dtoAttr = DTOAttribute(attr.getId(), attr.getLabel(), getAttributeType(attr), attr.getPossibleSelections())
         val string = Json.encodeToString(dtoAttr)
-        mqttConnectorText.publish(message = string, subtopic = "attribute", onPublished = { println("Sent:" + string) })
+        mqttConnectorAttribute.publish(message = string, subtopic = "attribute", onPublished = { println("Sent:" + string) })
     }
 
     override fun validationChanged(attr: Attribute<*, *, *>) {
