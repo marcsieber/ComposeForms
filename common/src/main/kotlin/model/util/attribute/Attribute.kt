@@ -60,7 +60,6 @@ abstract class Attribute <A,T,L> (//required parameters
      * The attribute is passed to its model and to its validators so that they can access values of the attribute.
      */
     init{
-        model.addAttribute(this)
         validators.forEach{it.addAttribute(this)}
         reqValidator.addAttribute(this)
         syntaxValidator.addAttribute(this)

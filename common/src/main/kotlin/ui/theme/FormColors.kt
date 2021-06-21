@@ -10,6 +10,7 @@ enum class FormColors(val color : Color) {
     RIGHTTRACK(Color.Gray),
 
     BACKGROUND_COLOR(getColor("0E325E")),
+    BACKGROUND_COLOR_GROUPS(getColor("8698AE")),
     BACKGROUND_COLOR_LIGHT(getColor("ECEFF2")),
     FONT_ON_BACKGOUND(Color.White),
     BODY_BACKGROUND(Color.White),

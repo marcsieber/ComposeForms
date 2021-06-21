@@ -2,12 +2,15 @@ package ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -92,3 +95,16 @@ fun header(model : FormModel){
     }
 }
 
+@Composable
+fun GroupTitle(title : String){
+    Row(modifier = Modifier.fillMaxWidth().padding(6.dp,12.dp)) {
+        Card(
+            modifier = Modifier.fillMaxWidth().height(38.dp).border(0.dp, Color.Transparent, RoundedCornerShape(10.dp)),
+            backgroundColor = get(FormColors.BACKGROUND_COLOR_GROUPS)){
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically){
+                Text(title, color = get(FormColors.FONT_ON_BACKGOUND))
+            }
+        }
+    }
+}

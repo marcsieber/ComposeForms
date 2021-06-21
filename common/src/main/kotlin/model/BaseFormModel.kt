@@ -7,6 +7,7 @@ import communication.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import model.util.Group
 import model.util.attribute.*
 import java.util.*
 
@@ -16,7 +17,7 @@ abstract class BaseFormModel() : FormModel {
     //Properties
 
     private var title               = ""
-    protected var allAttributes     = mutableStateListOf<Attribute<*,*,*>>()
+    private var allGroups           = mutableStateListOf<Group>()
     private var changedForAll       = mutableStateOf(false)
     private val validForAll         = mutableStateOf(true)
     private var currentLanguage     = mutableStateOf<String>(if (getPossibleLanguages().size > 0) getPossibleLanguages()[0] else "")
@@ -39,7 +40,7 @@ abstract class BaseFormModel() : FormModel {
      */
     override fun saveAll(): Boolean {
         return if(isValidForAll()){
-            allAttributes.forEach{ it.save() }
+            allGroups.forEach{it.attributes.forEach{ it.save() }}
             true
         }else{
             false
@@ -53,7 +54,7 @@ abstract class BaseFormModel() : FormModel {
      */
     override fun undoAll(): Boolean {
         return if(isChangedForAll()){
-            allAttributes.forEach{ it.undo() }
+            allGroups.forEach{it.attributes.forEach{ it.undo() }}
             true
         }else{
             false
@@ -67,11 +68,11 @@ abstract class BaseFormModel() : FormModel {
      */
     override fun setCurrentLanguageForAll(lang: String){
         currentLanguage.value = lang
-        allAttributes.forEach{attribute -> attribute.setCurrentLanguage(lang) }
+        allGroups.forEach{it.attributes.forEach{attribute -> attribute.setCurrentLanguage(lang) }}
     }
 
     override fun validateAll() {
-        allAttributes.forEach{it.revalidate()}
+        allGroups.forEach{it.attributes.forEach{it.revalidate()}}
     }
 
 
@@ -83,7 +84,7 @@ abstract class BaseFormModel() : FormModel {
      * If yes, changedForAll is set true. If not, changedForAll is set false.
      */
     override fun setChangedForAll(){
-        changedForAll.value = allAttributes.any(Attribute<*,*,*>::isChanged)
+        changedForAll.value = allGroups.flatMap{it.attributes}.any(Attribute<*,*,*>::isChanged)
     }
 
     /**
@@ -91,7 +92,7 @@ abstract class BaseFormModel() : FormModel {
      * If yes, changed is set true. If not, changed is set false.
      */
     override fun setValidForAll(){
-        validForAll.value = allAttributes.all(Attribute<*,*,*>::isValid)
+        validForAll.value = allGroups.flatMap{it.attributes}.all(Attribute<*,*,*>::isValid)
     }
 
     override fun setTitle(title: String){
@@ -101,8 +102,8 @@ abstract class BaseFormModel() : FormModel {
     //******************************************************************************************************
     //Getter
 
-    override fun getAttributes(): List<Attribute<*,*,*>> {
-        return allAttributes
+    override fun getGroups(): List<Group> {
+        return allGroups
     }
 
     override fun getTitle(): String {
@@ -121,11 +122,15 @@ abstract class BaseFormModel() : FormModel {
         return currentLanguage.value == language
     }
 
-    override fun addAttribute(attr: Attribute<*,*,*>) {
-        allAttributes.add(attr)
-        if(getCurrentLanguage() != ""){
-            attr.setCurrentLanguage(getCurrentLanguage())
-        }
+//    override fun addAttribute(attr: Attribute<*,*,*>) { //TODO
+//        allGroups.flatMap{it.attributes}.add(attr)
+//        if(getCurrentLanguage() != ""){
+//            attr.setCurrentLanguage(getCurrentLanguage())
+//        }
+//    }
+
+    override fun addGroup(group: Group) {
+        allGroups.add(group)
     }
 
     override fun getCurrentLanguage(): String {

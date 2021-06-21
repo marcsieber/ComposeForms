@@ -1,10 +1,11 @@
 package model
 
 import androidx.compose.ui.focus.FocusRequester
+import model.util.Group
 import model.util.attribute.Attribute
 
 interface FormModel {
-    fun getAttributes() : List<Attribute<*,*,*>>
+    fun getGroups() : List<Group>
     fun getTitle() : String
     fun setTitle(title: String)
     fun saveAll() : Boolean
@@ -17,11 +18,12 @@ interface FormModel {
     fun setValidForAll()
     fun isValidForAll() : Boolean
     fun isChangedForAll(): Boolean
-    fun addAttribute(attr: Attribute<*,*,*>)
+//    fun addAttribute(attr: Attribute<*,*,*>)
+    fun addGroup(group: Group)
     fun getPossibleLanguages(): List<String>
 
     fun getAttributeById(id: Int): Attribute<*,*,*>?{
-        return getAttributes().find{ it.getId() == id}
+        return getGroups().flatMap{it.attributes}.find{it.getId() == id}
     }
 
     fun attributeChanged(attr: Attribute<*,*,*>)
