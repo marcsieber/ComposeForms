@@ -54,8 +54,10 @@ fun Header(model: Model){
                 InputField(model, type)
                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(vertical = 12.dp)){
                     Column(modifier = Modifier.widthIn(max = 220.dp)) {
-                        for(msg in errorMessages.value){
-                            Text(msg, color = get(FormColors.ERROR), fontSize = 14.sp)
+                        if(!isOnRightTrack) {
+                            for (msg in errorMessages.value) {
+                                Text(msg, color = get(FormColors.ERROR), fontSize = 14.sp)
+                            }
                         }
                     }
                     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {

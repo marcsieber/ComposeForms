@@ -13,10 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.*
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.FormModel
@@ -30,10 +28,10 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
 
     val focusRequester = remember { FocusRequester() }
 
-    val index = remember { model.addFocusRequester(focusRequester) }
-    val interactionSource = remember { MutableInteractionSource() }
+    val index = remember { model.addFocusRequester(focusRequester, attr) }
     val focused = model.getCurrentFocusIndex() == index
     val error = if(!focused) !attr.isValid() else !attr.isRightTrackValid() //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
+
 
     OutlinedTextField(
         singleLine = true,
@@ -50,11 +48,18 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
             }
             .focusOrder(focusRequester)
             .onKeyEvent{event ->
+//                println(event.key)
                 if(event.key == Key.Tab){
                     model.focusNext()
                     return@onKeyEvent false
                 }
                 keyEvent(event)
+            }
+            .shortcuts {
+//                println("SHORTCUT" )
+              on(Key.Tab){
+//                  println("TAB PRESSED")
+              }
             },
         value = attr.getValueAsText(),
         onValueChange = {attr.setValueAsText(it)},
@@ -62,7 +67,6 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
         enabled = !attr.isReadOnly(),
         readOnly = attr.isReadOnly(),
         isError = error ,
-        interactionSource = interactionSource,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = if(!attr.isValid()) get(FormColors.RIGHTTRACK) else get(FormColors.VALID),
             focusedLabelColor = if(!attr.isValid()) get(FormColors.RIGHTTRACK)  else get(FormColors.VALID),

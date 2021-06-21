@@ -3,7 +3,10 @@ package model
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
-import communication.AttributeType
+import communication.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import model.util.attribute.*
 import java.util.*
 
@@ -18,6 +21,14 @@ abstract class BaseFormModel() : FormModel {
     private val validForAll         = mutableStateOf(true)
     private var currentLanguage     = mutableStateOf<String>(if (getPossibleLanguages().size > 0) getPossibleLanguages()[0] else "")
 
+
+
+    val mqttBroker    = "localhost"
+    val mainTopic     = "/fhnwforms/"
+    val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
+    val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
+    val mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
+    val mqttConnectorAttribute = MqttConnector(mqttBroker, mainTopic)
 
     //******************************************************************************************************
     //Functions called on user actions
@@ -134,7 +145,7 @@ abstract class BaseFormModel() : FormModel {
         }
     }
 
-    private var focusRequesters: MutableList<FocusRequester> = mutableListOf()
+    private var focusRequesters: MutableList<Pair<FocusRequester, Attribute<*,*,*>>> = mutableListOf()
     private var currentFocusIndex = mutableStateOf(0)
 
     override fun getCurrentFocusIndex(): Int {
@@ -146,15 +157,16 @@ abstract class BaseFormModel() : FormModel {
             currentFocusIndex.value = index
             val attr: Attribute<*,*,*>? = getAttributeById(currentFocusIndex.value)
             if(attr != null) {
-                attributeChanged(attr)
+                sendAll(attr)
             }
-            focusRequesters[currentFocusIndex.value].requestFocus()
+            focusRequesters[currentFocusIndex.value].first.requestFocus()
         }
     }
 
-    override fun addFocusRequester(fr: FocusRequester): Int {
-        if(fr !in focusRequesters) {
-            focusRequesters.add(fr)
+    override fun addFocusRequester(fr: FocusRequester, attr: Attribute<*, *, *>): Int {
+        val p = Pair(fr, attr)
+        if(p !in focusRequesters) {
+            focusRequesters.add(p)
 //            if(focusRequesters.size == 1) fr.requestFocus()
             return focusRequesters.size -1
         }
@@ -171,11 +183,83 @@ abstract class BaseFormModel() : FormModel {
 
     }
 
-    /**
-     * TODO: DO the things here instead of userdefined model
-     */
-    override fun validationChanged(attr: Attribute<*, *, *>) {
+    override fun textChanged(attr: Attribute<*,*,*>){
+        if(attr.getId() == getCurrentFocusIndex()) {
+            val dtoText = DTOText(attr.getId(), attr.getValueAsText())
+            val string = Json.encodeToString(dtoText)
+            mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("Sent:" + string) })
+        }
     }
+
     override fun attributeChanged(attr: Attribute<*, *, *>) {
+        val dtoAttr = DTOAttribute(attr.getId(), attr.getLabel(), getAttributeType(attr), attr.getPossibleSelections())
+        val string = Json.encodeToString(dtoAttr)
+        mqttConnectorText.publish(message = string, subtopic = "attribute", onPublished = { println("Sent:" + string) })
+    }
+
+    override fun validationChanged(attr: Attribute<*, *, *>) {
+        if(attr.getId() == getCurrentFocusIndex()) {
+            val dtoValidation = DTOValidation(
+                attr.isRightTrackValid(), attr.isValid(),
+                attr.isReadOnly(), attr.getErrorMessages()
+            )
+            val string = Json.encodeToString(dtoValidation)
+            mqttConnectorValidation.publish(
+                message = string,
+                subtopic = "validation",
+                onPublished = { println("sent: " + string) })
+        }
+    }
+
+
+    fun onReceivedText(string: String) {
+        val dtotext = Json.decodeFromString<DTOText>(string)
+        getAttributeById(dtotext.id)?.setValueAsText(dtotext.text)
+    }
+
+
+    fun sendAll(attr: Attribute<*,*,*>){
+        attributeChanged(attr)
+        textChanged(attr)
+        validationChanged(attr)
+    }
+
+    fun onReceivedCommand(string: String) {
+        val commandDTO = Json.decodeFromString<DTOCommand>(string)
+
+        when(commandDTO.command){
+            Command.NEXT -> focusNext()
+            Command.PREVIOUS -> focusPrevious()
+            Command.REQUEST -> {
+                val attr: Attribute<*,*,*>? = getAttributeById(getCurrentFocusIndex())
+                if(attr != null) {
+                    sendAll(attr)
+                }
+            }
+            Command.SAVE -> println("save")
+            Command.UNDO -> println("next")
+        }
+    }
+
+    fun connectAndSubscribe(){
+        mqttConnectorText.connectAndSubscribe(subtopic = "text", onNewMessage =
+        {
+            onReceivedText(it)
+            println("Recieved: " + it)
+        })
+
+        mqttConnectorAttribute.connectAndSubscribe(subtopic = "attribute", onNewMessage =
+        {
+        })
+
+        mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage =
+        {
+            onReceivedCommand(it)
+            println("Recieved: " + it)
+        })
+
+        mqttConnectorValidation.connectAndSubscribe(subtopic = "validation", onNewMessage =
+        {
+        })
     }
 }
