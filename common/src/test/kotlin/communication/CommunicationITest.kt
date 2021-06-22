@@ -61,17 +61,17 @@ class CommunicationITest {
         attribute2 = StringAttribute(model!!, testLabels.test, value = "")
 
         group = Group(model!!, "testgroup", listOf(attribute1!!, attribute2!!))
+
+        model!!.addFocusRequester(mockk(relaxed = true), attribute1!!)
+        model!!.addFocusRequester(mockk(relaxed = true), attribute2!!)
     }
 
 
     @Test
     fun testSendAmount(){
 
-        verify(exactly = 1){
-            mqttConnectorValidationT.publish(any(), any(), any(), any()) // One Validation will be done on initialization of attribute
-        }
-
         verify(exactly = 0) {
+            mqttConnectorValidationT.publish(any(), any(), any(), any())
             mqttConnectorTextT.publish(any(), any(), any(), any())
             mqttConnectorAttributeT.publish(any(), any(), any(), any())
             mqttConnectorCommandT.publish(any(), any(), any(), any())
@@ -87,18 +87,16 @@ class CommunicationITest {
             mqttConnectorTextT.publish(any(), any(), any(), any())
         }
 
-        verify(exactly = 3) {
+        verify(exactly = 2) {
             mqttConnectorValidationT.publish(any(), any(), any(), any())
         }
     }
 
     @Test
     fun testChangeSelection(){
-        verify(exactly = 1) {
-            mqttConnectorValidationT.publish(any(), any(), any(), any()) // One Validation will be done on initialization of attribute
-        }
 
         verify(exactly = 0) {
+            mqttConnectorValidationT.publish(any(), any(), any(), any())
             mqttConnectorTextT.publish(any(), any(), any(), any())
             mqttConnectorAttributeT.publish(any(), any(), any(), any())
             mqttConnectorCommandT.publish(any(), any(), any(), any())
@@ -112,9 +110,6 @@ class CommunicationITest {
         verify(exactly = 1) {
             mqttConnectorAttributeT.publish(any(), any(), any(), any())
             mqttConnectorTextT.publish(any(), any(), any(), any())
-        }
-
-        verify(exactly = 2){
             mqttConnectorValidationT.publish(any(), any(), any(), any())
         }
     }
