@@ -285,10 +285,10 @@ internal class BaseFormModelTest {
     @Test
     fun testGetGroupsAndAttributes() {
         //then
-        assertEquals(3, model.getGroups().flatMap{it.attributes}.size)
-        assertEquals(2, model.getGroups()[0].attributes.size)
-        assertEquals(1, model.getGroups()[1].attributes.size)
-        assertEquals(0, model.getGroups()[2].attributes.size)
+        assertEquals(3, model.getGroups().flatMap{it.getAttributes()}.size)
+        assertEquals(2, model.getGroups()[0].getAttributes().size)
+        assertEquals(1, model.getGroups()[1].getAttributes().size)
+        assertEquals(0, model.getGroups()[2].getAttributes().size)
         assertEquals(3, model.getGroups().size)
         assertEquals("Group 1", model.getGroups()[0].title)
         assertEquals("Group 2", model.getGroups()[1].title)
