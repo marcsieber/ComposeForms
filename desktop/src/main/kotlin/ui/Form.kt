@@ -44,7 +44,7 @@ class Form {
                             GroupTitle(it.title)
 
                             LazyVerticalGrid(cells = GridCells.Adaptive(300.dp)){
-                                items(it.attributes){ attribute ->
+                                items(it.getAttributes()){ attribute ->
                                     AttributeElement(model, attribute)
                                 }
                             }

@@ -11,7 +11,7 @@ import model.util.Group
 import model.util.attribute.*
 import java.util.*
 
-abstract class BaseFormModel() : FormModel {
+abstract class BaseFormModel : FormModel {
 
     //******************************************************************************************************
     //Properties
@@ -40,7 +40,7 @@ abstract class BaseFormModel() : FormModel {
      */
     override fun saveAll(): Boolean {
         return if(isValidForAll()){
-            allGroups.forEach{it.attributes.forEach{ it.save() }}
+            allGroups.forEach{it.getAttributes().forEach{ it.save() }}
             true
         }else{
             false
@@ -54,7 +54,7 @@ abstract class BaseFormModel() : FormModel {
      */
     override fun undoAll(): Boolean {
         return if(isChangedForAll()){
-            allGroups.forEach{it.attributes.forEach{ it.undo() }}
+            allGroups.forEach{it.getAttributes().forEach{ it.undo() }}
             true
         }else{
             false
@@ -68,11 +68,11 @@ abstract class BaseFormModel() : FormModel {
      */
     override fun setCurrentLanguageForAll(lang: String){
         currentLanguage.value = lang
-        allGroups.forEach{it.attributes.forEach{attribute -> attribute.setCurrentLanguage(lang) }}
+        allGroups.forEach{it.getAttributes().forEach{attribute -> attribute.setCurrentLanguage(lang) }}
     }
 
     override fun validateAll() {
-        allGroups.forEach{it.attributes.forEach{it.revalidate()}}
+        allGroups.forEach{it.getAttributes().forEach{it.revalidate()}}
     }
 
 
@@ -84,7 +84,7 @@ abstract class BaseFormModel() : FormModel {
      * If yes, changedForAll is set true. If not, changedForAll is set false.
      */
     override fun setChangedForAll(){
-        changedForAll.value = allGroups.flatMap{it.attributes}.any(Attribute<*,*,*>::isChanged)
+        changedForAll.value = allGroups.flatMap{it.getAttributes()}.any(Attribute<*,*,*>::isChanged)
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class BaseFormModel() : FormModel {
      * If yes, changed is set true. If not, changed is set false.
      */
     override fun setValidForAll(){
-        validForAll.value = allGroups.flatMap{it.attributes}.all(Attribute<*,*,*>::isValid)
+        validForAll.value = allGroups.flatMap{it.getAttributes()}.all(Attribute<*,*,*>::isValid)
     }
 
     override fun setTitle(title: String){

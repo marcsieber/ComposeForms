@@ -23,7 +23,7 @@ interface FormModel {
     fun getPossibleLanguages(): List<String>
 
     fun getAttributeById(id: Int): Attribute<*,*,*>?{
-        return getGroups().flatMap{it.attributes}.find{it.getId() == id}
+        return getGroups().flatMap{it.getAttributes()}.find{it.getId() == id}
     }
 
     fun attributeChanged(attr: Attribute<*,*,*>)
