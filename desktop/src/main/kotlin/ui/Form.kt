@@ -32,12 +32,15 @@ class Form {
     @Composable
     fun of(model: FormModel){
         with(model) {
-            Column() {
+            Column {
                 header(model)
 
                 Row(modifier = Modifier.fillMaxSize().background(get(FormColors.BODY_BACKGROUND))) {
                     Column {
-                        getGroups().forEach(){
+                        if(getGroups().isEmpty()){
+                            NoGroupsMessage()
+                        }
+                        getGroups().forEach {
                             GroupTitle(it.title)
 
                             LazyVerticalGrid(cells = GridCells.Adaptive(300.dp)){
@@ -47,12 +50,6 @@ class Form {
                             }
                         }
                     }
-
-//                    LazyColumn(Modifier.fillMaxHeight()) {
-//                        items(getAttributes()) { attribute ->
-//                            AttributeElement(model, attribute)
-//                        }
-//                    }
                 }
             }
         }

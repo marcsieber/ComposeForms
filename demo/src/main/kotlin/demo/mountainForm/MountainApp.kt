@@ -1,5 +1,6 @@
 package demo.mountainForm
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ object MountainApp {
 
     val service: MountainService = MountainServiceImpl()
 
+    @ExperimentalFoundationApi
     @Composable
     fun createAppUI(){
         model = remember {MountainPM(service)}

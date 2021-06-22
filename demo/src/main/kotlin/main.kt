@@ -1,4 +1,5 @@
 import androidx.compose.desktop.Window
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.IntSize
@@ -10,6 +11,7 @@ import demo.zwischenprasentation.DemoApp
 import ui.Form
 
 
+@ExperimentalFoundationApi
 fun main() = Window(
     title = "Compose for Desktop",
     size = IntSize(600, 1000)
