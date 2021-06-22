@@ -338,7 +338,6 @@ abstract class Attribute <A,T,L> (//required parameters
             if (isValid()) {
                 setValue(typeValue)
                 if(!getConvertUserView().isNullOrEmpty()){
-                    println("Hallo")
                     println(getConvertUserView())
                     if(getConvertUserView()[0] && (getConvertImmediately()[0] || convertBecauseUnfocussed)){
                         setValueAsText(getValue().toString())
@@ -523,6 +522,10 @@ abstract class Attribute <A,T,L> (//required parameters
         var id : Int = 0
         fun getNextId(): Int{
             return id++
+        }
+
+        fun resetId(){
+            id = 0
         }
     }
 }

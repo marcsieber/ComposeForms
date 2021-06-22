@@ -1,7 +1,6 @@
 package communication
 
 import io.mockk.clearAllMocks
-import io.mockk.clearMocks
 import io.mockk.mockk
 import io.mockk.verify
 import model.BaseFormModel
@@ -9,37 +8,46 @@ import model.util.ILabel
 import model.util.attribute.Attribute
 import model.util.attribute.StringAttribute
 import model.validators.semanticValidators.StringValidator
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommunicationITest {
 
     enum class testLabels(test: String): ILabel{
-        test("test"),
-        label1("L1"),
-        label2("L2")
+        test("test")
     }
 
     lateinit var mqttConnectorTextT : MqttConnector
     lateinit var mqttConnectorAttributeT : MqttConnector
     lateinit var mqttConnectorCommandT : MqttConnector
     lateinit var mqttConnectorValidationT : MqttConnector
-    lateinit var model: BaseFormModel
 
-    lateinit var attribute1 : Attribute<*,*,*>
-    lateinit var attribute2 : Attribute<*,*,*>
+    var model: BaseFormModel? = null
+
+    var attribute1 : Attribute<*,*,*>? = null
+    var attribute2 : Attribute<*,*,*>? = null
+
+    @BeforeEach
+    fun setUp(){
+        initObjects()
+    }
+
+    @AfterEach
+    fun tearDown(){
+        Attribute.resetId()
+        clearAllMocks()
+    }
 
     @BeforeAll
-    fun setUp(){
-        println("Setup all")
-        mqttConnectorTextT = mockk<MqttConnector>(relaxed = true)
-        mqttConnectorAttributeT = mockk<MqttConnector>(relaxed = true)
-        mqttConnectorCommandT = mockk<MqttConnector>(relaxed = true)
-        mqttConnectorValidationT = mockk<MqttConnector>(relaxed = true)
+    private fun initMocks(){
+        mqttConnectorTextT = mockk(relaxed = true)
+        mqttConnectorAttributeT = mockk(relaxed = true)
+        mqttConnectorCommandT = mockk(relaxed = true)
+        mqttConnectorValidationT = mockk(relaxed = true)
+    }
 
+    private fun initObjects(){
+        model = null
         model = object: BaseFormModel(){
             override val mqttConnectorText = mqttConnectorTextT
             override val mqttConnectorAttribute = mqttConnectorAttributeT
@@ -50,29 +58,26 @@ class CommunicationITest {
                 return emptyList()
             }
         }
-
-        attribute1 = StringAttribute(model, testLabels.test, value = "", validators = listOf(StringValidator(2,5)))
-        attribute2 = StringAttribute(model, testLabels.test, value = "", required = true)
-    }
-
-    @BeforeEach
-    fun setupEach(){
-        // Clearing all mocks - so initial calls e.g. creating Attribute that calls a publish for validation will be reset.
-        // Has to be done to not reinitialize everything and not be dependent on ordering of the tests
-        clearAllMocks()
+        //when
+        attribute1 = StringAttribute(model!!, testLabels.test, value = "", validators = listOf(StringValidator(2,5)))
+        attribute2 = StringAttribute(model!!, testLabels.test, value = "")
     }
 
 
     @Test
     fun testSendAmount(){
-        verify(exactly = 0) {
+
+        verify(exactly = 1){
             mqttConnectorValidationT.publish(any(), any(), any(), any()) // One Validation will be done on initialization of attribute
+        }
+
+        verify(exactly = 0) {
             mqttConnectorTextT.publish(any(), any(), any(), any())
             mqttConnectorAttributeT.publish(any(), any(), any(), any())
             mqttConnectorCommandT.publish(any(), any(), any(), any())
         }
 
-        attribute1.setValueAsText("123")
+        attribute1!!.setValueAsText("123")
 
         verify(exactly = 0) {
             mqttConnectorCommandT.publish(any(), any(), any(), any())
@@ -81,21 +86,25 @@ class CommunicationITest {
         verify(exactly = 1) {
             mqttConnectorTextT.publish(any(), any(), any(), any())
         }
-        verify(exactly = 2) {
+
+        verify(exactly = 3) {
             mqttConnectorValidationT.publish(any(), any(), any(), any())
         }
     }
 
     @Test
     fun testChangeSelection(){
-        verify(exactly = 0) {
+        verify(exactly = 1) {
             mqttConnectorValidationT.publish(any(), any(), any(), any()) // One Validation will be done on initialization of attribute
+        }
+
+        verify(exactly = 0) {
             mqttConnectorTextT.publish(any(), any(), any(), any())
             mqttConnectorAttributeT.publish(any(), any(), any(), any())
             mqttConnectorCommandT.publish(any(), any(), any(), any())
         }
 
-        model.setCurrentFocusIndex(1)
+        model!!.setCurrentFocusIndex(1)
 
         verify(exactly = 0) {
             mqttConnectorCommandT.publish(any())
@@ -103,6 +112,9 @@ class CommunicationITest {
         verify(exactly = 1) {
             mqttConnectorAttributeT.publish(any(), any(), any(), any())
             mqttConnectorTextT.publish(any(), any(), any(), any())
+        }
+
+        verify(exactly = 2){
             mqttConnectorValidationT.publish(any(), any(), any(), any())
         }
     }
