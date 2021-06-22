@@ -151,21 +151,21 @@ abstract class BaseFormModel : FormModel {
     }
 
     private var focusRequesters: MutableList<Pair<FocusRequester, Attribute<*,*,*>>> = mutableListOf()
-    private var currentFocusIndex = mutableStateOf(0)
+    private var currentFocusIndex = mutableStateOf<Int?>(null)
 
-    override fun getCurrentFocusIndex(): Int {
+    override fun getCurrentFocusIndex(): Int? {
         return currentFocusIndex.value
     }
 
-    override fun setCurrentFocusIndex(index: Int) {
+    override fun setCurrentFocusIndex(index: Int?) {
         if(index != currentFocusIndex.value) {
             currentFocusIndex.value = index
             val attr: Attribute<*,*,*>? = getAttributeById(currentFocusIndex.value)
             if(attr != null) {
                 sendAll(attr)
             }
-            if(currentFocusIndex.value < focusRequesters.size) {
-                focusRequesters[currentFocusIndex.value].first.requestFocus()
+            if(currentFocusIndex.value != null  && currentFocusIndex.value!! < focusRequesters.size) {
+                focusRequesters[currentFocusIndex.value!!].first.requestFocus()
             }
         }
     }
@@ -181,12 +181,22 @@ abstract class BaseFormModel : FormModel {
         return -1
     }
 
+    /**
+     * This method focuses the next field if there is an already focused field.
+     */
     override fun focusNext() {
-        setCurrentFocusIndex((currentFocusIndex.value + 1) % focusRequesters.size)
+        if(currentFocusIndex.value != null){
+            setCurrentFocusIndex((currentFocusIndex.value!! + 1) % focusRequesters.size)
+        }
     }
 
+    /**
+     * This method focuses the previous field if there is an already focused field.
+     */
     override fun focusPrevious() {
-        setCurrentFocusIndex((currentFocusIndex.value + focusRequesters.size - 1) % focusRequesters.size)
+        if(currentFocusIndex.value != null) {
+            setCurrentFocusIndex((currentFocusIndex.value!! + focusRequesters.size - 1) % focusRequesters.size)
+        }
     }
 
     override fun textChanged(attr: Attribute<*,*,*>){
