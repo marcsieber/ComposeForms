@@ -42,6 +42,8 @@ internal class BaseFormModelTest {
         anzKinder = IntegerAttribute(model = model, value = ANZ_KINDER, label = Label.ANZKINDER)
 
         Group(model, "Group 1", listOf(alter, anzKinder))
+        Group(model, "Group 2", listOf(alter))
+        Group(model, "Group 3", listOf())
     }
 
     @Test
@@ -281,10 +283,18 @@ internal class BaseFormModelTest {
     }
 
     @Test
-    fun testGetAttributes() {
+    fun testGetGroupsAndAttributes() {
         //then
-        assertEquals(2, model.getGroups().flatMap{it.attributes}.size)
+        assertEquals(3, model.getGroups().flatMap{it.attributes}.size)
+        assertEquals(2, model.getGroups()[0].attributes.size)
+        assertEquals(1, model.getGroups()[1].attributes.size)
+        assertEquals(0, model.getGroups()[2].attributes.size)
+        assertEquals(3, model.getGroups().size)
+        assertEquals("Group 1", model.getGroups()[0].title)
+        assertEquals("Group 2", model.getGroups()[1].title)
+        assertEquals("Group 3", model.getGroups()[2].title)
     }
+
 
     @Test
     fun testGetTitle() {
