@@ -4,6 +4,7 @@ import io.mockk.clearAllMocks
 import io.mockk.mockk
 import io.mockk.verify
 import model.BaseFormModel
+import model.util.Group
 import model.util.ILabel
 import model.util.attribute.Attribute
 import model.util.attribute.StringAttribute
@@ -26,6 +27,7 @@ class CommunicationITest {
 
     var attribute1 : Attribute<*,*,*>? = null
     var attribute2 : Attribute<*,*,*>? = null
+    var group      : Group? = null
 
     @BeforeEach
     fun setUp(){
@@ -57,6 +59,8 @@ class CommunicationITest {
         //when
         attribute1 = StringAttribute(model!!, testLabels.test, value = "", validators = listOf(StringValidator(2,5)))
         attribute2 = StringAttribute(model!!, testLabels.test, value = "")
+
+        group = Group(model!!, "testgroup", listOf(attribute1!!, attribute2!!))
     }
 
 
