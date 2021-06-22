@@ -34,7 +34,6 @@ object Model {
 
     fun connectAndSubscribe(){
         mqttConnectorAttribute.connectAndSubscribe(subtopic = "attribute", onNewMessage = {
-            println("ATTRIBUTE RECEIVED: $it")
             val dtoText = Json.decodeFromString<DTOAttribute>(it)
             id = dtoText.id
             label = dtoText.label
@@ -48,7 +47,6 @@ object Model {
         })
 
         mqttConnectorText.connectAndSubscribe(subtopic = "text", onNewMessage = {
-            println("TEXT RECEIVED: $it")
             val dtoText = Json.decodeFromString<DTOText>(it)
             id = dtoText.id
             text = dtoText.text
@@ -58,14 +56,9 @@ object Model {
 
         mqttConnectorValidation.connectAndSubscribe(subtopic = "validation", onNewMessage = {
             val dtoValidation = Json.decodeFromString<DTOValidation>(it)
-            println("Valid: " + isValid + "; onRightTrack: " + isOnRightTrack + "; Error: " + errorMessages )
             isOnRightTrack = dtoValidation.onRightTrack
             isValid = dtoValidation.isValid
             errorMessages.value = dtoValidation.errorMessages
-
-            println("RT: $isOnRightTrack")
-            println("VALID: $isValid")
-            println("errormsg: ${errorMessages.value}")
         }, onConnected = {isConnected = true})
     }
 

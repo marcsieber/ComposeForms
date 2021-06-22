@@ -80,6 +80,7 @@ abstract class Attribute <A,T,L> (//required parameters
      */
     fun setValueAsText(valueAsText : String, doPublish: Boolean = true){
         if("\t" in valueAsText){
+            println("TAB ENTFERNT")
             return
         }
         if(!isReadOnly()){
@@ -87,7 +88,7 @@ abstract class Attribute <A,T,L> (//required parameters
             setChanged(valueAsText)
             checkAndSetValue(valueAsText)
             if(doPublish) {
-                model.attributeChanged(this)
+                model.textChanged(this)
             }
         }
     }
@@ -336,7 +337,6 @@ abstract class Attribute <A,T,L> (//required parameters
             if (isValid()) {
                 setValue(typeValue)
                 if(!getConvertUserView().isNullOrEmpty()){
-                    println("Hallo")
                     println(getConvertUserView())
                     if(getConvertUserView()[0] && (getConvertImmediately()[0] || convertBecauseUnfocussed)){
                         setValueAsText(getValue().toString())
@@ -521,6 +521,10 @@ abstract class Attribute <A,T,L> (//required parameters
         var id : Int = 0
         fun getNextId(): Int{
             return id++
+        }
+
+        fun resetId(){
+            id = 0
         }
     }
 }
