@@ -139,4 +139,40 @@ class CommunicationITest {
             mqttConnectorValidationT.publish(any(), any(), any(), any())
         }
     }
+
+    @Test
+    fun testOnReceiveOutOfBoundsSelection(){
+        clearAllMocks() //This test is only interested on the workflow of the command received. Therefore the mocks are cleared before the test
+
+        model!!.setCurrentFocusIndex(5)
+        val start = "{ \"command\" :"
+        val end = " }"
+        var mid = ""
+
+        //when
+        mid = "\"REQUEST\""
+        val command1 = start + mid + end
+        model!!.onReceivedCommand(command1)
+        //then
+        verify(exactly = 0){
+            mqttConnectorAttributeT.publish(any(), any(), any(), any())
+            mqttConnectorTextT.publish(any(), any(), any(), any())
+            mqttConnectorValidationT.publish(any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    fun testConnectAndSubscribeConnectingAllChannels(){
+        clearAllMocks() //Only interested in interactions from connect and subscribe
+        //when
+        model!!.connectAndSubscribe()
+        //then
+        verify(exactly = 1) {
+            mqttConnectorValidationT.connectAndSubscribe(any(), any(), any(), any())
+            mqttConnectorTextT.connectAndSubscribe(any(), any(), any(), any())
+            mqttConnectorCommandT.connectAndSubscribe(any(), any(), any(), any())
+            mqttConnectorAttributeT.connectAndSubscribe(any(), any(), any(), any())
+        }
+
+    }
 }
