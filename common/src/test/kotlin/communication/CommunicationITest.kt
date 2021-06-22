@@ -29,13 +29,9 @@ class CommunicationITest {
 
     @BeforeEach
     fun setUp(){
-        initObjects()
-    }
-
-    @AfterEach
-    fun tearDown(){
         Attribute.resetId()
         clearAllMocks()
+        initObjects()
     }
 
     @BeforeAll
