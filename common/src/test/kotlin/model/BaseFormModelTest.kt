@@ -1,5 +1,6 @@
 package model
 
+import model.util.Group
 import model.util.ILabel
 import model.util.attribute.*
 import org.junit.jupiter.api.Assertions.*
@@ -39,6 +40,8 @@ internal class BaseFormModelTest {
         alter = IntegerAttribute(model = model, value = ALTER, label = Label.ALTER)
 
         anzKinder = IntegerAttribute(model = model, value = ANZ_KINDER, label = Label.ANZKINDER)
+
+        Group(model, "Group 1", listOf(alter, anzKinder))
     }
 
     @Test
@@ -280,7 +283,7 @@ internal class BaseFormModelTest {
     @Test
     fun testGetAttributes() {
         //then
-        assertEquals(2, model.getAttributes().size)
+        assertEquals(2, model.getGroups().flatMap{it.attributes}.size)
     }
 
     @Test
