@@ -1,12 +1,16 @@
 package ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
@@ -14,8 +18,11 @@ import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.FormModel
+import model.util.Utilities
 import model.util.attribute.Attribute
+import model.util.attribute.SelectionAttribute
 import ui.theme.ColorsUtil.Companion.get
+import ui.theme.DropdownColors
 import ui.theme.FormColors
 
 
@@ -32,6 +39,8 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
     OutlinedTextField(
         singleLine = true,
         modifier = Modifier
+            .fillMaxWidth()
+            .padding(6.dp, 12.dp, 6.dp, 6.dp)
             .focusModifier().onFocusEvent { focS ->
                 if(focused != focS.isFocused){
                     if(!focS.isFocused){
@@ -82,4 +91,84 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
             }
         }
     }
+}
+
+@Composable
+fun SelectionField(model : FormModel, selectionAttribute : SelectionAttribute<*>){
+    with(model){
+        val dropDownIsOpen          = remember { mutableStateOf(false) }
+        val selectionString         = mutableStateOf(selectionAttribute.getValueAsText().substring(1, selectionAttribute.getValueAsText().length-1))
+        val label                   = selectionAttribute.getLabel()
+
+        Row(modifier = Modifier.padding(6.dp, 12.dp, 6.dp, 6.dp)) {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Column() {
+                    Card(){
+                        OutlinedButton(
+                            modifier = Modifier.height(64.dp).fillMaxWidth().padding(top = 8.dp),
+                            onClick = { dropDownIsOpen.value = true },
+                            shape = RoundedCornerShape(8),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = DropdownColors.BUTTON_BACKGROUND.color),
+                            border = BorderStroke(1.dp, if (selectionAttribute.isValid()) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR))
+                        ) {
+                            if (selectionString.value.equals("")) {
+                                Text(label, color = get(FormColors.LABEL))
+                            } else {
+                                Text(selectionString.value)
+                            }
+                        }
+                        Row(modifier = Modifier.height(12.dp)){
+                            if (!selectionString.value.equals("")) {
+                                Text(
+                                    label,
+                                    color = get(FormColors.LABEL),
+                                    modifier = Modifier.wrapContentSize().padding(4.dp),
+                                    fontSize = 12.sp
+                                )
+                            }
+                        }
+                    }
+                    DropDownMenu(
+                        dropDownIsOpen, selectionAttribute.getPossibleSelections(), Utilities<Set<String>>().stringToSetConverter(selectionAttribute.getValueAsText()),
+                        selectionAttribute::addUserSelection, selectionAttribute::removeUserSelection
+                    )
+
+                }
+
+            }
+        }
+        Column {
+            if (!selectionAttribute.isValid()) {
+                for (msg in selectionAttribute.getErrorMessages()) {
+                    Text(msg, color = get(FormColors.ERROR), fontSize = 12.sp, modifier = Modifier.padding(4.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DropDownMenu(dropDownIsOpen: MutableState<Boolean>, selections: Set<String>, currentSelectionValue: Set<String>,
+                 add :(String)-> Unit, remove : (String) -> Unit) {
+
+    DropdownMenu(
+        expanded = dropDownIsOpen.value,
+        onDismissRequest = { dropDownIsOpen.value = false},
+        modifier = Modifier.wrapContentSize().fillMaxWidth(),
+        content = {
+            selections.forEachIndexed { index, string ->
+                val elementIsSelected       = currentSelectionValue.contains(string)
+                val elementIsSelectedBackgroundColor  = if(elementIsSelected) get(DropdownColors.BACKGROUND_ELEMENT_SEL) else get(DropdownColors.BACKGROUND_ELEMENT_NOT_SEL)
+                val elementIsSelectedTextColor = if(elementIsSelected) get(DropdownColors.TEXT_ELEMENT_SEL) else get(DropdownColors.TEXT_ELEMENT_NOT_SEL)
+                DropdownMenuItem(
+                    modifier = Modifier.background(elementIsSelectedBackgroundColor),
+                    onClick = {
+                        if (!elementIsSelected) {
+                            add(string)
+                        } else { remove(string)}},
+                    content = {Text( text = string, modifier = Modifier.background(elementIsSelectedBackgroundColor), color = elementIsSelectedTextColor)}
+                )
+            }
+        }
+    )
 }

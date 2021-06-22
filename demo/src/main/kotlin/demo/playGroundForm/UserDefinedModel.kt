@@ -12,6 +12,7 @@ import model.convertables.ReplacementPair
 import model.meanings.Currency
 import model.meanings.CustomMeaning
 import model.meanings.Percentage
+import model.util.Group
 import model.util.attribute.*
 import model.validators.semanticValidators.*
 import java.time.LocalTime
@@ -224,6 +225,11 @@ class UserDefinedModel : BaseFormModel(){
             strValidator.overrideStringValidator(15,20,"Length must be between 15 and 20 characters")
         }
     }
+
+
+
+    val group1 = Group(this, "Group-Name", listOf(s,d1,d2,selectionValue))
+    val group2 = Group(this, "Group-Name 2", listOf(intValue1, intValue2, longValue, shortValue))
 
 
 //    Blalbla(
