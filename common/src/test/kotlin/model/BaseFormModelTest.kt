@@ -1,5 +1,9 @@
 package model
 
+import androidx.compose.ui.focus.FocusRequester
+import communication.AttributeType
+import io.mockk.mockk
+import model.meanings.Default
 import model.util.Group
 import model.util.ILabel
 import model.util.attribute.*
@@ -21,6 +25,7 @@ internal class BaseFormModelTest {
 
     lateinit var alter : Attribute<*,*,*>
     lateinit var anzKinder : Attribute<*,*,*>
+    lateinit var group : Group
 
     enum class Label(val test: String): ILabel{
         ALTER("Alter"),
@@ -36,12 +41,15 @@ internal class BaseFormModelTest {
 
     @BeforeEach
     fun setUp(){
+        //reset
+        Attribute.resetId()
+
         //given
         alter = IntegerAttribute(model = model, value = ALTER, label = Label.ALTER)
 
         anzKinder = IntegerAttribute(model = model, value = ANZ_KINDER, label = Label.ANZKINDER)
 
-        Group(model, "Group 1", listOf(alter, anzKinder))
+        group = Group(model, "Group 1", listOf(alter, anzKinder))
         Group(model, "Group 2", listOf(alter))
         Group(model, "Group 3", listOf())
     }
@@ -359,4 +367,182 @@ internal class BaseFormModelTest {
         assertTrue(model.isCurrentLanguageForAll("test"))
 
     }
+
+    @Test
+    fun testGetAttributeType(){
+        //when
+        var attr: Attribute<*,*,*> = StringAttribute(model, Label.ANZKINDER)
+        //then
+        assertEquals(AttributeType.STRING, model.getAttributeType(attr))
+
+        //when
+        attr = DoubleAttribute(model, Label.ANZKINDER)
+        //then
+        assertEquals(AttributeType.DOUBLE, model.getAttributeType(attr))
+
+        //when
+        attr = FloatAttribute(model, Label.ANZKINDER)
+        //then
+        assertEquals(AttributeType.FLOAT, model.getAttributeType(attr))
+
+        //when
+        attr = ShortAttribute(model, Label.ANZKINDER)
+        //then
+        assertEquals(AttributeType.SHORT, model.getAttributeType(attr))
+
+        //when
+        attr = IntegerAttribute(model, Label.ANZKINDER)
+        //then
+        assertEquals(AttributeType.INTEGER, model.getAttributeType(attr))
+
+        //when
+        attr= LongAttribute(model, Label.ANZKINDER)
+        //then
+        assertEquals(AttributeType.LONG, model.getAttributeType(attr))
+
+        //when
+        attr = SelectionAttribute(model, Label.ANZKINDER, emptySet())
+        //then
+        assertEquals(AttributeType.SELECTION, model.getAttributeType(attr))
+
+
+        //when
+        attr = object : Attribute<StringAttribute<Label>, String, Label>(model, Label.ANZKINDER, null, false, false, emptyList(), emptyList(),
+            emptyList(), Default()){
+            override val typeT: String
+                get() = ""
+        }
+        //then
+        assertEquals(AttributeType.OTHER, model.getAttributeType(attr))
+
+    }
+
+
+    @Test
+    fun testSetCurrentFocusIndex(){
+        //when
+        model.setCurrentFocusIndex(0)
+        //then
+        assertEquals(0, model.getCurrentFocusIndex())
+
+
+        //when
+        model.setCurrentFocusIndex(1)
+        //then
+        assertEquals(1, model.getCurrentFocusIndex())
+
+
+        //when
+        model.setCurrentFocusIndex(10)
+        //then
+        assertEquals(10, model.getCurrentFocusIndex())
+
+
+        //when
+        model.setCurrentFocusIndex(-10)
+        //then
+        assertEquals(10, model.getCurrentFocusIndex())
+    }
+
+    @Test
+    fun testFocusRequesters(){
+        //given
+        val fr1 : FocusRequester = mockk(relaxed = true)
+        //when
+        val i1 = model.addFocusRequester(fr1, alter)
+        //then
+        assertEquals(0, i1)
+
+        //given
+        val fr2 : FocusRequester = mockk(relaxed = true)
+        //when
+        val i2 = model.addFocusRequester(fr2, anzKinder)
+        //then
+        assertEquals(1, i2)
+
+        //when
+        val i3 = model.addFocusRequester(fr1, alter)
+        //then
+        assertEquals(-1, i3)
+
+
+        assertEquals(0, model.getCurrentFocusIndex())
+        //when
+        model.focusNext()
+        //then
+        assertEquals(1, model.getCurrentFocusIndex())
+
+        //when
+        model.focusNext()
+        //then
+        assertEquals(0, model.getCurrentFocusIndex())
+
+        //when
+        model.focusPrevious()
+        //then
+        assertEquals(1, model.getCurrentFocusIndex())
+
+        //previous
+        //when
+        model.focusPrevious()
+        //then
+        assertEquals(0, model.getCurrentFocusIndex())
+    }
+
+    @Test
+    fun testOnReceivedText(){
+        //given
+        val string = "{ \"id\":0, \"text\":\"123\" }"
+        //when
+        model.onReceivedText(string)
+        //then
+        assertEquals("123", alter.getValueAsText())
+
+
+        //given
+        val string2 = "{ \"id\":2, \"text\":\"123\" }"
+        //when
+        model.onReceivedText(string)
+        //then
+        assertEquals("123", alter.getValueAsText())
+    }
+
+    @Test
+    fun testOnReceivedCommand(){
+        //given
+        val attr = StringAttribute(model, Label.ANZKINDER)
+        group.addAttribute(attr)
+
+        val fr1 : FocusRequester = mockk(relaxed = true)
+        model.addFocusRequester(fr1, alter)
+        val fr2 : FocusRequester = mockk(relaxed = true)
+        model.addFocusRequester(fr2, anzKinder)
+        val fr3 : FocusRequester = mockk(relaxed = true)
+        model.addFocusRequester(fr3, attr)
+
+        assertEquals(0, model.getCurrentFocusIndex())
+
+        val start = "{ \"command\" :"
+        val end = " }"
+        var mid = ""
+
+        //when
+        mid = "\"NEXT\""
+        val command1 = start + mid + end
+        model.onReceivedCommand(command1)
+        //then
+        assertEquals(1, model.getCurrentFocusIndex())
+
+        model.onReceivedCommand(command1)
+        //then
+        assertEquals(2, model.getCurrentFocusIndex())
+
+        //when
+        mid = "\"PREVIOUS\""
+        val command2 = start + mid + end
+        model.onReceivedCommand(command2)
+        //then
+        assertEquals(1, model.getCurrentFocusIndex())
+    }
+
 }

@@ -158,7 +158,7 @@ abstract class BaseFormModel : FormModel {
     }
 
     override fun setCurrentFocusIndex(index: Int) {
-        if(index != currentFocusIndex.value) {
+        if(index != currentFocusIndex.value && index >= 0) {
             currentFocusIndex.value = index
             val attr: Attribute<*,*,*>? = getAttributeById(currentFocusIndex.value)
             if(attr != null) {

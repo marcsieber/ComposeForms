@@ -120,8 +120,23 @@ class CommunicationITest {
     }
 
 
-//    @Test
-//    fun testOnReceive(){
-//
-//    }
+    @Test
+    fun testOnReceive(){
+        clearAllMocks() //This test is only interested on the workflow of the command received. Therefore the mocks are cleared before the test
+
+        val start = "{ \"command\" :"
+        val end = " }"
+        var mid = ""
+
+        //when
+        mid = "\"REQUEST\""
+        val command1 = start + mid + end
+        model!!.onReceivedCommand(command1)
+        //then
+        verify(exactly = 1){
+            mqttConnectorAttributeT.publish(any(), any(), any(), any())
+            mqttConnectorTextT.publish(any(), any(), any(), any())
+            mqttConnectorValidationT.publish(any(), any(), any(), any())
+        }
+    }
 }
