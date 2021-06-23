@@ -1,9 +1,6 @@
 package ui
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.focusable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
@@ -11,6 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropDownCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
@@ -41,6 +40,7 @@ import ui.theme.FormColors
 @Composable
 fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> Boolean){
 
+    val selectionField : Boolean = attr is SelectionAttribute
     val focusRequester = remember { FocusRequester() }
 
     val index = remember { model.addFocusRequester(focusRequester, attr) }
@@ -80,42 +80,71 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
         val unfocusedColor by mutableStateOf(if(attr.isValid()) get(FormColors.RIGHTTRACK) else {get(FormColors.ERROR)})
         var showErrorMsg by remember { mutableStateOf(false) }
 
+        //for selectionField
+        var dropDownIsOpen : MutableState<Boolean> = remember { mutableStateOf(false) }
+        var selectionString : MutableState<String> = remember {mutableStateOf("")}
+        if(selectionField) {
+            selectionString = mutableStateOf(attr.getValueAsText().substring(1, attr.getValueAsText().length - 1))
+        }
+
 
         //Label
         Row(modifier = Modifier.height(24.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
             Text( if(attr.isRequired()) attr.getLabel() + "*" else attr.getLabel(),
                 fontSize = 12.sp,
                 modifier = Modifier.padding(bottom = 12.dp),
-                color = if(focused) focusedColor else unfocusedColor)
+                color = if(focused) focusedColor else unfocusedColor,
+                fontWeight = if(focused) FontWeight.Bold else FontWeight.Normal)
         }
 
         //Input
-        Row {
+        Column {
 //            BoxWithConstraints(contentAlignment = Alignment.CenterEnd) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)){
 
-                //Field
-                BasicTextField(
-                    value = attr.getValueAsText(),
-                    onValueChange = {attr.setValueAsText(it)},
-                    singleLine = true,
-                    modifier = Modifier.height(20.dp).fillMaxWidth(0.9f).padding(start = 12.dp) //todo: Find better solution for Text field and trailing icon side by side
-                )
+                    //Field
+                    BasicTextField(
+                        value = if(!selectionField) attr.getValueAsText() else selectionString.value,
+                        onValueChange = {attr.setValueAsText(it)},
+                        singleLine = true,
+                        modifier = Modifier
+                            .height(20.dp)
+                            .fillMaxWidth(if(selectionField) 0.88f else if(attr.meaning !== Default<Any>()) 0.9f else 1f) //todo: Find better solution for Text field and icon side by side
+                            .padding(start = 12.dp, end = 12.dp),
+                        readOnly = attr.isReadOnly() || selectionField
+                    )
 
-                //Trailing-Icon
-                if(attr.meaning !== Default<Any>()){
-                    Text(attr.meaning.addMeaning(attr.getValueAsText()),
-                        textAlign = TextAlign.Right,
-                        modifier = Modifier.padding(end = 12.dp),
-                        color = if(focused) focusedColor else unfocusedColor)
-                }
+                    //Trailing-Icon
+                    if(!selectionField && attr.meaning !== Default<Any>()){
+                        Text(attr.meaning.addMeaning(attr.getValueAsText()),
+                            textAlign = TextAlign.Right,
+                            modifier = Modifier.padding(end = 12.dp),
+                            color = if(focused) focusedColor else unfocusedColor)
+                    }
+
+                    //Drop-Down-Icon for Selection-Field
+                    if(selectionField){
+                        IconButton(
+                            onClick = { dropDownIsOpen.value = true; model.setCurrentFocusIndex(index) },
+                            modifier = Modifier.clip(CircleShape).size(20.dp)
+                        ) {
+                            Icon(Icons.Filled.ArrowDropDownCircle, "DropDown", tint = if(focused) focusedColor else unfocusedColor)
+                        }
+                    }
+            }
+            //DropDown-Menu
+            if(selectionField){
+                DropDownMenu(
+                    dropDownIsOpen, attr.getPossibleSelections(), Utilities<Set<String>>().stringToSetConverter(attr.getValueAsText()),
+                    (attr as SelectionAttribute)::addUserSelection, attr::removeUserSelection
+                )
             }
         }
 
-
         //Line
-        Divider(color = if(attr.isReadOnly()) Color.Transparent else if(focused) focusedColor else unfocusedColor, thickness = if(focused) 2.dp else 1.dp)
-
+        Row(modifier = Modifier.height(2.dp)){
+            Divider(color = if(attr.isReadOnly()) Color.Transparent else if(focused) focusedColor else unfocusedColor, thickness = if(focused) 2.dp else 1.dp)
+        }
 
         //Error-Message
         Spacer(modifier = Modifier.height(2.dp))
@@ -140,7 +169,7 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
                 }
             }
 
-            Row(modifier = Modifier.padding(end = 4.dp)){
+            Row(modifier = Modifier.padding(end = 6.dp)){
                 if (error) {
                     IconButton(
                         onClick = { showErrorMsg = !showErrorMsg
@@ -149,74 +178,6 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
                     ) {
                         Icon(Icons.Filled.Error, "Error", tint = get(FormColors.ERROR))
                     }
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun SelectionField(model : FormModel, selectionAttribute : SelectionAttribute<*>){
-    with(model){
-        val dropDownIsOpen          = remember { mutableStateOf(false) }
-        val selectionString         = mutableStateOf(selectionAttribute.getValueAsText().substring(1, selectionAttribute.getValueAsText().length-1))
-        val label                   = selectionAttribute.getLabel()
-
-        val fr = remember { FocusRequester() }
-        val index = remember { model.addFocusRequester(fr, selectionAttribute) }
-
-        val fm = LocalFocusManager.current
-
-        Row(modifier = Modifier.padding(6.dp, 12.dp, 6.dp, 6.dp)) {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Column {
-                    Card {
-                        OutlinedButton(
-                            modifier = Modifier.height(64.dp).fillMaxWidth().padding(top = 8.dp)
-                                .focusable().focusOrder(fr).onFocusChanged { if(it.isFocused){
-                                    fm.clearFocus(true)
-                                    model.setCurrentFocusIndex(index)
-                                }},
-                            onClick = {
-                                fm.clearFocus(true)
-                                dropDownIsOpen.value = true
-                                model.setCurrentFocusIndex(index)
-                            },
-                            shape = RoundedCornerShape(8),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = DropdownColors.BUTTON_BACKGROUND.color),
-                            border = BorderStroke(1.dp, if (selectionAttribute.isValid()) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR))
-                        ) {
-                            if (selectionString.value.equals("")) {
-                                Text(label, color = get(FormColors.LABEL))
-                            } else {
-                                Text(selectionString.value)
-                            }
-                        }
-                        Row(modifier = Modifier.height(12.dp)){
-                            if (!selectionString.value.equals("")) {
-                                Text(
-                                    label,
-                                    color = get(FormColors.LABEL),
-                                    modifier = Modifier.wrapContentSize().padding(4.dp),
-                                    fontSize = 12.sp
-                                )
-                            }
-                        }
-                    }
-                    DropDownMenu(
-                        dropDownIsOpen, selectionAttribute.getPossibleSelections(), Utilities<Set<String>>().stringToSetConverter(selectionAttribute.getValueAsText()),
-                        selectionAttribute::addUserSelection, selectionAttribute::removeUserSelection
-                    )
-
-                }
-
-            }
-        }
-        Column {
-            if (!selectionAttribute.isValid()) {
-                for (msg in selectionAttribute.getErrorMessages()) {
-                    Text(msg, color = get(FormColors.ERROR), fontSize = 12.sp, modifier = Modifier.padding(4.dp))
                 }
             }
         }

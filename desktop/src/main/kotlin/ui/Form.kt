@@ -130,7 +130,10 @@ class Form {
     }
 
     @Composable fun AttributeElement(model: FormModel, selectionAttribute: SelectionAttribute<*>){ //todo: undo & save when dropdown is open
-        SelectionField(model, selectionAttribute)
+        InputField(model, selectionAttribute){
+            return@InputField true
+        }
+//        SelectionField(model, selectionAttribute)
     }
 
 
