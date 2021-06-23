@@ -4,20 +4,23 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.FormModel
+import model.meanings.Default
 import model.util.Utilities
 import model.util.attribute.Attribute
 import model.util.attribute.SelectionAttribute
@@ -35,22 +38,19 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
     val focused = model.getCurrentFocusIndex() == index
     val error = if(!focused) !attr.isValid() else !attr.isRightTrackValid() //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
 
-
-    OutlinedTextField(
-        singleLine = true,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(6.dp, 12.dp, 6.dp, 6.dp)
-            .focusModifier().onFocusEvent { focS ->
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.padding(6.dp, 15.dp, 6.dp, 15.dp)
+            .focusModifier()
+            .onFocusEvent { focS ->
                 if(focused != focS.isFocused){
                     if(!focS.isFocused){
-                        attr.checkAndSetConvertableBecauseUnfocussedAttribute() //setConvertables()
+                        attr.checkAndSetConvertableBecauseUnfocussedAttribute() //setConvertables() //todo unfocus when no inputfield is focused
                     }
                 }
                 if(focS.isFocused){
                     model.setCurrentFocusIndex(index)
-                }
-            }
+                }}
             .focusOrder(focusRequester)
             .onKeyEvent{event ->
 //                println(event.key)
@@ -62,36 +62,60 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
             }
             .shortcuts {
 //                println("SHORTCUT" )
-              on(Key.Tab){
+                on(Key.Tab){
 //                  println("TAB PRESSED")
-              }
-            },
-        value = attr.getValueAsText(),
-        trailingIcon = {Text(attr.meaning.addMeaning(attr.getValueAsText()))},
-        onValueChange = {attr.setValueAsText(it)},
-        label = { Text( if(attr.isRequired()) attr.getLabel() + "*" else attr.getLabel()) },
-        enabled = !attr.isReadOnly(),
-        readOnly = attr.isReadOnly(),
-        isError = error ,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = if(!attr.isValid()) get(FormColors.RIGHTTRACK) else get(FormColors.VALID),
-            focusedLabelColor = if(!attr.isValid()) get(FormColors.RIGHTTRACK)  else get(FormColors.VALID),
-            errorBorderColor = get(FormColors.ERROR),
-            errorLabelColor = get(FormColors.ERROR),
-            disabledBorderColor = Color.Transparent, //readonly
-            disabledTextColor = Color.Black,         //readonly
-            disabledLabelColor = Color.Black,        //readonly
-            cursorColor = Color.Black
-        )
-    )
-    Column {
-        if(error){
-            for(msg in attr.getErrorMessages()){
-                Text(msg, color = get(FormColors.ERROR), fontSize = 12.sp, modifier = Modifier.padding(4.dp) )
+                }
+            }){
+
+        val focusedColor by mutableStateOf(if(attr.isValid()) get(FormColors.VALID) else if(attr.isRightTrackValid()) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR))
+        val unfocusedColor by mutableStateOf(if(attr.isValid()) get(FormColors.RIGHTTRACK) else {get(FormColors.ERROR)})
+
+
+        //Error-Message
+        Row(modifier = Modifier.height(20.dp).background(get(FormColors.ERROR)), verticalAlignment = Alignment.CenterVertically) {
+            if (error) {
+                for (msg in attr.getErrorMessages()) {
+                    Text(msg, color = Color.White, fontSize = 12.sp, modifier = Modifier.padding(4.dp))
+                }
             }
         }
+        Spacer(modifier = Modifier.height(4.dp))
+
+        //Label
+        Row(modifier = Modifier.height(24.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
+            Text( if(attr.isRequired()) attr.getLabel() + "*" else attr.getLabel(),
+                fontSize = 12.sp,
+                modifier = Modifier.padding(bottom = 12.dp),
+                color = if(focused) focusedColor else unfocusedColor)
+        }
+
+        //Input
+        Row {
+            BoxWithConstraints(contentAlignment = Alignment.CenterEnd) {
+                //Field
+                BasicTextField(
+                    value = attr.getValueAsText(),
+                    onValueChange = {attr.setValueAsText(it)},
+                    singleLine = true,
+                    modifier = Modifier.height(20.dp).fillMaxWidth().padding(start = 12.dp)
+                )
+
+                //Trailing-Icon
+                if(attr.meaning !== Default<Any>()){
+                    Text(attr.meaning.addMeaning(attr.getValueAsText()),
+                        textAlign = TextAlign.Right,
+                        modifier = Modifier.padding(end = 12.dp),
+                        color = if(focused) focusedColor else unfocusedColor)
+                }
+            }
+        }
+
+
+        //Line
+        Divider(color = if(attr.isReadOnly()) Color.Transparent else if(focused) focusedColor else unfocusedColor, thickness = if(focused) 2.dp else 1.dp)
     }
 }
+
 
 @Composable
 fun SelectionField(model : FormModel, selectionAttribute : SelectionAttribute<*>){
@@ -102,8 +126,8 @@ fun SelectionField(model : FormModel, selectionAttribute : SelectionAttribute<*>
 
         Row(modifier = Modifier.padding(6.dp, 12.dp, 6.dp, 6.dp)) {
             Box(modifier = Modifier.fillMaxWidth()) {
-                Column() {
-                    Card(){
+                Column {
+                    Card {
                         OutlinedButton(
                             modifier = Modifier.height(64.dp).fillMaxWidth().padding(top = 8.dp),
                             onClick = { dropDownIsOpen.value = true },

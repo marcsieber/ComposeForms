@@ -22,7 +22,7 @@ interface FormModel {
     fun addGroup(group: Group)
     fun getPossibleLanguages(): List<String>
 
-    fun getAttributeById(id: Int): Attribute<*,*,*>?{
+    fun getAttributeById(id: Int?): Attribute<*,*,*>?{
         return getGroups().flatMap{it.getAttributes()}.find{it.getId() == id}
     }
 
@@ -33,7 +33,7 @@ interface FormModel {
     fun addFocusRequester(fr: FocusRequester, attr: Attribute<*,*,*>): Int
     fun focusNext()
     fun focusPrevious()
-    fun setCurrentFocusIndex(index: Int)
-    fun getCurrentFocusIndex(): Int
+    fun setCurrentFocusIndex(index: Int?)
+    fun getCurrentFocusIndex(): Int?
 
 }

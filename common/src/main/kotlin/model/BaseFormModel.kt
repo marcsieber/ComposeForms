@@ -152,10 +152,9 @@ abstract class BaseFormModel : FormModel {
 
     //List with focus requester to change focus in the model
     private var focusRequesters: MutableList<Pair<FocusRequester, Attribute<*,*,*>>> = mutableListOf()
-    private var currentFocusIndex = mutableStateOf(0)
+    private var currentFocusIndex = mutableStateOf<Int?>(null)
 
-
-    override fun getCurrentFocusIndex(): Int {
+    override fun getCurrentFocusIndex(): Int? {
         return currentFocusIndex.value
     }
 
@@ -172,15 +171,15 @@ abstract class BaseFormModel : FormModel {
      * TODO: Check if the attr id also can be used?!
      * @param index
      */
-    override fun setCurrentFocusIndex(index: Int) {
-        if(index != currentFocusIndex.value && index >= 0) {
+    override fun setCurrentFocusIndex(index: Int?) {
+        if(index != currentFocusIndex.value) {
             currentFocusIndex.value = index
             val attr: Attribute<*,*,*>? = getAttributeById(getCurrentFocusAttributeId())
             if(attr != null) {
                 sendAll(attr)
             }
-            if(currentFocusIndex.value < focusRequesters.size) {
-                focusRequesters[currentFocusIndex.value].first.requestFocus()
+            if(currentFocusIndex.value != null  && currentFocusIndex.value!! < focusRequesters.size && currentFocusIndex.value!! >= 0) {
+                focusRequesters[currentFocusIndex.value!!].first.requestFocus()
             }
         }
     }
@@ -202,17 +201,23 @@ abstract class BaseFormModel : FormModel {
     }
 
     /**
-     * Sets the current focus on the next greater value. If it is out of bounds then starts from beginning
+     * This method focuses the next field if there is an already focused field.
+     * It sets the current focus to the next greater value. If it is out of bounds then starts from beginning
      */
     override fun focusNext() {
-        setCurrentFocusIndex((currentFocusIndex.value + 1) % focusRequesters.size)
+        if(currentFocusIndex.value != null){
+            setCurrentFocusIndex((currentFocusIndex.value!! + 1) % focusRequesters.size)
+        }
     }
 
     /**
-     * Sets the current focus on the previous value. If it is a negative value, set the highest value
+     * This method focuses the previous field if there is an already focused field.
+     * It sets the current focus to the previous value. If it is a negative value, set the highest value
      */
     override fun focusPrevious() {
-        setCurrentFocusIndex((currentFocusIndex.value + focusRequesters.size - 1) % focusRequesters.size)
+        if(currentFocusIndex.value != null) {
+            setCurrentFocusIndex((currentFocusIndex.value!! + focusRequesters.size - 1) % focusRequesters.size)
+        }
     }
 
     /**
