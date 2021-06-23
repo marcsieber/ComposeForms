@@ -2,6 +2,7 @@ package model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import communication.*
 import kotlinx.serialization.decodeFromString
@@ -159,8 +160,8 @@ abstract class BaseFormModel : FormModel {
     }
 
     private fun getCurrentFocusAttributeId(): Int{
-        return if(getCurrentFocusIndex() < focusRequesters.size){
-            focusRequesters[getCurrentFocusIndex()].second.getId()
+        return if(getCurrentFocusIndex()?: Int.MAX_VALUE < focusRequesters.size){
+            focusRequesters[getCurrentFocusIndex()!!].second.getId()
         }else{
             -1
         }
@@ -172,7 +173,7 @@ abstract class BaseFormModel : FormModel {
      * @param index
      */
     override fun setCurrentFocusIndex(index: Int?) {
-        if(index != currentFocusIndex.value) {
+        if(index != currentFocusIndex.value && index?:0 >= 0) {
             currentFocusIndex.value = index
             val attr: Attribute<*,*,*>? = getAttributeById(getCurrentFocusAttributeId())
             if(attr != null) {
@@ -207,6 +208,8 @@ abstract class BaseFormModel : FormModel {
     override fun focusNext() {
         if(currentFocusIndex.value != null){
             setCurrentFocusIndex((currentFocusIndex.value!! + 1) % focusRequesters.size)
+        }else{
+            setCurrentFocusIndex(0)
         }
     }
 
@@ -217,6 +220,8 @@ abstract class BaseFormModel : FormModel {
     override fun focusPrevious() {
         if(currentFocusIndex.value != null) {
             setCurrentFocusIndex((currentFocusIndex.value!! + focusRequesters.size - 1) % focusRequesters.size)
+        }else{
+            setCurrentFocusIndex(focusRequesters.size -1)
         }
     }
 
