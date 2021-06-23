@@ -150,6 +150,7 @@ abstract class BaseFormModel : FormModel {
         }
     }
 
+    //List with focus requester to change focus in the model
     private var focusRequesters: MutableList<Pair<FocusRequester, Attribute<*,*,*>>> = mutableListOf()
     private var currentFocusIndex = mutableStateOf<Int?>(null)
 
@@ -157,6 +158,11 @@ abstract class BaseFormModel : FormModel {
         return currentFocusIndex.value
     }
 
+    /**
+     * Set current focus index if it differs from current focus index and is greater or equals 0
+     * TODO: Check if the attr id also can be used?!
+     * @param index
+     */
     override fun setCurrentFocusIndex(index: Int?) {
         if(index != currentFocusIndex.value) {
             currentFocusIndex.value = index
@@ -164,12 +170,18 @@ abstract class BaseFormModel : FormModel {
             if(attr != null) {
                 sendAll(attr)
             }
-            if(currentFocusIndex.value != null  && currentFocusIndex.value!! < focusRequesters.size) {
+            if(currentFocusIndex.value != null  && currentFocusIndex.value!! < focusRequesters.size && currentFocusIndex.value!! >= 0) {
                 focusRequesters[currentFocusIndex.value!!].first.requestFocus()
             }
         }
     }
 
+    /**
+     * Adds focus requester as a pair with the attribute. Only adds if the pair is not in the list.
+     * @param fr: FocusRequester for the attribute
+     * @param attr: Attribute that the FR is made for
+     * @return Int: index of the pair in the list. Returns -1 if the pair is already in the list
+     */
     override fun addFocusRequester(fr: FocusRequester, attr: Attribute<*, *, *>): Int {
         val p = Pair(fr, attr)
         if(p !in focusRequesters) {
@@ -177,12 +189,12 @@ abstract class BaseFormModel : FormModel {
 //            if(focusRequesters.size == 1) fr.requestFocus()
             return focusRequesters.size -1
         }
-
         return -1
     }
 
     /**
      * This method focuses the next field if there is an already focused field.
+     * It sets the current focus to the next greater value. If it is out of bounds then starts from beginning
      */
     override fun focusNext() {
         if(currentFocusIndex.value != null){
@@ -192,6 +204,7 @@ abstract class BaseFormModel : FormModel {
 
     /**
      * This method focuses the previous field if there is an already focused field.
+     * It sets the current focus to the previous value. If it is a negative value, set the highest value
      */
     override fun focusPrevious() {
         if(currentFocusIndex.value != null) {
@@ -199,6 +212,11 @@ abstract class BaseFormModel : FormModel {
         }
     }
 
+    /**
+     * Publishing the attribute as a DTOText on the text channel if the attribute is the current selected attribute
+     * @param attr: Attribute used for getting the text
+     * TODO: Sync with setCurrentFocusIndex for which attribute is selected
+     */
     override fun textChanged(attr: Attribute<*,*,*>){
         if(attr.getId() == getCurrentFocusIndex()) {
             val dtoText = DTOText(attr.getId(), attr.getValueAsText())
@@ -207,12 +225,20 @@ abstract class BaseFormModel : FormModel {
         }
     }
 
+    /**
+     * Publishing the attribute as DTOAttribute to the attribute channel
+     * @param attr: Attribute that has to be published
+     */
     override fun attributeChanged(attr: Attribute<*, *, *>) {
         val dtoAttr = DTOAttribute(attr.getId(), attr.getLabel(), getAttributeType(attr), attr.getPossibleSelections())
         val string = Json.encodeToString(dtoAttr)
         mqttConnectorAttribute.publish(message = string, subtopic = "attribute", onPublished = { println("Sent:" + string) })
     }
 
+    /**
+     * Publishing the validation result of the attribute as DTOValidation if the attribute is the current selected
+     * @param attr: Attribute from which the validation has changed
+     */
     override fun validationChanged(attr: Attribute<*, *, *>) {
         if(attr.getId() == getCurrentFocusIndex()) {
             val dtoValidation = DTOValidation(
@@ -227,19 +253,30 @@ abstract class BaseFormModel : FormModel {
         }
     }
 
-
+    /**
+     * Function that sets for an ID, provided in the string the value as text for the value in the string
+     * @param string: String as JSON from DTOText
+     */
     fun onReceivedText(string: String) {
         val dtotext = Json.decodeFromString<DTOText>(string)
         getAttributeById(dtotext.id)?.setValueAsText(dtotext.text)
     }
 
 
+    /**
+     * Publishing all kinds of changes
+     * @param attr: Attribute that the values are used from
+     */
     fun sendAll(attr: Attribute<*,*,*>){
         attributeChanged(attr)
         textChanged(attr)
         validationChanged(attr)
     }
 
+    /**
+     * Function that handles a command
+     * @param string: DTOCommand as JSON String
+     */
     fun onReceivedCommand(string: String) {
         val commandDTO = Json.decodeFromString<DTOCommand>(string)
 
@@ -257,6 +294,9 @@ abstract class BaseFormModel : FormModel {
         }
     }
 
+    /**
+     * Connecting all channels to the server and set handle function for the new messages for each channel
+     */
     fun connectAndSubscribe(){
         mqttConnectorText.connectAndSubscribe(subtopic = "text", onNewMessage =
         {

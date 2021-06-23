@@ -16,6 +16,7 @@ import java.util.*
 
 
 /**
+ * TODO: Write Comment
  * ACHTUNG: Das ist nur eine erste Konfiguration eines Mqtt-Brokers.
  *
  * Dient vor allem dazu mit den verschiedenen Parametern experimentieren zu können
@@ -37,6 +38,14 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
         .identifier(UUID.randomUUID().toString())
         .buildAsync()
 
+    /**
+     * Connecting to the server.
+     *
+     * @param subtopic: default #, listening to all channels
+     * @param onNewMessage: function that is invoked with the ned message
+     * @param onConnectionFailed: function that is invoked when the connection could not be etablished
+     * @param onConnected: function that is invoked when the connection has etablished
+     */
     fun connectAndSubscribe(subtopic: String = "#",
                             onNewMessage: (String) -> Unit = {},
                             onConnectionFailed: () -> Unit = {},
@@ -58,6 +67,11 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
             }
     }
 
+    /**
+     * Subscribing to one channel
+     * @param subtopic: subtopic that is subscribed to
+     * @param onNewMessage: function that is invoked when a new message arrived
+     */
     fun subscribe(subtopic: String = "#", onNewMessage: (String) -> Unit){
         client.subscribeWith()
             .topicFilter(maintopic + subtopic)
@@ -69,6 +83,13 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
             .send()
     }
 
+    /**
+     * Publishing / Sending a message to a subtopic.
+     * @param message: String that will be sent
+     * @param subtopic: Subtopic / channel to which it will be sent
+     * @param onPublished: function that is invoked after sending was successful
+     * @param onError: function that is invoked when an error occurs during sending
+     */
     fun publish(message: String, subtopic: String = "", onPublished: () -> Unit = {}, onError: () -> Unit = {}) {
         client.publishWith()
             .topic(maintopic + subtopic)
@@ -87,6 +108,9 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
             }
     }
 
+    /**
+     * disconnect from the server
+     */
     fun disconnect() {
         client.disconnectWith()
             .sessionExpiryInterval(0)
@@ -94,6 +118,6 @@ class MqttConnector (val mqttBroker: String, val maintopic: String,
     }
 }
 
-// praktische Extension Functions
+//extension functions to transform strings
 private fun String.asPayload() : ByteArray = toByteArray(StandardCharsets.UTF_8)
 private fun Mqtt5Publish.payloadAsString() : String = String(payloadAsBytes, StandardCharsets.UTF_8)
