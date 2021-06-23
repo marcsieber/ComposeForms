@@ -4,16 +4,25 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,17 +76,8 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
 
         val focusedColor by mutableStateOf(if(attr.isValid()) get(FormColors.VALID) else if(attr.isRightTrackValid()) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR))
         val unfocusedColor by mutableStateOf(if(attr.isValid()) get(FormColors.RIGHTTRACK) else {get(FormColors.ERROR)})
+        var showErrorMsg by remember { mutableStateOf(false) }
 
-
-        //Error-Message
-        Row(modifier = Modifier.height(20.dp).background(get(FormColors.ERROR)), verticalAlignment = Alignment.CenterVertically) {
-            if (error) {
-                for (msg in attr.getErrorMessages()) {
-                    Text(msg, color = Color.White, fontSize = 12.sp, modifier = Modifier.padding(4.dp))
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(4.dp))
 
         //Label
         Row(modifier = Modifier.height(24.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
@@ -89,13 +89,15 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
 
         //Input
         Row {
-            BoxWithConstraints(contentAlignment = Alignment.CenterEnd) {
+//            BoxWithConstraints(contentAlignment = Alignment.CenterEnd) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)){
+
                 //Field
                 BasicTextField(
                     value = attr.getValueAsText(),
                     onValueChange = {attr.setValueAsText(it)},
                     singleLine = true,
-                    modifier = Modifier.height(20.dp).fillMaxWidth().padding(start = 12.dp)
+                    modifier = Modifier.height(20.dp).fillMaxWidth(0.9f).padding(start = 12.dp) //todo: Find better solution for Text field and trailing icon side by side
                 )
 
                 //Trailing-Icon
@@ -111,6 +113,43 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
 
         //Line
         Divider(color = if(attr.isReadOnly()) Color.Transparent else if(focused) focusedColor else unfocusedColor, thickness = if(focused) 2.dp else 1.dp)
+
+
+        //Error-Message
+        Spacer(modifier = Modifier.height(2.dp))
+        Row(modifier = Modifier.fillMaxWidth().height(20.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End),
+            verticalAlignment = Alignment.CenterVertically){
+
+            if (error && showErrorMsg) {
+                Card(modifier = Modifier
+                    .fillMaxWidth(0.9f)                                             //todo: Find better solution for Text field and icon side by side
+                    .border(0.dp,get(FormColors.ERROR), RoundedCornerShape(50))
+                    .height(20.dp),
+                backgroundColor = get(FormColors.ERROR)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        for (msg in attr.getErrorMessages()) {
+                            Text(
+                                msg, color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.Light,
+                                modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 1.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
+            Row(modifier = Modifier.padding(end = 4.dp)){
+                if (error) {
+                    IconButton(
+                        onClick = { showErrorMsg = !showErrorMsg
+                                  println("new state: $showErrorMsg")},
+                        modifier = Modifier.clip(CircleShape).size(20.dp)
+                    ) {
+                        Icon(Icons.Filled.Error, "Error", tint = get(FormColors.ERROR))
+                    }
+                }
+            }
+        }
     }
 }
 
