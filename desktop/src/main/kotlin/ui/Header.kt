@@ -30,8 +30,8 @@ fun header(model : FormModel){
                 Text(getTitle(), color = get(FormColors.FONT_ON_BACKGOUND), fontSize = 22.sp, modifier = androidx.compose.ui.Modifier.align(
                     androidx.compose.ui.Alignment.CenterVertically))
 
-                Row(){
-                    Column() {
+                Row {
+                    Column {
                         val langDropDownIsOpen = remember { mutableStateOf(false) }
                         OutlinedButton(
                             modifier = androidx.compose.ui.Modifier.padding(4.dp),
@@ -97,7 +97,7 @@ fun header(model : FormModel){
 
 @Composable
 fun GroupTitle(title : String){
-    Row(modifier = Modifier.fillMaxWidth().padding(6.dp,12.dp)) {
+    Row(modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 6.dp, top = 12.dp)) {
         Card(
             modifier = Modifier.fillMaxWidth().height(38.dp).border(0.dp, Color.Transparent, RoundedCornerShape(10.dp)),
             backgroundColor = get(FormColors.BACKGROUND_COLOR_GROUPS)){
