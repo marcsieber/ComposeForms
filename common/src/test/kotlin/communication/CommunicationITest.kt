@@ -70,6 +70,9 @@ class CommunicationITest {
     @Test
     fun testSendAmount(){
 
+        model!!.setCurrentFocusIndex(0)
+        clearAllMocks()
+
         verify(exactly = 0) {
             mqttConnectorValidationT.publish(any(), any(), any(), any())
             mqttConnectorTextT.publish(any(), any(), any(), any())
@@ -117,6 +120,7 @@ class CommunicationITest {
 
     @Test
     fun testOnReceive(){
+        model!!.setCurrentFocusIndex(0)
         clearAllMocks() //This test is only interested on the workflow of the command received. Therefore the mocks are cleared before the test
 
         val start = "{ \"command\" :"
@@ -137,6 +141,7 @@ class CommunicationITest {
 
     @Test
     fun testOnReceiveOutOfBoundsSelection(){
+        model!!.setCurrentFocusIndex(0)
         clearAllMocks() //This test is only interested on the workflow of the command received. Therefore the mocks are cleared before the test
 
         model!!.setCurrentFocusIndex(5)
