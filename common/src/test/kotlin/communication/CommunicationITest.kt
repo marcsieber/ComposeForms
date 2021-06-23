@@ -60,18 +60,21 @@ class CommunicationITest {
         attribute1 = StringAttribute(model!!, testLabels.test, value = "", validators = listOf(StringValidator(2,5)))
         attribute2 = StringAttribute(model!!, testLabels.test, value = "")
 
-        group = Group(model!!, "testgroup", listOf(attribute1!!, attribute2!!))
+        group = Group(model!!, "testgroup", attribute1!!, attribute2!!)
+
+        model!!.addFocusRequester(mockk(relaxed = true), attribute1!!)
+        model!!.addFocusRequester(mockk(relaxed = true), attribute2!!)
     }
 
 
     @Test
     fun testSendAmount(){
 
-        verify(exactly = 1){
-            mqttConnectorValidationT.publish(any(), any(), any(), any()) // One Validation will be done on initialization of attribute
-        }
+        model!!.setCurrentFocusIndex(0)
+        clearAllMocks()
 
         verify(exactly = 0) {
+            mqttConnectorValidationT.publish(any(), any(), any(), any())
             mqttConnectorTextT.publish(any(), any(), any(), any())
             mqttConnectorAttributeT.publish(any(), any(), any(), any())
             mqttConnectorCommandT.publish(any(), any(), any(), any())
@@ -87,18 +90,16 @@ class CommunicationITest {
             mqttConnectorTextT.publish(any(), any(), any(), any())
         }
 
-        verify(exactly = 3) {
+        verify(exactly = 2) {
             mqttConnectorValidationT.publish(any(), any(), any(), any())
         }
     }
 
     @Test
     fun testChangeSelection(){
-        verify(exactly = 1) {
-            mqttConnectorValidationT.publish(any(), any(), any(), any()) // One Validation will be done on initialization of attribute
-        }
 
         verify(exactly = 0) {
+            mqttConnectorValidationT.publish(any(), any(), any(), any())
             mqttConnectorTextT.publish(any(), any(), any(), any())
             mqttConnectorAttributeT.publish(any(), any(), any(), any())
             mqttConnectorCommandT.publish(any(), any(), any(), any())
@@ -112,9 +113,6 @@ class CommunicationITest {
         verify(exactly = 1) {
             mqttConnectorAttributeT.publish(any(), any(), any(), any())
             mqttConnectorTextT.publish(any(), any(), any(), any())
-        }
-
-        verify(exactly = 2){
             mqttConnectorValidationT.publish(any(), any(), any(), any())
         }
     }
@@ -122,6 +120,7 @@ class CommunicationITest {
 
     @Test
     fun testOnReceive(){
+        model!!.setCurrentFocusIndex(0)
         clearAllMocks() //This test is only interested on the workflow of the command received. Therefore the mocks are cleared before the test
 
         val start = "{ \"command\" :"
@@ -142,6 +141,7 @@ class CommunicationITest {
 
     @Test
     fun testOnReceiveOutOfBoundsSelection(){
+        model!!.setCurrentFocusIndex(0)
         clearAllMocks() //This test is only interested on the workflow of the command received. Therefore the mocks are cleared before the test
 
         model!!.setCurrentFocusIndex(5)

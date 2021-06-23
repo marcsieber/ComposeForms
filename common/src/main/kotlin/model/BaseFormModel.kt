@@ -2,6 +2,7 @@ package model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import communication.*
 import kotlinx.serialization.decodeFromString
@@ -158,15 +159,23 @@ abstract class BaseFormModel : FormModel {
         return currentFocusIndex.value
     }
 
+    private fun getCurrentFocusAttributeId(): Int{
+        return if(getCurrentFocusIndex()?: Int.MAX_VALUE < focusRequesters.size){
+            focusRequesters[getCurrentFocusIndex()!!].second.getId()
+        }else{
+            -1
+        }
+    }
+
     /**
      * Set current focus index if it differs from current focus index and is greater or equals 0
      * TODO: Check if the attr id also can be used?!
      * @param index
      */
     override fun setCurrentFocusIndex(index: Int?) {
-        if(index != currentFocusIndex.value) {
+        if(index != currentFocusIndex.value && index?:0 >= 0) {
             currentFocusIndex.value = index
-            val attr: Attribute<*,*,*>? = getAttributeById(currentFocusIndex.value)
+            val attr: Attribute<*,*,*>? = getAttributeById(getCurrentFocusAttributeId())
             if(attr != null) {
                 sendAll(attr)
             }
@@ -199,6 +208,8 @@ abstract class BaseFormModel : FormModel {
     override fun focusNext() {
         if(currentFocusIndex.value != null){
             setCurrentFocusIndex((currentFocusIndex.value!! + 1) % focusRequesters.size)
+        }else{
+            setCurrentFocusIndex(0)
         }
     }
 
@@ -209,6 +220,8 @@ abstract class BaseFormModel : FormModel {
     override fun focusPrevious() {
         if(currentFocusIndex.value != null) {
             setCurrentFocusIndex((currentFocusIndex.value!! + focusRequesters.size - 1) % focusRequesters.size)
+        }else{
+            setCurrentFocusIndex(focusRequesters.size -1)
         }
     }
 
@@ -218,7 +231,7 @@ abstract class BaseFormModel : FormModel {
      * TODO: Sync with setCurrentFocusIndex for which attribute is selected
      */
     override fun textChanged(attr: Attribute<*,*,*>){
-        if(attr.getId() == getCurrentFocusIndex()) {
+        if(attr.getId() == getCurrentFocusAttributeId()) {
             val dtoText = DTOText(attr.getId(), attr.getValueAsText())
             val string = Json.encodeToString(dtoText)
             mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("Sent:" + string) })
@@ -240,7 +253,7 @@ abstract class BaseFormModel : FormModel {
      * @param attr: Attribute from which the validation has changed
      */
     override fun validationChanged(attr: Attribute<*, *, *>) {
-        if(attr.getId() == getCurrentFocusIndex()) {
+        if(attr.getId() == getCurrentFocusAttributeId()) {
             val dtoValidation = DTOValidation(
                 attr.isRightTrackValid(), attr.isValid(),
                 attr.isReadOnly(), attr.getErrorMessages()
@@ -284,7 +297,7 @@ abstract class BaseFormModel : FormModel {
             Command.NEXT -> focusNext()
             Command.PREVIOUS -> focusPrevious()
             Command.REQUEST -> {
-                val attr: Attribute<*,*,*>? = getAttributeById(getCurrentFocusIndex())
+                val attr: Attribute<*,*,*>? = getAttributeById(getCurrentFocusAttributeId())
                 if(attr != null) {
                     sendAll(attr)
                 }

@@ -20,7 +20,7 @@ import ui.theme.FormColors
 fun NumberContent(model: Model){
     with(model){
         Column(modifier = Modifier.fillMaxSize().padding(top = 0.dp, bottom = 12.dp)) {
-            //Searchfield
+            //Calculationfield
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top){
                 OutlinedTextField(searchString.value,
                     onValueChange = { searchString.value = it; filterPossibleSelections(it)},

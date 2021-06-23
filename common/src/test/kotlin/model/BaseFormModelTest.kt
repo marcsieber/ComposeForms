@@ -49,9 +49,9 @@ internal class BaseFormModelTest {
 
         anzKinder = IntegerAttribute(model = model, value = ANZ_KINDER, label = Label.ANZKINDER)
 
-        group = Group(model, "Group 1", listOf(alter, anzKinder))
-        Group(model, "Group 2", listOf(alter))
-        Group(model, "Group 3", listOf())
+        group = Group(model, "Group 1", alter, anzKinder)
+        Group(model, "Group 2", alter)
+        Group(model, "Group 3")
     }
 
     @Test
@@ -466,7 +466,12 @@ internal class BaseFormModelTest {
         assertEquals(-1, i3)
 
 
+        assertEquals(null, model.getCurrentFocusIndex())
+        //when
+        model.focusNext()
+        //then
         assertEquals(0, model.getCurrentFocusIndex())
+
         //when
         model.focusNext()
         //then
@@ -520,6 +525,8 @@ internal class BaseFormModelTest {
         val fr3 : FocusRequester = mockk(relaxed = true)
         model.addFocusRequester(fr3, attr)
 
+
+        model.setCurrentFocusIndex(0)
         assertEquals(0, model.getCurrentFocusIndex())
 
         val start = "{ \"command\" :"
@@ -543,6 +550,41 @@ internal class BaseFormModelTest {
         model.onReceivedCommand(command2)
         //then
         assertEquals(1, model.getCurrentFocusIndex())
+    }
+
+    @Test
+    fun testOnReceivedCommandNull(){
+        //given
+        val attr = StringAttribute(model, Label.ANZKINDER)
+        group.addAttribute(attr)
+
+        val fr1 : FocusRequester = mockk(relaxed = true)
+        model.addFocusRequester(fr1, alter)
+        val fr2 : FocusRequester = mockk(relaxed = true)
+        model.addFocusRequester(fr2, anzKinder)
+        val fr3 : FocusRequester = mockk(relaxed = true)
+        model.addFocusRequester(fr3, attr)
+
+        assertEquals(null, model.getCurrentFocusIndex())
+
+        val start = "{ \"command\" :"
+        val end = " }"
+        var mid = ""
+
+        //when
+        mid = "\"REQUEST\""
+        val command1 = start + mid + end
+        model.onReceivedCommand(command1)
+        //then
+        assertEquals(null, model.getCurrentFocusIndex())
+
+        //when
+        mid = "\"NEXT\""
+        val command2 = start + mid + end
+        model.onReceivedCommand(command2)
+        //then
+        assertEquals(0, model.getCurrentFocusIndex())
+
     }
 
 }

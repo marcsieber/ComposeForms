@@ -228,8 +228,8 @@ class UserDefinedModel : BaseFormModel(){
 
 
 
-    val group1 = Group(this, "Group-Name", listOf(s,d1,d2,selectionValue))
-    val group2 = Group(this, "Group-Name 2", listOf(intValue1, intValue2, longValue, shortValue))
+    val group1 = Group(this, "Group-Name", s,d1,d2,selectionValue)
+    val group2 = Group(this, "Group-Name 2", intValue1, intValue2, longValue, shortValue)
 
 
 //    Blalbla(

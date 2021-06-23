@@ -3,6 +3,7 @@ package ui
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
@@ -21,6 +22,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -161,13 +163,26 @@ fun SelectionField(model : FormModel, selectionAttribute : SelectionAttribute<*>
         val selectionString         = mutableStateOf(selectionAttribute.getValueAsText().substring(1, selectionAttribute.getValueAsText().length-1))
         val label                   = selectionAttribute.getLabel()
 
+        val fr = remember { FocusRequester() }
+        val index = remember { model.addFocusRequester(fr, selectionAttribute) }
+
+        val fm = LocalFocusManager.current
+
         Row(modifier = Modifier.padding(6.dp, 12.dp, 6.dp, 6.dp)) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 Column {
                     Card {
                         OutlinedButton(
-                            modifier = Modifier.height(64.dp).fillMaxWidth().padding(top = 8.dp),
-                            onClick = { dropDownIsOpen.value = true },
+                            modifier = Modifier.height(64.dp).fillMaxWidth().padding(top = 8.dp)
+                                .focusable().focusOrder(fr).onFocusChanged { if(it.isFocused){
+                                    fm.clearFocus(true)
+                                    model.setCurrentFocusIndex(index)
+                                }},
+                            onClick = {
+                                fm.clearFocus(true)
+                                dropDownIsOpen.value = true
+                                model.setCurrentFocusIndex(index)
+                            },
                             shape = RoundedCornerShape(8),
                             colors = ButtonDefaults.buttonColors(backgroundColor = DropdownColors.BUTTON_BACKGROUND.color),
                             border = BorderStroke(1.dp, if (selectionAttribute.isValid()) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR))

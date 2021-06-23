@@ -91,6 +91,7 @@ fun BottomBar(model: Model){
 @Composable
 fun InputField(model : Model, attrType: AttributeType){
     with(model) {
+        val color = if(isValid) get(FormColors.VALID) else if(isOnRightTrack) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR)
         OutlinedTextField(
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
@@ -101,10 +102,10 @@ fun InputField(model : Model, attrType: AttributeType){
             },
             label = { Text(label) },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                unfocusedBorderColor  = if(isValid) get(FormColors.VALID) else if(isOnRightTrack) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR),
-                unfocusedLabelColor   = if(isValid) get(FormColors.VALID) else if(isOnRightTrack) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR),
-                focusedBorderColor    = if(isValid) get(FormColors.VALID) else if(isOnRightTrack) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR),
-                focusedLabelColor     = if(isValid) get(FormColors.VALID) else if(isOnRightTrack) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR),
+                unfocusedBorderColor  = color,
+                unfocusedLabelColor   = color,
+                focusedBorderColor    = color,
+                focusedLabelColor     = color,
                 cursorColor           = Color.Black,
                 errorBorderColor      = get(FormColors.ERROR),
                 errorLabelColor       = get(FormColors.ERROR)
