@@ -49,9 +49,9 @@ internal class BaseFormModelTest {
 
         anzKinder = IntegerAttribute(model = model, value = ANZ_KINDER, label = Label.ANZKINDER)
 
-        group = Group(model, "Group 1", listOf(alter, anzKinder))
-        Group(model, "Group 2", listOf(alter))
-        Group(model, "Group 3", listOf())
+        group = Group(model, "Group 1", alter, anzKinder)
+        Group(model, "Group 2", alter)
+        Group(model, "Group 3")
     }
 
     @Test

@@ -1,10 +1,9 @@
 package model.util
 
-import androidx.compose.runtime.mutableStateListOf
 import model.FormModel
 import model.util.attribute.Attribute
 
-class Group(val model : FormModel, val title : String, private val attributes : List<Attribute<*, *, *>>) {
+class Group(val model : FormModel, val title : String, vararg attributes :Attribute<*, *, *>) {
 
     private val groupAttributes = attributes.toMutableList()
 

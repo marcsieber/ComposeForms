@@ -60,7 +60,7 @@ class CommunicationITest {
         attribute1 = StringAttribute(model!!, testLabels.test, value = "", validators = listOf(StringValidator(2,5)))
         attribute2 = StringAttribute(model!!, testLabels.test, value = "")
 
-        group = Group(model!!, "testgroup", listOf(attribute1!!, attribute2!!))
+        group = Group(model!!, "testgroup", attribute1!!, attribute2!!)
 
         model!!.addFocusRequester(mockk(relaxed = true), attribute1!!)
         model!!.addFocusRequester(mockk(relaxed = true), attribute2!!)
