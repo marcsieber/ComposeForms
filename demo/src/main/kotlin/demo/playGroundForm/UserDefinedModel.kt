@@ -7,8 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import model.BaseFormModel
-import model.convertables.CustomConvertable
-import model.convertables.ReplacementPair
+import model.convertibles.CustomConvertible
+import model.convertibles.ReplacementPair
 import model.meanings.Currency
 import model.meanings.CustomMeaning
 import model.meanings.Percentage
@@ -58,12 +58,12 @@ class UserDefinedModel : BaseFormModel(){
         model = this,
         value = 0.0,
         label = Labels.convertOnUnfocussing,
-        convertables = listOf(
-            CustomConvertable(listOf(
+        convertibles = listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
             )),
-            CustomConvertable(listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true)
         ),
@@ -74,12 +74,12 @@ class UserDefinedModel : BaseFormModel(){
         model = this,
         value = 0.0,
         label = Labels.convertImmediately,
-        convertables = listOf(
-            CustomConvertable(listOf(
+        convertibles = listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
             ), true, true),
-            CustomConvertable(listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true, true)
         ),
@@ -90,12 +90,12 @@ class UserDefinedModel : BaseFormModel(){
         model = this,
         value = 0.0,
         label = Labels.doNotConvert,
-        convertables = listOf(
-            CustomConvertable(listOf(
+        convertibles = listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
             ), false),
-            CustomConvertable(listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = false)
         ),
@@ -106,7 +106,7 @@ class UserDefinedModel : BaseFormModel(){
     val time = StringAttribute(
         model = this,
         label = Labels.timeLabel,
-        convertables = listOf(CustomConvertable(listOf(
+        convertibles = listOf(CustomConvertible(listOf(
             ReplacementPair("now", LocalTime.now().toString())
             ), convertUserView = true)
         )

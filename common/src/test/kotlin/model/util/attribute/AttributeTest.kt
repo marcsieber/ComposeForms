@@ -1,8 +1,8 @@
 package model.util.attribute
 
 import model.BaseFormModel
-import model.convertables.CustomConvertable
-import model.convertables.ReplacementPair
+import model.convertibles.CustomConvertible
+import model.convertibles.ReplacementPair
 import model.util.Labels
 
 import org.junit.jupiter.api.Test
@@ -346,16 +346,16 @@ abstract class AttributeTest<T : Any> {
     }
 
     //***************************************************************************************
-    //testConvertable functions
+    //testConvertible functions
 
     @Test
-    fun testConvertableFunctionsInAttribute(){
+    fun testConvertibleFunctionsInAttribute(){
 
         if(attribute is StringAttribute) {
             //given
             val attr = StringAttribute(
-                model, label = Labels.TEST, convertables = listOf(
-                    CustomConvertable(
+                model, label = Labels.TEST, convertibles = listOf(
+                    CustomConvertible(
                         listOf(
                             ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
                         ), convertUserView = true
@@ -372,7 +372,7 @@ abstract class AttributeTest<T : Any> {
             assertEquals("1.3", attr.getConvertedValueAsText()[0])
 
             //when
-            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+            attr.checkAndSetConvertibleBecauseUnfocusedAttribute()
 
             //then
             assertEquals("1.3", attr.getValueAsText())
@@ -382,8 +382,8 @@ abstract class AttributeTest<T : Any> {
         if(attribute is DoubleAttribute) {
             //given
             val attr = DoubleAttribute(
-                model,label =  Labels.TEST, convertables = listOf(
-                    CustomConvertable(
+                model,label =  Labels.TEST, convertibles = listOf(
+                    CustomConvertible(
                         listOf(
                             ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
                         ), convertUserView = true
@@ -400,7 +400,7 @@ abstract class AttributeTest<T : Any> {
             assertEquals("1.3", attr.getConvertedValueAsText()[0])
 
             //when
-            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+            attr.checkAndSetConvertibleBecauseUnfocusedAttribute()
 
             //then
             assertEquals("1.3", attr.getValueAsText())
@@ -409,8 +409,8 @@ abstract class AttributeTest<T : Any> {
         if(attribute is FloatAttribute) {
             //given
             val attr = FloatAttribute(
-                model,label =  Labels.TEST, convertables = listOf(
-                    CustomConvertable(
+                model,label =  Labels.TEST, convertibles = listOf(
+                    CustomConvertible(
                         listOf(
                             ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
                         ), convertUserView = true
@@ -427,7 +427,7 @@ abstract class AttributeTest<T : Any> {
             assertEquals("1.3", attr.getConvertedValueAsText()[0])
 
             //when
-            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+            attr.checkAndSetConvertibleBecauseUnfocusedAttribute()
 
             //then
             assertEquals("1.3", attr.getValueAsText())
@@ -436,8 +436,8 @@ abstract class AttributeTest<T : Any> {
         if(attribute is IntegerAttribute) {
             //given
             val attr = IntegerAttribute(
-                model,label =  Labels.TEST, convertables = listOf(
-                    CustomConvertable(
+                model,label =  Labels.TEST, convertibles = listOf(
+                    CustomConvertible(
                         listOf(
                             ReplacementPair("eins", "1")
                         ), convertUserView = true
@@ -454,7 +454,7 @@ abstract class AttributeTest<T : Any> {
             assertEquals("1", attr.getConvertedValueAsText()[0])
 
             //when
-            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+            attr.checkAndSetConvertibleBecauseUnfocusedAttribute()
 
             //then
             assertEquals("1", attr.getValueAsText())
@@ -462,8 +462,8 @@ abstract class AttributeTest<T : Any> {
         if(attribute is LongAttribute) {
             //given
             val attr = LongAttribute(
-                model,label =  Labels.TEST, convertables = listOf(
-                    CustomConvertable(
+                model,label =  Labels.TEST, convertibles = listOf(
+                    CustomConvertible(
                         listOf(
                             ReplacementPair("eins", "1")
                         ), convertUserView = true
@@ -480,7 +480,7 @@ abstract class AttributeTest<T : Any> {
             assertEquals("1", attr.getConvertedValueAsText()[0])
 
             //when
-            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+            attr.checkAndSetConvertibleBecauseUnfocusedAttribute()
 
             //then
             assertEquals("1", attr.getValueAsText())
@@ -488,8 +488,8 @@ abstract class AttributeTest<T : Any> {
         if(attribute is ShortAttribute) {
             //given
             val attr = ShortAttribute(
-                model,label =  Labels.TEST, convertables = listOf(
-                    CustomConvertable(
+                model,label =  Labels.TEST, convertibles = listOf(
+                    CustomConvertible(
                         listOf(
                             ReplacementPair("eins", "1")
                         ), convertUserView = true
@@ -506,7 +506,7 @@ abstract class AttributeTest<T : Any> {
             assertEquals("1", attr.getConvertedValueAsText()[0])
 
             //when
-            attr.checkAndSetConvertableBecauseUnfocussedAttribute()
+            attr.checkAndSetConvertibleBecauseUnfocusedAttribute()
 
             //then
             assertEquals("1", attr.getValueAsText())

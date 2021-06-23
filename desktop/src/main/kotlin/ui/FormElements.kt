@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.*
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.key.*
@@ -54,7 +53,7 @@ fun InputField(model: FormModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) 
             .onFocusEvent { focS ->
                 if(focused != focS.isFocused){
                     if(!focS.isFocused){
-                        attr.checkAndSetConvertableBecauseUnfocussedAttribute() //setConvertables() //todo unfocus when no inputfield is focused
+                        attr.checkAndSetConvertibleBecauseUnfocusedAttribute() //setConvertibles() //todo unfocus when no inputfield is focused
                     }
                 }
                 if(focS.isFocused){

@@ -1,8 +1,7 @@
 package model.util.attribute
 
 import model.FormModel
-import model.convertables.CustomConvertable
-import model.convertables.ReplacementPair
+import model.convertibles.CustomConvertible
 import model.meanings.Default
 import model.meanings.SemanticMeaning
 import model.util.ILabel
@@ -10,21 +9,21 @@ import model.util.Utilities
 import model.validators.semanticValidators.SemanticValidator
 
 class SelectionAttribute<L>(//required parameters
-                            model                              : FormModel,
-                            label                              : L,
-                            possibleSelections                 : Set<String>,
+    model                              : FormModel,
+    label                              : L,
+    possibleSelections                 : Set<String>,
 
                             //required parameters
-                            value                              : Set<String>                            = emptySet<String>(),
-                            required                           : Boolean                                = false,
-                            readOnly                           : Boolean                                = false,
-                            onChangeListeners                  : List<(Set<String>?) -> Unit>           = emptyList(),
-                            validators                         : List<SemanticValidator<Set<String>>>   = mutableListOf(),
-                            convertables                       : List<CustomConvertable>                = emptyList(),
-                            meaning                            : SemanticMeaning<Set<String>>           = Default()
+    value                              : Set<String>                            = emptySet<String>(),
+    required                           : Boolean                                = false,
+    readOnly                           : Boolean                                = false,
+    onChangeListeners                  : List<(Set<String>?) -> Unit>           = emptyList(),
+    validators                         : List<SemanticValidator<Set<String>>>   = mutableListOf(),
+    convertibles                       : List<CustomConvertible>                = emptyList(),
+    meaning                            : SemanticMeaning<Set<String>>           = Default()
 
 ) : Attribute<SelectionAttribute<L>, Set<String>, L>(model = model, value = value, label = label, required = required, readOnly = readOnly,
-    onChangeListeners = onChangeListeners, validators = validators, convertables = convertables, meaning = meaning)
+    onChangeListeners = onChangeListeners, validators = validators, convertibles = convertibles, meaning = meaning)
         where L: Enum<*>, L : ILabel{
 
     override val typeT: Set<String>
