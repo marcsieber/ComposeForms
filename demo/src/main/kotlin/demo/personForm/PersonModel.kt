@@ -2,9 +2,8 @@ package demo.personForm
 
 import model.BaseFormModel
 import model.util.attribute.*
-import model.convertables.CustomConvertable
-import model.convertables.ReplacementPair
-import model.util.attribute.*
+import model.convertibles.CustomConvertible
+import model.convertibles.ReplacementPair
 import model.validators.semanticValidators.NumberValidator
 import model.validators.semanticValidators.StringValidator
 import java.time.LocalTime
@@ -28,12 +27,12 @@ class PersonModel() : BaseFormModel() {
         model = this,
         value = 0.0,
         label = demo.playGroundForm.Labels.convertOnUnfocussing,
-        convertables = listOf(
-            CustomConvertable(listOf(
+        convertibles = listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
             ), convertUserView = true),
-            CustomConvertable(listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true)
         )
@@ -43,12 +42,12 @@ class PersonModel() : BaseFormModel() {
         model = this,
         value = 0.0,
         label = demo.playGroundForm.Labels.convertImmediately,
-        convertables = listOf(
-            CustomConvertable(listOf(
+        convertibles = listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
             ), true, true),
-            CustomConvertable(listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true, true)
         )
@@ -58,12 +57,12 @@ class PersonModel() : BaseFormModel() {
         model = this,
         value = 0.0,
         label = demo.playGroundForm.Labels.doNotConvert,
-        convertables = listOf(
-            CustomConvertable(listOf(
+        convertibles = listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
             ), false),
-            CustomConvertable(listOf(
+            CustomConvertible(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = false)
         )
@@ -72,7 +71,7 @@ class PersonModel() : BaseFormModel() {
     val time = StringAttribute(
         model = this,
         label = demo.playGroundForm.Labels.timeLabel,
-        convertables = listOf(CustomConvertable(listOf(
+        convertibles = listOf(CustomConvertible(listOf(
             ReplacementPair("now", LocalTime.now().toString())
         ), convertUserView = true)
         )

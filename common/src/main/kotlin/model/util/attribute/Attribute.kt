@@ -2,8 +2,8 @@ package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
 import model.FormModel
-import model.convertables.ConvertableResult
-import model.convertables.CustomConvertable
+import model.convertibles.ConvertibleResult
+import model.convertibles.CustomConvertible
 import model.meanings.SemanticMeaning
 import model.util.ILabel
 import model.util.Utilities
@@ -14,17 +14,17 @@ import model.validators.semanticValidators.SemanticValidator
 import java.lang.NumberFormatException
 
 abstract class Attribute <A,T,L> (//required parameters
-                                  private val model       : FormModel,
-                                  label                   : L,
+    private val model       : FormModel,
+    label                   : L,
 
                                   //optional parameters
-                                  private var value       : T?,
-                                  required                : Boolean,
-                                  readOnly                : Boolean,
-                                  var onChangeListeners   : List<(T?) -> Unit>,
-                                  var validators          : List<SemanticValidator<T>>,
-                                  var convertables        : List<CustomConvertable>,
-                                  var meaning             : SemanticMeaning<T>
+    private var value       : T?,
+    required                : Boolean,
+    readOnly                : Boolean,
+    var onChangeListeners   : List<(T?) -> Unit>,
+    var validators          : List<SemanticValidator<T>>,
+    var convertibles        : List<CustomConvertible>,
+    var meaning             : SemanticMeaning<T>
 //                                  var formatter           : Formatter
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
@@ -44,7 +44,7 @@ abstract class Attribute <A,T,L> (//required parameters
     private val readOnly            = mutableStateOf(readOnly)
     private val valid               = mutableStateOf(true)
     private val rightTrackValid     = mutableStateOf(true)
-    private val convertable         = mutableStateOf(false)
+    private val convertible         = mutableStateOf(false)
     private val changed             = mutableStateOf(false)
     private var currentLanguage     = ""
 
@@ -53,7 +53,7 @@ abstract class Attribute <A,T,L> (//required parameters
     private val reqValidator        = RequiredValidator<T>(required)
     private val syntaxValidator     = SyntaxValidator<T>()
 
-    private val listOfConvertableResults = mutableStateOf<List<ConvertableResult>>(emptyList())
+    private val listOfConvertibleResults = mutableStateOf<List<ConvertibleResult>>(emptyList())
 
 
     /**
@@ -322,8 +322,8 @@ abstract class Attribute <A,T,L> (//required parameters
      */
     private fun checkAndSetNonNullValue(newVal: String, calledFromKeyEvent: Boolean, convertBecauseUnfocussed : Boolean) {
         val convertedValueAsText : String
-        checkAllConvertables(newVal)
-        if(convertable.value){
+        checkAllConvertibles(newVal)
+        if(convertible.value){
             convertedValueAsText = getConvertedValueAsText()[0]
         }else{
             convertedValueAsText = newVal
@@ -447,50 +447,50 @@ abstract class Attribute <A,T,L> (//required parameters
 
 
     //******************************************
-    //Functions in which convertables are involved:
+    //Functions in which convertibles are involved:
 
     /**
-     * This method sets the listOfConvertableResults, checks if any result is convertable (true) and sets convertable.
-     * @param listOfConvertableResults
+     * This method sets the listOfConvertibleResults, checks if any result is convertible (true) and sets convertible.
+     * @param listOfconvertibleResults
      */
-    fun setListOfConvertableResults(listOfConvertableResults: List<ConvertableResult>){
-        this.listOfConvertableResults.value = listOfConvertableResults
-        this.convertable.value = (this.listOfConvertableResults.value.any { it.isConvertable })
+    fun setListOfConvertibleResults(listOfConvertibleResults: List<ConvertibleResult>){
+        this.listOfConvertibleResults.value = listOfConvertibleResults
+        this.convertible.value = (this.listOfConvertibleResults.value.any { it.isConvertible })
     }
 
     /**
-     * This method checks, if the value is convertable regarding all convertables of this attribute.
-     * The result is recorded in the convertableResult
+     * This method checks, if the value is convertible regarding all convertibles of this attribute.
+     * The result is recorded in the convertibleResult
      */
-    fun checkAllConvertables(newValAsText: String){
-        setListOfConvertableResults(convertables.map { it.convertUserInput(newValAsText)})
+    fun checkAllConvertibles(newValAsText: String){
+        setListOfConvertibleResults(convertibles.map { it.convertUserInput(newValAsText)})
     }
 
     /**
-     * This method returns the convertedValueAsText of all convertable convertable results
+     * This method returns the convertedValueAsText of all convertible convertible results
      *
      * @return List<String>
      */
     fun getConvertedValueAsText(): List<String>{
-        return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertedValueAsText}
+        return listOfConvertibleResults.value.filter{it.isConvertible}.map{it.convertedValueAsText}
     }
 
     /**
-     * This method returns the convertUserView values (true/false) for all convertable results
+     * This method returns the convertUserView values (true/false) for all convertible results
      *
      * @return List<Boolean>
      */
     fun getConvertUserView() : List<Boolean>{
-        return listOfConvertableResults.value.filter{it.isConvertable}.map{it.convertUserView}
+        return listOfConvertibleResults.value.filter{it.isConvertible}.map{it.convertUserView}
     }
 
     /**
-     * This method returns the convertImmediately values (true/false) for all convertable results
+     * This method returns the convertImmediately values (true/false) for all convertible results
      *
      * @return List<Boolean>
      */
     fun getConvertImmediately() : List<Boolean>{
-        return listOfConvertableResults.value.filter{it.isConvertable}.map {it.convertImmediately}
+        return listOfConvertibleResults.value.filter{it.isConvertible}.map {it.convertImmediately}
     }
 
     fun getId(): Int{
@@ -500,7 +500,7 @@ abstract class Attribute <A,T,L> (//required parameters
     /**
      * This method calls setAndCheckValue with the parameter convertBecauseUnfocussed = true.
      */
-    fun checkAndSetConvertableBecauseUnfocussedAttribute(){
+    fun checkAndSetConvertibleBecauseUnfocusedAttribute(){
         checkAndSetValue(newVal = getValueAsText(), convertBecauseUnfocussed = true)
     }
 
