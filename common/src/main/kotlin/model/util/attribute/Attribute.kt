@@ -21,7 +21,7 @@ abstract class Attribute <A,T,L> (//required parameters
     private var value       : T?,
     required                : Boolean,
     readOnly                : Boolean,
-    var onChangeListeners   : List<(T?) -> Unit>,
+    private var onChangeListeners   : List<ChangeListenerPair<Any?>>,
     var validators          : List<SemanticValidator<T>>,
     var convertibles        : List<CustomConvertible>,
     var meaning             : SemanticMeaning<T>
@@ -47,6 +47,8 @@ abstract class Attribute <A,T,L> (//required parameters
     private val convertible         = mutableStateOf(false)
     private val changed             = mutableStateOf(false)
     private var currentLanguage     = ""
+
+    private var onChangeListenersOfThis = mutableListOf<(T?) -> Unit>()
 
     private val listOfValidationResults  = mutableStateOf<List<ValidationResult>>(emptyList())
     abstract val typeT        : T
@@ -205,7 +207,10 @@ abstract class Attribute <A,T,L> (//required parameters
     protected fun setValue(value: T?) {
         if(value != this.value){
             this.value = value
-            onChangeListeners.forEach{it(value)}
+            onChangeListenersOfThis.forEach{
+                println(it)
+                it(value)
+            }
         }
     }
 
@@ -292,8 +297,18 @@ abstract class Attribute <A,T,L> (//required parameters
         return changed.value
     }
 
+    fun addOnChangeListener(func: (T?) -> Unit){
+        onChangeListenersOfThis.add(func)
+    }
 
-
+    fun setListenersOnOtherAttributes(){
+        onChangeListeners.forEach{ olPair ->
+            olPair.attribute.addOnChangeListener{
+                olPair.func(this as Attribute<*,Any?, *>, it)
+            }
+            olPair.attribute.addOnChangeListener{ println("Added hardcoded: $it") }
+        }
+    }
 
     //******************************************************************************************************
     //Validation

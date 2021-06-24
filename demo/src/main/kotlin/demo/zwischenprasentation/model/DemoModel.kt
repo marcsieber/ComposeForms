@@ -28,7 +28,7 @@ class DemoModel() : BaseFormModel() {
         validators = listOf(SelectionValidator(minNumberOfSelections = 1, maxNumberOfSelections = 1)))
 
 
-    val ageAttribute = IntegerAttribute(model = this, label = Labels.AGE, onChangeListeners = listOf{ jobAttribute.setRequired(it != null && it >= 18)})
+//    val ageAttribute = IntegerAttribute(model = this, label = Labels.AGE, onChangeListeners = listOf{ jobAttribute.setRequired(it != null && it >= 18)})
 
     val jobAttribute = StringAttribute(model = this, label = Labels.JOB)
 

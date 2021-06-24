@@ -15,7 +15,7 @@ class DoubleAttribute<L>(   //required parameters
     value                   : Double?                           = null,
     required                : Boolean                           = false,
     readOnly                : Boolean                           = false,
-    onChangeListeners       : List<(Double?) -> Unit>           = emptyList(),
+    onChangeListeners       : List<ChangeListenerPair<Any?>>       = emptyList(),
     validators              : List<SemanticValidator<Double>>   = mutableListOf(),
     convertibles            : List<CustomConvertible>           = emptyList(),
     meaning                 : SemanticMeaning<Double>           = Default(),

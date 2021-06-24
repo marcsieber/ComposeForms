@@ -47,9 +47,9 @@ class UserTestingFormModel : BaseFormModel() {
 
     var beruf = StringAttribute(this,
         label = UserTestingLabels.BERUF,
-        onChangeListeners = listOf({
-            steuernummer.setRequired(it != null)
-        })
+//        onChangeListeners = listOf({
+//            steuernummer.setRequired(it != null)
+//        })
     )
     var myGeschlechter = setOf("Mann", "Frau")
     var geschlecht = SelectionAttribute(

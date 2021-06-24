@@ -112,6 +112,8 @@ class UserDefinedModel : BaseFormModel(){
         )
     )
 
+    val intAttr = IntegerAttribute(this, Labels.intLabel, 12)
+
     //String
     val strVal = StringValidator(5)
     val stringValue = StringAttribute(
@@ -121,19 +123,27 @@ class UserDefinedModel : BaseFormModel(){
         required = true,
         validators = listOf(strVal),
         label = Labels.stringLabel,
-        onChangeListeners = listOf {
-            if (it.equals("Ich")) {
-                customValidator.overrideCustomValidator(validationMessage = "Neue Message")
-            }
-        }
     )
 
-    val string = StringAttribute(
+//    private val func: (Attribute<*,*,*>, Int?) -> Unit = { a, b -> println("bla $a, bla $b") }
+    private val func: (Attribute<*,*,*>, Any?) -> Unit = { a, b -> a.setRequired( (b as Int?)?:0 >= 18) }
+    val test =  ChangeListenerPair<Any?>(intAttr as Attribute<*,Any?,*>, func)
+
+
+    val string: StringAttribute<Labels> = StringAttribute(
         model = this,
         value = "1234",
         validators = listOf(StringValidator(minLength = 3, maxLength = 5)),
-        label = Labels.stringLabel
+        label = Labels.stringLabel,
+        onChangeListeners = listOf(
+//            ChangeListenerPair({intAttr}, { (me -> { value -> println("new value $value"); me.setReadOnly(value == 123) } }),
+//            ChangeListenerPair({intAttr}) { a,b -> a.setReadOnly( b == 123) },
+              test
+//                ChangeListenerPair({intAttr}, { a, b -> a.setRequired( b?:0 >= 0)})
+        )
     )
+
+//    Group(this, "Stranger Things", stringValue, string)
 
     //Numbers
     val intValue1    = IntegerAttribute(
@@ -141,12 +151,12 @@ class UserDefinedModel : BaseFormModel(){
         label = Labels.intLabel,
         readOnly = false,
         validators = listOf(NumberValidator(0, 10, 2, 4, true, "LowerBound ist bei 0, upperBound bei 10, es sind nur 2er-Schritte zugelassen")),
-        onChangeListeners = listOf{
-            if(it == 4){
-                strVal.overrideStringValidator(8)
-            }
-
-        }
+//        onChangeListeners = listOf{
+//            if(it == 4){
+//                strVal.overrideStringValidator(8)
+//            }
+//
+//        }
     )
 
     val intValue2    = IntegerAttribute(model = this,
@@ -177,7 +187,7 @@ class UserDefinedModel : BaseFormModel(){
         required = true,
         readOnly = false,
         validators = listOf(NumberValidator(0f, 100f, 3f, 9.5f, true)) ,
-        onChangeListeners = listOf { longValue.setReadOnly(it == 12.5f) }
+//        onChangeListeners = listOf { longValue.setReadOnly(it == 12.5f) }
     )
 
     val doubleValue = DoubleAttribute(
@@ -187,11 +197,6 @@ class UserDefinedModel : BaseFormModel(){
         required = true,
         readOnly = false,
         validators = listOf(FloatingPointValidator(2, "Nur 2 Nachkommastellen")),
-        onChangeListeners = listOf {
-            if (it == 8.85) {
-                selectionValue.addANewPossibleSelection("Neues Element")
-            }
-        }
     )
 
     val list = setOf("Hallo", "Louisa", "Steve", "Eintrag", "Eintrag564", "Hi", "Mann", "Frau")
@@ -227,14 +232,18 @@ class UserDefinedModel : BaseFormModel(){
     }
 
 
+    val group0 = Group(this, "Stranger Things", stringValue, string, intAttr)
+//    val group1 = Group(this, "Group-Name", s,d1,d2,selectionValue)
+//    val group2 = Group(this, "Group-Name 2", intValue1, intValue2, longValue, shortValue)
 
-    val group1 = Group(this, "Group-Name", s,d1,d2,selectionValue)
-    val group2 = Group(this, "Group-Name 2", intValue1, intValue2, longValue, shortValue)
 
+    init{
+        getGroups().forEach{
+            it.getAttributes().forEach {
+                it.setListenersOnOtherAttributes()
+            }
+        }
+    }
 
-//    Blalbla(
-//    Group(name = "HalloGroup", ([attribut, 2],[attr, 2],2),(6)),
-//    Group(name = "NextGroup", (2,4))
-//    )
 
 }

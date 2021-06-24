@@ -14,7 +14,7 @@ abstract class FloatingPointAttribute <F,T,L> (//required parameters
     value                       : T?,
     required                    : Boolean,
     readOnly                    : Boolean,
-    onChangeListeners           : List<(T?) -> Unit>,
+    onChangeListeners           : List<ChangeListenerPair<Any?>>,
     validators                  : List<SemanticValidator<T>>,
     convertibles                : List<CustomConvertible>,
     meaning                     : SemanticMeaning<T>,

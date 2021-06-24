@@ -15,13 +15,13 @@ class StringAttribute<L>(//required parameters
     value               : String?                          = null,
     required            : Boolean                          = false,
     readOnly            : Boolean                          = false,
-    onChangeListeners   : List<(String?) -> Unit>          = emptyList(),
+    onChangeListeners   : List<ChangeListenerPair<Any?>>      = emptyList(),
     validators          : List<SemanticValidator<String>>  = mutableListOf(),
     convertibles        : List<CustomConvertible>          = emptyList(),
     meaning             : SemanticMeaning<String>          = Default()
 
 ) : Attribute<StringAttribute<L>, String, L>(model = model, value = value, label = label, required = required,
-    readOnly = readOnly, onChangeListeners = onChangeListeners, validators = validators,
+    readOnly = readOnly, onChangeListeners = onChangeListeners ,validators = validators,
     convertibles = convertibles, meaning = meaning)
         where L: Enum<*>, L : ILabel{
 
