@@ -4,9 +4,10 @@ import androidx.compose.ui.focus.FocusRequester
 import communication.AttributeType
 import io.mockk.mockk
 import model.meanings.Default
-import model.util.Group
+import model.util.presentationElements.Group
 import model.util.ILabel
 import model.util.attribute.*
+import model.util.presentationElements.Field
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -49,8 +50,8 @@ internal class BaseFormModelTest {
 
         anzKinder = IntegerAttribute(model = model, value = ANZ_KINDER, label = Label.ANZKINDER)
 
-        group = Group(model, "Group 1", alter, anzKinder)
-        Group(model, "Group 2", alter)
+        group = Group(model, "Group 1", Field(alter), Field(anzKinder))
+        Group(model, "Group 2", Field(alter))
         Group(model, "Group 3")
     }
 

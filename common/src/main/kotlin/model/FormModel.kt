@@ -1,7 +1,7 @@
 package model
 
 import androidx.compose.ui.focus.FocusRequester
-import model.util.Group
+import model.util.presentationElements.Group
 import model.util.attribute.Attribute
 
 interface FormModel {

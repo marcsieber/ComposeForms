@@ -1,11 +1,13 @@
-package model.util
+package model.util.presentationElements
 
 import model.FormModel
 import model.util.attribute.Attribute
 
-class Group(val model : FormModel, val title : String, vararg attributes :Attribute<*, *, *>) {
+class Group(val model : FormModel, val title : String, vararg field : Field) {
 
-    private val groupAttributes = attributes.toMutableList()
+    private val groupFields = field.map { it }.toMutableList()
+    private val groupAttributes = field.map { it.getAttribute() }.toMutableList()
+
 
     init {
         model.addGroup(this)
@@ -23,6 +25,10 @@ class Group(val model : FormModel, val title : String, vararg attributes :Attrib
     //Getter
 
     fun getAttributes(): List<Attribute<*,*,*>>{
-        return groupAttributes.toList()
+        return groupAttributes
+    }
+
+    fun getFields(): List<Field>{
+        return groupFields
     }
 }

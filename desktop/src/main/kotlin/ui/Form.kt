@@ -1,28 +1,21 @@
 package ui
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import model.FormModel
-import model.util.Utilities
 import model.util.attribute.*
+import model.util.presentationElements.Field
+import model.util.presentationElements.FieldSize
 import ui.theme.ColorsUtil.Companion.get
-import ui.theme.DropdownColors
 import ui.theme.FormColors
 
 
@@ -43,9 +36,26 @@ class Form {
                         getGroups().forEach {
                             GroupTitle(it.title)
 
+                            //lists with one or two fields (depending on field sizes) for cells in LazyVerticalGrid
+                            val cellsWithFields : MutableList<MutableList<Field>> = mutableListOf()
+
+                            it.getFields().forEach{
+                                if(it.getFieldSize() === FieldSize.NORMAL){
+                                    cellsWithFields.add(mutableStateListOf(it))
+                                }
+                                else{
+                                    if(cellsWithFields.isEmpty() || cellsWithFields.get(cellsWithFields.size-1).size != 1){
+                                        cellsWithFields.add(mutableStateListOf(it))
+                                    }
+                                    else{  //There is already 1 small element
+                                        cellsWithFields.get(cellsWithFields.size-1).add(it)
+                                    }
+                                }
+                            }
+
                             LazyVerticalGrid(cells = GridCells.Adaptive(300.dp)){
-                                items(it.getAttributes()){ attribute ->
-                                    AttributeElement(model, attribute)
+                                items(cellsWithFields){
+                                    CellElement(model, it)
                                 }
                             }
                         }
@@ -56,6 +66,30 @@ class Form {
 
     }
 
+    @Composable
+    private fun CellElement(model: FormModel, listOfFields : MutableList<Field>){
+        //Small sized fields
+        if(listOfFields[0].getFieldSize() == FieldSize.SMALL){
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(modifier = Modifier.fillMaxWidth(0.5f)) {
+                    AttributeElement(model, listOfFields[0].getAttribute())
+                }
+
+                if(listOfFields.size == 2){
+                    Row(modifier = Modifier.fillMaxWidth(1f)){
+                        AttributeElement(model, listOfFields[1].getAttribute())
+                    }
+                }
+            }
+        }
+
+        //Normal sized fields
+        else{
+            AttributeElement(model, listOfFields[0].getAttribute())
+        }
+    }
 
 
     @Composable
@@ -70,8 +104,6 @@ class Form {
             is SelectionAttribute -> AttributeElement(model, attr)
         }
     }
-
-
 
 
     @Composable

@@ -4,10 +4,11 @@ import io.mockk.clearAllMocks
 import io.mockk.mockk
 import io.mockk.verify
 import model.BaseFormModel
-import model.util.Group
+import model.util.presentationElements.Group
 import model.util.ILabel
 import model.util.attribute.Attribute
 import model.util.attribute.StringAttribute
+import model.util.presentationElements.Field
 import model.validators.semanticValidators.StringValidator
 import org.junit.jupiter.api.*
 
@@ -60,7 +61,7 @@ class CommunicationITest {
         attribute1 = StringAttribute(model!!, testLabels.test, value = "", validators = listOf(StringValidator(2,5)))
         attribute2 = StringAttribute(model!!, testLabels.test, value = "")
 
-        group = Group(model!!, "testgroup", attribute1!!, attribute2!!)
+        group = Group(model!!, "testgroup", Field(attribute1!!), Field(attribute2!!))
 
         model!!.addFocusRequester(mockk(relaxed = true), attribute1!!)
         model!!.addFocusRequester(mockk(relaxed = true), attribute2!!)

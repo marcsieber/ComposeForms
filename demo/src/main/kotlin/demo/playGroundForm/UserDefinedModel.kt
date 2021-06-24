@@ -12,8 +12,10 @@ import model.convertibles.ReplacementPair
 import model.meanings.Currency
 import model.meanings.CustomMeaning
 import model.meanings.Percentage
-import model.util.Group
+import model.util.presentationElements.Group
 import model.util.attribute.*
+import model.util.presentationElements.Field
+import model.util.presentationElements.FieldSize
 import model.validators.semanticValidators.*
 import java.time.LocalTime
 import kotlin.concurrent.thread
@@ -227,10 +229,17 @@ class UserDefinedModel : BaseFormModel(){
     }
 
 
+    val group1 = Group(this, "Group-Name",
+        Field(s, FieldSize.SMALL),
+        Field(d1, FieldSize.SMALL),
+        Field(d2),
+        Field(selectionValue, FieldSize.SMALL))
 
-    val group1 = Group(this, "Group-Name", s,d1,d2,selectionValue)
-    val group2 = Group(this, "Group-Name 2", intValue1, intValue2, longValue, shortValue)
-
+    val group2 = Group(this, "Group-Name 2",
+        Field(intValue1),
+        Field(intValue2),
+        Field(longValue),
+        Field(shortValue))
 
 //    Blalbla(
 //    Group(name = "HalloGroup", ([attribut, 2],[attr, 2],2),(6)),
