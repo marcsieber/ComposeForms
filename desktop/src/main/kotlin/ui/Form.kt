@@ -44,7 +44,9 @@ class Form {
                                     cellsWithFields.add(mutableStateListOf(it))
                                 }
                                 else{
-                                    if(cellsWithFields.isEmpty() || cellsWithFields.get(cellsWithFields.size-1).size != 1){
+                                    if(    cellsWithFields.isEmpty()
+                                        || cellsWithFields.get(cellsWithFields.size-1).size != 1
+                                        || cellsWithFields.get(cellsWithFields.size-1)[0].getFieldSize() === FieldSize.NORMAL){
                                         cellsWithFields.add(mutableStateListOf(it))
                                     }
                                     else{  //There is already 1 small element
@@ -167,8 +169,6 @@ class Form {
         }
 //        SelectionField(model, selectionAttribute)
     }
-
-
 
 
 }
