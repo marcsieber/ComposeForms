@@ -76,9 +76,9 @@ fun header(model : FormModel){
                         colors = ButtonDefaults.buttonColors(backgroundColor = get(FormColors.VALID)),
                         enabled = isChangedForAll(),
                         onClick = {
-                            undoAll()
+                            resetAll()
                         }) {
-                        Text("Undo", color = if(isChangedForAll()) Color.White else Color.Gray)
+                        Text("Reset", color = if(isChangedForAll()) Color.White else Color.Gray)
                     }
                     Button(
                         modifier = androidx.compose.ui.Modifier.padding(4.dp),

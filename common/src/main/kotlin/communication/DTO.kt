@@ -19,15 +19,15 @@ class DTOCommand(val command: Command)
 
 
 
-enum class Command(){
+enum class Command {
     NEXT,
     PREVIOUS,
     REQUEST,
     SAVE,
-    UNDO
+    RESET
 }
 
-enum class AttributeType(){
+enum class AttributeType {
     STRING,
     INTEGER,
     SHORT,

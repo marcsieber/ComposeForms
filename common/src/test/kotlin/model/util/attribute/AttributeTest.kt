@@ -73,10 +73,10 @@ abstract class AttributeTest<T : Any> {
     }
 
     @Test
-    fun testUndo() {
+    fun testReset() {
         //when
         attribute.setValueAsText(validValue2AsText)
-        attribute.undo()
+        attribute.reset()
 
         //then
         assertEquals(validValue1Uneven,         attribute.getValue())
@@ -89,7 +89,7 @@ abstract class AttributeTest<T : Any> {
         attribute.save()
         attribute.setValueAsText(validValue3AsText)
         attribute.setValueAsText(validValue4AsText)
-        attribute.undo()
+        attribute.reset()
 
         //then
         assertEquals(validValue2,         attribute.getValue())

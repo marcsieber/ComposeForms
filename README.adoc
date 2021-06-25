@@ -97,7 +97,7 @@
 | save()
 | Speichert den Wert des Attributs, wenn es in einem validen Zustand ist.
 
-| undo()
+| reset()
 | Setzt den Wert des Attributs auf den letzten gespeicherten Wert zurück.
 
 | setCurrentLanguage(language : Locale)

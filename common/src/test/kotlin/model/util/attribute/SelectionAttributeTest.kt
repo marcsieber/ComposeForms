@@ -21,7 +21,7 @@ class SelectionAttributeTest {
     @BeforeEach
     fun setUpSelectionAttribute(){
         //given
-        selAtr = SelectionAttribute(model = model, possibleSelections = setOf("Element1", "Element2"), label = Labels.TEST);
+        selAtr = SelectionAttribute(model = model, possibleSelections = setOf("Element1", "Element2"), label = Labels.TEST)
     }
 
     @Test
@@ -392,14 +392,14 @@ class SelectionAttributeTest {
     }
 
     @Test
-    fun testUndo() {
+    fun testReset() {
         //given
         selAtr.addANewPossibleSelection("Element3")
         selAtr.addANewPossibleSelection("Element4")
 
         //when
         selAtr.addUserSelection("Element1")
-        selAtr.undo()
+        selAtr.reset()
 
         //then
         assertEquals( emptySet<String>(), selAtr.getValue())
@@ -413,7 +413,7 @@ class SelectionAttributeTest {
         selAtr.save()
         selAtr.addUserSelection("Element3")
         selAtr.addUserSelection("Element4")
-        selAtr.undo()
+        selAtr.reset()
 
         //then
         assertEquals( setOf("Element2"), selAtr.getValue())
@@ -647,7 +647,7 @@ class SelectionAttributeTest {
     @Test
     fun testNullValues() {
         //given
-        val attr = SelectionAttribute(model = model, possibleSelections = emptySet(), label = Labels.TEST);
+        val attr = SelectionAttribute(model = model, possibleSelections = emptySet(), label = Labels.TEST)
 
         //then
         assertEquals(emptySet<String>(), attr.getValue())

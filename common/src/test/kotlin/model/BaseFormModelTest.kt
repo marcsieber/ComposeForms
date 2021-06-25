@@ -99,12 +99,12 @@ internal class BaseFormModelTest {
     }
 
     @Test
-    fun testUndoAll() {
+    fun testResetAll() {
 
         //when
         alter.setValueAsText("61")
         anzKinder.setValueAsText("2")
-        model.undoAll()
+        model.resetAll()
 
         //then
         assertSame(ANZ_KINDER, anzKinder.getValue())
@@ -114,7 +114,7 @@ internal class BaseFormModelTest {
         alter.setValueAsText("61")
         anzKinder.setValueAsText("2")
         model.saveAll()
-        model.undoAll()
+        model.resetAll()
 
         //then
         assertSame(61, alter.getValue())

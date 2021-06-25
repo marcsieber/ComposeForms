@@ -14,18 +14,18 @@ import model.validators.semanticValidators.SemanticValidator
 import java.lang.NumberFormatException
 
 abstract class Attribute <A,T,L> (//required parameters
-    private val model       : FormModel,
-    label                   : L,
+                                  private val model       : FormModel,
+                                  label                   : L,
 
                                   //optional parameters
-    private var value       : T?,
-    required                : Boolean,
-    readOnly                : Boolean,
-    var onChangeListeners   : List<(T?) -> Unit>,
-    var validators          : List<SemanticValidator<T>>,
-    var convertibles        : List<CustomConvertible>,
-    var meaning             : SemanticMeaning<T>
-//                                  var formatter           : Formatter
+                                  private var value       : T?,
+                                  required                : Boolean,
+                                  readOnly                : Boolean,
+                                  var onChangeListeners   : List<(T?) -> Unit>,
+                                  var validators          : List<SemanticValidator<T>>,
+                                  var convertibles        : List<CustomConvertible>,
+                                  var meaning             : SemanticMeaning<T>
+                                  //                                  var formatter           : Formatter
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
 
@@ -178,7 +178,7 @@ abstract class Attribute <A,T,L> (//required parameters
      * This method resets the valAsText to the last stored value.
      * The value is indirectly adjusted as well, because the value listens to valAsText, and setValue(newVal) is executed.
      */
-    internal fun undo(){
+    internal fun reset(){
         setValueAsText(getSavedValue()?.toString() ?: "")
     }
 
@@ -233,7 +233,7 @@ abstract class Attribute <A,T,L> (//required parameters
                 set = newVal.substring(1,newVal.length-1).split(", ").toSet() //convert string to set
             }
             this.changed.value = !(set.equals(getSavedValue()))
-            if(!isChanged()){ // set value & savedValue to the new order, otherwise the user will be irritated if the order changes when undo is clicked
+            if(!isChanged()){ // set value & savedValue to the new order, otherwise the user will be irritated if the order changes when reset is clicked
                 checkAndSetValue(newVal)
                 save()
             }

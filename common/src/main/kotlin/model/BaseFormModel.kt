@@ -48,13 +48,12 @@ abstract class BaseFormModel : FormModel {
     }
 
     /**
-     * This method undoes all attributes,
-     * if there is at leased one change
-     * @return if the attributes had changes and where undone or not : Boolean
+     * This method resets all attributes if there is at leased one change
+     * @return if the attributes had changes and were reseted or not : Boolean
      */
-    override fun undoAll(): Boolean {
+    override fun resetAll(): Boolean {
         return if(isChangedForAll()){
-            allGroups.forEach{it.getAttributes().forEach{ it.undo() }}
+            allGroups.forEach{it.getAttributes().forEach{ it.reset() }}
             true
         }else{
             false
@@ -302,7 +301,7 @@ abstract class BaseFormModel : FormModel {
                 }
             }
             Command.SAVE -> println("save")
-            Command.UNDO -> println("next")
+            Command.RESET -> println("next")
         }
     }
 

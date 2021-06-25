@@ -161,7 +161,7 @@ class Form {
         }
     }
 
-    @Composable fun AttributeElement(model: FormModel, selectionAttribute: SelectionAttribute<*>){ //todo: undo & save when dropdown is open
+    @Composable fun AttributeElement(model: FormModel, selectionAttribute: SelectionAttribute<*>){ //todo: reset & save when dropdown is open
         InputField(model, selectionAttribute){
             return@InputField true
         }

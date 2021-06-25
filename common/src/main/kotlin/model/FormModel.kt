@@ -9,7 +9,7 @@ interface FormModel {
     fun getTitle() : String
     fun setTitle(title: String)
     fun saveAll() : Boolean
-    fun undoAll() : Boolean
+    fun resetAll() : Boolean
     fun validateAll()
     fun setCurrentLanguageForAll(lang : String)
     fun isCurrentLanguageForAll(lang: String): Boolean
