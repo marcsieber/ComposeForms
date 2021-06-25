@@ -1,6 +1,6 @@
 package model.util.attribute
 
-import model.BaseFormModel
+import model.BaseModel
 import model.util.Labels
 import model.validators.semanticValidators.SelectionValidator
 import org.junit.jupiter.api.Test
@@ -12,7 +12,7 @@ import java.lang.IllegalArgumentException
 class SelectionAttributeTest {
 
     lateinit var selAtr : SelectionAttribute<Labels>
-    var model = object: BaseFormModel() {
+    var model = object: BaseModel() {
         override fun getPossibleLanguages(): List<String> {
             return emptyList()
         }
@@ -21,7 +21,7 @@ class SelectionAttributeTest {
     @BeforeEach
     fun setUpSelectionAttribute(){
         //given
-        selAtr = SelectionAttribute(model = model, possibleSelections = setOf("Element1", "Element2"), label = Labels.TEST);
+        selAtr = SelectionAttribute(model = model, possibleSelections = setOf("Element1", "Element2"), label = Labels.TEST)
     }
 
     @Test
@@ -392,14 +392,14 @@ class SelectionAttributeTest {
     }
 
     @Test
-    fun testUndo() {
+    fun testReset() {
         //given
         selAtr.addANewPossibleSelection("Element3")
         selAtr.addANewPossibleSelection("Element4")
 
         //when
         selAtr.addUserSelection("Element1")
-        selAtr.undo()
+        selAtr.reset()
 
         //then
         assertEquals( emptySet<String>(), selAtr.getValue())
@@ -413,7 +413,7 @@ class SelectionAttributeTest {
         selAtr.save()
         selAtr.addUserSelection("Element3")
         selAtr.addUserSelection("Element4")
-        selAtr.undo()
+        selAtr.reset()
 
         //then
         assertEquals( setOf("Element2"), selAtr.getValue())
@@ -429,14 +429,12 @@ class SelectionAttributeTest {
 
         //then
         assertEquals(Labels.TEST.test, selAtr.getLabel())
-        assertTrue(selAtr.isCurrentLanguage("test"))
 
         //when
         selAtr.setCurrentLanguage("eng")
 
         //then
         assertEquals(Labels.TEST.eng, selAtr.getLabel())
-        assertTrue(selAtr.isCurrentLanguage("eng"))
     }
 
     @Test
@@ -567,8 +565,7 @@ class SelectionAttributeTest {
         selAtr.setCurrentLanguage(lang)
 
         //then
-        assertTrue(selAtr.isCurrentLanguage(lang))
-        assertFalse(selAtr.isCurrentLanguage("test"))
+        assertEquals(Labels.TEST.eng, selAtr.getLabel())
     }
 
     @Test
@@ -647,7 +644,7 @@ class SelectionAttributeTest {
     @Test
     fun testNullValues() {
         //given
-        val attr = SelectionAttribute(model = model, possibleSelections = emptySet(), label = Labels.TEST);
+        val attr = SelectionAttribute(model = model, possibleSelections = emptySet(), label = Labels.TEST)
 
         //then
         assertEquals(emptySet<String>(), attr.getValue())

@@ -1,6 +1,6 @@
 package demo.personForm
 
-import model.BaseFormModel
+import model.BaseModel
 import model.util.attribute.*
 import model.convertibles.CustomConvertible
 import model.convertibles.ReplacementPair
@@ -8,7 +8,7 @@ import model.validators.semanticValidators.NumberValidator
 import model.validators.semanticValidators.StringValidator
 import java.time.LocalTime
 
-class PersonModel() : BaseFormModel() {
+class PersonModel : BaseModel() {
 
 
     override fun getPossibleLanguages(): List<String> {

@@ -1,6 +1,6 @@
 package model.util.attribute
 
-import model.FormModel
+import model.IModel
 import model.convertibles.CustomConvertible
 import model.meanings.Default
 import model.meanings.SemanticMeaning
@@ -9,7 +9,7 @@ import model.util.Utilities
 import model.validators.semanticValidators.SemanticValidator
 
 class SelectionAttribute<L>(//required parameters
-    model                              : FormModel,
+    model                              : IModel,
     label                              : L,
     possibleSelections                 : Set<String>,
 
@@ -63,7 +63,7 @@ class SelectionAttribute<L>(//required parameters
      * @param value : String
      */
     fun removeUserSelection(value: String){
-        val newSet : MutableSet<String> = Utilities<Set<String>>().stringToSetConverter(getValueAsText())!!.toMutableSet()
+        val newSet : MutableSet<String> = Utilities<Set<String>>().stringToSetConverter(getValueAsText()).toMutableSet()
         newSet.remove(value)
         setValueAsText(newSet.toString())
     }

@@ -2,7 +2,6 @@ package demo.userTesting
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
-import model.BaseFormModel
 import ui.Form
 
 class UserTestingApp {

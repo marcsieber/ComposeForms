@@ -4,17 +4,18 @@ import androidx.compose.ui.focus.FocusRequester
 import communication.AttributeType
 import io.mockk.mockk
 import model.meanings.Default
-import model.util.Group
+import model.util.presentationElements.Group
 import model.util.ILabel
 import model.util.attribute.*
+import model.util.presentationElements.Field
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.BeforeEach
 
-internal class BaseFormModelTest {
+internal class BaseModelTest {
 
-    var model = object: BaseFormModel(){
+    var model = object: BaseModel(){
         override fun getPossibleLanguages(): List<String> {
             return Label.getLanguages()
         }
@@ -49,8 +50,8 @@ internal class BaseFormModelTest {
 
         anzKinder = IntegerAttribute(model = model, value = ANZ_KINDER, label = Label.ANZKINDER)
 
-        group = Group(model, "Group 1", alter, anzKinder)
-        Group(model, "Group 2", alter)
+        group = Group(model, "Group 1", Field(alter), Field(anzKinder))
+        Group(model, "Group 2", Field(alter))
         Group(model, "Group 3")
     }
 
@@ -98,12 +99,12 @@ internal class BaseFormModelTest {
     }
 
     @Test
-    fun testUndoAll() {
+    fun testResetAll() {
 
         //when
         alter.setValueAsText("61")
         anzKinder.setValueAsText("2")
-        model.undoAll()
+        model.resetAll()
 
         //then
         assertSame(ANZ_KINDER, anzKinder.getValue())
@@ -113,7 +114,7 @@ internal class BaseFormModelTest {
         alter.setValueAsText("61")
         anzKinder.setValueAsText("2")
         model.saveAll()
-        model.undoAll()
+        model.resetAll()
 
         //then
         assertSame(61, alter.getValue())

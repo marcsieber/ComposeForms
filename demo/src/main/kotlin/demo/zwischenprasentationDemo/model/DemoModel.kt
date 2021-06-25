@@ -1,9 +1,9 @@
 package demo.zwischenprasentationDemo.model
 
-import model.BaseFormModel
+import model.BaseModel
 import model.util.attribute.Attribute
 
-class DemoModel() : BaseFormModel() {
+class DemoModel : BaseModel() {
 
     override fun attributeChanged(attr: Attribute<*, *, *>) {
     }

@@ -3,11 +3,12 @@ package communication
 import io.mockk.clearAllMocks
 import io.mockk.mockk
 import io.mockk.verify
-import model.BaseFormModel
-import model.util.Group
+import model.BaseModel
+import model.util.presentationElements.Group
 import model.util.ILabel
 import model.util.attribute.Attribute
 import model.util.attribute.StringAttribute
+import model.util.presentationElements.Field
 import model.validators.semanticValidators.StringValidator
 import org.junit.jupiter.api.*
 
@@ -23,7 +24,7 @@ class CommunicationITest {
     lateinit var mqttConnectorCommandT : MqttConnector
     lateinit var mqttConnectorValidationT : MqttConnector
 
-    var model: BaseFormModel? = null
+    var model: BaseModel? = null
 
     var attribute1 : Attribute<*,*,*>? = null
     var attribute2 : Attribute<*,*,*>? = null
@@ -46,7 +47,7 @@ class CommunicationITest {
 
     private fun initObjects(){
         model = null
-        model = object: BaseFormModel(){
+        model = object: BaseModel(){
             override val mqttConnectorText = mqttConnectorTextT
             override val mqttConnectorAttribute = mqttConnectorAttributeT
             override val mqttConnectorCommand = mqttConnectorCommandT
@@ -60,7 +61,7 @@ class CommunicationITest {
         attribute1 = StringAttribute(model!!, testLabels.test, value = "", validators = listOf(StringValidator(2,5)))
         attribute2 = StringAttribute(model!!, testLabels.test, value = "")
 
-        group = Group(model!!, "testgroup", attribute1!!, attribute2!!)
+        group = Group(model!!, "testgroup", Field(attribute1!!), Field(attribute2!!))
 
         model!!.addFocusRequester(mockk(relaxed = true), attribute1!!)
         model!!.addFocusRequester(mockk(relaxed = true), attribute2!!)

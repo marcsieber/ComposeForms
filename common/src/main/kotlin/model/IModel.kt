@@ -1,15 +1,15 @@
 package model
 
 import androidx.compose.ui.focus.FocusRequester
-import model.util.Group
+import model.util.presentationElements.Group
 import model.util.attribute.Attribute
 
-interface FormModel {
+interface IModel {
     fun getGroups() : List<Group>
     fun getTitle() : String
     fun setTitle(title: String)
     fun saveAll() : Boolean
-    fun undoAll() : Boolean
+    fun resetAll() : Boolean
     fun validateAll()
     fun setCurrentLanguageForAll(lang : String)
     fun isCurrentLanguageForAll(lang: String): Boolean

@@ -1,6 +1,6 @@
 package model.util.attribute
 
-import model.BaseFormModel
+import model.BaseModel
 import model.convertibles.CustomConvertible
 import model.convertibles.ReplacementPair
 import model.util.Labels
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 
 abstract class AttributeTest<T : Any> {
 
-    var model = object: BaseFormModel() {
+    var model = object: BaseModel() {
         override fun getPossibleLanguages(): List<String> {
             return emptyList()
         }
@@ -30,7 +30,7 @@ abstract class AttributeTest<T : Any> {
 
     lateinit var attribute : Attribute<*,*,*>
 
-    protected abstract fun provideAttribute(model: BaseFormModel, value: T?) : Attribute<*, Any, *>
+    protected abstract fun provideAttribute(model: BaseModel, value: T?) : Attribute<*, Any, *>
 
     @BeforeEach
     fun setUp(){
@@ -73,10 +73,10 @@ abstract class AttributeTest<T : Any> {
     }
 
     @Test
-    fun testUndo() {
+    fun testReset() {
         //when
         attribute.setValueAsText(validValue2AsText)
-        attribute.undo()
+        attribute.reset()
 
         //then
         assertEquals(validValue1Uneven,         attribute.getValue())
@@ -89,7 +89,7 @@ abstract class AttributeTest<T : Any> {
         attribute.save()
         attribute.setValueAsText(validValue3AsText)
         attribute.setValueAsText(validValue4AsText)
-        attribute.undo()
+        attribute.reset()
 
         //then
         assertEquals(validValue2,         attribute.getValue())
@@ -105,14 +105,12 @@ abstract class AttributeTest<T : Any> {
 
         //then
         assertEquals(Labels.TEST.test, attribute.getLabel())
-        assertTrue(attribute.isCurrentLanguage("test"))
 
         //when
         attribute.setCurrentLanguage("eng")
 
         //then
         assertEquals(Labels.TEST.eng, attribute.getLabel())
-        assertTrue(attribute.isCurrentLanguage("eng"))
     }
 
     @Test
@@ -236,8 +234,7 @@ abstract class AttributeTest<T : Any> {
         attribute.setCurrentLanguage(lang)
 
         //then
-        assertTrue(attribute.isCurrentLanguage(lang))
-        assertFalse(attribute.isCurrentLanguage("test"))
+        assertEquals(Labels.TEST.eng, attribute.getLabel())
     }
 
     @Test

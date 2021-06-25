@@ -6,19 +6,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import model.BaseFormModel
+import model.BaseModel
 import model.convertibles.CustomConvertible
 import model.convertibles.ReplacementPair
 import model.meanings.Currency
 import model.meanings.CustomMeaning
 import model.meanings.Percentage
-import model.util.Group
+import model.util.presentationElements.Group
 import model.util.attribute.*
+import model.util.presentationElements.Field
+import model.util.presentationElements.FieldSize
 import model.validators.semanticValidators.*
 import java.time.LocalTime
 import kotlin.concurrent.thread
 
-class UserDefinedModel : BaseFormModel(){
+class UserDefinedModel : BaseModel(){
 
 
     private val modelScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -78,7 +80,7 @@ class UserDefinedModel : BaseFormModel(){
             CustomConvertible(listOf(
                 ReplacementPair("eins", "1"),
                 ReplacementPair("zwei", "2")
-            ), true, true),
+            ), false, true),
             CustomConvertible(listOf(
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true, true)
@@ -236,6 +238,11 @@ class UserDefinedModel : BaseFormModel(){
 //    val group1 = Group(this, "Group-Name", s,d1,d2,selectionValue)
 //    val group2 = Group(this, "Group-Name 2", intValue1, intValue2, longValue, shortValue)
 
+    val group1 = Group(this, "Group-Name",
+        Field(s, FieldSize.SMALL),
+        Field(d1, FieldSize.SMALL),
+        Field(d2),
+        Field(selectionValue))
 
     init{
         getGroups().forEach{
@@ -245,5 +252,10 @@ class UserDefinedModel : BaseFormModel(){
         }
     }
 
+    val group2 = Group(this, "Group-Name 2",
+        Field(intValue1),
+        Field(intValue2),
+        Field(longValue),
+        Field(shortValue))
 
 }

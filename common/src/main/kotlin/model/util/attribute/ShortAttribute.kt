@@ -1,6 +1,6 @@
 package model.util.attribute
 
-import model.FormModel
+import model.IModel
 import model.convertibles.CustomConvertible
 import model.meanings.Default
 import model.meanings.SemanticMeaning
@@ -8,7 +8,7 @@ import model.util.ILabel
 import model.validators.semanticValidators.SemanticValidator
 
 class ShortAttribute<L>(//required parameters
-    model                   : FormModel,
+    model                   : IModel,
     label                   : L,
 
                         //optional parameters

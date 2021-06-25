@@ -2,14 +2,14 @@ package demo.mountainForm.model
 
 import demo.mountainForm.service.MountainDTO
 import demo.mountainForm.service.MountainService
-import model.BaseFormModel
+import model.BaseModel
 import model.util.attribute.Attribute
 import model.util.attribute.DoubleAttribute
 import model.util.attribute.LongAttribute
 import model.util.attribute.StringAttribute
 import java.util.*
 
-class MountainPM(var service : MountainService) : BaseFormModel() {
+class MountainPM(var service : MountainService) : BaseModel() {
 
     private val BASE_URL = "https://dieterholz.github.io/StaticResources/mountainpictures/"
     private var currentMountain: MountainDTO

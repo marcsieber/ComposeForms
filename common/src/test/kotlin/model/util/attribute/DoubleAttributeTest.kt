@@ -1,6 +1,6 @@
 package model.util.attribute
 
-import model.BaseFormModel
+import model.BaseModel
 import model.util.Labels
 import model.validators.semanticValidators.FloatingPointValidator
 import org.junit.jupiter.api.Assertions
@@ -12,11 +12,11 @@ import java.lang.IllegalArgumentException
 
 internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: Double?): Attribute<*, Any,*> {
+    override fun provideAttribute(model: BaseModel, value: Double?): Attribute<*, Any,*> {
         return DoubleAttribute(model, Labels.TEST, value) as Attribute<*, Any,*>
     }
 
-    override fun provideNumberAttribute(model: BaseFormModel, value: Double?): NumberAttribute<*, Double,*> {
+    override fun provideNumberAttribute(model: BaseModel, value: Double?): NumberAttribute<*, Double,*> {
         return DoubleAttribute(model, Labels.TEST, value)
     }
 

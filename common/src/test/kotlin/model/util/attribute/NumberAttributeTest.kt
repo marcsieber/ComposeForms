@@ -1,6 +1,6 @@
 package model.util.attribute
 
-import model.BaseFormModel
+import model.BaseModel
 import model.validators.semanticValidators.NumberValidator
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.*
@@ -26,7 +26,7 @@ abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T :
 
     lateinit var numAt : NumberAttribute<*, T,*>
 
-    abstract fun provideNumberAttribute(model: BaseFormModel, value: T?) : NumberAttribute<*, T,*>
+    abstract fun provideNumberAttribute(model: BaseModel, value: T?) : NumberAttribute<*, T,*>
     
     @BeforeEach
     fun setUpNumAtr(){

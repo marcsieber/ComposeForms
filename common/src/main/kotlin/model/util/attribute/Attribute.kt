@@ -1,7 +1,7 @@
 package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
-import model.FormModel
+import model.IModel
 import model.convertibles.ConvertibleResult
 import model.convertibles.CustomConvertible
 import model.meanings.SemanticMeaning
@@ -14,7 +14,7 @@ import model.validators.semanticValidators.SemanticValidator
 import java.lang.NumberFormatException
 
 abstract class Attribute <A,T,L> (//required parameters
-    private val model       : FormModel,
+    private val model       : IModel,
     label                   : L,
 
                                   //optional parameters
@@ -25,7 +25,7 @@ abstract class Attribute <A,T,L> (//required parameters
     var validators          : List<SemanticValidator<T>>,
     var convertibles        : List<CustomConvertible>,
     var meaning             : SemanticMeaning<T>
-//                                  var formatter           : Formatter
+    //var formatter           : Formatter
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
 
@@ -46,7 +46,6 @@ abstract class Attribute <A,T,L> (//required parameters
     private val rightTrackValid     = mutableStateOf(true)
     private val convertible         = mutableStateOf(false)
     private val changed             = mutableStateOf(false)
-    private var currentLanguage     = ""
 
     private var onChangeListenersOfThis = mutableListOf<(T?) -> Unit>()
 
@@ -180,7 +179,7 @@ abstract class Attribute <A,T,L> (//required parameters
      * This method resets the valAsText to the last stored value.
      * The value is indirectly adjusted as well, because the value listens to valAsText, and setValue(newVal) is executed.
      */
-    internal fun undo(){
+    internal fun reset(){
         setValueAsText(getSavedValue()?.toString() ?: "")
     }
 
@@ -193,7 +192,6 @@ abstract class Attribute <A,T,L> (//required parameters
      */
     internal fun setCurrentLanguage(language : String){
         labelAsText.value = label.getLabelInLanguage(this.label, language)
-        currentLanguage = language
     }
 
     //******************************************************************************************************
@@ -238,7 +236,7 @@ abstract class Attribute <A,T,L> (//required parameters
                 set = newVal.substring(1,newVal.length-1).split(", ").toSet() //convert string to set
             }
             this.changed.value = !(set.equals(getSavedValue()))
-            if(!isChanged()){ // set value & savedValue to the new order, otherwise the user will be irritated if the order changes when undo is clicked
+            if(!isChanged()){ // set value & savedValue to the new order, otherwise the user will be irritated if the order changes when reset is clicked
                 checkAndSetValue(newVal)
                 save()
             }
@@ -274,15 +272,6 @@ abstract class Attribute <A,T,L> (//required parameters
 
     open fun getPossibleSelections(): Set<String>{
         return emptySet()
-    }
-
-    /**
-     * This method checks if the language is set as the current language
-     * @param language : Locale
-     * @return Boolean
-     */
-    fun isCurrentLanguage(language : String) : Boolean{
-        return currentLanguage == language
     }
 
     fun getLabel() : String{

@@ -5,7 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Calculate
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,9 +26,9 @@ fun NumberContent(model: Model){
         Column(modifier = Modifier.fillMaxSize().padding(top = 0.dp, bottom = 12.dp)) {
             //Calculationfield
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top){
-                OutlinedTextField(searchString.value,
-                    onValueChange = { searchString.value = it; filterPossibleSelections(it)},
-                    label = { "" },
+                OutlinedTextField(calculationString.value,
+                    onValueChange = { },
+                    label = { Icon(Icons.Filled.Calculate, "Calculation-Icon") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = ColorsUtil.get(FormColors.BACKGROUND_COLOR),
@@ -79,3 +83,5 @@ var calcItems = listOf<Pair<String, () -> Unit>>(
     Pair("CE", {}),
     Pair("+", {})
 )
+
+val calculationString = mutableStateOf("")
