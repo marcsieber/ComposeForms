@@ -118,7 +118,7 @@ fun InputField(model : Model, attrType: AttributeType){
 
 fun showTextForType(text : String, type: AttributeType) : String {
     return when(type){
-        AttributeType.SELECTION -> text.substring(1, text.length-1)
+        AttributeType.SELECTION -> if(text.isNotEmpty()) text.substring(1,  text.length-1) else ""
         else                    -> text
     }
 }

@@ -54,4 +54,5 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation("androidx.activity:activity-compose:1.3.0-alpha03")
+    implementation("org.jetbrains.compose.material:material-icons-extended:0.4.0-build182")
 }
