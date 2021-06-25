@@ -14,13 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import model.FormModel
+import model.IModel
 import ui.theme.ColorsUtil.Companion.get
 import ui.theme.DropdownColors
 import ui.theme.FormColors
 
 @Composable
-fun header(model : FormModel){
+fun header(model : IModel){
     with(model){
         TopAppBar(
             backgroundColor = get(FormColors.BACKGROUND_COLOR),

@@ -1,9 +1,9 @@
 package model.util.presentationElements
 
-import model.FormModel
+import model.IModel
 import model.util.attribute.Attribute
 
-class Group(val model : FormModel, val title : String, vararg field : Field) {
+class Group(val model : IModel, val title : String, vararg field : Field) {
 
     private val groupFields = field.map { it }.toMutableList()
     private val groupAttributes = field.map { it.getAttribute() }.toMutableList()

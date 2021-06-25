@@ -1,7 +1,7 @@
 package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
-import model.FormModel
+import model.IModel
 import model.convertibles.ConvertibleResult
 import model.convertibles.CustomConvertible
 import model.meanings.SemanticMeaning
@@ -14,18 +14,18 @@ import model.validators.semanticValidators.SemanticValidator
 import java.lang.NumberFormatException
 
 abstract class Attribute <A,T,L> (//required parameters
-                                  private val model       : FormModel,
-                                  label                   : L,
+    private val model       : IModel,
+    label                   : L,
 
                                   //optional parameters
-                                  private var value       : T?,
-                                  required                : Boolean,
-                                  readOnly                : Boolean,
-                                  var onChangeListeners   : List<(T?) -> Unit>,
-                                  var validators          : List<SemanticValidator<T>>,
-                                  var convertibles        : List<CustomConvertible>,
-                                  var meaning             : SemanticMeaning<T>
-                                  //                                  var formatter           : Formatter
+    private var value       : T?,
+    required                : Boolean,
+    readOnly                : Boolean,
+    var onChangeListeners   : List<(T?) -> Unit>,
+    var validators          : List<SemanticValidator<T>>,
+    var convertibles        : List<CustomConvertible>,
+    var meaning             : SemanticMeaning<T>
+    //var formatter           : Formatter
 
 ) where A : Attribute<A,T,L>, T : Any?, L: Enum<*>, L : ILabel {
 
@@ -46,7 +46,6 @@ abstract class Attribute <A,T,L> (//required parameters
     private val rightTrackValid     = mutableStateOf(true)
     private val convertible         = mutableStateOf(false)
     private val changed             = mutableStateOf(false)
-    private var currentLanguage     = ""
 
     private val listOfValidationResults  = mutableStateOf<List<ValidationResult>>(emptyList())
     abstract val typeT        : T
@@ -191,7 +190,6 @@ abstract class Attribute <A,T,L> (//required parameters
      */
     internal fun setCurrentLanguage(language : String){
         labelAsText.value = label.getLabelInLanguage(this.label, language)
-        currentLanguage = language
     }
 
     //******************************************************************************************************
@@ -271,15 +269,6 @@ abstract class Attribute <A,T,L> (//required parameters
         return emptySet()
     }
 
-    /**
-     * This method checks if the language is set as the current language
-     * @param language : Locale
-     * @return Boolean
-     */
-    fun isCurrentLanguage(language : String) : Boolean{
-        return currentLanguage == language
-    }
-
     fun getLabel() : String{
         return labelAsText.value
     }
@@ -291,8 +280,6 @@ abstract class Attribute <A,T,L> (//required parameters
     fun isChanged() : Boolean{
         return changed.value
     }
-
-
 
 
     //******************************************************************************************************

@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.unit.dp
-import model.FormModel
+import model.IModel
 import model.util.attribute.*
 import model.util.presentationElements.Field
 import model.util.presentationElements.FieldSize
@@ -23,7 +23,7 @@ class Form {
 
     @ExperimentalFoundationApi
     @Composable
-    fun of(model: FormModel){
+    fun of(model: IModel){
         with(model) {
             Column {
                 header(model)
@@ -69,7 +69,7 @@ class Form {
     }
 
     @Composable
-    private fun CellElement(model: FormModel, listOfFields : MutableList<Field>){
+    private fun CellElement(model: IModel, listOfFields : MutableList<Field>){
         //Small sized fields
         if(listOfFields[0].getFieldSize() == FieldSize.SMALL){
             Row(
@@ -95,7 +95,7 @@ class Form {
 
 
     @Composable
-    private fun AttributeElement(model: FormModel, attr: Attribute<*,*,*>){
+    private fun AttributeElement(model: IModel, attr: Attribute<*,*,*>){
         when (attr) {
             is StringAttribute -> AttributeElement(model, attr)
             is LongAttribute -> AttributeElement(model, attr)
@@ -109,12 +109,12 @@ class Form {
 
 
     @Composable
-    private fun AttributeElement(model: FormModel, strAttr: StringAttribute<*>){
+    private fun AttributeElement(model: IModel, strAttr: StringAttribute<*>){
         InputField(model, strAttr){return@InputField true}
     }
 
     @Composable
-    private fun AttributeElement(model: FormModel, longAttr: LongAttribute<*>){
+    private fun AttributeElement(model: IModel, longAttr: LongAttribute<*>){
         InputField(model, longAttr)
             {
 //                if (it.key == Key.DirectionUp) {
@@ -129,17 +129,17 @@ class Form {
     }
 
     @Composable
-    private fun AttributeElement(model: FormModel, intAttr: IntegerAttribute<*>){
+    private fun AttributeElement(model: IModel, intAttr: IntegerAttribute<*>){
         InputField(model, intAttr){ return@InputField true}
     }
 
     @Composable
-    private fun AttributeElement(model: FormModel, shortAttr: ShortAttribute<*>){
+    private fun AttributeElement(model: IModel, shortAttr: ShortAttribute<*>){
         InputField(model, shortAttr){ return@InputField true}
     }
 
     @Composable
-    private fun AttributeElement(model: FormModel, floatAttr: FloatAttribute<*>){
+    private fun AttributeElement(model: IModel, floatAttr: FloatAttribute<*>){
         InputField(model, floatAttr){
 //            if (it.key == Key.DirectionUp) {
 //                floatAttr.setValueAsTextFromKeyEvent( (floatAttr.getValue() as Float + floatAttr.getStepSize()).toString())
@@ -151,7 +151,7 @@ class Form {
     }
 
     @Composable
-    private fun AttributeElement(model: FormModel, doubleAttr: DoubleAttribute<*>){
+    private fun AttributeElement(model: IModel, doubleAttr: DoubleAttribute<*>){
         InputField(model, doubleAttr){
 //            if (it.key == Key.DirectionUp) {
 //                doubleAttr.setValueAsTextFromKeyEvent( (doubleAttr.getValue() as Double + doubleAttr.getStepSize()).toString())
@@ -163,7 +163,7 @@ class Form {
         }
     }
 
-    @Composable fun AttributeElement(model: FormModel, selectionAttribute: SelectionAttribute<*>){ //todo: reset & save when dropdown is open
+    @Composable fun AttributeElement(model: IModel, selectionAttribute: SelectionAttribute<*>){ //todo: reset & save when dropdown is open
         InputField(model, selectionAttribute){
             return@InputField true
         }

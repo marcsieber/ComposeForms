@@ -11,7 +11,7 @@ import model.util.presentationElements.Group
 import model.util.attribute.*
 import java.util.*
 
-abstract class BaseFormModel : FormModel {
+abstract class BaseModel : IModel {
 
     //******************************************************************************************************
     //Properties

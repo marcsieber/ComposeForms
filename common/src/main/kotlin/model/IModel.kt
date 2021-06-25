@@ -4,7 +4,7 @@ import androidx.compose.ui.focus.FocusRequester
 import model.util.presentationElements.Group
 import model.util.attribute.Attribute
 
-interface FormModel {
+interface IModel {
     fun getGroups() : List<Group>
     fun getTitle() : String
     fun setTitle(title: String)

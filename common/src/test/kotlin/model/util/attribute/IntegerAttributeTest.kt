@@ -1,14 +1,14 @@
 package model.util.attribute
 
-import model.BaseFormModel
+import model.BaseModel
 import model.util.Labels
 
 internal class IntegerAttributeTest: NumberAttributeTest<Int>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: Int?): Attribute<*, Any,*> {
+    override fun provideAttribute(model: BaseModel, value: Int?): Attribute<*, Any,*> {
         return IntegerAttribute(model, Labels.TEST, value) as Attribute<*, Any,*>
     }
-    override fun provideNumberAttribute(model: BaseFormModel, value: Int?): NumberAttribute<*, Int,*> {
+    override fun provideNumberAttribute(model: BaseModel, value: Int?): NumberAttribute<*, Int,*> {
         return IntegerAttribute(model, Labels.TEST, value)
     }
 

@@ -1,13 +1,13 @@
 package demo.zwischenprasentation.model
 
-import model.BaseFormModel
+import model.BaseModel
 import model.util.attribute.Attribute
 import model.util.attribute.IntegerAttribute
 import model.util.attribute.SelectionAttribute
 import model.util.attribute.StringAttribute
 import model.validators.semanticValidators.SelectionValidator
 
-class DemoModel() : BaseFormModel() {
+class DemoModel : BaseModel() {
 
     init{
         setTitle("Demo App")

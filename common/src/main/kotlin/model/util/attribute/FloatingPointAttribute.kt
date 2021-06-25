@@ -1,13 +1,13 @@
 package model.util.attribute
 
-import model.FormModel
+import model.IModel
 import model.convertibles.CustomConvertible
 import model.meanings.SemanticMeaning
 import model.util.ILabel
 import model.validators.semanticValidators.SemanticValidator
 
 abstract class FloatingPointAttribute <F,T,L> (//required parameters
-    model                       : FormModel,
+    model                       : IModel,
     label                       : L,
 
                                                //optional parameters
@@ -23,6 +23,4 @@ abstract class FloatingPointAttribute <F,T,L> (//required parameters
 
 ) : NumberAttribute<F,T,L>(model = model, value = value, label = label, required = required, readOnly = readOnly,
     onChangeListeners = onChangeListeners, validators = validators, convertibles = convertibles, meaning = meaning)
-        where F : FloatingPointAttribute<F,T,L>, T : Number, T : Comparable<T>, L: Enum<*>, L : ILabel{
-
-}
+        where F : FloatingPointAttribute<F,T,L>, T : Number, T : Comparable<T>, L: Enum<*>, L : ILabel

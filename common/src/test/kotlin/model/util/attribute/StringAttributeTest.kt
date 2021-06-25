@@ -1,6 +1,6 @@
 package model.util.attribute
 
-import model.BaseFormModel
+import model.BaseModel
 import model.util.Labels
 import model.validators.semanticValidators.StringValidator
 import org.junit.jupiter.api.Assertions.*
@@ -10,7 +10,7 @@ import java.lang.IllegalArgumentException
 
 internal class StringAttributeTest: AttributeTest<String>() {
 
-    override fun provideAttribute(model: BaseFormModel, value: String?): Attribute<*, Any, *> {
+    override fun provideAttribute(model: BaseModel, value: String?): Attribute<*, Any, *> {
         return StringAttribute(model, Labels.TEST, value) as Attribute<*, Any, *>
     }
 

@@ -1,14 +1,14 @@
 package model.util.attribute
 
-import model.BaseFormModel
+import model.BaseModel
 import model.util.Labels
 
 internal class LongAttributeTest : NumberAttributeTest<Long>(){
 
-    override fun provideAttribute(model: BaseFormModel, value: Long?): Attribute<*, Any,*> {
+    override fun provideAttribute(model: BaseModel, value: Long?): Attribute<*, Any,*> {
         return LongAttribute(model, Labels.TEST, value) as Attribute<*, Any,*>
     }
-    override fun provideNumberAttribute(model: BaseFormModel, value: Long?): NumberAttribute<*, Long,*> {
+    override fun provideNumberAttribute(model: BaseModel, value: Long?): NumberAttribute<*, Long,*> {
         return LongAttribute(model, Labels.TEST, value)
     }
 

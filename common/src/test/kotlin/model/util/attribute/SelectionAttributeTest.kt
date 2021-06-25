@@ -1,6 +1,6 @@
 package model.util.attribute
 
-import model.BaseFormModel
+import model.BaseModel
 import model.util.Labels
 import model.validators.semanticValidators.SelectionValidator
 import org.junit.jupiter.api.Test
@@ -12,7 +12,7 @@ import java.lang.IllegalArgumentException
 class SelectionAttributeTest {
 
     lateinit var selAtr : SelectionAttribute<Labels>
-    var model = object: BaseFormModel() {
+    var model = object: BaseModel() {
         override fun getPossibleLanguages(): List<String> {
             return emptyList()
         }
@@ -429,14 +429,12 @@ class SelectionAttributeTest {
 
         //then
         assertEquals(Labels.TEST.test, selAtr.getLabel())
-        assertTrue(selAtr.isCurrentLanguage("test"))
 
         //when
         selAtr.setCurrentLanguage("eng")
 
         //then
         assertEquals(Labels.TEST.eng, selAtr.getLabel())
-        assertTrue(selAtr.isCurrentLanguage("eng"))
     }
 
     @Test
@@ -567,8 +565,7 @@ class SelectionAttributeTest {
         selAtr.setCurrentLanguage(lang)
 
         //then
-        assertTrue(selAtr.isCurrentLanguage(lang))
-        assertFalse(selAtr.isCurrentLanguage("test"))
+        assertEquals(Labels.TEST.eng, selAtr.getLabel())
     }
 
     @Test

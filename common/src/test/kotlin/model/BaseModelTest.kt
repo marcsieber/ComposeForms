@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.BeforeEach
 
-internal class BaseFormModelTest {
+internal class BaseModelTest {
 
-    var model = object: BaseFormModel(){
+    var model = object: BaseModel(){
         override fun getPossibleLanguages(): List<String> {
             return Label.getLanguages()
         }
