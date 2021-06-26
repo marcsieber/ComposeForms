@@ -21,7 +21,7 @@ abstract class Attribute <A,T,L> (//required parameters
     private var value       : T?,
     required                : Boolean,
     readOnly                : Boolean,
-    private var onChangeListeners   : List<ChangeListenerPair<Any?>>,
+    private var onChangeListeners   : List<(Attribute<*,*,*>) -> Unit>,
     var validators          : List<SemanticValidator<T>>,
     var convertibles        : List<CustomConvertible>,
     var meaning             : SemanticMeaning<T>
@@ -206,7 +206,6 @@ abstract class Attribute <A,T,L> (//required parameters
         if(value != this.value){
             this.value = value
             onChangeListenersOfThis.forEach{
-                println(it)
                 it(value)
             }
         }
@@ -286,16 +285,13 @@ abstract class Attribute <A,T,L> (//required parameters
         return changed.value
     }
 
-    fun addOnChangeListener(func: (T?) -> Unit){
+    private fun addOnChangeListenerInternal(func: (T?) -> Unit){
         onChangeListenersOfThis.add(func)
     }
 
     fun setListenersOnOtherAttributes(){
-        onChangeListeners.forEach{ olPair ->
-            olPair.attribute.addOnChangeListener{
-                olPair.func(this as Attribute<*,Any?, *>, it)
-            }
-            olPair.attribute.addOnChangeListener{ println("Added hardcoded: $it") }
+        onChangeListeners.forEach{ f ->
+            f(this)
         }
     }
 
@@ -529,6 +525,13 @@ abstract class Attribute <A,T,L> (//required parameters
 
         fun resetId(){
             id = 0
+        }
+    }
+
+
+    infix fun addOnChangeListener(func: (attr: Attribute<*,*,*>, value: T?) -> Unit): (Attribute<*,*,*>) -> Unit {
+        return { attr ->
+            this.addOnChangeListenerInternal { func(attr, it) }
         }
     }
 }

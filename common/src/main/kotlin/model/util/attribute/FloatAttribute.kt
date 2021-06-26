@@ -15,7 +15,7 @@ class FloatAttribute<L>(    //required parameters
     value                   : Float?                            = null,
     required                : Boolean                           = false,
     readOnly                : Boolean                           = false,
-    onChangeListeners       : List<ChangeListenerPair<Any?>>       = emptyList(),
+    onChangeListeners       : List<(Attribute<*,*,*>) -> Unit>                        = emptyList(),
     validators              : List<SemanticValidator<Float>>    = mutableListOf(),
     convertibles            : List<CustomConvertible>           = emptyList(),
     meaning                 : SemanticMeaning<Float>            = Default(),

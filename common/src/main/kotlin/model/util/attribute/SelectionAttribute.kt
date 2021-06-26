@@ -17,7 +17,7 @@ class SelectionAttribute<L>(//required parameters
     value                              : Set<String>                            = emptySet<String>(),
     required                           : Boolean                                = false,
     readOnly                           : Boolean                                = false,
-    onChangeListeners                  : List<ChangeListenerPair<Any?>>           = emptyList(),
+    onChangeListeners                  : List<(Attribute<*,*,*>) -> Unit>           = emptyList(),
     validators                         : List<SemanticValidator<Set<String>>>   = mutableListOf(),
     convertibles                       : List<CustomConvertible>                = emptyList(),
     meaning                            : SemanticMeaning<Set<String>>           = Default()

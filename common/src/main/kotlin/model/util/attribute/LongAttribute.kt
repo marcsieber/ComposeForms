@@ -15,7 +15,7 @@ class LongAttribute<L>(//required parameters
     value                   : Long?                          = null,
     required                : Boolean                        = false,
     readOnly                : Boolean                        = false,
-    onChangeListeners       : List<ChangeListenerPair<Any?>>    = emptyList(),
+    onChangeListeners       : List<(Attribute<*,*,*>) -> Unit>   = emptyList(),
     validators              : List<SemanticValidator<Long>>  = mutableListOf(),
     convertibles            : List<CustomConvertible>        = emptyList(),
     meaning                 : SemanticMeaning<Long>          = Default()

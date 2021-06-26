@@ -15,7 +15,7 @@ class IntegerAttribute<L>(//required parameters
     value                    : Int?                           = null,
     required                 : Boolean                        = false,
     readOnly                 : Boolean                        = false,
-    onChangeListeners        : List<ChangeListenerPair<Any?>>    = emptyList(),
+    onChangeListeners        : List<(Attribute<*,*,*>) -> Unit>   = emptyList(),
     validators               : List<SemanticValidator<Int>>   = mutableListOf(),
     convertibles             : List<CustomConvertible>        = emptyList(),
     meaning                  : SemanticMeaning<Int>           = Default()

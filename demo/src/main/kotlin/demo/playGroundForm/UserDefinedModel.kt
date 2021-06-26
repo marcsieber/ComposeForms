@@ -127,25 +127,17 @@ class UserDefinedModel : BaseModel(){
         label = Labels.stringLabel,
     )
 
-//    private val func: (Attribute<*,*,*>, Int?) -> Unit = { a, b -> println("bla $a, bla $b") }
-    private val func: (Attribute<*,*,*>, Any?) -> Unit = { a, b -> a.setRequired( (b as Int?)?:0 >= 18) }
-    val test =  ChangeListenerPair<Any?>(intAttr as Attribute<*,Any?,*>, func)
-
-
     val string: StringAttribute<Labels> = StringAttribute(
         model = this,
         value = "1234",
         validators = listOf(StringValidator(minLength = 3, maxLength = 5)),
         label = Labels.stringLabel,
         onChangeListeners = listOf(
-//            ChangeListenerPair({intAttr}, { (me -> { value -> println("new value $value"); me.setReadOnly(value == 123) } }),
-//            ChangeListenerPair({intAttr}) { a,b -> a.setReadOnly( b == 123) },
-              test
-//                ChangeListenerPair({intAttr}, { a, b -> a.setRequired( b?:0 >= 0)})
+            intAttr addOnChangeListener { a, v -> a.setRequired(v ?: 0 >= 123) },
+            intAttr addOnChangeListener { a, v -> a.setReadOnly(v ?: 0 == 1) },
         )
     )
 
-//    Group(this, "Stranger Things", stringValue, string)
 
     //Numbers
     val intValue1    = IntegerAttribute(
@@ -153,12 +145,6 @@ class UserDefinedModel : BaseModel(){
         label = Labels.intLabel,
         readOnly = false,
         validators = listOf(NumberValidator(0, 10, 2, 4, true, "LowerBound ist bei 0, upperBound bei 10, es sind nur 2er-Schritte zugelassen")),
-//        onChangeListeners = listOf{
-//            if(it == 4){
-//                strVal.overrideStringValidator(8)
-//            }
-//
-//        }
     )
 
     val intValue2    = IntegerAttribute(model = this,
@@ -189,7 +175,6 @@ class UserDefinedModel : BaseModel(){
         required = true,
         readOnly = false,
         validators = listOf(NumberValidator(0f, 100f, 3f, 9.5f, true)) ,
-//        onChangeListeners = listOf { longValue.setReadOnly(it == 12.5f) }
     )
 
     val doubleValue = DoubleAttribute(
@@ -234,9 +219,12 @@ class UserDefinedModel : BaseModel(){
     }
 
 
-    val group0 = Group(this, "Stranger Things", stringValue, string, intAttr)
-//    val group1 = Group(this, "Group-Name", s,d1,d2,selectionValue)
-//    val group2 = Group(this, "Group-Name 2", intValue1, intValue2, longValue, shortValue)
+    val group0 = Group(this, "Stranger Things",
+        Field(stringValue),
+        Field(string),
+        Field(intAttr)
+    )
+
 
     val group1 = Group(this, "Group-Name",
         Field(s, FieldSize.SMALL),

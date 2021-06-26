@@ -15,7 +15,7 @@ class StringAttribute<L>(//required parameters
     value               : String?                          = null,
     required            : Boolean                          = false,
     readOnly            : Boolean                          = false,
-    onChangeListeners   : List<ChangeListenerPair<Any?>>      = emptyList(),
+    onChangeListeners   : List<(a: Attribute<*,*,*>) -> Unit> = emptyList(),
     validators          : List<SemanticValidator<String>>  = mutableListOf(),
     convertibles        : List<CustomConvertible>          = emptyList(),
     meaning             : SemanticMeaning<String>          = Default()

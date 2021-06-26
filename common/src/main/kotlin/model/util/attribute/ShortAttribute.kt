@@ -15,7 +15,7 @@ class ShortAttribute<L>(//required parameters
     value                   : Short?                            = null,
     required                : Boolean                           = false,
     readOnly                : Boolean                           = false,
-    onChangeListeners       : List<ChangeListenerPair<Any?>>       = emptyList(),
+    onChangeListeners       : List<(Attribute<*,*,*>) -> Unit>       = emptyList(),
     validators              : List<SemanticValidator<Short>>    = mutableListOf(),
     convertibles            : List<CustomConvertible>           = emptyList(),
     meaning                 : SemanticMeaning<Short>            = Default()
