@@ -25,8 +25,7 @@ object embeddedMqtt {
                 hiveMQ?.start()?.join()
             }
         } catch (ex : Exception) {
-            println("Exception: ${ex.message}")
-//            ex.printStackTrace()
+            ex.printStackTrace()
         }
     }
 
