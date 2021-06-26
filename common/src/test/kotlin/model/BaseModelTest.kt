@@ -3,6 +3,7 @@ package model
 import androidx.compose.ui.focus.FocusRequester
 import communication.AttributeType
 import io.mockk.mockk
+import kotlinx.coroutines.*
 import model.meanings.Default
 import model.util.presentationElements.Group
 import model.util.ILabel
@@ -24,8 +25,8 @@ internal class BaseModelTest {
     val ALTER = 50
     val ANZ_KINDER = 3
 
-    lateinit var alter : Attribute<*,*,*>
-    lateinit var anzKinder : Attribute<*,*,*>
+    lateinit var alter : Attribute<*,Int,*>
+    lateinit var anzKinder : Attribute<*,Int,*>
     lateinit var group : Group
 
     enum class Label(val test: String): ILabel{
@@ -416,6 +417,42 @@ internal class BaseModelTest {
         //then
         assertEquals(AttributeType.OTHER, model.getAttributeType(attr))
 
+    }
+
+    @Test
+    fun testOnChangeListeners(){
+        //given
+        val taxNumber = StringAttribute(model, Label.TEST, onChangeListeners =
+            listOf(alter addOnChangeListener {a, v -> a.setRequired( v?:0 >= 18)}))
+        Group(model, "foo", Field(taxNumber))
+
+        runBlocking { //Has to block more than approx. 500ms for model to add listeners
+            delay(1500)
+        }
+
+
+        //then
+        assertFalse(taxNumber.isRequired())
+
+        //when
+        alter.setValueAsText("17")
+        //then
+        assertFalse(taxNumber.isRequired())
+
+        //when
+        alter.setValueAsText("18")
+        //then
+        assertTrue(taxNumber.isRequired())
+
+        //when
+        alter.setValueAsText("19")
+        //then
+        assertTrue(taxNumber.isRequired())
+
+        //when
+        alter.setValueAsText("")
+        //then
+        assertFalse(taxNumber.isRequired())
     }
 
 

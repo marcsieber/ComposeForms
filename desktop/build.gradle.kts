@@ -15,7 +15,6 @@ sourceSets{
         dependencies {
             api(compose.desktop.currentOs)
             implementation(project(":common"))
-            implementation("com.hivemq:hivemq-community-edition-embedded:2021.1")
             implementation("org.jetbrains.compose.material:material-icons-extended-desktop:0.4.0-build182")
         }
     }

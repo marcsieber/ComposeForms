@@ -1,11 +1,6 @@
 package demo.playGroundForm
 
 import androidx.compose.runtime.mutableStateOf
-import communication.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import model.BaseModel
 import model.convertibles.CustomConvertible
 import model.convertibles.ReplacementPair
@@ -20,25 +15,11 @@ import model.validators.semanticValidators.*
 import java.time.LocalTime
 import kotlin.concurrent.thread
 
-class UserDefinedModel : BaseModel(){
-
-
-    private val modelScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
+class UserDefinedModel : BaseModel(true){
 
     init {
         setTitle("Demo Title")
-
-        startUp()
     }
-
-    fun startUp(){
-        modelScope.launch {
-            runEmbeddedMQServer()
-            connectAndSubscribe()
-        }
-    }
-
 
     override fun getPossibleLanguages(): List<String> {
        return Labels.getLanguages()
@@ -231,14 +212,6 @@ class UserDefinedModel : BaseModel(){
         Field(d1, FieldSize.SMALL),
         Field(d2),
         Field(selectionValue))
-
-    init{
-        getGroups().forEach{
-            it.getAttributes().forEach {
-                it.setListenersOnOtherAttributes()
-            }
-        }
-    }
 
     val group2 = Group(this, "Group-Name 2",
         Field(intValue1),

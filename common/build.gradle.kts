@@ -21,6 +21,7 @@ sourceSets{
             api("org.junit.jupiter:junit-jupiter:5.7.1")
             api("com.hivemq:hivemq-mqtt-client:1.2.1")
             api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+            implementation("com.hivemq:hivemq-community-edition-embedded:2021.1")
             testImplementation("io.mockk:mockk:1.11.0")
         }
     }

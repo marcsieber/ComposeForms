@@ -2,8 +2,10 @@ package model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
 import communication.*
+import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -11,7 +13,7 @@ import model.util.presentationElements.Group
 import model.util.attribute.*
 import java.util.*
 
-abstract class BaseModel : IModel {
+abstract class BaseModel(private val withServer: Boolean = false) : IModel {
 
     //******************************************************************************************************
     //Properties
@@ -30,6 +32,33 @@ abstract class BaseModel : IModel {
     open val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
     open val mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
     open val mqttConnectorAttribute = MqttConnector(mqttBroker, mainTopic)
+
+    private val modelScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    var startedUp = false
+
+    private fun startUp(){
+        if(withServer)
+        modelScope.launch {
+            if(!startedUp) {
+                startedUp = true
+                embeddedMqtt.start()
+                connectAndSubscribe()
+            }
+        }
+    }
+
+    private fun init(){
+        CoroutineScope(SupervisorJob()).launch {
+            delay(500) //TODO: Maybe waiting for any attribute is initialized?
+
+            getGroups().forEach {
+                it.getAttributes().forEach {
+                    it.setListenersOnOtherAttributes()
+                }
+            }
+        }
+    }
 
     //******************************************************************************************************
     //Functions called on user actions
@@ -328,5 +357,11 @@ abstract class BaseModel : IModel {
         mqttConnectorValidation.connectAndSubscribe(subtopic = "validation", onNewMessage =
         {
         })
+    }
+
+
+    init{
+        init()
+        startUp()
     }
 }
