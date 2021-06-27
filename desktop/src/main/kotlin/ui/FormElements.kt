@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.IModel
 import model.meanings.Default
-import model.util.Utilities
+import util.Utilities
 import model.util.attribute.Attribute
 import model.util.attribute.SelectionAttribute
 import ui.theme.ColorsUtil.Companion.get

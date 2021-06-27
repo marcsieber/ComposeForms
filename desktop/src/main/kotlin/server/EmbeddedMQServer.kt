@@ -1,4 +1,4 @@
-package communication
+package server
 
 import com.hivemq.embedded.EmbeddedHiveMQ
 import com.hivemq.embedded.EmbeddedHiveMQBuilder

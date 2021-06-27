@@ -5,7 +5,7 @@ import model.convertibles.CustomConvertible
 import model.meanings.Default
 import model.meanings.SemanticMeaning
 import model.util.ILabel
-import model.util.Utilities
+import util.Utilities
 import model.validators.semanticValidators.SemanticValidator
 
 class SelectionAttribute<L>(//required parameters

@@ -6,7 +6,7 @@ import model.convertibles.ConvertibleResult
 import model.convertibles.CustomConvertible
 import model.meanings.SemanticMeaning
 import model.util.ILabel
-import model.util.Utilities
+import util.Utilities
 import model.validators.RequiredValidator
 import model.validators.SyntaxValidator
 import model.validators.ValidationResult

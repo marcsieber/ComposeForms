@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.model.Model
 import com.model.Model.possibleSelections
 import com.model.Model.text
-import model.util.Utilities
+import util.Utilities
 import ui.theme.ColorsUtil
 import ui.theme.DropdownColors
 import ui.theme.FormColors

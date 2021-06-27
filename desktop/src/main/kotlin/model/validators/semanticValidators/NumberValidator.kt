@@ -1,6 +1,6 @@
 package model.validators.semanticValidators
 
-import model.util.Utilities
+import util.Utilities
 import model.validators.ValidationResult
 
 class NumberValidator<T>(private var lowerBound              : T? = null,

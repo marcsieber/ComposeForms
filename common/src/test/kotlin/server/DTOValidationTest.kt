@@ -1,5 +1,6 @@
-package communication
+package server
 
+import communication.DTOValidation
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

@@ -409,7 +409,8 @@ internal class BaseModelTest {
 
 
         //when
-        attr = object : Attribute<StringAttribute<Label>, String, Label>(model, Label.ANZKINDER, null, false, false, emptyList(), emptyList(),
+        attr = object : Attribute<StringAttribute<Label>, String, Label>(model,
+            Label.ANZKINDER, null, false, false, emptyList(), emptyList(),
             emptyList(), Default()){
             override val typeT: String
                 get() = ""

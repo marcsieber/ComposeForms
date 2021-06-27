@@ -3,17 +3,8 @@ package communication
 import com.hivemq.client.mqtt.datatypes.MqttQos
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import model.util.attribute.Attribute
 import java.nio.charset.StandardCharsets
 import java.util.*
-
-
-
-
-
 
 /**
  * TODO: Write Comment

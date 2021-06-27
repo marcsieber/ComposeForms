@@ -1,6 +1,6 @@
 package model.validators
 
-import model.util.Utilities
+import util.Utilities
 import java.lang.NumberFormatException
 
 class SyntaxValidator<T>( validationMessage   : String = "") : Validator<T>(validationMessage = validationMessage) {

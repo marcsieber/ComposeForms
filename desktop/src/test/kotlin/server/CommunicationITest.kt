@@ -1,5 +1,6 @@
-package communication
+package server
 
+import communication.MqttConnector
 import io.mockk.clearAllMocks
 import io.mockk.mockk
 import io.mockk.verify

@@ -1,5 +1,7 @@
-package communication
+package server
 
+import communication.AttributeType
+import communication.DTOAttribute
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
