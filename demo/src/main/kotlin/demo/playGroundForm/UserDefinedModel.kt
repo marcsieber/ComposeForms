@@ -7,23 +7,21 @@ import model.convertibles.ReplacementPair
 import model.meanings.Currency
 import model.meanings.CustomMeaning
 import model.meanings.Percentage
+import model.util.ILabel
 import model.util.presentationElements.Group
 import model.util.attribute.*
 import model.util.presentationElements.Field
 import model.util.presentationElements.FieldSize
 import model.validators.semanticValidators.*
 import java.time.LocalTime
-import kotlin.concurrent.thread
 
-class UserDefinedModel : BaseModel(true){
+class UserDefinedModel : BaseModel(Labels.stringLabel, withServer = true){
 
     init {
         setTitle("Demo Title")
     }
 
-    override fun getPossibleLanguages(): List<String> {
-       return Labels.getLanguages()
-    }
+
 
     val strValidator = StringValidator(5, 10)
     val customValidator = CustomValidator<String>({value -> value!!.length in 3..5}, validationMessage = "Message")
@@ -41,6 +39,7 @@ class UserDefinedModel : BaseModel(true){
         model = this,
         value = 0.0,
         label = Labels.convertOnUnfocussing,
+        required = true,
         convertibles = listOf(
             CustomConvertible(listOf(
                 ReplacementPair("eins", "1"),
@@ -113,6 +112,7 @@ class UserDefinedModel : BaseModel(true){
         value = "1234",
         validators = listOf(StringValidator(minLength = 3, maxLength = 5)),
         label = Labels.stringLabel,
+        required = true,
         onChangeListeners = listOf(
             intAttr addOnChangeListener { a, v -> a.setRequired(v ?: 0 >= 123) },
             intAttr addOnChangeListener { a, v -> a.setReadOnly(v ?: 0 == 1) },
@@ -189,17 +189,6 @@ class UserDefinedModel : BaseModel(true){
     val dropDownItems  = setOf<String>("1","2","3","4")
     val dropDownOpen    = mutableStateOf(false)
     val dropDownSelIndex = mutableStateOf(0)
-
-
-    init{
-        thread {
-            Thread.sleep(3000)
-//            this.labels = label2
-            this.setCurrentLanguageForAll("Deutsch")
-            strValidator.overrideStringValidator(15,20,"Length must be between 15 and 20 characters")
-        }
-    }
-
 
     val group0 = Group(this, "Stranger Things",
         Field(stringValue),

@@ -69,11 +69,6 @@ class UserTestingFormModel : BaseModel() {
         )
     )
 
-    override fun getPossibleLanguages(): List<String> {
-        return mutableListOf("english","german")
-    }
-
-
 
     override fun validationChanged(attr: Attribute<*, *, *>) {
 

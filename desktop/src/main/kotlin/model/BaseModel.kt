@@ -9,11 +9,12 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import model.util.ILabel
 import model.util.presentationElements.Group
 import model.util.attribute.*
 import java.util.*
 
-abstract class BaseModel(private val withServer: Boolean = false) : IModel {
+abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private val withServer: Boolean = false) : IModel {
 
     //******************************************************************************************************
     //Properties
@@ -22,8 +23,13 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
     private var allGroups           = mutableStateListOf<Group>()
     private var changedForAll       = mutableStateOf(false)
     private val validForAll         = mutableStateOf(true)
-    private var currentLanguage     = mutableStateOf<String>(if (getPossibleLanguages().size > 0) getPossibleLanguages()[0] else "")
+    private var currentLanguage     = mutableStateOf("")
 
+    init{
+        if (getPossibleLanguages().isNotEmpty()) {
+            currentLanguage.value = getPossibleLanguages()[0]
+        }
+    }
 
 
     val mqttBroker    = "localhost"
@@ -50,7 +56,7 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
 
     private fun init(){
         CoroutineScope(SupervisorJob()).launch {
-            delay(500) //TODO: Maybe waiting for any attribute is initialized?
+            delay(1500) //TODO: Maybe waiting for any attribute is initialized?
 
             getGroups().forEach {
                 it.getAttributes().forEach {
@@ -149,13 +155,6 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
     override fun isCurrentLanguageForAll(language : String) : Boolean{
         return currentLanguage.value == language
     }
-
-//    override fun addAttribute(attr: Attribute<*,*,*>) { //TODO
-//        allGroups.flatMap{it.attributes}.add(attr)
-//        if(getCurrentLanguage() != ""){
-//            attr.setCurrentLanguage(getCurrentLanguage())
-//        }
-//    }
 
     override fun addGroup(group: Group) {
         allGroups.add(group)
@@ -357,6 +356,10 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
         mqttConnectorValidation.connectAndSubscribe(subtopic = "validation", onNewMessage =
         {
         })
+    }
+
+    final override fun getPossibleLanguages(): List<String> {
+        return iLabel.getLanguagesDynamic()
     }
 
 

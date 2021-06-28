@@ -10,11 +10,8 @@ import model.util.presentationElements.FieldSize
 import model.util.presentationElements.Group
 import model.validators.semanticValidators.*
 
-class PersonModel : BaseModel(true) {
+class PersonModel : BaseModel(withServer = true) {
 
-    override fun getPossibleLanguages(): List<String> {
-        return PersonLabels.getLanguages()
-    }
 
     init {
         setTitle(if (isCurrentLanguageForAll("deutsch")) "Klienten" else "Clients")
