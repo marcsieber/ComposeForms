@@ -260,7 +260,7 @@ abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private
         if(attr.getId() == getCurrentFocusAttributeId()) {
             val dtoText = DTOText(attr.getId(), attr.getValueAsText())
             val string = Json.encodeToString(dtoText)
-            mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("Sent:" + string) })
+            mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("Sent Text:" + string) })
         }
     }
 
@@ -271,7 +271,7 @@ abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private
     override fun attributeChanged(attr: Attribute<*, *, *>) {
         val dtoAttr = DTOAttribute(attr.getId(), attr.getLabel(), getAttributeType(attr), attr.getPossibleSelections())
         val string = Json.encodeToString(dtoAttr)
-        mqttConnectorAttribute.publish(message = string, subtopic = "attribute", onPublished = { println("Sent:" + string) })
+        mqttConnectorAttribute.publish(message = string, subtopic = "attribute", onPublished = { println("Sent Attr Changed:" + string) })
     }
 
     /**
@@ -288,7 +288,7 @@ abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private
             mqttConnectorValidation.publish(
                 message = string,
                 subtopic = "validation",
-                onPublished = { println("sent: " + string) })
+                onPublished = { println("sent validation: " + string) })
         }
     }
 
