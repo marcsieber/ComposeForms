@@ -126,6 +126,7 @@ class UserDefinedModel : BaseModel(true){
         label = Labels.intLabel,
         readOnly = false,
         validators = listOf(NumberValidator(0, 10, 2, 4, true, "LowerBound ist bei 0, upperBound bei 10, es sind nur 2er-Schritte zugelassen")),
+        meaning = Currency(java.util.Currency.getInstance("EUR"))
     )
 
     val intValue2    = IntegerAttribute(model = this,
@@ -177,7 +178,7 @@ class UserDefinedModel : BaseModel(true){
     )
 
     init{
-        setCurrentLanguageForAll("English")
+        setCurrentLanguageForAll("english")
     }
 
     val dateValue   = mutableStateOf("01/05/2020")
@@ -219,4 +220,5 @@ class UserDefinedModel : BaseModel(true){
         Field(longValue),
         Field(shortValue))
 
+    val group = Group(this,"")
 }

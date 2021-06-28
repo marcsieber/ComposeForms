@@ -4,91 +4,78 @@ import model.BaseModel
 import model.util.attribute.*
 import model.convertibles.CustomConvertible
 import model.convertibles.ReplacementPair
-import model.validators.semanticValidators.NumberValidator
-import model.validators.semanticValidators.StringValidator
-import java.time.LocalTime
+import model.meanings.CustomMeaning
+import model.util.presentationElements.Field
+import model.util.presentationElements.FieldSize
+import model.util.presentationElements.Group
+import model.validators.semanticValidators.*
 
-class PersonModel : BaseModel() {
-
+class PersonModel : BaseModel(true) {
 
     override fun getPossibleLanguages(): List<String> {
-        return Labels.getLanguages()
+        return PersonLabels.getLanguages()
     }
 
-    val id          = IntegerAttribute(this, label = Labels.ID, 1, readOnly = true)
-    val firstName   = StringAttribute(this, label = Labels.FIRSTNAME, validators = listOf(StringValidator(minLength = 5, maxLength = 10)))
-    val lastName    = StringAttribute(this, label = Labels.LASTNAME)
-//    val occupation  = StringAttribute(this, label = Labels.OCCUPATION, onChangeListeners = listOf{taxNumber.setRequired(it != null)})
-    val taxNumber   = IntegerAttribute(this, label = Labels.TAXNUMBER)
-    val age         = LongAttribute(this, label = Labels.AGE, validators = listOf(NumberValidator(lowerBound = 0, upperBound = 130)))
-    val gender      = SelectionAttribute(this, label = Labels.GENDER, possibleSelections = setOf<String>("Frau", "Mann"))
-
-    val d1 = DoubleAttribute(
-        model = this,
-        value = 0.0,
-        label = demo.playGroundForm.Labels.convertOnUnfocussing,
-        convertibles = listOf(
-            CustomConvertible(listOf(
-                ReplacementPair("eins", "1"),
-                ReplacementPair("zwei", "2")
-            ), convertUserView = true),
-            CustomConvertible(listOf(
-                ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
-            ), convertUserView = true)
-        )
-    )
-
-    val d2 = DoubleAttribute(
-        model = this,
-        value = 0.0,
-        label = demo.playGroundForm.Labels.convertImmediately,
-        convertibles = listOf(
-            CustomConvertible(listOf(
-                ReplacementPair("eins", "1"),
-                ReplacementPair("zwei", "2")
-            ), true, true),
-            CustomConvertible(listOf(
-                ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
-            ), convertUserView = true, true)
-        )
-    )
-
-    val d3 = DoubleAttribute(
-        model = this,
-        value = 0.0,
-        label = demo.playGroundForm.Labels.doNotConvert,
-        convertibles = listOf(
-            CustomConvertible(listOf(
-                ReplacementPair("eins", "1"),
-                ReplacementPair("zwei", "2")
-            ), false),
-            CustomConvertible(listOf(
-                ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
-            ), convertUserView = false)
-        )
-    )
-
-    val time = StringAttribute(
-        model = this,
-        label = demo.playGroundForm.Labels.timeLabel,
-        convertibles = listOf(CustomConvertible(listOf(
-            ReplacementPair("now", LocalTime.now().toString())
-        ), convertUserView = true)
-        )
-    )
-
-
-
     init {
-        setCurrentLanguageForAll("deutsch")
         setTitle(if (isCurrentLanguageForAll("deutsch")) "Klienten" else "Clients")
     }
 
-    override fun attributeChanged(attr: Attribute<*, *, *>) {
+    val id          = IntegerAttribute(model = this, label = PersonLabels.ID,
+        value = 1,
+        readOnly = true)
 
-    }
+    val firstName   = StringAttribute(model = this, label = PersonLabels.FIRSTNAME,
+        required = true,
+        validators = listOf(StringValidator(minLength = 5, maxLength = 10)))
 
-    override fun validationChanged(attr: Attribute<*, *, *>) {
+    val lastName    = StringAttribute(model = this, label = PersonLabels.LASTNAME,
+        required = true)
 
+    val age         = LongAttribute(this, PersonLabels.AGE,
+        validators = listOf(NumberValidator(lowerBound = 0, upperBound = 130)))
+
+    val gender      = SelectionAttribute(this, PersonLabels.GENDER,
+        possibleSelections = setOf<String>("Man", "Woman", "Other"))
+
+    val size        = DoubleAttribute(this, PersonLabels.SIZE,
+        meaning = CustomMeaning("m"),
+        validators = listOf(FloatingPointValidator(2, "Too many decimal places."), NumberValidator(lowerBound = 0.0, upperBound = 3.0)),
+        convertibles = listOf(CustomConvertible(replaceRegex = listOf(ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")), convertUserView = false, convertImmediately = true)))
+
+    val occupation  = StringAttribute(this, PersonLabels.OCCUPATION)
+
+    val taxNumber   = IntegerAttribute(this, PersonLabels.TAXNUMBER,
+        onChangeListeners = listOf(
+            occupation addOnChangeListener {taxN, occ -> taxN.setRequired(occ != null)}
+        ))
+
+    val postCode    = IntegerAttribute(this, PersonLabels.POSTCODE,
+        validators = listOf(RegexValidator(regexPattern = "*{3,5}", rightTrackRegexPattern = "*{0,5}", validationMessage = "The input must be 3 - 5 characters long")))
+
+    val place       = StringAttribute(this, PersonLabels.PLACE)
+    val street      = StringAttribute(this, PersonLabels.STREET)
+    val houseNumber = ShortAttribute(this, PersonLabels.HOUSENUMBER)
+
+
+    val group1 = Group(model = this, title = "Personal Information",
+        Field(id, FieldSize.SMALL),
+        Field(firstName, FieldSize.SMALL),
+        Field(lastName),
+        Field(age, FieldSize.SMALL),
+        Field(size, FieldSize.SMALL),
+        Field(gender, FieldSize.NORMAL),
+        Field(occupation),
+        Field(taxNumber)
+    )
+
+    val group2 = Group(model = this, title = "Adress",
+        Field(postCode),
+        Field(place),
+        Field(street),
+        Field(houseNumber)
+    )
+
+    init{
+        this.setCurrentLanguageForAll("english")
     }
 }

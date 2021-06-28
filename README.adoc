@@ -5,60 +5,269 @@
 :url-docs: https://asciidoctor.org/docs
 :url-gem: https://rubygems.org/gems/asciidoctor
 
-== Attribut-Properties
+Compose Forms ist eine Library, mit welcher sich schnell und einfach schöne & benutzerfreundliche Formulare erstellen lassen.
 
-=== Allgemein
 
-.Allgemeine Attribut-Properties
+
+image::desktop-form.png[width = 500]
+
+Der Code zu diesem Beispiel ist hier zu finden:
+
+[red]#demo > src > main > kotlin > demo > personForm#
+
+Eine zusätzliche Benutzer-unterstützende Feature ist die Möglichkeit, das Smartphone für die Eingabe der einzelnen Input-Felder verwenden zu können. Über einen Boolean kann entschieden werden, ob die Smartphone-Eingabe-Möglichkeit für das Formular freigegeben werden soll. Dem End-User ist es frei überlassen, ob er das Smartphone verwenden möchte oder nicht. Über einen Button im Formular kann das Smartphone via QR-Code mit dem Desktop-Formular verbunden werden. Auf dem Smartphone werden dann individuelle Eingabe-Masken zum auf dem Desktop-fokussierten Inputfeld angezeigt.
+
+image::smartphone-calc.png[width = 250]
+
+*Hinweis:*
+Die Library befindet sich gerade im Entwicklungszustand und wird laufend verbessert, daher sind noch nicht alle Funktionalitäten verfügbar.
+
+== Übersicht
+Für die Erstellung eines Formulares sind grundsätzlich folgende 3 Klassen nötig:
+
+* Model, in welchem Attribute und Gruppen definiert werden
+* Enum, in welchem die Label-Namen definiert werden
+* Starter-Klasse
+
+== Model
+
+Um ein Formular zu erstellen, muss zuerst ein Model erstellt werden. Dieses sollte das BaseModel implementieren.
+Was das BaseModel alles zu bieten hat findest du <<anchor-basemodel, hier>>. +
+
+[source,kotlin]
+class UserDefinedModel : BaseModel(){ }
+
+Nun kann in einem init-Block, welcher beim starten 1x ausgeführt wird, der Applikationstitel festgelegt werden, die Sprache gesetzt werden und falls das Smartphone verwendet werden soll auch dieses startbar gemacht werden.
+
+[source,kotlin]
+init {
+        setTitle("Demo Title")
+        setCurrentLanguageForAll("english")
+        startUp()
+}
+
+Jetzt können hier im Model alle benötigten Attribute definiert werden.
+
+
+
+
+
+== Attribute
+
+=== Übersicht
+Ein Attribut ist eine Wiederspiegelung eines Objektes eines bestimmten Typs
+mit allen Werten und Informationen, die zur Interaktion (z.B. zum Speichern etc.) benötigt werden.
+
+In dieser API gibt es folgende Attribut-Typen:
+
+image::attribute-types.png[width = 800]
+
+[red]#Orange:# Abstrakte Klassen  +
+[blue]#Blau:# Konkrete Implementierungen. Diese können verwendet werden.
+
+
+
+
+=== So wird ein Attribut erstellt:
+
+Ein Beispiel:
+
+[source,kotlin]
+val s = StringAttribute(model = this, value = "")
+
+Ein Attribut hat verschiedene Parameter, welche der Konfiguration des Attributs dienen. Bestimmte Parameter müssen angegeben werden (im Folgenden mit * markiert), andere sind optional und haben bereits einen Default-Wert gesetzt.
+
+
+.Attribut-Parameter
 [cols="1,1,2",width=100%,frame=topbot]
 |===
 | Property | Typ |Beschreibung
 
-| value
-| Int
-| zuletzt valider Wert
+|<<anchor-model, model *>>
+|IModel
+|Model, welches alle Attribute verwaltet
 
-| savedValue
-| Int
-| zuletzt gespeicherter Wert
-
-| valueAsText
-| String
-| aktueller Wert
-
-| label
-| String
+| <<anchor-label, label *>>
+| L
 | Label-Text
 
-| required
+| <<anchor-value, value>>
+| T?
+| letzter valider Wert
+
+| <<anchor-required, required>>
 | Boolean
 | Ist das Attribut ein Pflichtfeld?
 
-| readOnly
+| <<anchor-readOnly, readOnly>>
 | Boolean
 | Ist das Attribut ein schreibgeschütztes Feld, das nicht verändert werden kann?
 
-| valid
-| Boolean
-| Ist valueAsText ein valider Input?
+| <<anchor-onChangeListeners, onChangeListeners>>
+| List<(T?) -> Unit>
+| Listener, die auf Wert-Änderungen reagieren
 
-| validationMessage
-| String
-| Nachricht zur Validierung
+| <<anchor-validators, validators>>
+| List<SemanticValidator<T>>,
+| Validatoren, die die festlegen wann der user input valid, invalid & onRightTrack ist
 
-| changed
-| Boolean
-| Gibt es Änderungen im Vergleich zum savedValue?
+| <<anchor-convertibles, convertibles>>
+| List<CustomConvertible>
+| Convertibles, die dem User eine einfachere Eingabe erlauben
 
-| labels
-| HashMap<Locale,String>
-| Beinhaltet (Sprache, Label-Name)-Pärchen, bei Mehrsprachigkeit
-
-| currentLanguage
-| Locale
-| aktuelle Sprache bei Mehrsprachigkeit
+| <<anchor-meaning, meaning>>
+| SemanticMeaning<T>
+| Dem value eine semantische Bedeutung geben (beispielsweise, dass es eine Währung ist)
 
 |===
+
+Bestimmte Attribute besitzen weitere Parameter:
+
+.Weitere Attribut-Parameter
+[cols="1,1,1,1",width=100%,frame=topbot]
+|===
+| Attribut(e) | Property | Typ |Beschreibung
+
+| FloatingPointAttribute
+| <<anchor-decimalPlaces, decimalPlaces>>
+| Int
+| Legt die Anzahl zugelassener Nachkommastellen fest.
+
+| SelectionAttribute
+| <<anchor-possibleSelections, possibleSelections *>>
+| Set<String>
+| Gibt die
+
+|===
+
+
+
+
+== Gruppen
+
+Nachdem alle Attribute erstellt wurden, können diese nun Gruppen zugeordnet werden. Nur Attribute, welche mind. einer Gruppe zugewiesen sind werden im Formular angezeigt.
+
+Beispiel: Erstellung einer Gruppe im Model:
+
+[source, kotlin]
+val group1 = Group(this, "Group-Name",
+Field(s, FieldSize.SMALL),
+Field(d1, FieldSize.SMALL),
+Field(d2),
+Field(selectionValue))
+
+Eine Gruppe besitzt folgende Parameter:
+
+.Group-Parameter
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+|<<anchor-group-model, model *>>
+|IModel
+|Model, welches alle Attribute und Gruppen verwaltet.
+
+| <<anchor-group-title, title *>>
+| String
+| Gruppen-Titel
+
+| <<anchor-fields, field>>
+| vararg
+| Alle Felder die angezeigt werden sollen.
+
+|===
+
+Die Attribute können hier bewusst in gewünschter Reihenfolge in den Gruppen platziert werden. Auch die Grösse der Felder kann bestimmt werden (SMALL oder NORMAL).
+
+== Starterklasse erstellen
+
+Das Model ist nun fertig. Nun fehlt nur noch die Starterklasse, in welcher das UI mit dem model verbunden wird, um die Applikation zu starten.
+
+Es wird eine neue Kotlin-Klasse erstellt, in folgendem Beispiel _Main.kt_.
+
+[source, kotlin]
+@ExperimentalFoundationApi
+fun main() = Window() {
+        val model = remember { UserDefinedModel() }
+        Form().of(model)
+}
+
+Wichtig sind die Annotation _@ExperimentalFoundationApi_ und das _remember_ beim Initialisieren des Models
+
+Beim Window bieten sich folgende Parameter an, um das Window optimal anzuzeigen:
+
+.Hilfreiche Window-Parameter (von Compose for Desktop)
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+| title
+| String
+| Titel des Fensters definieren
+
+| size
+| IntSize
+| Die Grösse des Fensters beim Aufstarten definieren.
+
+|===
+
+
+== UI modifizieren (optional)
+
+=== Farben ändern
+
+Die Formular-Farben können im File _FormColors.kt_ ganz einfach modifiziert werden, in dem die Farbwerte in den Enums angepasst werden.
+
+Das File befindet sich hier:
+
+[red]#common > src > main > kotlin > ui > theme > FormColors.kt#
+
+== Übersicht der Funktionalität, die dem Enduser zur Verfügung steht
+
+
+
+== Tiefergehende Information / Hilfestellung
+
+=== Was tun, wenn sich die Applikation nicht starten lässt
+
+Checke, ob in den Configurations die Variable _-cp $Classpath$_ bei der Starterklasse unter VM options gesetzt ist.
+
+image::edit-configurations.png[width = 300]
+
+image::configuration-window.png[width = 800]
+
+Starte dann die Applikation erneut.
+
+=== Nähere Erklärung zur richtigen Erstellung der Parameter
+
+==== Attribut-Parameter
+
+===== [[anchor-model]] model
+===== [[anchor-label]] label
+===== [[anchor-value]] value
+===== [[anchor-required]] required
+===== [[anchor-readOnly]] readOnly
+===== [[anchor-onChangeListeners]] onChangeListeners
+===== [[anchor-validators]] validators
+===== [[anchor-convertibles]] convertibles
+===== [[anchor-meaning]] meaning
+===== [[anchor-decimalPlaces]] decimalPlaces
+===== [[anchor-possibleSelections]] possibleSelections
+
+==== Group-Parameter
+
+===== [[anchor-group-model]] model
+===== [[anchor-group-title]] title
+===== [[anchor-fields]] fields
+
+=== [[anchor-basemodel]] BaseModel
+
+
+
+
+
+
+== Ab hier eventuell löschen
 
 === Zusatz für Integer-Attribute
 
