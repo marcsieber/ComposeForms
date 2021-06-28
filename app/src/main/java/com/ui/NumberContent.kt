@@ -10,23 +10,30 @@ import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.model.CalculatorModel
 import com.model.Model
 import ui.theme.ColorsUtil
 import ui.theme.DropdownColors
 import ui.theme.FormColors
 
+
+lateinit var calcModel : CalculatorModel<Double>
+
 @ExperimentalFoundationApi
 @Composable
 fun NumberContent(model: Model){
+    calcModel = remember{CalculatorModel<Double>(model)}
     with(model){
         Column(modifier = Modifier.fillMaxSize().padding(top = 0.dp, bottom = 12.dp)) {
             //Calculationfield
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top){
-                OutlinedTextField(calculationString.value,
+                OutlinedTextField(
+                    calcModel.calculationString.value,
                     onValueChange = { },
                     label = { Icon(Icons.Filled.Calculate, "Calculation-Icon") },
                     modifier = Modifier.fillMaxWidth(),
@@ -66,22 +73,20 @@ fun CalcButton(text : String, onClick: () -> Unit, color: ButtonColors = ButtonD
 }
 
 var calcItems = listOf<Pair<String, () -> Unit>>(
-    Pair("7", {}),
-    Pair("8", {}),
-    Pair("9", {}),
-    Pair("/", {}),
-    Pair("4", {}),
-    Pair("5", {}),
-    Pair("6", {}),
-    Pair("*", {}),
-    Pair("1", {}),
-    Pair("2", {}),
-    Pair("3", {}),
-    Pair("-", {}),
+    Pair("7", {calcModel.newNumberForCalc(7)}),
+    Pair("8", {calcModel.newNumberForCalc(8)}),
+    Pair("9", {calcModel.newNumberForCalc(9)}),
+    Pair("/", {calcModel.newOperatorForCalc("/")}),
+    Pair("4", {calcModel.newNumberForCalc(4)}),
+    Pair("5", {calcModel.newNumberForCalc(5)}),
+    Pair("6", {calcModel.newNumberForCalc(6)}),
+    Pair("*", {calcModel.newOperatorForCalc("*")}),
+    Pair("1", {calcModel.newNumberForCalc(1)}),
+    Pair("2", {calcModel.newNumberForCalc(2)}),
+    Pair("3", {calcModel.newNumberForCalc(3)}),
+    Pair("-", {calcModel.newOperatorForCalc("-")}),
     Pair(".", {}),
-    Pair("0", {}),
+    Pair("0", {calcModel.newNumberForCalc(0)}),
     Pair("CE", {}),
-    Pair("+", {})
+    Pair("+", {calcModel.newOperatorForCalc("+")}),
 )
-
-val calculationString = mutableStateOf("")
