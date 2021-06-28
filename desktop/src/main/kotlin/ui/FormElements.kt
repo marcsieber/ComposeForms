@@ -38,7 +38,21 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
 
     val index = remember { model.addFocusRequester(focusRequester, attr) }
     val focused = model.getCurrentFocusIndex() == index
-    val error = if(!focused) !attr.isValid() else !attr.isRightTrackValid() //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
+    val firstTimeUnfocused = remember { mutableStateOf(true) }
+
+    if(firstTimeUnfocused.value && focused){
+        firstTimeUnfocused.value = false
+    }
+
+    val error = if(!focused) {
+        if(firstTimeUnfocused.value){
+            false
+        }else {
+            !attr.isValid()
+        }
+    } else {
+        !attr.isRightTrackValid()
+    } //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -70,7 +84,9 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
             }){
 
         val focusedColor by mutableStateOf(if(attr.isValid()) get(FormColors.VALID) else if(attr.isRightTrackValid()) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR))
-        val unfocusedColor by mutableStateOf(if(attr.isValid()) get(FormColors.RIGHTTRACK) else {get(FormColors.ERROR)})
+        val unfocusedColor by mutableStateOf(if(attr.isValid() || firstTimeUnfocused.value) get(FormColors.RIGHTTRACK) else {get(FormColors.ERROR)})
+
+        val color = if(focused) focusedColor else unfocusedColor
         var showErrorMsg by remember { mutableStateOf(false) }
 
         //for selectionField
@@ -86,7 +102,7 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
             Text( if(attr.isRequired()) attr.getLabel() + "*" else attr.getLabel(),
                 fontSize = 12.sp,
                 modifier = Modifier.padding(bottom = 12.dp),
-                color = if(focused) focusedColor else unfocusedColor,
+                color = color,
                 fontWeight = if(focused) FontWeight.Bold else FontWeight.Normal)
         }
 
@@ -112,7 +128,7 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
                         Text(attr.meaning.addMeaning(attr.getValueAsText()),
                             textAlign = TextAlign.Right,
                             modifier = Modifier.padding(end = 12.dp),
-                            color = if(focused) focusedColor else unfocusedColor)
+                            color = color)
                     }
 
                     //Drop-Down-Icon for Selection-Field
@@ -121,7 +137,7 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
                             onClick = { dropDownIsOpen.value = true; model.setCurrentFocusIndex(index) },
                             modifier = Modifier.clip(CircleShape).size(20.dp)
                         ) {
-                            Icon(Icons.Filled.ArrowDropDownCircle, "DropDown", tint = if(focused) focusedColor else unfocusedColor)
+                            Icon(Icons.Filled.ArrowDropDownCircle, "DropDown", tint = color)
                         }
                     }
             }
@@ -136,7 +152,7 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
 
         //Line
         Row(modifier = Modifier.height(2.dp)){
-            Divider(color = if(attr.isReadOnly()) Color.Transparent else if(focused) focusedColor else unfocusedColor, thickness = if(focused) 2.dp else 1.dp)
+            Divider(color = if(attr.isReadOnly()) Color.Transparent else color, thickness = if(focused) 2.dp else 1.dp)
         }
 
         //Error-Message
