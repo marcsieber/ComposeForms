@@ -12,11 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 
 abstract class AttributeTest<T : Any> {
 
-    var model = object: BaseModel() {
-        override fun getPossibleLanguages(): List<String> {
-            return emptyList()
-        }
-    }
+    var model = object: BaseModel() {}
 
     lateinit var validValue1Uneven : T
     lateinit var validValue2 : T
