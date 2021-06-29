@@ -59,7 +59,7 @@ mit allen Werten und Informationen, die zur Interaktion (z.B. zum Speichern etc.
 
 In dieser API gibt es folgende Attribut-Typen:
 
-image::attribute-types.png[width = 800]
+image::attribute-types.png[]
 
 [red]#Orange:# Abstrakte Klassen  +
 [blue]#Blau:# Konkrete Implementierungen. Diese können verwendet werden.
@@ -222,32 +222,62 @@ Das File befindet sich hier:
 
 [red]#common > src > main > kotlin > ui > theme > FormColors.kt#
 
-== Enduser-Funktionen
+== User-Experience
 
-Übersicht der Funktionalität, die dem Enduser zur Verfügung steht
 
-=== Funktionen für Benutzer-Aktionen
+=== Zur Verfügung stehende Aktionen
 
-.Funktionen, die bei Benutzer-Aktionen aufgerufen werden können
-[cols="2,2",width=100%,frame=topbot]
+.User-Aktionen
+[cols="3,1,3",width=100%,frame=topbot]
 |===
-| Funktion | Auswirkung
+| Funktionalität | aufgerufene Model-Funktion | Auswirkung
 
-| save()
-| Speichert den Wert des Attributs, wenn es in einem validen Zustand ist.
+| BILD +
+| saveAll()
+| Speichert die Werte (User-Inputs) aller Attribute, sofern alle in einem validen Zustand sind.
 
-| reset()
-| Setzt den Wert des Attributs auf den letzten gespeicherten Wert zurück.
+| BILD +
+| resetAll()
+| Setzt die Werte aller Attribute auf die zuletzt gespeicherten Werte zurück.
 
-| setCurrentLanguage(language : Locale)
-| Setzt die aktuelle Sprache auf language. +
-Achtung: Wenn die Sprache zuvor nicht bei der Konfiguration des Attributs definiert wurde, wird in den Labels der Default-Wert "..." gesetzt.
+| BILD +
+| setCurrentLanguageForAll( lang : String)
+| Setzt die aktuelle Sprache. Die Sprachen müssen zuvor im Label-Enum definiert werden. (siehe <<anchor-label, label>>) +
+_Diese Funktionalität ist noch nicht vollständig implementiert._
+
+| BILD +
+|
+| Generiert einen QR-Code, sodass sich der User mit dem Smartphone verbinden kann.
 
 |===
 
 === 3 Stati
 
-valid, invalid, rightTrack
+Für eine bessere User-Experience können sich die Attribute in 3 verschiedenen Stati befinden. +
+Mit dem _rightTrack_-Status sind die Zeiten vorbei, in denen sich der User über rote Fehlermeldungen aufregt, die von Anfang an angezeit werden, bevor der User auch nur die Chance hatte sich um einen richtigen Input zu bemühen. Der rightTrack-Status gibt an, ob sich der User auf dem richtigen Weg zu einem validen Input befindet. Erst, wenn der Input wirklich in die falsche Richtung geht wird der Input als invalid angezeigt.
+
+
+.Übersicht zu den 3 Stati
+[cols="2,1,3",width=100%,frame=topbot]
+|===
+| Aussehen | Status | Auswirkung
+
+| BILD +
+| valid
+|
+
+| BILD +
+| invalid
+|
+
+| BILD +
+| rightTrack
+|
+
+|===
+
+==== Beispiel
+
 
 == Tiefergehende Information / Hilfestellung
 
