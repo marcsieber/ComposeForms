@@ -5,6 +5,8 @@ import model.util.presentationElements.Group
 import model.util.attribute.Attribute
 
 interface IModel {
+    fun getIPAdress(): String
+
     fun getGroups() : List<Group>
     fun getTitle() : String
     fun setTitle(title: String)

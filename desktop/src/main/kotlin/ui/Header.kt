@@ -1,6 +1,8 @@
 package ui
 
+import androidx.compose.desktop.Window
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -12,9 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.IModel
+import server.QRCodeService
 import ui.theme.ColorsUtil.Companion.get
 import ui.theme.DropdownColors
 import ui.theme.FormColors
@@ -31,6 +36,7 @@ fun header(model : IModel){
                     androidx.compose.ui.Alignment.CenterVertically))
 
                 Row {
+                    QRCode(model)
                     Column {
                         val langDropDownIsOpen = remember { mutableStateOf(false) }
                         OutlinedButton(
@@ -94,6 +100,28 @@ fun header(model : IModel){
         }
     }
 }
+
+
+@Composable
+fun QRCode(model: IModel){
+
+    Button(
+        modifier = Modifier.padding(4.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = get(FormColors.VALID)),
+        onClick = {
+            val size = 500
+            Window(size = IntSize(size, size)) {
+                val img = remember{ mutableStateOf(ImageBitmap(size,size)) }
+                val ip = model.getIPAdress()
+                QRCodeService().getQRCode("https://stevevogel.github.io/ComposeForms/$ip", size){ img.value = it}
+                Image(img.value, "QR Code")
+            }
+        }) {
+        Text("Show QR Code")
+    }
+
+}
+
 
 @Composable
 fun GroupTitle(title : String){

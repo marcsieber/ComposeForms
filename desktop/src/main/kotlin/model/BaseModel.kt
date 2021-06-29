@@ -12,7 +12,10 @@ import kotlinx.serialization.json.Json
 import model.util.ILabel
 import model.util.presentationElements.Group
 import model.util.attribute.*
+import java.lang.RuntimeException
 import java.util.*
+import java.net.NetworkInterface
+
 
 abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private val withServer: Boolean = false) : IModel {
 
@@ -360,6 +363,27 @@ abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private
 
     final override fun getPossibleLanguages(): List<String> {
         return iLabel.getLanguagesDynamic()
+    }
+
+    override fun getIPAdress(): String {
+        val interfaces: List<NetworkInterface> = Collections.list(NetworkInterface.getNetworkInterfaces())
+
+        for(interFace: NetworkInterface in interfaces){
+            if(interFace.name.equals("en0")){
+                val addresses = interFace.inetAddresses()
+                for(addr in addresses){
+                    val sAddr = addr.hostAddress
+                    val isIPv4 = sAddr.indexOf(':')<0
+
+                    if(isIPv4) {
+                        println(sAddr)
+                        return sAddr
+                    }
+                }
+            }
+        }
+
+        throw RuntimeException("IP not found")
     }
 
 
