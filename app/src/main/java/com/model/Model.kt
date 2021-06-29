@@ -32,6 +32,8 @@ object Model {
 
     var isConnected: Boolean = false
 
+    val calcModel = CalculatorModel<Double>(this)
+
     fun connectAndSubscribe(){
         mqttConnectorAttribute.connectAndSubscribe(subtopic = "attribute", onNewMessage = {
             val dtoText = Json.decodeFromString<DTOAttribute>(it)
@@ -50,6 +52,7 @@ object Model {
             val dtoText = Json.decodeFromString<DTOText>(it)
             id = dtoText.id
             text = dtoText.text
+            calcModel.reset()
         })
 
         mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage = {})

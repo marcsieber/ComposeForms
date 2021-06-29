@@ -21,14 +21,31 @@ import ui.theme.ColorsUtil
 import ui.theme.DropdownColors
 import ui.theme.FormColors
 
-
-lateinit var calcModel : CalculatorModel<Double>
-
 @ExperimentalFoundationApi
 @Composable
 fun NumberContent(model: Model){
-    calcModel = remember{CalculatorModel<Double>(model)}
     with(model){
+
+        var calcItems = listOf(
+            Pair("7", {calcModel.newNumberForCalc(7)}),
+            Pair("8", {calcModel.newNumberForCalc(8)}),
+            Pair("9", {calcModel.newNumberForCalc(9)}),
+            Pair("/", {calcModel.newOperatorForCalc("/")}),
+            Pair("4", {calcModel.newNumberForCalc(4)}),
+            Pair("5", {calcModel.newNumberForCalc(5)}),
+            Pair("6", {calcModel.newNumberForCalc(6)}),
+            Pair("*", {calcModel.newOperatorForCalc("*")}),
+            Pair("1", {calcModel.newNumberForCalc(1)}),
+            Pair("2", {calcModel.newNumberForCalc(2)}),
+            Pair("3", {calcModel.newNumberForCalc(3)}),
+            Pair("-", {calcModel.newOperatorForCalc("-")}),
+            Pair(".", {}),
+            Pair("0", {calcModel.newNumberForCalc(0)}),
+            Pair("CE", {calcModel.deleteLastCharacter()}),
+            Pair("+", {calcModel.newOperatorForCalc("+")}),
+        )
+
+
         Column(modifier = Modifier.fillMaxSize().padding(top = 0.dp, bottom = 12.dp)) {
             //Calculationfield
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top){
@@ -72,21 +89,3 @@ fun CalcButton(text : String, onClick: () -> Unit, color: ButtonColors = ButtonD
     ){Text(text)}
 }
 
-var calcItems = listOf<Pair<String, () -> Unit>>(
-    Pair("7", {calcModel.newNumberForCalc(7)}),
-    Pair("8", {calcModel.newNumberForCalc(8)}),
-    Pair("9", {calcModel.newNumberForCalc(9)}),
-    Pair("/", {calcModel.newOperatorForCalc("/")}),
-    Pair("4", {calcModel.newNumberForCalc(4)}),
-    Pair("5", {calcModel.newNumberForCalc(5)}),
-    Pair("6", {calcModel.newNumberForCalc(6)}),
-    Pair("*", {calcModel.newOperatorForCalc("*")}),
-    Pair("1", {calcModel.newNumberForCalc(1)}),
-    Pair("2", {calcModel.newNumberForCalc(2)}),
-    Pair("3", {calcModel.newNumberForCalc(3)}),
-    Pair("-", {calcModel.newOperatorForCalc("-")}),
-    Pair(".", {}),
-    Pair("0", {calcModel.newNumberForCalc(0)}),
-    Pair("CE", {}),
-    Pair("+", {calcModel.newOperatorForCalc("+")}),
-)
