@@ -129,37 +129,18 @@ abstract class Attribute <A,T,L> (//required parameters
         this.required.value = reqValidator.isRequired()
     }
 
-    /**
-     *
-     */
-    fun isRequired(): Boolean { //private
-        return required.value
-    }
-
-
     fun setReadOnly(isReadOnly : Boolean){
         this.readOnly.value = isReadOnly
     }
 
-    /**
-     * This method sets the valid value and calls setValidForAll()
-     * @param isValid : Boolean
-     */
-    protected fun setValid(isValid : Boolean){
-        this.valid.value = isValid
-        this.model.setValidForAll()
-    }
-
-    fun setRightTrackValue(newVal : T?){
+    fun setRightTrackValue(newVal : T?){  //todo: private / protected
         this.rightTrackValue.value = newVal
     }
 
-    fun getRightTrackValue() : T? {
-        return rightTrackValue.value
-    }
-
-    fun isRightTrackValid() : Boolean {
-        return rightTrackValid.value
+    fun setListenersOnOtherAttributes(){   //todo: private / protected
+        onChangeListeners.forEach{ f ->
+            f(this)
+        }
     }
 
     //******************************************************************************************************
@@ -211,6 +192,15 @@ abstract class Attribute <A,T,L> (//required parameters
         }
     }
 
+    /**
+     * This method sets the valid value and calls setValidForAll()
+     * @param isValid : Boolean
+     */
+    protected fun setValid(isValid : Boolean){
+        this.valid.value = isValid
+        this.model.setValidForAll()
+    }
+
     //******************************************************************************************************
     //Private Setter
 
@@ -254,8 +244,17 @@ abstract class Attribute <A,T,L> (//required parameters
         model.setChangedForAll()
     }
 
+    private fun addOnChangeListenerInternal(func: (T?) -> Unit){
+        onChangeListenersOfThis.add(func)
+    }
+
+
     //******************************************************************************************************
     //Getter
+
+    fun getId(): Int{
+        return id
+    }
 
     fun getValue() : T?{
         return value
@@ -263,6 +262,10 @@ abstract class Attribute <A,T,L> (//required parameters
 
     fun getSavedValue() : T?{
         return savedValue
+    }
+
+    fun getRightTrackValue() : T? {
+        return rightTrackValue.value
     }
 
     fun getValueAsText(): String {
@@ -277,6 +280,15 @@ abstract class Attribute <A,T,L> (//required parameters
         return labelAsText.value
     }
 
+
+    /**
+     *
+     */
+    fun isRequired(): Boolean { //private
+        return required.value
+    }
+
+
     fun isReadOnly() : Boolean{
         return readOnly.value
     }
@@ -285,15 +297,6 @@ abstract class Attribute <A,T,L> (//required parameters
         return changed.value
     }
 
-    private fun addOnChangeListenerInternal(func: (T?) -> Unit){
-        onChangeListenersOfThis.add(func)
-    }
-
-    fun setListenersOnOtherAttributes(){
-        onChangeListeners.forEach{ f ->
-            f(this)
-        }
-    }
 
     //******************************************************************************************************
     //Validation
@@ -391,6 +394,16 @@ abstract class Attribute <A,T,L> (//required parameters
         checkAndSetValue(this.valueAsText.value)
     }
 
+
+    fun isValid() : Boolean{
+        return valid.value
+    }
+
+
+    fun isRightTrackValid() : Boolean {
+        return rightTrackValid.value
+    }
+
     /**
      * This method returns the validationMessages of all invalid validation results
      *
@@ -398,10 +411,6 @@ abstract class Attribute <A,T,L> (//required parameters
      */
     fun getErrorMessages(): List<String>{
         return listOfValidationResults.value.filter{!it.result}.map{it.validationMessage}
-    }
-
-    fun isValid() : Boolean{
-        return valid.value
     }
 
     /**
@@ -491,10 +500,6 @@ abstract class Attribute <A,T,L> (//required parameters
      */
     fun getConvertImmediately() : List<Boolean>{
         return listOfConvertibleResults.value.filter{it.isConvertible}.map {it.convertImmediately}
-    }
-
-    fun getId(): Int{
-        return id
     }
 
     /**

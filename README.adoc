@@ -31,8 +31,7 @@ Für die Erstellung eines Formulares sind grundsätzlich folgende 3 Klassen nöt
 
 == Model
 
-Um ein Formular zu erstellen, muss zuerst ein Model erstellt werden. Dieses sollte das BaseModel implementieren.
-Was das BaseModel alles zu bieten hat findest du <<anchor-basemodel, hier>>. +
+Um ein Formular zu erstellen, muss zuerst ein Model erstellt werden. Dieses sollte das BaseModel implementieren. +
 
 [source,kotlin]
 class UserDefinedModel : BaseModel(){ }
@@ -70,10 +69,11 @@ image::attribute-types.png[width = 800]
 
 === So wird ein Attribut erstellt:
 
-Ein Beispiel:
+Ein Beispiel: +
+Es wird ein StringAttribut erstellt, in welchem der Strassenname gespeichert werden soll.
 
 [source,kotlin]
-val s = StringAttribute(model = this, value = "")
+val street = StringAttribute(model = this, label = PersonLabels.STREET)
 
 Ein Attribut hat verschiedene Parameter, welche der Konfiguration des Attributs dienen. Bestimmte Parameter müssen angegeben werden (im Folgenden mit * markiert), andere sind optional und haben bereits einen Default-Wert gesetzt.
 
@@ -136,7 +136,7 @@ Bestimmte Attribute besitzen weitere Parameter:
 | SelectionAttribute
 | <<anchor-possibleSelections, possibleSelections *>>
 | Set<String>
-| Gibt die
+| Legt das Set an Auswahlmöglichkeiten fest.
 
 |===
 
@@ -222,79 +222,9 @@ Das File befindet sich hier:
 
 [red]#common > src > main > kotlin > ui > theme > FormColors.kt#
 
-== Übersicht der Funktionalität, die dem Enduser zur Verfügung steht
+== Enduser-Funktionen
 
-
-
-== Tiefergehende Information / Hilfestellung
-
-=== Was tun, wenn sich die Applikation nicht starten lässt
-
-Checke, ob in den Configurations die Variable _-cp $Classpath$_ bei der Starterklasse unter VM options gesetzt ist.
-
-image::edit-configurations.png[width = 300]
-
-image::configuration-window.png[width = 800]
-
-Starte dann die Applikation erneut.
-
-=== Nähere Erklärung zur richtigen Erstellung der Parameter
-
-==== Attribut-Parameter
-
-===== [[anchor-model]] model
-===== [[anchor-label]] label
-===== [[anchor-value]] value
-===== [[anchor-required]] required
-===== [[anchor-readOnly]] readOnly
-===== [[anchor-onChangeListeners]] onChangeListeners
-===== [[anchor-validators]] validators
-===== [[anchor-convertibles]] convertibles
-===== [[anchor-meaning]] meaning
-===== [[anchor-decimalPlaces]] decimalPlaces
-===== [[anchor-possibleSelections]] possibleSelections
-
-==== Group-Parameter
-
-===== [[anchor-group-model]] model
-===== [[anchor-group-title]] title
-===== [[anchor-fields]] fields
-
-=== [[anchor-basemodel]] BaseModel
-
-
-
-
-
-
-== Ab hier eventuell löschen
-
-=== Zusatz für Integer-Attribute
-
-.Optionale Extra-Properties für das Integer-Attribute, die den validen Input einschränken
-[cols="1,1,2",width=100%,frame=topbot]
-|===
-| Property | Typ |Beschreibung
-
-| lowerBound
-| Int
-| untere Grenze für Input
-
-| upperBound
-| Int
-| obere Grenze für Input
-
-| stepSize
-| Int
-| Schrittgrösse
-
-| stepStart
-| Int
-| Zahl, von der aus die Schritte nach oben/unten gerechnet werden
-
-|===
-
-== Funktionen
+Übersicht der Funktionalität, die dem Enduser zur Verfügung steht
 
 === Funktionen für Benutzer-Aktionen
 
@@ -315,140 +245,175 @@ Achtung: Wenn die Sprache zuvor nicht bei der Konfiguration des Attributs defini
 
 |===
 
+=== 3 Stati
 
+valid, invalid, rightTrack
 
-=== Funktionen für die Konfiguration eines Attributs (Setter)
+== Tiefergehende Information / Hilfestellung
 
-==== Allgemein
+=== Komplikationen beim Starten
 
-Alle Setter geben die aktuelle Instanz (das Attribut) wieder zurück, sodass ein Attribut mit seinen Konfigurationen ganz einfach erstellt werden kann.
+Was tun, wenn sich die Applikation nicht starten lässt?
 
-BEISPIEL +
+Checke, ob in den Configurations die Variable _-cp $Classpath$_ bei der Starterklasse unter VM options gesetzt ist.
 
-Die Properties mit * werden auf jeden Fall geändert.
-Die anderen Properties müssen nicht, können jedoch, je  nach mitgegebenem Funktions-Parameter, geändert werden.
+image::edit-configurations.png[width = 300]
 
+image::configuration-window.png[width = 800]
 
-.Funktionen zur Konfiguration eines Attributs (Setter)
-[cols="2,3",width=100%,frame=topbot]
+Starte dann die Applikation erneut.
+
+=== Attribut-Parameter
+
+Im Folgenden eine detaillierte Erklärung zur richtigen Erstellung der Attribut-Parameter
+
+==== [[anchor-model]] model
+==== [[anchor-label]] label
+==== [[anchor-value]] value
+==== [[anchor-required]] required
+==== [[anchor-readOnly]] readOnly
+==== [[anchor-onChangeListeners]] onChangeListeners
+==== [[anchor-validators]] validators
+
+===== Number-Validator
+
+.Number-Validator-Properties
+[cols="1,1,2",width=100%,frame=topbot]
 |===
-| Funktion |  verändert folgende Properties
+| Property | Typ |Beschreibung
 
-| setCurrentLanguage(language : Locale)
-|
+| lowerBound
+| Int
+| untere Grenze für Input
+
+| upperBound
+| Int
+| obere Grenze für Input
+
+| stepSize
+| Int
+| Schrittgrösse
+
+| stepStart
+| Int
+| Zahl, von der aus die Schritte nach oben/unten gerechnet werden
+|===
+
+==== [[anchor-convertibles]] convertibles
+==== [[anchor-meaning]] meaning
+==== [[anchor-decimalPlaces]] decimalPlaces
+==== [[anchor-possibleSelections]] possibleSelections
+
+=== Group-Parameter
+
+Im Folgenden eine detaillierte Erklärung zur richtigen Erstellung der Group-Parameter
+
+==== [[anchor-group-model]] model
+==== [[anchor-group-title]] title
+==== [[anchor-fields]] fields
+
+
+
+== Konfiguration zur Laufzeit
+
+Diese Funktionen sind beispielsweise bei Verwendung von onChange-Listenern hilfreich.
+
+=== Attribut-Funktionen
+
+Die folgenden Funktionen können auf Attributen aufgerufen werden:
+
+.Einige hilfreiche Setter-Funktionen eines Attributs
+[cols="2,2",width=100%,frame=topbot]
+|===
+| Funktion |  Beschreibung
 
 | setValAsText(valueAsText : String)
-| - valueAsText * +
-- changed +
-- valid +
-- validationMessage +
-- value +
-
-| setLabel(label : String)
-|
-
-| setLabelForLanguage(language : Locale, label : String)
-|
+| Den User-Input setzen +
 
 | setRequired(isRequired : Boolean)
-|
+| Siehe Attribut-Parameter <<anchor-required, required>>
 
 | setReadOnly(isReadOnly : Boolean)
-|
-
-| setValid(isValid : Boolean)
-|
-
-|===
-
-==== Zusatz für Integer-Attribute
-
-.Funktionen zur zusätzlichen Konfiguration eines Integer-Attributs (Setter)
-[cols="2,3",width=100%,frame=topbot]
-|===
-| Funktion |  verändert folgende Properties
-
-| setLowerBound(lowerBound : Int)
-|
-
-| setUpperBound(upperBound : Int)
-|
-
-| setStepSize(stepSize : Int)
-|
+| Siehe Attribut-Parameter <<anchor-readOnly, readOnly>>
 
 |===
 
 
-
-=== Funktionen zur Abfrage von Attribut-Werten (Getter)
-
-==== Allgemein
-
-.Getter-Funktionen, die Auskunft über gesetzte Werte geben
+.Einige hilfreiche Getter-Funktionen eines Attributs
 [cols="2,1,2",width=100%,frame=topbot]
 |===
 | Funktion | Rückgabe-Typ | Beschreibung
 
-| isCurrentLanguage(language : Locale)
-| Boolean
-| Gibt zurück, ob die aktuelle Sprache diesselbe ist, wie die als Parameter angegebene Sprache.
+| getId()
+| Int
+| Gibt die Id des Attributs zurück
 
 | getValue()
-| Int
-| Gibt den aktuellen validen Wert zurück.
+| T?
+| Gibt den letzten validen Wert zurück.
 
 | getSavedValue()
-| Int
+| T?
 | Gibt den gespeicherten Wert zurück.
 
-| getValAsText()
+| getRightTrackValue()
+| T?
+| Gibt den letzten right-Track-validen Wert zurück.
+
+| getValueAsText()
 | String
-|
+| Gibt den aktuellen User-Input-String zurück
+
+| getPossibleSelections()
+| Set<String>
+| Beim Selection-Attribut wird das Set mit den gesetzten Auswahlmöglichkeiten zurückgegeben. Bei anderen Attributtypen bestehen die Auswahlmöglichkeiten des Sets aus früheren User-Input-Eingaben (noch nicht implementiert).
 
 | getLabel()
 | String
-|
+| Gibt den aktuellen Label-Text zurück
 
 | isRequired()
 | Boolean
-|
+| Gibt zurück, ob eine Eingabe erforderlich ist
 
 | isReadOnly()
 | Boolean
-|
-
-| isValid()
-| Boolean
-|
-
-| getValidationMessage()
-| String
-|
+| Gibt zurück, ob der Wert verändert werden darf
 
 | isChanged()
 | Boolean
-|
+| Gibt zurück, ob value gleich ist wie savedValue
+
+| isValid()
+| Boolean
+| Gibt zurück, ob der User-Input (valueAsText) valid ist
+
+| isRightTrackValid()
+| Boolean
+| Gibt zurück, ob der User-Input auf dem richtigen Weg zu einem validen Input ist.
+
+| getErrorMessages()
+| List<String>
+| Gibt alle auf den aktuellen Input (valueAsText) zutreffenden ErrorMessages zurück
 
 |===
 
-==== Zusatz für Integer-Attribute
+=== Model-Funktionen
 
-.Zusätzliche Getter-Funktionen, falls optionale Extra-Properties für das Integer-Attribut gesetzt wurden
-[cols="2,1,2",width=100%,frame=topbot]
+Die folgenden Funktionen können auf einem Model aufgerufen werden:
+
+.Einige hilfreiche Funktionen des Base-Models (Diese Funktionen beeinflussen alle Attribute)
+[cols="2,2",width=100%,frame=topbot]
 |===
-| Funktion | Rückgabe-Typ | Beschreibung
+| Funktion |  Beschreibung
 
-| getLowerBound()
-| Int
-|
+| setValAsText(valueAsText : String)
+| Den User-Input setzen +
 
-| getUpperBound()
-| Int
-|
+| setRequired(isRequired : Boolean)
+| Siehe Attribut-Parameter <<anchor-required, required>>
 
-| getStepSize()
-| Int
-|
+| setReadOnly(isReadOnly : Boolean)
+| Siehe Attribut-Parameter <<anchor-readOnly, readOnly>>
 
 |===
