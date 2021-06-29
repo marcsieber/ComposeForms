@@ -61,7 +61,8 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
             .onFocusEvent { focS ->
                 if(focused != focS.isFocused){
                     if(!focS.isFocused){
-                        attr.checkAndSetConvertibleBecauseUnfocusedAttribute() //setConvertibles() //todo unfocus when no inputfield is focused
+                        attr.checkAndSetConvertibleBecauseUnfocusedAttribute()
+                        model.setCurrentFocusIndex(null)
                     }
                 }
                 if(focS.isFocused){

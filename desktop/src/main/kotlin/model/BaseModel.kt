@@ -9,11 +9,15 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import model.util.ILabel
 import model.util.presentationElements.Group
 import model.util.attribute.*
+import java.lang.RuntimeException
 import java.util.*
+import java.net.NetworkInterface
 
-abstract class BaseModel(private val withServer: Boolean = false) : IModel {
+
+abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private val withServer: Boolean = false) : IModel {
 
     //******************************************************************************************************
     //Properties
@@ -22,8 +26,13 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
     private var allGroups           = mutableStateListOf<Group>()
     private var changedForAll       = mutableStateOf(false)
     private val validForAll         = mutableStateOf(true)
-    private var currentLanguage     = mutableStateOf<String>(if (getPossibleLanguages().size > 0) getPossibleLanguages()[0] else "")
+    private var currentLanguage     = mutableStateOf("")
 
+    init{
+        if (getPossibleLanguages().isNotEmpty()) {
+            currentLanguage.value = getPossibleLanguages()[0]
+        }
+    }
 
 
     val mqttBroker    = "localhost"
@@ -50,7 +59,7 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
 
     private fun init(){
         CoroutineScope(SupervisorJob()).launch {
-            delay(500) //TODO: Maybe waiting for any attribute is initialized?
+            delay(1500) //TODO: Maybe waiting for any attribute is initialized?
 
             getGroups().forEach {
                 it.getAttributes().forEach {
@@ -149,13 +158,6 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
     override fun isCurrentLanguageForAll(language : String) : Boolean{
         return currentLanguage.value == language
     }
-
-//    override fun addAttribute(attr: Attribute<*,*,*>) { //TODO
-//        allGroups.flatMap{it.attributes}.add(attr)
-//        if(getCurrentLanguage() != ""){
-//            attr.setCurrentLanguage(getCurrentLanguage())
-//        }
-//    }
 
     override fun addGroup(group: Group) {
         allGroups.add(group)
@@ -261,7 +263,7 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
         if(attr.getId() == getCurrentFocusAttributeId()) {
             val dtoText = DTOText(attr.getId(), attr.getValueAsText())
             val string = Json.encodeToString(dtoText)
-            mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("Sent:" + string) })
+            mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("Sent Text:" + string) })
         }
     }
 
@@ -272,7 +274,7 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
     override fun attributeChanged(attr: Attribute<*, *, *>) {
         val dtoAttr = DTOAttribute(attr.getId(), attr.getLabel(), getAttributeType(attr), attr.getPossibleSelections())
         val string = Json.encodeToString(dtoAttr)
-        mqttConnectorAttribute.publish(message = string, subtopic = "attribute", onPublished = { println("Sent:" + string) })
+        mqttConnectorAttribute.publish(message = string, subtopic = "attribute", onPublished = { println("Sent Attr Changed:" + string) })
     }
 
     /**
@@ -289,7 +291,7 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
             mqttConnectorValidation.publish(
                 message = string,
                 subtopic = "validation",
-                onPublished = { println("sent: " + string) })
+                onPublished = { println("sent validation: " + string) })
         }
     }
 
@@ -357,6 +359,31 @@ abstract class BaseModel(private val withServer: Boolean = false) : IModel {
         mqttConnectorValidation.connectAndSubscribe(subtopic = "validation", onNewMessage =
         {
         })
+    }
+
+    final override fun getPossibleLanguages(): List<String> {
+        return iLabel.getLanguagesDynamic()
+    }
+
+    override fun getIPAdress(): String {
+        val interfaces: List<NetworkInterface> = Collections.list(NetworkInterface.getNetworkInterfaces())
+
+        for(interFace: NetworkInterface in interfaces){
+            if(interFace.name.equals("en0")){
+                val addresses = interFace.inetAddresses()
+                for(addr in addresses){
+                    val sAddr = addr.hostAddress
+                    val isIPv4 = sAddr.indexOf(':')<0
+
+                    if(isIPv4) {
+                        println(sAddr)
+                        return sAddr
+                    }
+                }
+            }
+        }
+
+        throw RuntimeException("IP not found")
     }
 
 

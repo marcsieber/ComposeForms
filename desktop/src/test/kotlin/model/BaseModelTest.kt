@@ -16,11 +16,7 @@ import org.junit.jupiter.api.BeforeEach
 
 internal class BaseModelTest {
 
-    var model = object: BaseModel(){
-        override fun getPossibleLanguages(): List<String> {
-            return Label.getLanguages()
-        }
-    }
+    var model = object: BaseModel(Label.TEST){}
 
     val ALTER = 50
     val ANZ_KINDER = 3

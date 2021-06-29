@@ -80,11 +80,6 @@ class MountainPM(var service : MountainService) : BaseModel() {
         ))
     }
 
-    override fun getPossibleLanguages(): List<String> {
-        return Labels.getLanguages()
-    }
-
-
     // alle Getter und Setter
 
     fun idAttribute(): LongAttribute<Labels> {

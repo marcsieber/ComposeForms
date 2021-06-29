@@ -16,8 +16,8 @@ import org.junit.jupiter.api.*
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommunicationITest {
 
-    enum class testLabels(test: String): ILabel{
-        test("test")
+    enum class testLabels(val test: String): ILabel{
+        TEST("test")
     }
 
     lateinit var mqttConnectorTextT : MqttConnector
@@ -48,19 +48,16 @@ class CommunicationITest {
 
     private fun initObjects(){
         model = null
-        model = object: BaseModel(){
+        model = object: BaseModel(testLabels.TEST){
             override val mqttConnectorText = mqttConnectorTextT
             override val mqttConnectorAttribute = mqttConnectorAttributeT
             override val mqttConnectorCommand = mqttConnectorCommandT
             override val mqttConnectorValidation = mqttConnectorValidationT
-
-            override fun getPossibleLanguages(): List<String> {
-                return emptyList()
-            }
         }
+
         //when
-        attribute1 = StringAttribute(model!!, testLabels.test, value = "", validators = listOf(StringValidator(2,5)))
-        attribute2 = StringAttribute(model!!, testLabels.test, value = "")
+        attribute1 = StringAttribute(model!!, testLabels.TEST, value = "", validators = listOf(StringValidator(2,5)))
+        attribute2 = StringAttribute(model!!, testLabels.TEST, value = "")
 
         group = Group(model!!, "testgroup", Field(attribute1!!), Field(attribute2!!))
 

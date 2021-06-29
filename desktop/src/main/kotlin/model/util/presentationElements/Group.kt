@@ -11,10 +11,12 @@ class Group(val model : IModel, val title : String, vararg fields : Field) {
 
     init {
         model.addGroup(this)
+        fields.forEach{it.getAttribute().setCurrentLanguage(model.getCurrentLanguage())}
     }
 
     fun addAttribute(attribute : Attribute<*,*,*>){
         groupAttributes.add(attribute)
+        attribute.setCurrentLanguage(model.getCurrentLanguage())
     }
 
     fun removeAttribute(attribute: Attribute<*, *, *>){

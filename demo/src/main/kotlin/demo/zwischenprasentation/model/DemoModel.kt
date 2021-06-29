@@ -32,11 +32,6 @@ class DemoModel : BaseModel() {
 
     val jobAttribute = StringAttribute(model = this, label = Labels.JOB)
 
-    override fun getPossibleLanguages(): List<String> {
-        return Labels.getLanguages()
-    }
-
-
     override fun validationChanged(attr: Attribute<*, *, *>) {
 
     }
