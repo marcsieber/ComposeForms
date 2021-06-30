@@ -7,14 +7,18 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
 
     val calculationString   = mutableStateOf(model.text)
     val operators           = listOf("+", "-", "*", "/")
+    val operatorsBlanked: List<String> = operators.map{ " $it " }
+    val validRegex          = Regex("^[0123456789\\.\\*\\-\\+\\/ ]*$")
 
     /**
      * This method updates the CalculationString with a new number and makes sure that the new result is calculated.
      * @param num: Int
      */
     fun newNumberForCalc(num: Int){
-        calculationString.value += num.toString()
-        calculationStringToNumber()
+        if(calculationString.value.matches(validRegex)){
+            calculationString.value += num.toString()
+            calculationStringToNumber()
+        }
     }
 
     /**
@@ -24,23 +28,35 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * @param op: String
      */
     fun newOperatorForCalc(op: String){
-        if(calculationString.value.isNotEmpty() && calculationString.value[calculationString.value.lastIndex] == ' '){
-            calculationString.value = calculationString.value.dropLast(3)
+        if(calculationString.value.matches(validRegex)) {
+            if (calculationString.value.isNotEmpty() && calculationString.value[calculationString.value.lastIndex] == ' ') {
+                calculationString.value = calculationString.value.dropLast(3)
+            }
+            calculationString.value += " $op "
+            calculationStringToNumber(false)
         }
-        calculationString.value += " $op "
-        calculationStringToNumber(false)
     }
 
     /**
-     * This method deletes the last character that was entered and makes sure that the new result is calculated.
+     * This method deletes the last character that was entered and ensures that the new result is calculated
+     * as long as the calculationString contains only characters that can be converted into a result.
      */
     fun deleteLastCharacter(){
-        if(calculationString.value[calculationString.value.lastIndex] == ' '){
-            calculationString.value = calculationString.value.dropLast(3)
-        }else{
-            calculationString.value = calculationString.value.dropLast(1)
+        if(calculationString.value.isNotEmpty()){
+            if(calculationString.value.length >= 3 && calculationString.value.substring(startIndex = calculationString.value.lastIndex - 2)
+                in operatorsBlanked){ //last 3 indexes = " $op "
+                calculationString.value = calculationString.value.dropLast(3)
+            }else{
+                calculationString.value = calculationString.value.dropLast(1)
+            }
         }
-        calculationStringToNumber()
+
+        if(calculationString.value.matches(validRegex)) { //valid characters -> calculate result
+            calculationStringToNumber()
+        }else{ //invalid characters -> no calculation
+            model.text = calculationString.value
+            model.publish()
+        }
     }
 
     /**
@@ -58,24 +74,28 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * The publish parameter can be used to specify whether publish should be executed or not.
      * @param publish : Boolean
      */
-    private fun calculationStringToNumber(publish: Boolean = true){
-        val list = calculationString.value.split(" ")
-        var currentResult = toDataType(0.0, attrType)
-        var operatorCache = "+"
+    private fun calculationStringToNumber(publish: Boolean = true){ //TODO fix "num SPACE num" (num + num is excecuted)
+        if(calculationString.value.trim().isEmpty()){
+            model.text = ""
+            calculationString.value = ""
+        }else {
+            val list = calculationString.value.split(" ")
+            var currentResult = toDataType(0.0, attrType)
+            var operatorCache = "+"
 
-        list.forEach{
-            if(it.isEmpty()){
-                return@forEach
-            }
+            list.forEach {
+                if (it.isEmpty()) {
+                    return@forEach
+                }
 
-            if(it in operators){
-                operatorCache = it
-            }else{
-                currentResult = calculate(currentResult.toDouble(), it.toDouble(), operatorCache)
+                if (it in operators) {
+                    operatorCache = it
+                } else {
+                    currentResult = calculate(currentResult.toDouble(), it.toDouble(), operatorCache)
+                }
             }
+            model.text = currentResult.toString()
         }
-
-        model.text = currentResult.toString()
 
         if(publish){
             model.publish()

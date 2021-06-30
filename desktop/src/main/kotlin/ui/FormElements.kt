@@ -25,6 +25,7 @@ import model.meanings.Default
 import util.Utilities
 import model.util.attribute.Attribute
 import model.util.attribute.SelectionAttribute
+import ui.theme.ColorsUtil
 import ui.theme.ColorsUtil.Companion.get
 import ui.theme.DropdownColors
 import ui.theme.FormColors
@@ -33,7 +34,6 @@ import ui.theme.FormColors
 @Composable
 fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> Boolean){
 
-    val selectionField : Boolean = attr is SelectionAttribute
     val focusRequester = remember { FocusRequester() }
 
     val index = remember { model.addFocusRequester(focusRequester, attr) }
@@ -43,16 +43,6 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
     if(firstTimeUnfocused.value && focused){
         firstTimeUnfocused.value = false
     }
-
-    val error = if(!focused) {
-        if(firstTimeUnfocused.value){
-            false
-        }else {
-            !attr.isValid()
-        }
-    } else {
-        !attr.isRightTrackValid()
-    } //TODO: focuses size not check throws an out of bounds when clicking on selection attribute on an element
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -70,7 +60,6 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
                 }}
             .focusOrder(focusRequester)
             .onKeyEvent{event ->
-//                println(event.key)
                 if(event.key == Key.Tab){
                     model.focusNext()
                     return@onKeyEvent false
@@ -78,96 +67,133 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
                 keyEvent(event)
             }
             .shortcuts {
-//                println("SHORTCUT" )
                 on(Key.Tab){
-//                  println("TAB PRESSED")
                 }
             }){
 
+        //Variables
         val focusedColor by mutableStateOf(if(attr.isValid()) get(FormColors.VALID) else if(attr.isRightTrackValid()) get(FormColors.RIGHTTRACK) else get(FormColors.ERROR))
         val unfocusedColor by mutableStateOf(if(attr.isValid() || firstTimeUnfocused.value) get(FormColors.RIGHTTRACK) else {get(FormColors.ERROR)})
 
         val color = if(focused) focusedColor else unfocusedColor
-        var showErrorMsg by remember { mutableStateOf(false) }
 
-        //for selectionField
-        var dropDownIsOpen : MutableState<Boolean> = remember { mutableStateOf(false) }
-        var selectionString : MutableState<String> = remember {mutableStateOf("")}
-        if(selectionField) {
-            selectionString = mutableStateOf(attr.getValueAsText().substring(1, attr.getValueAsText().length - 1))
-        }
+        //Assemble UI
+        Label(model, attr, color, focused)
+        InputElement(model, attr, color, focused, index)
+        ErrorMessage(model, attr, focused, firstTimeUnfocused)
+    }
+}
 
-
-        //Label
-        Row(modifier = Modifier.height(24.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
-            Text( if(attr.isRequired()) attr.getLabel() + "*" else attr.getLabel(),
+/**
+ * Label for an input-field
+ */
+@Composable
+private fun Label(model: IModel, attr: Attribute<*, *, *>, color: Color, focused : Boolean) {
+    with(model) {
+        Row(modifier = Modifier.height(24.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                if (attr.isRequired()) attr.getLabel() + "*" else attr.getLabel(),
                 fontSize = 12.sp,
                 modifier = Modifier.padding(bottom = 12.dp),
                 color = color,
-                fontWeight = if(focused) FontWeight.Bold else FontWeight.Normal)
+                fontWeight = if (focused) FontWeight.Bold else FontWeight.Normal
+            )
+        }
+    }
+}
+
+/**
+ * Input-Element for an input-field. Here the user can make an input
+ */
+@Composable
+private fun InputElement(model: IModel, attr: Attribute<*, *, *>, color: Color, focused: Boolean, index : Int){
+    with(model){
+
+        //variables for selectionField
+        val isSelectionField : Boolean = attr is SelectionAttribute
+        var dropDownIsOpen : MutableState<Boolean> = remember { mutableStateOf(false) }
+        var selectionString : MutableState<String> = remember {mutableStateOf("")}
+        if(isSelectionField) {
+            selectionString = mutableStateOf(attr.getValueAsText().substring(1, attr.getValueAsText().length - 1))
         }
 
-        //Input
         Column {
 //            BoxWithConstraints(contentAlignment = Alignment.CenterEnd) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)){
 
-                    //Field
-                    BasicTextField(
-                        value = if(!selectionField) attr.getValueAsText() else selectionString.value,
-                        onValueChange = {attr.setValueAsText(it)},
-                        singleLine = true,
-                        modifier = Modifier
-                            .height(20.dp)
-                            .fillMaxWidth(if(selectionField) 0.88f else if(attr.meaning !== Default<Any>()) 0.9f else 1f) //todo: Find better solution for Text field and icon side by side
-                            .padding(start = 12.dp, end = 12.dp),
-                        readOnly = attr.isReadOnly() || selectionField
-                    )
+                //Field
+                BasicTextField(
+                    value = if(!isSelectionField) attr.getValueAsText() else selectionString.value,
+                    onValueChange = {attr.setValueAsText(it)},
+                    singleLine = true,
+                    modifier = Modifier
+                        .height(20.dp)
+                        .fillMaxWidth(if(isSelectionField) 0.88f else if(attr.meaning !== Default<Any>()) 0.9f else 1f) //todo: Find better solution for Text field and icon side by side
+                        .padding(start = 12.dp, end = 12.dp),
+                    readOnly = attr.isReadOnly() || isSelectionField
+                )
 
-                    //Trailing-Icon
-                    if(!selectionField && attr.meaning !== Default<Any>()){
-                        Text(attr.meaning.addMeaning(attr.getValueAsText()),
-                            textAlign = TextAlign.Right,
-                            modifier = Modifier.padding(end = 12.dp),
-                            color = color)
-                    }
+                //Trailing-Icon
+                if(!isSelectionField && attr.meaning !== Default<Any>()){
+                    Text(attr.meaning.addMeaning(attr.getValueAsText()),
+                        textAlign = TextAlign.Right,
+                        modifier = Modifier.padding(end = 12.dp),
+                        color = color)
+                }
 
-                    //Drop-Down-Icon for Selection-Field
-                    if(selectionField){
-                        IconButton(
-                            onClick = { dropDownIsOpen.value = true; model.setCurrentFocusIndex(index) },
-                            modifier = Modifier.clip(CircleShape).size(20.dp)
-                        ) {
-                            Icon(Icons.Filled.ArrowDropDownCircle, "DropDown", tint = color)
-                        }
+                //Drop-Down-Icon for Selection-Field
+                if(isSelectionField){
+                    IconButton(
+                        onClick = { dropDownIsOpen.value = true; model.setCurrentFocusIndex(index) },
+                        modifier = Modifier.clip(CircleShape).size(20.dp)
+                    ) {
+                        Icon(Icons.Filled.ArrowDropDownCircle, "DropDown", tint = color)
                     }
+                }
             }
             //DropDown-Menu
-            if(selectionField){
+            if(isSelectionField){
                 DropDownMenu(
                     dropDownIsOpen, attr.getPossibleSelections(), Utilities<Set<String>>().stringToSetConverter(attr.getValueAsText()),
                     (attr as SelectionAttribute)::addUserSelection, attr::removeUserSelection
                 )
             }
         }
-
         //Line
         Row(modifier = Modifier.height(2.dp)){
             Divider(color = if(attr.isReadOnly()) Color.Transparent else color, thickness = if(focused) 2.dp else 1.dp)
+        }
+    }
+}
+
+@Composable
+private fun ErrorMessage(model: IModel, attr: Attribute<*, *, *>, focused: Boolean, firstTimeUnfocused : MutableState<Boolean>){
+    with(model){
+
+        var showErrorMsg by remember { mutableStateOf(false) }
+        val error = if(!focused) {
+            if(firstTimeUnfocused.value){
+                false
+            }else {
+                !attr.isValid()
+            }
+        } else {
+            !attr.isRightTrackValid()
         }
 
         //Error-Message
         Spacer(modifier = Modifier.height(2.dp))
         Row(modifier = Modifier.fillMaxWidth().height(20.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End),
+            horizontalArrangement = Arrangement.spacedBy(4.dp, androidx.compose.ui.Alignment.End),
             verticalAlignment = Alignment.CenterVertically){
 
             if (error && showErrorMsg) {
                 Card(modifier = Modifier
                     .fillMaxWidth(0.9f)                                             //todo: Find better solution for Text field and icon side by side
-                    .border(0.dp,get(FormColors.ERROR), RoundedCornerShape(50))
+                    .border(0.dp, get(FormColors.ERROR), RoundedCornerShape(50))
                     .height(20.dp),
-                backgroundColor = get(FormColors.ERROR)) {
+                    backgroundColor = get(FormColors.ERROR)
+                ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         for (msg in attr.getErrorMessages()) {
                             Text(
@@ -182,8 +208,7 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
             Row(modifier = Modifier.padding(end = 6.dp)){
                 if (error) {
                     IconButton(
-                        onClick = { showErrorMsg = !showErrorMsg
-                                  println("new state: $showErrorMsg")},
+                        onClick = { showErrorMsg = !showErrorMsg },
                         modifier = Modifier.clip(CircleShape).size(20.dp)
                     ) {
                         Icon(Icons.Filled.Error, "Error", tint = get(FormColors.ERROR))
@@ -194,8 +219,9 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
     }
 }
 
+
 @Composable
-fun DropDownMenu(dropDownIsOpen: MutableState<Boolean>, selections: Set<String>, currentSelectionValue: Set<String>,
+private fun DropDownMenu(dropDownIsOpen: MutableState<Boolean>, selections: Set<String>, currentSelectionValue: Set<String>,
                  add :(String)-> Unit, remove : (String) -> Unit) {
 
     DropdownMenu(
