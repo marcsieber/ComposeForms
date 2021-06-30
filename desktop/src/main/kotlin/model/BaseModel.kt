@@ -296,12 +296,13 @@ abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private
     }
 
     /**
-     * Function that sets for an ID, provided in the string the value as text for the value in the string
+     * Function that sets the value as text for the value in the string for an ID, provided in the string.
+     * Publish should not be executed.
      * @param string: String as JSON from DTOText
      */
     fun onReceivedText(string: String) {
         val dtotext = Json.decodeFromString<DTOText>(string)
-        getAttributeById(dtotext.id)?.setValueAsText(dtotext.text)
+        getAttributeById(dtotext.id)?.setValueAsText(dtotext.text, false)
     }
 
 

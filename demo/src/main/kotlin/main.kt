@@ -16,12 +16,12 @@ fun main() = Window(
     title = "Compose for Desktop",
     size = IntSize(600, 1000)
 ) {
-    MaterialTheme {
-        val model = remember { UserDefinedModel() }
-        DemoUI(model)
+//    MaterialTheme {
+//        val model = remember { UserDefinedModel() }
+//        DemoUI(model)
 
-//        val model = remember { PersonModel() }
-//        Form().of(model)
+        val model = remember { PersonModel() }
+        Form().of(model)
 
 //        DemoUI(DemoModel())
 
@@ -30,6 +30,6 @@ fun main() = Window(
 //        DemoApp.createAppUI()
 
 //        UserTestingApp().createAppUI()
-    }
+//    }
 }
 

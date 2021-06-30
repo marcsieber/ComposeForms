@@ -32,7 +32,19 @@ object Model {
 
     var isConnected: Boolean = false
 
-    val calcModel = CalculatorModel<Double>(this)
+    var calcModel = returnCalculatorModelWithCorrectType()
+
+    private fun returnCalculatorModelWithCorrectType(): CalculatorModel<*>? {
+        println("type: " + type)
+        return when(type){
+            AttributeType.DOUBLE    -> CalculatorModel<Double>(this, AttributeType.DOUBLE)
+            AttributeType.FLOAT     -> CalculatorModel<Float>(this, AttributeType.FLOAT)
+            AttributeType.INTEGER   -> CalculatorModel<Int>(this, AttributeType.INTEGER)
+            AttributeType.LONG      -> CalculatorModel<Long>(this, AttributeType.LONG)
+            AttributeType.SHORT     -> CalculatorModel<Short>(this, AttributeType.SHORT)
+            else                    -> null
+        }
+    }
 
     fun connectAndSubscribe(){
         mqttConnectorAttribute.connectAndSubscribe(subtopic = "attribute", onNewMessage = {
@@ -41,6 +53,7 @@ object Model {
             label = dtoText.label
             type = dtoText.attrType
             possibleSelections = dtoText.possibleSelections
+            calcModel = returnCalculatorModelWithCorrectType()
         }, onConnected = {
             isConnected = true
             val dtoCommand = DTOCommand(Command.REQUEST)
@@ -52,7 +65,7 @@ object Model {
             val dtoText = Json.decodeFromString<DTOText>(it)
             id = dtoText.id
             text = dtoText.text
-            calcModel.reset()
+            calcModel?.reset()
         })
 
         mqttConnectorCommand.connectAndSubscribe(subtopic = "command", onNewMessage = {})

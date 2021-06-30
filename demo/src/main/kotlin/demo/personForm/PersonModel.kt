@@ -10,7 +10,7 @@ import model.util.presentationElements.FieldSize
 import model.util.presentationElements.Group
 import model.validators.semanticValidators.*
 
-class PersonModel : BaseModel(withServer = true) {
+class PersonModel : BaseModel(withServer = true, iLabel = PersonLabels.SIZE) {
 
 
     init {

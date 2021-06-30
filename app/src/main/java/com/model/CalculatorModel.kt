@@ -1,8 +1,9 @@
 package com.model
 
 import androidx.compose.runtime.mutableStateOf
+import communication.AttributeType
 
-class CalculatorModel<T>(val model : Model) where T : Number {
+class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T : Number {
 
     val calculationString   = mutableStateOf(model.text)
     val operators           = listOf("+", "-", "*", "/")
@@ -17,12 +18,17 @@ class CalculatorModel<T>(val model : Model) where T : Number {
     }
 
     /**
-     * This method updates the CalculationString with a new operator and makes sure that the new result is calculated.
+     * This method updates the calculationString with a new operator and calls calculationStringToNumber(false)
+     * to make sure that the new operator is saved, but nothing should be published to the desktop.
+     * This method also makes sure that no two operators are next to each other (only the last operator will be saved).
      * @param op: String
      */
     fun newOperatorForCalc(op: String){
+        if(calculationString.value.isNotEmpty() && calculationString.value[calculationString.value.lastIndex] == ' '){
+            calculationString.value = calculationString.value.dropLast(3)
+        }
         calculationString.value += " $op "
-        calculationStringToNumber()
+        calculationStringToNumber(false)
     }
 
     /**
@@ -38,11 +44,10 @@ class CalculatorModel<T>(val model : Model) where T : Number {
     }
 
     /**
-     * This method ensures that the calculationString and the currentResult are reset to model.text.
+     * This method ensures that the calculationString is reset to model.text.
      */
     fun reset(){
         calculationString.value = model.text
-        calculationStringToNumber(false)
     }
 
     //******************************
@@ -50,12 +55,12 @@ class CalculatorModel<T>(val model : Model) where T : Number {
 
     /**
      * This method calculates the result from the calculation given in the calculationString.
-     * The Publish parameter can be used to specify whether publish should be executed or not.
+     * The publish parameter can be used to specify whether publish should be executed or not.
      * @param publish : Boolean
      */
     private fun calculationStringToNumber(publish: Boolean = true){
         val list = calculationString.value.split(" ")
-        var currentResult : Double = 0.0
+        var currentResult = toDataType(0.0, attrType)
         var operatorCache = "+"
 
         list.forEach{
@@ -66,7 +71,7 @@ class CalculatorModel<T>(val model : Model) where T : Number {
             if(it in operators){
                 operatorCache = it
             }else{
-                currentResult = calculate(currentResult, it.toDouble(), operatorCache)
+                currentResult = calculate(currentResult.toDouble(), it.toDouble(), operatorCache)
             }
         }
 
@@ -85,14 +90,32 @@ class CalculatorModel<T>(val model : Model) where T : Number {
      * @return result: Double
      * @throws IllegalArgumentException
      */
-    private fun calculate(val1 : Double, val2: Double, operator : String): Double {
+    private fun calculate(val1 : Double, val2: Double, operator : String): T {
 
         when (operator){
-            "+" -> return (val1.toDouble() + val2.toDouble())
-            "-" -> return (val1.toDouble() - val2.toDouble())
-            "*" -> return (val1.toDouble() * val2.toDouble())
-            "/" -> return (val1.toDouble() / val2.toDouble())
+            "+" -> return toDataType((val1 + val2), attrType)
+            "-" -> return toDataType((val1 - val2), attrType)
+            "*" -> return toDataType((val1 * val2), attrType)
+            "/" -> return toDataType((val1 / val2), attrType)
             else -> throw IllegalArgumentException("Operator not implemented")
+        }
+    }
+
+    /**
+     * This method returns the value as attribute type.
+     * @param value: Double
+     * @param attrType: AttributeType
+     */
+    private fun toDataType(value : Double, attrType: AttributeType) : T{
+        println("A-T: " + attrType +", val: " + value)
+        return when (attrType){
+            AttributeType.SHORT     -> value.toInt().toShort() as T
+            AttributeType.INTEGER   -> value.toInt() as T
+
+            AttributeType.LONG      -> value.toLong() as T
+            AttributeType.DOUBLE    -> value.toDouble() as T
+            AttributeType.FLOAT     -> value.toFloat() as T
+            else -> value as T
         }
     }
 }
