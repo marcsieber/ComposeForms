@@ -10,15 +10,18 @@ import kotlinx.serialization.json.Json
 
 object Model {
 
+//    var mqttBroker = "127.0.0.1"
+    var mqttBroker = "192.168.178.53"
     //broker.hivemq.com
 //    val mqttBroker    = "broker.hivemq.com"
 //    val mqttBroker    = "192.168.0.94"
-    val mqttBroker    = "192.168.178.55" //ifconfig en0
+//    val mqttBroker    = "192.168.178.53"
+//    val mqttBroker    = "192.168.178.55" //ifconfig en0
     val mainTopic     = "/fhnwforms/"
-    val mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
-    val mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
-    val mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
-    val mqttConnectorAttribute = MqttConnector(mqttBroker, mainTopic)
+    lateinit var mqttConnectorText : MqttConnector
+    lateinit var mqttConnectorCommand : MqttConnector
+    lateinit var mqttConnectorValidation : MqttConnector
+    lateinit var mqttConnectorAttribute : MqttConnector
 
     var id : Int = 0
 
@@ -33,6 +36,11 @@ object Model {
     var isConnected: Boolean = false
 
     fun connectAndSubscribe(){
+        mqttConnectorText = MqttConnector(mqttBroker, mainTopic)
+        mqttConnectorAttribute = MqttConnector(mqttBroker, mainTopic)
+        mqttConnectorValidation = MqttConnector(mqttBroker, mainTopic)
+        mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
+
         mqttConnectorAttribute.connectAndSubscribe(subtopic = "attribute", onNewMessage = {
             val dtoText = Json.decodeFromString<DTOAttribute>(it)
             id = dtoText.id

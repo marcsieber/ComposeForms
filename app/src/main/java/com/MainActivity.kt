@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import com.IApp
+import com.model.Model
 
 class MainActivity : AppCompatActivity() {
     private lateinit var app: IApp  //alle Beispiele implementieren das Interface EmobaApp
@@ -11,7 +12,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ToDo: hier die emoba App eintragen, die gestartet werden soll
+        println("intent data: ${intent.data}")
+        intent.data?.lastPathSegment?.also { ip ->
+            println(ip)
+            Model.mqttBroker = ip
+        }
+
         app = App
 
         app.initialize(activity = this, savedInstanceState = savedInstanceState)
