@@ -113,7 +113,7 @@ fun QRCode(model: IModel){
             Window(size = IntSize(size, size)) {
                 val img = remember{ mutableStateOf(ImageBitmap(size,size)) }
                 val ip = model.getIPAdress()
-                QRCodeService().getQRCode("https://stevevogel.github.io/ComposeForms/$ip", size){ img.value = it}
+                QRCodeService().getQRCode("https://stevevogel1.github.io/ComposeForms/$ip", size){ img.value = it}
                 Image(img.value, "QR Code")
             }
         }) {
