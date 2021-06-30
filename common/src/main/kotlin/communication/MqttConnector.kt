@@ -12,7 +12,7 @@ import java.util.*
  *
  * Dient vor allem dazu mit den verschiedenen Parametern experimentieren zu können
  *
- * siehe die Doku:
+ * siehe Doku:
  * https://hivemq.github.io/hivemq-mqtt-client/
  * https://github.com/hivemq/hivemq-mqtt-client
  *

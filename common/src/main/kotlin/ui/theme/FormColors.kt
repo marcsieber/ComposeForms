@@ -28,7 +28,7 @@ enum class DropdownColors(val color : Color) {
 
 
 
-class ColorsUtil(){
+class ColorsUtil {
     companion object {
         fun getColor(colorString: String): Color {
             val r = java.lang.Long.parseLong(colorString.subSequence(0, 2).toString(), 16).toFloat() / 255
@@ -45,8 +45,5 @@ class ColorsUtil(){
             return color.color
         }
     }
-
-
-
 
 }
