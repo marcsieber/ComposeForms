@@ -1,4 +1,4 @@
-package com.ui
+package ch.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.model.Model
-import com.model.Model.possibleSelections
-import com.model.Model.text
+import ch.model.Model
+import ch.model.Model.possibleSelections
+import ch.model.Model.text
 import util.Utilities
 import ui.theme.ColorsUtil
 import ui.theme.DropdownColors
@@ -31,8 +31,9 @@ fun SelectionContent(model: Model) {
         Column(modifier = Modifier.fillMaxSize().padding(top = 0.dp, bottom = 12.dp)) {
             //Searchfield
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top){
-                OutlinedTextField(searchString.value,
-                    onValueChange = { searchString.value = it; filterPossibleSelections(it)},
+                OutlinedTextField(
+                    searchString.value,
+                    onValueChange = { searchString.value = it; filterPossibleSelections(it) },
                     label = {Icon(Icons.Filled.Search, "Search")},
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.outlinedTextFieldColors(

@@ -1,4 +1,4 @@
-package com
+package ch.fhnw
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -1,4 +1,4 @@
-package com.model
+package ch.model
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,10 +10,10 @@ import kotlinx.serialization.json.Json
 
 object Model {
 
-//    val mqttBroker    = "broker.hivemq.com"
-//    val mqttBroker    = "192.168.0.94" oftr
-    val mqttBroker    = "192.168.178.55" //ifconfig en0 - witt
-//    val mqttBroker    = "192.168.178.26" // inz
+//    var mqttBroker    = "broker.hivemq.com"
+//    var mqttBroker    = "192.168.0.94" oftr
+    var mqttBroker    = "192.168.178.55" //ifconfig en0 - witt
+//    var mqttBroker    = "192.168.178.26" // inz
     val mainTopic     = "/fhnwforms/"
     lateinit var mqttConnectorText : MqttConnector
     lateinit var mqttConnectorCommand : MqttConnector
@@ -80,7 +80,7 @@ object Model {
             isOnRightTrack = dtoValidation.onRightTrack
             isValid = dtoValidation.isValid
             errorMessages.value = dtoValidation.errorMessages
-        }, onConnected = {isConnected = true})
+        }, onConnected = { isConnected = true})
     }
 
     fun publish(){
