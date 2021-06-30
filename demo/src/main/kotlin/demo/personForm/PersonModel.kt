@@ -10,11 +10,11 @@ import model.util.presentationElements.FieldSize
 import model.util.presentationElements.Group
 import model.validators.semanticValidators.*
 
-class PersonModel : BaseModel(withServer = true, iLabel = PersonLabels.SIZE) {
+class PersonModel : BaseModel(smartphoneOption = true, iLabel = PersonLabels.SIZE) {
 
 
     init {
-        setTitle(if (isCurrentLanguageForAll("deutsch")) "Klienten" else "Clients")
+        setTitle("Clients")
     }
 
     val id          = IntegerAttribute(model = this, label = PersonLabels.ID,
@@ -23,7 +23,7 @@ class PersonModel : BaseModel(withServer = true, iLabel = PersonLabels.SIZE) {
 
     val firstName   = StringAttribute(model = this, label = PersonLabels.FIRSTNAME,
         required = true,
-        validators = listOf(StringValidator(minLength = 5, maxLength = 10)))
+        validators = listOf(StringValidator(minLength = 3, maxLength = 10)))
 
     val lastName    = StringAttribute(model = this, label = PersonLabels.LASTNAME,
         required = true)

@@ -30,6 +30,19 @@ import ui.theme.ColorsUtil.Companion.get
 import ui.theme.DropdownColors
 import ui.theme.FormColors
 
+@Composable
+fun GroupTitle(title : String){
+    Row(modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 6.dp, top = 12.dp)) {
+        Card(
+            modifier = Modifier.fillMaxWidth().height(38.dp).border(0.dp, Color.Transparent, RoundedCornerShape(10.dp)),
+            backgroundColor = get(FormColors.BACKGROUND_COLOR_GROUPS)){
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically){
+                Text(title, color = get(FormColors.FONT_ON_BACKGOUND))
+            }
+        }
+    }
+}
 
 @Composable
 fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> Boolean){
@@ -83,6 +96,11 @@ fun InputField(model: IModel, attr: Attribute<*, *, *>, keyEvent: (KeyEvent) -> 
         ErrorMessage(model, attr, focused, firstTimeUnfocused)
     }
 }
+
+
+//*********************************************
+//Internal functions
+
 
 /**
  * Label for an input-field

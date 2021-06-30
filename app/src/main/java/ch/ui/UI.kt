@@ -37,7 +37,6 @@ fun UI(model: Model) {
                     AttributeType.INTEGER -> NumberContent(model)
                     AttributeType.FLOAT -> NumberContent(model)
                     AttributeType.DOUBLE -> NumberContent(model)
-                    AttributeType.STRING -> DecisionContent(model)
                 }
             }
         }

@@ -17,7 +17,7 @@ import java.util.*
 import java.net.NetworkInterface
 
 
-abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private val withServer: Boolean = false) : IModel {
+abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private val smartphoneOption: Boolean = false) : IModel {
 
     //******************************************************************************************************
     //Properties
@@ -47,7 +47,7 @@ abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private
     var startedUp = false
 
     private fun startUp(){
-        if(withServer)
+        if(smartphoneOption)
         modelScope.launch {
             if(!startedUp) {
                 startedUp = true
@@ -165,6 +165,10 @@ abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private
 
     override fun getCurrentLanguage(): String {
         return currentLanguage.value
+    }
+
+    override fun smartphoneOption(): Boolean {
+        return smartphoneOption
     }
 
     fun getAttributeType(attr: Attribute<*, *, *>): AttributeType {
