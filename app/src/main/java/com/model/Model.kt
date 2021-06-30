@@ -10,13 +10,10 @@ import kotlinx.serialization.json.Json
 
 object Model {
 
-//    var mqttBroker = "127.0.0.1"
-    var mqttBroker = "192.168.178.53"
-    //broker.hivemq.com
 //    val mqttBroker    = "broker.hivemq.com"
-//    val mqttBroker    = "192.168.0.94"
-//    val mqttBroker    = "192.168.178.53"
-//    val mqttBroker    = "192.168.178.55" //ifconfig en0
+//    val mqttBroker    = "192.168.0.94" oftr
+    val mqttBroker    = "192.168.178.55" //ifconfig en0 - witt
+//    val mqttBroker    = "192.168.178.26" // inz
     val mainTopic     = "/fhnwforms/"
     lateinit var mqttConnectorText : MqttConnector
     lateinit var mqttConnectorCommand : MqttConnector
