@@ -1,4 +1,4 @@
-package com.model
+package ch.model
 
 import androidx.compose.runtime.mutableStateOf
 import communication.AttributeType

@@ -1,4 +1,4 @@
-package com.ui
+package ch.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.model.Model
+import ch.model.Model
 import communication.AttributeType
 import ui.theme.ColorsUtil
 import ui.theme.DropdownColors

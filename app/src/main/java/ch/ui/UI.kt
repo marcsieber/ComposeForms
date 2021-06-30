@@ -1,4 +1,4 @@
-package com.ui
+package ch.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.model.Model
+import ch.model.Model
 import communication.AttributeType
 import communication.Command
 import ui.theme.ColorsUtil
@@ -28,7 +28,7 @@ import ui.theme.ColorsUtil.Companion.get
 @Composable
 fun UI(model: Model) {
     with(model) {
-        Scaffold (topBar = {Header(model)}, bottomBar = { BottomBar(model)}){
+        Scaffold (topBar = { Header(model) }, bottomBar = { BottomBar(model) }){
             Column (modifier = Modifier.padding(12.dp)){
                 when(type){
                     AttributeType.SELECTION -> SelectionContent(model)

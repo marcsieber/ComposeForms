@@ -1,4 +1,4 @@
-package com.model
+package ch.model
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -80,7 +80,7 @@ object Model {
             isOnRightTrack = dtoValidation.onRightTrack
             isValid = dtoValidation.isValid
             errorMessages.value = dtoValidation.errorMessages
-        }, onConnected = {isConnected = true})
+        }, onConnected = { isConnected = true})
     }
 
     fun publish(){
