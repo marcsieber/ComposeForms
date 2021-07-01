@@ -57,6 +57,10 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
         }
     }
 
+    /**
+     * Function for adding special characters and special behavior
+     * @param char: Character representing a special case
+     */
     fun addSpecialCharacters(char: Char){
         if(char == '.'){
             if(pointIsActive.value) {
@@ -66,7 +70,10 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
         }
     }
 
-    fun recalculatePointIsActive(){
+    /**
+     * Recalculating point is active on the attribute type and the number
+     */
+    private fun recalculatePointIsActive(){
         pointIsActive.value = isFloatingPoint && !calculationString.value.contains(".")
     }
 
