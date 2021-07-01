@@ -49,6 +49,7 @@ import ui.theme.ColorsUtil.Companion.get
 @ExperimentalFoundationApi
 @Composable
 fun UI(model: Model) {
+
     with(model) {
         Scaffold (topBar = { Header(model) }, bottomBar = { BottomBar(model) }){
             Column (modifier = Modifier.padding(12.dp)){
