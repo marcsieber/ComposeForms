@@ -1,3 +1,25 @@
+/*
+ *
+ *  * ========================LICENSE_START=================================
+ *  * Compose Forms
+ *  * %%
+ *  * Copyright (C) 2021 FHNW Technik
+ *  * %%
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  * =========================LICENSE_END==================================
+ *
+ */
+
 package ch.fhnw
 
 import android.os.Bundle
@@ -7,25 +29,22 @@ import androidx.compose.runtime.Composable
 interface IApp {
 
     /**
-     * Initialer Aufbau des App-Status.
-     *
-     * Bereitstellen aller initial notwendigen Daten (Daten werden normalerweise erst
-     * geladen, wenn sie fuer die Anzeige benötigt werden).
+     * Initialize the app
+     * Providing all necessary data
      */
     fun initialize(activity: AppCompatActivity, savedInstanceState: Bundle?)
 
 
     /**
-     * Das gesamte UI der App.
+     * Create Complete UI of the app
      */
     @Composable
     fun createAppUI()
 
 
     /**
-     * Wird aufgerufen sobald die App nicht mehr im Vordergrund sichtbar ist.
+     * Called when UI not in foreground anymore
      */
     fun onStop(activity: AppCompatActivity) {
-        // Default: Nichts zu tun
     }
 }
