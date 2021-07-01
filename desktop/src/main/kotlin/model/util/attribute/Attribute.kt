@@ -307,6 +307,10 @@ abstract class Attribute <A,T,L> (//required parameters
     }
 
 
+    fun getModel() : IModel {
+        return model
+    }
+
     /**
      *
      */

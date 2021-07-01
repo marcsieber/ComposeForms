@@ -37,7 +37,12 @@ class Group(val model : IModel, val title : String, vararg fields : Field) {
 
     init {
         model.addGroup(this)
-        fields.forEach{it.getAttribute().setCurrentLanguage(model.getCurrentLanguage())}
+        fields.forEach{
+            if(model != it.getAttribute().getModel()){
+                throw IllegalArgumentException("Model of the attribute does not match the model of the group.")
+            }
+            it.getAttribute().setCurrentLanguage(model.getCurrentLanguage())
+        }
     }
 
     fun addAttribute(attribute : Attribute<*,*,*>){
