@@ -13,7 +13,7 @@ image::desktop-form.png[width = 500]
 
 Der Code zu diesem Beispiel ist hier zu finden:
 
-[red]#demo > src > main > kotlin > demo > personForm#
+[silver]#demo > src > main > kotlin > demo > personForm#
 
 Eine zusätzliche Benutzer-unterstützende Feature ist die Möglichkeit, das Smartphone für die Eingabe der einzelnen Input-Felder verwenden zu können. Über einen Boolean kann entschieden werden, ob die Smartphone-Eingabe-Möglichkeit für das Formular freigegeben werden soll. Dem End-User ist es frei überlassen, ob er das Smartphone verwenden möchte oder nicht. Über einen Button im Formular kann das Smartphone via QR-Code mit dem Desktop-Formular verbunden werden. Auf dem Smartphone werden dann individuelle Eingabe-Masken zum auf dem Desktop-fokussierten Inputfeld angezeigt.
 
@@ -220,7 +220,7 @@ Die Formular-Farben können im File _FormColors.kt_ ganz einfach modifiziert wer
 
 Das File befindet sich hier:
 
-[red]#common > src > main > kotlin > ui > theme > FormColors.kt#
+[silver]#common > src > main > kotlin > ui > theme > FormColors.kt#
 
 == User-Experience
 
@@ -359,7 +359,39 @@ Starte dann die Applikation erneut.
 Im Folgenden eine detaillierte Erklärung zur richtigen Erstellung der Attribut-Parameter
 
 ==== [[anchor-model]] model
+
+Das Model der Gruppe, in welcher sich das Attribut befindet, muss dasselbe sein, wie das Model des Attributs. (Falls dies nicht der Fall ist wird eine Exception geworfen.)
+
+*Beispiel 1 - Alles in einem Model* +
+Die Attribute und Gruppen werden im selben Model erstellt.
+Sowohl beim Attribut als auch bei der Gruppe wird _this_ als Model übergeben. +
+
+(siehe: [silver]#demo > src > main > kotlin > demo > personForm > PersonModel#)
+
+*Beispiel 2 - Attribute und Gruppen in mehreren Klassen verteilt* +
+Zusätzlich zu den Attributen aus Beispiel 1, soll ein weiteres Attribut auf dem Formular erscheinen. Dieses wird in diesem Beispiel direkt in der Starterklasse definiert und einer eigenen Gruppe übergeben. Damit es auf demselben Formular erscheint muss dasselbe Model als Parameter übergeben werden.
+
+image::example_parameter_model.png[]
+
+Nun erscheint in dem Formular die zusätzliche Gruppe mit dem Attribut unter den bereits im PersonModel definierten:
+
+image::example_result_parameter_model.png[]
+
 ==== [[anchor-label]] label
+
+Um Mehrsprachigkeit zu gewährleisten müssen die Labeltexte in einem Enum angegeben werden.
+Das Enum muss das Interface _ILabel_ implementieren und alle gewünschten Sprachen als Parameter mit Typ String definieren. +
+Im Enum können nun Code-Variablen festgelegt werden, in welchen die Übersetzungen der Labeltexte definiert werden.
+
+image::label-code.png[]
+( [silver]#demo > src > main > kotlin > demo > personForm > PersonLabels# )
+
+Bei den Attributen muss dann nur noch die richtige Code-Variable als Label angegeben werden.
+
+image::label_in_model.png[]
+( [silver]#demo > src > main > kotlin > demo > personForm > PersonModel# )
+
+
 ==== [[anchor-value]] value
 ==== [[anchor-required]] required
 ==== [[anchor-readOnly]] readOnly
