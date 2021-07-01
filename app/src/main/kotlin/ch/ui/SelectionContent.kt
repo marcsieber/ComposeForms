@@ -146,6 +146,11 @@ fun removeUserSelection(value: String){
     text = newSet.toString()
 }
 
-fun elementIsSelected(element : String) : Boolean{ //TODO: Improve function (if element is Eintrag -> Eintrag1 is also true at the moment)
-    return text.contains(element)
+fun elementIsSelected(element : String) : Boolean{
+    text.substring(1,  text.length-1).split(",").forEach{
+        if(it.trim() == element){
+            return true
+        }
+    }
+    return false
 }
