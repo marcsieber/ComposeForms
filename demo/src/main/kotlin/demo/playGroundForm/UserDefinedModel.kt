@@ -15,7 +15,7 @@ import model.util.presentationElements.FieldSize
 import model.validators.semanticValidators.*
 import java.time.LocalTime
 
-class UserDefinedModel : BaseModel(Labels.stringLabel, withServer = true){
+class UserDefinedModel : BaseModel(Labels.stringLabel, smartphoneOption = true){
 
     init {
         setTitle("Demo Title")

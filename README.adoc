@@ -227,25 +227,34 @@ Das File befindet sich hier:
 
 === Zur Verfügung stehende Aktionen
 
+image::header-functions.png[width =  600]
+
+
 .User-Aktionen
 [cols="3,1,3",width=100%,frame=topbot]
 |===
 | Funktionalität | aufgerufene Model-Funktion | Auswirkung
 
-| BILD +
-| saveAll()
-| Speichert die Werte (User-Inputs) aller Attribute, sofern alle in einem validen Zustand sind.
-
-| BILD +
-| resetAll()
-| Setzt die Werte aller Attribute auf die zuletzt gespeicherten Werte zurück.
-
-| BILD +
+a|
+image::language.png[width = 150]
 | setCurrentLanguageForAll( lang : String)
 | Setzt die aktuelle Sprache. Die Sprachen müssen zuvor im Label-Enum definiert werden. (siehe <<anchor-label, label>>) +
 _Diese Funktionalität ist noch nicht vollständig implementiert._
 
-| BILD +
+
+a|image::reset.png[width = 90]
+| resetAll()
+| Setzt die Werte aller Attribute auf die zuletzt gespeicherten Werte zurück.
+
+
+a|image::save.png[width = 84]
+| saveAll()
+| Speichert die Werte (User-Inputs) aller Attribute, sofern alle in einem validen Zustand sind.
+
+
+a|
+image::qrCode.png[width = 150]
+image::qr-code.png[]
 |
 | Generiert einen QR-Code, sodass sich der User mit dem Smartphone verbinden kann.
 
@@ -256,27 +265,79 @@ _Diese Funktionalität ist noch nicht vollständig implementiert._
 Für eine bessere User-Experience können sich die Attribute in 3 verschiedenen Stati befinden. +
 Mit dem _rightTrack_-Status sind die Zeiten vorbei, in denen sich der User über rote Fehlermeldungen aufregt, die von Anfang an angezeit werden, bevor der User auch nur die Chance hatte sich um einen richtigen Input zu bemühen. Der rightTrack-Status gibt an, ob sich der User auf dem richtigen Weg zu einem validen Input befindet. Erst, wenn der Input wirklich in die falsche Richtung geht wird der Input als invalid angezeigt.
 
-
 .Übersicht zu den 3 Stati
 [cols="2,1,3",width=100%,frame=topbot]
 |===
-| Aussehen | Status | Auswirkung
+| Aussehen | Status | Beschreibung
 
-| BILD +
-| valid
-|
+a|image::valid.png[width = 200]
+| *valid* +
 
-| BILD +
-| invalid
-|
+_(gültig)_
+| Der Input ist in einem validen Zustand und kann somit gespeichert werden.
+Valid  bedeutet der eingegebene Input (String): +
+- kann in den Typ des Attributs umgewandelt werden +
+- ist bezüglich des Parameter <<anchor-required, required>> in einem gültigen Zustand +
+- ist bezüglich aller gesetzten Validatoren in einem gültigen Zustand +
 
-| BILD +
-| rightTrack
-|
+
+a|image::invalid.png[width = 200]
+| *invalid* +
+
+_(nicht gültig)_
+| Der Input befindet sich in einem invaliden Zustand und kann nicht abgespeichert werden.
+Wenn der Input (String) nicht valid ist ist er in einem invaliden Zustand.
+
+
+a|image::rigthtTrack.png[width = 200]
+| *rightTrack* +
+
+_(auf dem richtigen Weg zu einem validen Zustand)_
+| Der rightTrack-Zustand besteht zusätzlich zu den beiden obigen. (Wenn der rightTrack-Zustand gesetzt ist, ist der Input also gleichzeitig in einem rightTrack-Zustand und einem invaliden oder validen Zustand. Wenn er nicht gesetzt ist, ist der Input invalid)
+
+Der Input wird dem User als rightTrack-Zustand angezeigt, wenn sich der Input in einem Zustand befindet, der sich auf dem richtigen Weg zu einem validen Zustand befindet. Sobald der Zustand valid ist wird das Attribut als valid angezeigt. +
+Der rightTrack Zustand wird nur angezeigt, wenn das Attribut noch nicht fokussiert wurde oder gerade fokussiert ist, danach wechselt es wieder in einen invaliden Zustand.
+
 
 |===
 
 ==== Beispiel
+Die obigen Inputfelder gehören zu folgendem Beispiel:
+
+image::example-stati.png[width = 800]
+
+Der Input muss zwischen 3 und 10 Zeichen enthalten, um valid zu sein.
+
+
+
+.Verhalten der Input-Felder
+[cols="1,2,2",width=100%,frame=topbot]
+|===
+|Anz. Characters +
+(Input-Länge)| Aussehen fokussiertes Feld| Aussehen nicht fokussiertes Feld +
+(nachdem es bereits fokussiert wurde)
+
+|0 - 2
+a|image::rigthtTrack.png[width = 200]
+
+rightTrack
+a|image::rightTrack-unfocused.png[width = 200]
+invalid
+
+| 3 - 10
+a|image::valid.png[width = 200]
+valid
+a|
+image::valid-unfocused.png[width = 200]
+valid
+
+| 10 - ...
+a|image::invalid.png[width = 200]
+invalid
+a|
+image::invalid-unfocused.png[width = 200]
+invalid
+|===
 
 
 == Tiefergehende Information / Hilfestellung

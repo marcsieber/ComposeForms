@@ -22,6 +22,7 @@
 
 package ch.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -100,8 +101,10 @@ fun NumberContent(model: Model){
                                 text = calcItems.get(it).first,
                                 onClick = {calcItems.get(it).second()},
                                 enabled = calcItems.get(it).third,
-                                color = if(it%4==3){ButtonDefaults.buttonColors(backgroundColor = ColorsUtil.get(DropdownColors.BACKGROUND_ELEMENT_SEL))}
-                                else{ButtonDefaults.buttonColors(backgroundColor = ColorsUtil.get(DropdownColors.BACKGROUND_ELEMENT_NOT_SEL))})
+                                backgroundColor =   if(it%4==3){ ColorsUtil.get(DropdownColors.BACKGROUND_ELEMENT_SEL)}
+                                                    else{ ColorsUtil.get(DropdownColors.BACKGROUND_ELEMENT_NOT_SEL)},
+                                border = if(!calcItems.get(it).third){ // Button disabled
+                                    BorderStroke(1.dp, ColorsUtil.get(DropdownColors.BACKGROUND_ELEMENT_SEL))} else BorderStroke(0.dp, Color.Transparent))
                         }
                     }
                 }
@@ -111,11 +114,12 @@ fun NumberContent(model: Model){
 }
 
 @Composable
-fun CalcButton(text : String, onClick: () -> Unit, enabled : Boolean, color: ButtonColors = ButtonDefaults.buttonColors(backgroundColor = ColorsUtil.get(DropdownColors.BUTTON_BACKGROUND))){
+fun CalcButton(text : String, onClick: () -> Unit, enabled : Boolean, backgroundColor : Color, border : BorderStroke){
     Button(onClick = onClick,
-        modifier = Modifier.height(84.dp).width(84.dp).padding(6.dp),
+        modifier = Modifier.requiredHeight(84.dp).width(84.dp).padding(6.dp),
         enabled = enabled,
-        colors = color,
+        colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor, disabledBackgroundColor = Color.Transparent),
+        border = border
     ){Text(text)}
 }
 

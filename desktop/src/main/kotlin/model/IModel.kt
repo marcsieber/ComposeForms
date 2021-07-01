@@ -42,7 +42,6 @@ interface IModel {
     fun setValidForAll()
     fun isValidForAll() : Boolean
     fun isChangedForAll(): Boolean
-//    fun addAttribute(attr: Attribute<*,*,*>)
     fun addGroup(group: Group)
     fun getPossibleLanguages(): List<String>
 
@@ -59,5 +58,7 @@ interface IModel {
     fun focusPrevious()
     fun setCurrentFocusIndex(index: Int?)
     fun getCurrentFocusIndex(): Int?
+
+    fun smartphoneOption() : Boolean
 
 }
