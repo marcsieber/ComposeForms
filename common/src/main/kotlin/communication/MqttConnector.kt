@@ -29,19 +29,17 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 
 /**
- * TODO: Write Comment
- * ACHTUNG: Das ist nur eine erste Konfiguration eines Mqtt-Brokers.
+ * This class connects to a mqtt server and the connection to send and received messages.
+ * TODO: Write more comment after connection changed from client per channel to x channels per client
  *
- * Dient vor allem dazu mit den verschiedenen Parametern experimentieren zu können
- *
- * siehe Doku:
+ * Documentation on the client:
  * https://hivemq.github.io/hivemq-mqtt-client/
  * https://github.com/hivemq/hivemq-mqtt-client
  *
- * Ein generischer Mqtt-Client (gut um Messages zu kontrollieren)
- * http://www.hivemq.com/demos/websocket-client/
- *
+ * @author Louisa Reinger
+ * @author Steve Vogel
  */
+
 class MqttConnector (val mqttBroker: String, val maintopic: String,
                      val qos: MqttQos = MqttQos.EXACTLY_ONCE){
 

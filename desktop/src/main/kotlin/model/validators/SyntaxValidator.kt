@@ -25,6 +25,10 @@ package model.validators
 import util.Utilities
 import java.lang.NumberFormatException
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class SyntaxValidator<T>( validationMessage   : String = "") : Validator<T>(validationMessage = validationMessage) {
 
     init {

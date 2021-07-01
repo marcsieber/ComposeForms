@@ -28,6 +28,10 @@ import org.jetbrains.skija.Image
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class QRCodeService {
 
 

@@ -22,6 +22,11 @@
 
 package util
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
+
 class Utilities<T> {
 
     /**

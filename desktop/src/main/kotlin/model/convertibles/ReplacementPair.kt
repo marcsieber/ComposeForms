@@ -22,4 +22,8 @@
 
 package model.convertibles
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class ReplacementPair(val convertibleRegex : String, val convertIntoRegex : String)

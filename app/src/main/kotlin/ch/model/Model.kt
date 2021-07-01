@@ -30,11 +30,15 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 object Model {
 
 //    var mqttBroker    = "broker.hivemq.com"
-//    var mqttBroker    = "192.168.0.94" //oftr
-    var mqttBroker    = "192.168.178.55" //ifconfig en0 - witt
+    var mqttBroker    = "192.168.0.94" //oftr
+//    var mqttBroker    = "192.168.178.55" //ifconfig en0 - witt
 //    var mqttBroker    = "192.168.178.26" // inz
     val mainTopic     = "/fhnwforms/"
     lateinit var mqttConnectorText : MqttConnector

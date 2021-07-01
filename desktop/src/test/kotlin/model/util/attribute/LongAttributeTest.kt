@@ -25,6 +25,10 @@ package model.util.attribute
 import model.BaseModel
 import model.util.Labels
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 internal class LongAttributeTest : NumberAttributeTest<Long>(){
 
     override fun provideAttribute(model: BaseModel, value: Long?): Attribute<*, Any,*> {

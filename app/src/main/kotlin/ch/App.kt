@@ -29,6 +29,10 @@ import androidx.compose.runtime.*
 import ch.model.Model
 import ch.ui.UI
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 object App : IApp {
 
     override fun initialize(activity: AppCompatActivity, savedInstanceState: Bundle?) {

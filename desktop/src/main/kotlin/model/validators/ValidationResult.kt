@@ -22,6 +22,10 @@
 
 package model.validators
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class ValidationResult(val result: Boolean, val rightTrackResult: Boolean, val validationMessage: String)
 
 

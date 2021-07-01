@@ -30,6 +30,10 @@ import model.util.ILabel
 import util.Utilities
 import model.validators.semanticValidators.SemanticValidator
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class SelectionAttribute<L>(//required parameters
     model                              : IModel,
     label                              : L,

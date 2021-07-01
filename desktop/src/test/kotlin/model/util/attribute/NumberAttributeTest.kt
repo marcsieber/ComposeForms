@@ -30,6 +30,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 abstract class NumberAttributeTest<T> : AttributeTest<T>() where T : Number, T : Comparable<T>{
 
     lateinit var upperBound : T

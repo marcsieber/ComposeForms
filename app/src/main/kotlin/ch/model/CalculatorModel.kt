@@ -27,6 +27,10 @@ package ch.model
 import androidx.compose.runtime.mutableStateOf
 import communication.AttributeType
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T : Number {
 
     val calculationString   = mutableStateOf(model.text)

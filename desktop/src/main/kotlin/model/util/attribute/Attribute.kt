@@ -35,6 +35,10 @@ import model.validators.ValidationResult
 import model.validators.semanticValidators.SemanticValidator
 import java.lang.NumberFormatException
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 abstract class Attribute <A,T,L> (//required parameters
     private val model       : IModel,
     label                   : L,

@@ -26,6 +26,10 @@ import androidx.compose.ui.focus.FocusRequester
 import model.util.presentationElements.Group
 import model.util.attribute.Attribute
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 interface IModel {
     fun getIPAdress(): String
 

@@ -25,6 +25,10 @@ package model.validators.semanticValidators
 import util.Utilities
 import model.validators.ValidationResult
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class NumberValidator<T>(private var lowerBound              : T? = null,
                          private var upperBound              : T? = null,
                          private var stepSize                : T? = null,

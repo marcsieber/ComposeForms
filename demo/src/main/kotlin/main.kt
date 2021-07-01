@@ -27,7 +27,10 @@ import androidx.compose.ui.unit.IntSize
 import demo.personForm.PersonModel
 import ui.Form
 
-
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 @ExperimentalFoundationApi
 fun main() = Window(
     title = "Compose for Desktop",

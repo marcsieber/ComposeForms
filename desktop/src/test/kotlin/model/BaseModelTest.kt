@@ -36,6 +36,10 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.BeforeEach
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 internal class BaseModelTest {
 
     var model = object: BaseModel(Label.TEST){}

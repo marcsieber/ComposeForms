@@ -41,6 +41,10 @@ import ui.theme.ColorsUtil.Companion.get
 import ui.theme.FormColors
 
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class Form {
 
     @ExperimentalFoundationApi

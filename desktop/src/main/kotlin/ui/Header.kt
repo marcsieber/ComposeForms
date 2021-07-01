@@ -45,6 +45,11 @@ import ui.theme.ColorsUtil.Companion.get
 import ui.theme.DropdownColors
 import ui.theme.FormColors
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
+
 @Composable
 fun header(model : IModel){
     with(model){

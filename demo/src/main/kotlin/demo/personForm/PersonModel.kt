@@ -32,6 +32,10 @@ import model.util.presentationElements.FieldSize
 import model.util.presentationElements.Group
 import model.validators.semanticValidators.*
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class PersonModel : BaseModel(smartphoneOption = true, iLabel = PersonLabels.SIZE) {
 
 

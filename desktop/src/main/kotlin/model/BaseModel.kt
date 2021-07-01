@@ -39,6 +39,10 @@ import java.util.*
 import java.net.NetworkInterface
 
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private val smartphoneOption: Boolean = false) : IModel {
 
     //******************************************************************************************************

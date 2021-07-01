@@ -32,6 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ch.model.Model
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 
 
 @Composable

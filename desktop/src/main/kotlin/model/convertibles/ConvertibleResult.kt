@@ -22,4 +22,8 @@
 
 package model.convertibles
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class ConvertibleResult(val isConvertible : Boolean, val convertedValueAsText : String, val convertUserView : Boolean, val convertImmediately : Boolean)

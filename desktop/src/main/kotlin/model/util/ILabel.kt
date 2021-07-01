@@ -24,6 +24,10 @@ package model.util
 
 import java.lang.reflect.Method
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 interface ILabel{
 
     /**

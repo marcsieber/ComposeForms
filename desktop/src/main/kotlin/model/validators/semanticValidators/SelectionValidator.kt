@@ -25,6 +25,10 @@ package model.validators.semanticValidators
 import model.util.attribute.SelectionAttribute
 import model.validators.ValidationResult
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class SelectionValidator(   private var minNumberOfSelections  : Int = 0,
                             private var maxNumberOfSelections  : Int = Int.MAX_VALUE,
                             validationMessage                  : String = "")

@@ -22,6 +22,10 @@
 
 package model.util.presentationElements
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 enum class FieldSize {
     SMALL,
     NORMAL

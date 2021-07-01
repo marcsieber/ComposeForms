@@ -26,6 +26,10 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 internal class RequiredValidatorTest {
 
     @Test

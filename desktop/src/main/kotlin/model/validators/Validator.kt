@@ -24,6 +24,10 @@ package model.validators
 
 import model.util.attribute.Attribute
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 abstract class Validator<T>(var validationMessage : String) {
 
     protected val attributes : MutableList<Attribute<*, *, *>> = mutableListOf()

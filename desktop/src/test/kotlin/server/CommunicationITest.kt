@@ -36,6 +36,10 @@ import model.validators.semanticValidators.StringValidator
 import org.junit.jupiter.api.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class CommunicationITest {
 
     enum class testLabels(val test: String): ILabel{

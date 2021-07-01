@@ -26,6 +26,10 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 internal class FloatingPointValidatorTest{
 
     @Test

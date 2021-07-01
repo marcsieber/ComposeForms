@@ -24,6 +24,10 @@ package model.validators.semanticValidators
 
 import model.validators.ValidationResult
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class StringValidator(private var minLength         : Int = 0,
                       private var maxLength         : Int = 1_000_000,
                       validationMessage             : String = "")

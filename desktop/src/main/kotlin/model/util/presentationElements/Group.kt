@@ -25,6 +25,10 @@ package model.util.presentationElements
 import model.IModel
 import model.util.attribute.Attribute
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class Group(val model : IModel, val title : String, vararg fields : Field) {
 
     private val groupFields = fields.map { it }.toMutableList()

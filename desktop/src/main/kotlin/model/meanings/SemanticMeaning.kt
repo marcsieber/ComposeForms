@@ -22,6 +22,10 @@
 
 package model.meanings
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 interface SemanticMeaning<T> {
 
     /**
