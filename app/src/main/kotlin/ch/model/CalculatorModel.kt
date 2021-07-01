@@ -38,6 +38,14 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
     val operatorsBlanked: List<String> = operators.map{ " $it " }
     val validRegex          = Regex("^[0123456789\\.\\*\\-\\+\\/ ]*$")
 
+    val isFloatingPoint = attrType === AttributeType.DOUBLE || attrType === AttributeType.FLOAT
+
+    var pointIsActive = mutableStateOf( false )
+
+    init{
+        recalculatePointIsActive()
+    }
+
     /**
      * This method updates the CalculationString with a new number and makes sure that the new result is calculated.
      * @param num: Int
@@ -47,6 +55,26 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
             calculationString.value += num.toString()
             calculationStringToNumber()
         }
+    }
+
+    /**
+     * Function for adding special characters and special behavior
+     * @param char: Character representing a special case
+     */
+    fun addSpecialCharacters(char: Char){
+        if(char == '.'){
+            if(pointIsActive.value) {
+                calculationString.value += char
+                recalculatePointIsActive()
+            }
+        }
+    }
+
+    /**
+     * Recalculating point is active on the attribute type and the number
+     */
+    private fun recalculatePointIsActive(){
+        pointIsActive.value = isFloatingPoint && !calculationString.value.contains(".")
     }
 
     /**
@@ -85,6 +113,8 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
             model.text = calculationString.value
             model.publish()
         }
+
+        recalculatePointIsActive()
     }
 
     /**
