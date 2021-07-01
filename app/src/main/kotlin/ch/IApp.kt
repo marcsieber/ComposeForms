@@ -51,5 +51,6 @@ interface IApp {
      * Called when UI not in foreground anymore
      */
     fun onStop(activity: AppCompatActivity) {
+        //Default implementation does nothing on stop
     }
 }

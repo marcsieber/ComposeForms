@@ -52,54 +52,79 @@ import ui.theme.FormColors
  * @author Steve Vogel
  */
 
+val searchString                        = mutableStateOf("")
+var filteredListOfPossibleSelections    = mutableStateOf(possibleSelections.toList())
 
 
 @Composable
 fun SelectionContent(model: Model) {
-    with(model){
-        Column(modifier = Modifier.fillMaxSize().padding(top = 0.dp, bottom = 12.dp)) {
-            //Searchfield
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top){
-                OutlinedTextField(
-                    searchString.value,
-                    onValueChange = { searchString.value = it; filterPossibleSelections(it) },
-                    label = {Icon(Icons.Filled.Search, "Search")},
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = ColorsUtil.get(FormColors.BACKGROUND_COLOR),
-                        focusedLabelColor = ColorsUtil.get(FormColors.BACKGROUND_COLOR),
-                        cursorColor = Color.Black
-                    )
-                )
-            }
+    Column(modifier = Modifier.fillMaxSize().padding(top = 0.dp, bottom = 12.dp)) {
+        SearchField()
+        PossibleSelections(model)
+    }
+}
 
-            //Possible Selections
-            Row(modifier = Modifier.fillMaxSize().padding(bottom = 12.dp, top = 12.dp), verticalAlignment = Alignment.Top){
-                LazyColumn(verticalArrangement = Arrangement.Top, modifier = Modifier.fillMaxHeight().padding(0.dp ,12.dp, 0.dp, 48.dp)) {
-                    filterPossibleSelections(searchString.value)
-                    items(filteredListOfPossibleSelections.value){
-                        Row(modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxSize()
-                            .requiredHeight(50.dp)
-                            .clickable{ if(elementIsSelected(it)) removeUserSelection(it) else addUserSelection(it); publish() }
-                            .background(if(elementIsSelected(it)) ColorsUtil.get(DropdownColors.BACKGROUND_ELEMENT_SEL) else ColorsUtil.get(
-                                DropdownColors.BACKGROUND_ELEMENT_NOT_SEL)),
-                            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
-                            Text(it,
-                                fontWeight = if(elementIsSelected(it))FontWeight.Bold else FontWeight.Normal,
-                                color = if(elementIsSelected(it)) ColorsUtil.get(DropdownColors.TEXT_ELEMENT_SEL) else ColorsUtil.get(DropdownColors.TEXT_ELEMENT_NOT_SEL)
-                            )
-                        }
-                    }
-                }
+@Composable
+private fun SearchField() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.Top
+    ) {
+        OutlinedTextField(
+            searchString.value,
+            onValueChange = { searchString.value = it; filterPossibleSelections(it) },
+            label = { Icon(Icons.Filled.Search, "Search") },
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = ColorsUtil.get(FormColors.BACKGROUND_COLOR),
+                focusedLabelColor = ColorsUtil.get(FormColors.BACKGROUND_COLOR),
+                cursorColor = Color.Black
+            )
+        )
+    }
+}
+
+@Composable
+private fun PossibleSelections(model: Model) {
+    Row(modifier = Modifier.fillMaxSize().padding(bottom = 12.dp, top = 12.dp), verticalAlignment = Alignment.Top) {
+        LazyColumn(
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.fillMaxHeight().padding(0.dp, 12.dp, 0.dp, 48.dp)
+        ) {
+            filterPossibleSelections(searchString.value)
+            items(filteredListOfPossibleSelections.value) {
+                SelectionItem(model, it)
             }
         }
     }
 }
 
-val searchString                        = mutableStateOf("")
-var filteredListOfPossibleSelections    = mutableStateOf(possibleSelections.toList())
+@Composable
+private fun SelectionItem(model: Model, it: String) {
+    with(model) {
+        val isSelected = elementIsSelected(it)
+        val fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+        val color = if (isSelected) ColorsUtil.get(DropdownColors.TEXT_ELEMENT_SEL)
+                        else ColorsUtil.get(DropdownColors.TEXT_ELEMENT_NOT_SEL)
+        val backgroundColor = if (isSelected) ColorsUtil.get(DropdownColors.BACKGROUND_ELEMENT_SEL)
+                                else ColorsUtil.get(DropdownColors.BACKGROUND_ELEMENT_NOT_SEL)
+
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxSize()
+            .requiredHeight(50.dp)
+            .clickable { if (isSelected) removeUserSelection(it) else addUserSelection(it); publish() }
+            .background(backgroundColor),
+            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = it,
+                    fontWeight = fontWeight,
+                    color = color
+                )
+        }
+    }
+}
 
 fun filterPossibleSelections(searchString: String){
     val interimList = possibleSelections.filter{it.contains(searchString, true)}.toMutableStateList()
