@@ -58,12 +58,23 @@ class PersonModel : BaseModel(smartphoneOption = true, iLabel = PersonLabels.SIZ
         validators = listOf(NumberValidator(lowerBound = 0, upperBound = 130)))
 
     val gender      = SelectionAttribute(this, PersonLabels.GENDER,
-        possibleSelections = setOf<String>("Man", "Woman", "Other"))
+        possibleSelections = setOf("Man", "Woman", "Other"),
+        validators = listOf(
+            SelectionValidator(0,1,"Only 1 selection possible.")
+        ))
 
     val size        = DoubleAttribute(this, PersonLabels.SIZE,
+        decimalPlaces = 2,
         meaning = CustomMeaning("m"),
-        validators = listOf(FloatingPointValidator(2, "Too many decimal places."), NumberValidator(lowerBound = 0.0, upperBound = 3.0)),
-        convertibles = listOf(CustomConvertible(replaceRegex = listOf(ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")), convertUserView = false, convertImmediately = true)))
+        validators = listOf(
+            FloatingPointValidator(2, "Too many decimal places."),
+            NumberValidator(lowerBound = 0.0, upperBound = 3.0)
+        ),
+        convertibles = listOf(CustomConvertible(
+            replaceRegex = listOf(ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")),
+            convertUserView = false,
+            convertImmediately = true
+        )))
 
     val occupation  = StringAttribute(this, PersonLabels.OCCUPATION)
 
