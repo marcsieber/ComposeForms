@@ -27,6 +27,10 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import ch.model.Model
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class MainActivity : AppCompatActivity() {
     private lateinit var app: IApp
 

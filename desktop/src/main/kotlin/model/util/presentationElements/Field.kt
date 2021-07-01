@@ -24,6 +24,10 @@ package model.util.presentationElements
 
 import model.util.attribute.Attribute
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class Field(private val attribute : Attribute<*,*,*>, private val fieldSize : FieldSize = FieldSize.NORMAL) {
 
     fun getAttribute(): Attribute<*, *, *> {

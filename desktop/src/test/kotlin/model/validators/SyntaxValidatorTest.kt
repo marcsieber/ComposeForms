@@ -25,6 +25,10 @@ package model.validators
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 internal class SyntaxValidatorTest{
 
     @Test

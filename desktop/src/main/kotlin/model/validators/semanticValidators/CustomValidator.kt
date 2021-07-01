@@ -24,6 +24,10 @@ package model.validators.semanticValidators
 
 import model.validators.ValidationResult
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 open class CustomValidator<T>(  private var validationFunction  : (T?) -> Boolean,
                                 private var rightTrackFunction  : ((T?) -> Boolean) ? = null,
                                 validationMessage               : String)

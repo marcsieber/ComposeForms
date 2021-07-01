@@ -24,6 +24,10 @@ package model.validators.semanticValidators
 
 import model.validators.ValidationResult
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class FloatingPointValidator<T>(    private var decimalPlaces   : Int = 10,
                                     validationMessage           : String = ""
 

@@ -32,6 +32,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 internal class DoubleAttributeTest : NumberAttributeTest<Double>() {
 
     override fun provideAttribute(model: BaseModel, value: Double?): Attribute<*, Any,*> {

@@ -25,6 +25,11 @@ package ui.theme
 import androidx.compose.ui.graphics.Color
 import ui.theme.ColorsUtil.Companion.getColor
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
+
 enum class FormColors(val color : Color) {
 
     ERROR(getColor("9F2C13")),

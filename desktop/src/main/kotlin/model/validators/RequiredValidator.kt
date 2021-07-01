@@ -22,6 +22,10 @@
 
 package model.validators
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class RequiredValidator<T>(private var isRequired           : Boolean = false,
                            validationMessage                : String = "")
     : Validator<T>(validationMessage = validationMessage) {

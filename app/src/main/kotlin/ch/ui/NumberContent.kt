@@ -41,6 +41,12 @@ import ui.theme.ColorsUtil
 import ui.theme.DropdownColors
 import ui.theme.FormColors
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
+
+
 @ExperimentalFoundationApi
 @Composable
 fun NumberContent(model: Model){

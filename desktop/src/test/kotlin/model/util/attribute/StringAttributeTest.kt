@@ -30,6 +30,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 internal class StringAttributeTest: AttributeTest<String>() {
 
     override fun provideAttribute(model: BaseModel, value: String?): Attribute<*, Any, *> {

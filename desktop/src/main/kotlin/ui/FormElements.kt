@@ -52,6 +52,11 @@ import ui.theme.ColorsUtil.Companion.get
 import ui.theme.DropdownColors
 import ui.theme.FormColors
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
+
 @Composable
 fun GroupTitle(title : String){
     Row(modifier = Modifier.fillMaxWidth().padding(start = 6.dp, end = 6.dp, top = 12.dp)) {

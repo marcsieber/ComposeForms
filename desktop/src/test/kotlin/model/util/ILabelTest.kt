@@ -25,6 +25,10 @@ package model.util
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class ILabelTest {
 
     enum class Testenum(val x : String, val y : String) : ILabel{

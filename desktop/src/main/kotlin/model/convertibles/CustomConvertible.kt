@@ -24,6 +24,10 @@ package model.convertibles
 
 import java.util.regex.Pattern
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class CustomConvertible(private var replaceRegex : List<ReplacementPair>, private var convertUserView : Boolean = true, private var convertImmediately : Boolean = false){
 
     /**

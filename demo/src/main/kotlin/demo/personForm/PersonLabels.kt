@@ -24,6 +24,10 @@ package demo.personForm
 
 import model.util.ILabel
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 enum class PersonLabels(val deutsch : String, val english : String) : ILabel{
     //Personal Information
     ID("ID", "ID"),

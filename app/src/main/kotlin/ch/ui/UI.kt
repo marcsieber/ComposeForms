@@ -45,6 +45,10 @@ import ui.theme.ColorsUtil
 import ui.theme.FormColors
 import ui.theme.ColorsUtil.Companion.get
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 
 @ExperimentalFoundationApi
 @Composable

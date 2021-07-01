@@ -24,6 +24,10 @@ package model.validators.semanticValidators
 
 import model.validators.Validator
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 abstract class SemanticValidator<T>(validationMessage : String) : Validator<T>(validationMessage = validationMessage) {
 
     protected var validationMessageSetByDev : Boolean = !validationMessage.equals("")

@@ -47,6 +47,13 @@ import ui.theme.ColorsUtil
 import ui.theme.DropdownColors
 import ui.theme.FormColors
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
+
+
+
 @Composable
 fun SelectionContent(model: Model) {
     with(model){

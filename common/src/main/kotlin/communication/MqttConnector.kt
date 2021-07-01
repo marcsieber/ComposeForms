@@ -41,7 +41,10 @@ import java.util.*
  * Ein generischer Mqtt-Client (gut um Messages zu kontrollieren)
  * http://www.hivemq.com/demos/websocket-client/
  *
+ * @author Louisa Reinger
+ * @author Steve Vogel
  */
+
 class MqttConnector (val mqttBroker: String, val maintopic: String,
                      val qos: MqttQos = MqttQos.EXACTLY_ONCE){
 

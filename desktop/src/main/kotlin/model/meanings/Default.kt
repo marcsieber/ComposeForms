@@ -22,6 +22,10 @@
 
 package model.meanings
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class Default<T> : SemanticMeaning<T> {
     override fun addMeaning(valAsText: String): String {
         return ""

@@ -32,6 +32,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 abstract class AttributeTest<T : Any> {
 
     var model = object: BaseModel() {}

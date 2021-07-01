@@ -33,6 +33,11 @@ import androidx.compose.ui.unit.dp
 import ui.theme.ColorsUtil
 import ui.theme.FormColors
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
+
 @Composable
 fun NoGroupsMessage(){
     Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){

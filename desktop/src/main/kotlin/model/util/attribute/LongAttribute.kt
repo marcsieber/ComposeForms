@@ -29,6 +29,10 @@ import model.meanings.SemanticMeaning
 import model.util.ILabel
 import model.validators.semanticValidators.SemanticValidator
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class LongAttribute<L>(//required parameters
     model                   : IModel,
     label                   : L,

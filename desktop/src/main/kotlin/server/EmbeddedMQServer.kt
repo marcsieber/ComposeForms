@@ -26,6 +26,10 @@ import com.hivemq.embedded.EmbeddedHiveMQ
 import com.hivemq.embedded.EmbeddedHiveMQBuilder
 
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 object embeddedMqtt {
 
     private val hiveMQ: EmbeddedHiveMQ?

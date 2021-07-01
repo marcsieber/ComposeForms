@@ -30,6 +30,10 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 object Model {
 
 //    var mqttBroker    = "broker.hivemq.com"

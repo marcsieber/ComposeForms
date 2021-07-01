@@ -24,6 +24,10 @@ package model.validators.semanticValidators
 
 import model.validators.ValidationResult
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class RegexValidator<T>(private var regexPattern          : String,
                         private var rightTrackRegexPattern: String? = null,
                         validationMessage                 : String = "")

@@ -25,6 +25,10 @@ package model.validators.semanticValidators
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 internal class StringValidatorTest{
 
     @Test

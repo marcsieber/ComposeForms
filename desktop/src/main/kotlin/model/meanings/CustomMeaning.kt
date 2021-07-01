@@ -22,6 +22,10 @@
 
 package model.meanings
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 class CustomMeaning<T>(val customText: String) : SemanticMeaning<T> {
 
     override fun addMeaning(valAsText: String): String {

@@ -22,6 +22,10 @@
 
 package communication
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 
 import kotlinx.serialization.Serializable
 

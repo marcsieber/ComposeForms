@@ -22,6 +22,10 @@
 
 package model.util
 
+/**
+ * @author Louisa Reinger
+ * @author Steve Vogel
+ */
 enum class Labels(val test: String, val eng: String): ILabel {
     TEST("test", "testEng");
 
