@@ -52,14 +52,14 @@ import ui.theme.FormColors
 fun NumberContent(model: Model){
     with(model){
 
-        val floatingPointNumber = type === AttributeType.DOUBLE || type === AttributeType.FLOAT
+
 
         /**
          * A calcItem defines the information that is needed for a calculator-button.
          * A calcItem is made up of a Triple that is defined as following:
          * Triple(text: String, onClick : () -> Unit, enabled : Boolean)
          */
-        var calcItems = listOf(
+        val calcItems = listOf<Triple<String, () -> Unit, Boolean>>(
             Triple("7", {calcModel?.newNumberForCalc(7)}, true),
             Triple("8", {calcModel?.newNumberForCalc(8)}, true),
             Triple("9", {calcModel?.newNumberForCalc(9)}, true),
@@ -72,7 +72,7 @@ fun NumberContent(model: Model){
             Triple("2", {calcModel?.newNumberForCalc(2)}, true),
             Triple("3", {calcModel?.newNumberForCalc(3)}, true),
             Triple("-", {calcModel?.newOperatorForCalc("-")}, true),
-            Triple(".", {}, if(floatingPointNumber) false else false), //TODO: Implement functionality for "." and set first false to true
+            Triple(".", {calcModel?.addSpecialCharacters('.')}, if(calcModel != null) calcModel!!.pointIsActive.value else false),
             Triple("0", {calcModel?.newNumberForCalc(0)}, true),
             Triple("CE", {calcModel?.deleteLastCharacter()}, true),
             Triple("+", {calcModel?.newOperatorForCalc("+")}, true),
