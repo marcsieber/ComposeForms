@@ -40,12 +40,4 @@ enum class PersonLabels(val deutsch : String, val english : String) : ILabel{
     PLACE("Ort", "Town/City"),
     STREET("Strasse", "Street"),
     HOUSENUMBER("Hausnummer","House Number");
-
-
-    // Needed to get Languages
-    companion object {
-        fun getLanguages(): List<String> {
-            return (values()[0] as ILabel).getLanguagesDynamic()
-        }
-    }
 }
