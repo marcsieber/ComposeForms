@@ -62,11 +62,9 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * @param char: Character representing a special case
      */
     fun addSpecialCharacters(char: Char){
-        if(char == '.'){
-            if(pointIsActive.value) {
-                calculationString.value += char
-                recalculatePointIsActive()
-            }
+        if(char == '.' && pointIsActive.value){
+            calculationString.value += char
+            recalculatePointIsActive()
         }
     }
 
