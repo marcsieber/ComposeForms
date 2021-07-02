@@ -20,10 +20,13 @@
  *
  */
 
-package model.convertibles
+package convertibles
+
+import kotlinx.serialization.Serializable
 
 /**
  * @author Louisa Reinger
  * @author Steve Vogel
  */
+@Serializable
 class ReplacementPair(val convertibleRegex : String, val convertIntoRegex : String)

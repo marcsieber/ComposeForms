@@ -20,7 +20,7 @@
  *
  */
 
-package model.convertibles
+package convertibles
 
 /**
  * @author Louisa Reinger

@@ -23,8 +23,8 @@
 package model.util.attribute
 
 import model.BaseModel
-import model.convertibles.CustomConvertible
-import model.convertibles.ReplacementPair
+import convertibles.CustomConvertible
+import convertibles.ReplacementPair
 import model.util.Labels
 
 import org.junit.jupiter.api.Test

@@ -20,19 +20,21 @@
  *
  */
 
-package model.convertibles
+package convertibles
 
+import kotlinx.serialization.Serializable
 import java.util.regex.Pattern
 
 /**
  * @author Louisa Reinger
  * @author Steve Vogel
  */
-class CustomConvertible(private var replaceRegex : List<ReplacementPair>, private var convertUserView : Boolean = true, private var convertImmediately : Boolean = false){
+@Serializable
+class CustomConvertible(var replaceRegex : List<ReplacementPair>, var convertUserView : Boolean = true, var convertImmediately : Boolean = false){
 
     /**
      * Converts the string. Therefore replaces the string with the regex pattern given in the constructor
-     * @param String: value that will be convertet
+     * @param String: value that will be converted
      * @return ConvertibleResult
      */
     fun convertUserInput(valueAsText : String): ConvertibleResult {
@@ -51,7 +53,11 @@ class CustomConvertible(private var replaceRegex : List<ReplacementPair>, privat
     //******************************************************************************************************
     //Getter
 
-    fun getConvertUserView() : Boolean{
-        return convertUserView
-    }
+//    fun getConvertUserView() : Boolean{
+//        return convertUserView
+//    }
+
+//    fun getReplaceRegex(): List<ReplacementPair>{
+//        return replaceRegex
+//    }
 }

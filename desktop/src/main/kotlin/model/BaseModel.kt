@@ -302,7 +302,7 @@ abstract class BaseModel(private val iLabel: ILabel = object : ILabel{}, private
      * @param attr: Attribute that has to be published
      */
     override fun attributeChanged(attr: Attribute<*, *, *>) {
-        val dtoAttr = DTOAttribute(attr.getId(), attr.getLabel(), getAttributeType(attr), attr.getPossibleSelections())
+        val dtoAttr = DTOAttribute(attr.getId(), attr.getLabel(), getAttributeType(attr), attr.getPossibleSelections(), attr.convertibles)
         val string = Json.encodeToString(dtoAttr)
         mqttConnectorAttribute.publish(message = string, subtopic = "attribute", onPublished = { println("Sent Attr Changed:" + string) })
     }

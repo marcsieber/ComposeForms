@@ -24,8 +24,7 @@ package model.util.attribute
 
 import androidx.compose.runtime.mutableStateOf
 import model.IModel
-import model.convertibles.ConvertibleResult
-import model.convertibles.CustomConvertible
+import convertibles.*
 import model.meanings.SemanticMeaning
 import model.util.ILabel
 import util.Utilities

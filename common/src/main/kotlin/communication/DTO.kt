@@ -27,11 +27,12 @@ package communication
  * @author Steve Vogel
  */
 
+import convertibles.CustomConvertible
 import kotlinx.serialization.Serializable
 
 @Serializable
 class DTOAttribute(val id: Int, val label: String, val attrType: AttributeType = AttributeType.OTHER,
-                   val possibleSelections: Set<String> = emptySet())
+                   val possibleSelections: Set<String> = emptySet(), val convertibles: List<CustomConvertible>)
 
 @Serializable
 class DTOText(val id: Int, val text: String)

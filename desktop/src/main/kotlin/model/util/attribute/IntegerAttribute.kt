@@ -23,7 +23,7 @@
 package model.util.attribute
 
 import model.IModel
-import model.convertibles.CustomConvertible
+import convertibles.CustomConvertible
 import model.meanings.Default
 import model.meanings.SemanticMeaning
 import model.util.ILabel

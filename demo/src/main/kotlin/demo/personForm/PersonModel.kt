@@ -24,8 +24,7 @@ package demo.personForm
 
 import model.BaseModel
 import model.util.attribute.*
-import model.convertibles.CustomConvertible
-import model.convertibles.ReplacementPair
+import convertibles.*
 import model.meanings.CustomMeaning
 import model.util.presentationElements.Field
 import model.util.presentationElements.FieldSize

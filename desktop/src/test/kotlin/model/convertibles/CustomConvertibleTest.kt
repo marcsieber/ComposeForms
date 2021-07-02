@@ -22,6 +22,8 @@
 
 package model.convertibles
 
+import convertibles.CustomConvertible
+import convertibles.ReplacementPair
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
