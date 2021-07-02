@@ -60,22 +60,22 @@ fun NumberContent(model: Model){
          * Triple(text: String, onClick : () -> Unit, enabled : Boolean)
          */
         val calcItems = listOf<Triple<String, () -> Unit, Boolean>>(
-            Triple("7", {calcModel?.newNumberForCalc(7)}, true),
-            Triple("8", {calcModel?.newNumberForCalc(8)}, true),
-            Triple("9", {calcModel?.newNumberForCalc(9)}, true),
-            Triple("/", {calcModel?.newOperatorForCalc("/")}, true),
-            Triple("4", {calcModel?.newNumberForCalc(4)}, true),
-            Triple("5", {calcModel?.newNumberForCalc(5)}, true),
-            Triple("6", {calcModel?.newNumberForCalc(6)}, true),
-            Triple("*", {calcModel?.newOperatorForCalc("*")}, true),
-            Triple("1", {calcModel?.newNumberForCalc(1)}, true),
-            Triple("2", {calcModel?.newNumberForCalc(2)}, true),
-            Triple("3", {calcModel?.newNumberForCalc(3)}, true),
-            Triple("-", {calcModel?.newOperatorForCalc("-")}, true),
-            Triple(".", {calcModel?.addSpecialCharacters('.')}, if(calcModel != null) calcModel!!.pointIsActive.value else false),
-            Triple("0", {calcModel?.newNumberForCalc(0)}, true),
-            Triple("CE", {calcModel?.deleteLastCharacter()}, true),
-            Triple("+", {calcModel?.newOperatorForCalc("+")}, true),
+            Triple("7",  {  calcModel?.newNumberForCalc(7)   }, true),
+            Triple("8",  {  calcModel?.newNumberForCalc(8)   }, true),
+            Triple("9",  {  calcModel?.newNumberForCalc(9)   }, true),
+            Triple("/",  {  calcModel?.newOperatorForCalc("/")}, true),
+            Triple("4",  {  calcModel?.newNumberForCalc(4)   }, true),
+            Triple("5",  {  calcModel?.newNumberForCalc(5)   }, true),
+            Triple("6",  {  calcModel?.newNumberForCalc(6)   }, true),
+            Triple("*",  {  calcModel?.newOperatorForCalc("*")}, true),
+            Triple("1",  {  calcModel?.newNumberForCalc(1)   }, true),
+            Triple("2",  {  calcModel?.newNumberForCalc(2)   }, true),
+            Triple("3",  {  calcModel?.newNumberForCalc(3)   }, true),
+            Triple("-",  {  calcModel?.newOperatorForCalc("-") }, true),
+            Triple(".",  {  calcModel?.addSpecialCharacters('.')    }, calcModel!!.pointIsActive.value),
+            Triple("0",  {  calcModel?.newNumberForCalc(0)   }, true),
+            Triple("CE", {  calcModel?.deleteLastCharacter()}, true),
+            Triple("+",  {  calcModel?.newOperatorForCalc("+")}, true),
         )
 
 
