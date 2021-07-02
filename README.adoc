@@ -48,7 +48,7 @@ init {
 Jetzt können hier im Model alle benötigten Attribute definiert werden.
 
 
-
+_Momentan ist für den Formular-Titel noch keine Mehrsprachigkeit-Möglichkeit verfügbar. Dies wird sich in Zukunft ändern._
 
 
 == Attribute
@@ -145,16 +145,19 @@ Bestimmte Attribute besitzen weitere Parameter:
 
 == Gruppen
 
-Nachdem alle Attribute erstellt wurden, können diese nun Gruppen zugeordnet werden. Nur Attribute, welche mind. einer Gruppe zugewiesen sind werden im Formular angezeigt.
+Nachdem alle Attribute erstellt wurden, können diese nun Gruppen zugeordnet werden. Nur Attribute, welche mindestens einer Gruppe zugewiesen sind werden im Formular angezeigt.
+
+Wichtig hierbei ist, dass alle Attribute die der Gruppe zugewiesen werden, dasselbe Model haben wie die Gruppe.
 
 Beispiel: Erstellung einer Gruppe im Model:
 
 [source, kotlin]
-val group1 = Group(this, "Group-Name",
-Field(s, FieldSize.SMALL),
-Field(d1, FieldSize.SMALL),
-Field(d2),
-Field(selectionValue))
+val group2 = Group(model = this, title = "Adress",
+        Field(postCode),
+        Field(place),
+        Field(street),
+        Field(houseNumber)
+    )
 
 Eine Gruppe besitzt folgende Parameter:
 
@@ -188,7 +191,7 @@ Es wird eine neue Kotlin-Klasse erstellt, in folgendem Beispiel _Main.kt_.
 [source, kotlin]
 @ExperimentalFoundationApi
 fun main() = Window() {
-        val model = remember { UserDefinedModel() }
+        val model = remember { PersonModel() }
         Form().of(model)
 }
 
@@ -211,6 +214,20 @@ Beim Window bieten sich folgende Parameter an, um das Window optimal anzuzeigen:
 
 |===
 
+== Applikation starten
+
+Falls das Smartphone verwendet werden soll, ist es wichtig, dass zuerst die Desktop-Appliaktion gestartet wird und erst danach das Smartphone, da sonst keine Verbindung zwischen den beiden Applikationen hergestellt werden kann.
+
+* Starterklasse starten
+
+image::startDesktopApp.png[]
+
+* Smartphone-App auf einem Android-Device (oder dem Emulator) installieren und starten
+
+image::Smartphone-App.png[]
+
+=== Smartphone über QR-Code verbinden
+Wenn sich das Smartphone via QR-Code (über die Desktop-Applikation) verbinden soll, muss die App bereits auf dem Smartphone installiert sein.
 
 == UI modifizieren (optional)
 
@@ -358,7 +375,7 @@ Starte dann die Applikation erneut.
 
 Im Folgenden eine detaillierte Erklärung zur richtigen Erstellung der Attribut-Parameter
 
-==== [[anchor-model]] model _(mandatory)_
+==== [[anchor-model]] model _(erforderlich)_
 
 Das Model der Gruppe, in welcher sich das Attribut befindet, muss dasselbe sein, wie das Model des Attributs. (Falls dies nicht der Fall ist wird eine Exception geworfen.)
 
@@ -371,24 +388,24 @@ Sowohl beim Attribut als auch bei der Gruppe wird _this_ als Model übergeben. +
 *Beispiel 2 - Attribute und Gruppen in mehreren Klassen verteilt* +
 Zusätzlich zu den Attributen aus Beispiel 1, soll ein weiteres Attribut auf dem Formular erscheinen. Dieses wird in diesem Beispiel direkt in der Starterklasse definiert und einer eigenen Gruppe übergeben. Damit es auf demselben Formular erscheint muss dasselbe Model als Parameter übergeben werden.
 
-image::example_parameter_model.png[]
+image::example_parameter_model.png[width = 700]
 
 Nun erscheint in dem Formular die zusätzliche Gruppe mit dem Attribut unter den bereits im PersonModel definierten:
 
 image::example_result_parameter_model.png[]
 
-==== [[anchor-label]] label _(mandatory)_
+==== [[anchor-label]] label _(erforderlich)_
 
 Um Mehrsprachigkeit zu gewährleisten müssen die Labeltexte in einem Enum angegeben werden.
 Das Enum muss das Interface _ILabel_ implementieren und alle gewünschten Sprachen als Parameter mit Typ String definieren. +
 Im Enum können nun Code-Variablen festgelegt werden, in welchen die Übersetzungen der Labeltexte definiert werden.
 
-image::label-code.png[]
+image::label-code.png[width = 800]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonLabels#_ )
 
 Bei den Attributen muss dann nur noch die richtige Code-Variable als Label angegeben werden.
 
-image::label_in_model.png[]
+image::label_in_model.png[width = 700]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 
@@ -396,7 +413,7 @@ image::label_in_model.png[]
 Wenn ein Attribut beim ersten Öffnen des Formulars nicht leer sein soll, kann über den Parameter _value_ der Wert gesetzt werden. +
 
 
-image::value-example.png[]
+image::value-example.png[width = 700]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Der Wert muss vom gleichen Typ sein wie das Attribut! Bei keiner Angabe wird der Default-Wert _null_ gesetzt.
@@ -407,7 +424,7 @@ Der Wert muss vom gleichen Typ sein wie das Attribut! Bei keiner Angabe wird der
 
 Wenn ein Atribut ein Pflichtfeld sein soll (also der User also gezwungen werden soll eine Eingabe zu tätigen und das Feld nicht leer zu lassen), kann beim Parameter required _true_ übergeben werden.
 
-image::required-example.png[]
+image::required-example.png[width = 700]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 
@@ -419,7 +436,7 @@ Bei keiner Angabe wird der Default-Wert _false_ gesetzt.
 
 Wenn ein Attribut für den User nur lesbar aber nicht modifizierbar sein soll, kann beim Parameter readonly _true_ übergeben werden.
 
-image::value-example.png[]
+image::value-example.png[width = 700]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Bei keiner Angabe wird der Default-Wert _false_ gesetzt.
@@ -434,11 +451,11 @@ Da mehrere onChangeListener übergeben werden können, muss immer eine Liste üb
 *Einen onChangeListener definieren:*
 
 [fuchsia]#Attribut, dessen Wert observiert werden soll# *addOnChangeListener {* +
-[red]#Lambda-Parameter für dieses Attribut# *,* [purple]#Lambda-Parameter für zu observierenden Wert# *->* _Was wann passieren soll_ *}*
+[lime]#Lambda-Parameter für dieses Attribut# *,* [purple]#Lambda-Parameter für zu observierenden Wert# *->* _Was wann passieren soll_ *}*
 
 *Beispiel:*
 
-image::onChangeListener.png[]
+image::onChangeListener.png[width = 850]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Sobald beim Attribut Beruf (occupation) etwas eingegeben wurde (Wert != null), soll die Steuernummer (taxnumber) zu einem Pflichtfeld werden.
@@ -482,17 +499,17 @@ Bei keiner Angabe wird der Default-Wert _emptyList()_ gesetzt.
 Bei Attributen die Kommazahlen als Wert speichern, kann zusätzlich angegeben werden wie viele Nachkommastellen maximal erwünscht sind.
 Sobald der User mehr Kommastellen eingibt wird der Input invalid.
 
-image::decimalPlaces.png[]
+image::decimalPlaces.png[width = 600]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Bei keiner Angabe wird der Default-Wert _8_ gesetzt.
 
-==== [[anchor-possibleSelections]] possibleSelections _(mandatory)_
+==== [[anchor-possibleSelections]] possibleSelections _(erforderlich)_
 *Nur für Selection-Attribute*
 
 Beim Selection-Attribut müssen die Auswahlmöglichkeiten, die dem User zur Verfügung stehen über den Parameter _possibleSelections_, angegeben werden. Die Auswahlmöglichkeiten müssen als Strings in einem Set übergeben werden.
 
-image::possibleSelections.png[]
+image::possibleSelections.png[width = 900]
 
 _Momentan ist hier noch keine Mehrsprachigkeit-Möglichkeit verfügbar. Dies wird sich in Zukunft ändern._
 
@@ -500,15 +517,45 @@ _Momentan ist hier noch keine Mehrsprachigkeit-Möglichkeit verfügbar. Dies wir
 
 Im Folgenden eine detaillierte Erklärung zur richtigen Erstellung der Group-Parameter
 
-==== [[anchor-group-model]] model _(mandatory)_
+==== [[anchor-group-model]] model _(erforderlich)_
 
+Das Model der Gruppe muss dasselbe sein, wie das Model der Attribute, die sich in der Gruppe befinden (im Parameter <<anchor-fields, fields>>). Falls dies nicht der Fall ist wird eine Exception geworfen. +
+*Beispiele*: siehe Parameter <<anchor-model, model>> beim Attribut.
 
-==== [[anchor-group-title]] title _(mandatory)_
+image::groupModel.png[width = 500]
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
+==== [[anchor-group-title]] title _(erforderlich)_
+
+Es muss ein Gruppen-Titel als String angegeben werden.
+
+image::groupModel.png[width = 500]
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
+
+_Momentan ist hier noch keine Mehrsprachigkeit-Möglichkeit verfügbar. Dies wird sich in Zukunft ändern._
 
 ==== [[anchor-fields]] fields _(optional)_
 
+Über den _fields_-Parameter können die Attribute als Felder hinzugefügt werden.
 
+Bei der _Group_ und _Field_ sollte darauf geachtet werden, dass die richtigen Klassen importiert werden:
+
+image::importsGroup.png[width = 450]
+
+Die Felder können einfach durch Komma getrennt angegeben werden:
+
+image::defineGroupFields.png[width = 600]
+
+Ein Field hat die Parameter *attribute* _(erforderlich)_, bei dem ein Attribut übergeben werden kann und *fieldSize* _(optional)_, mit dem die Grösse des Inputfeldes bestimmt werden kann.
+
+Wenn dem Field keine _fieldSize_ übergeben wird, wird der Default-Wert _FieldSize.NORMAL_ gesetzt.
+
+Die Felder erscheinen in derselben Reihenfolge, wie sie der Gruppe übergeben werden. +
+FieldSize.SMALL ist halb so gross wie FieldSize.NORMAL:
+
+image::groupWithFieldSizes.png[]
+
+Wenn der Gruppe keine Felder übergeben werden wird im Formular nur der Gruppen-Titel angezeigt.
 
 == Konfiguration zur Laufzeit
 
