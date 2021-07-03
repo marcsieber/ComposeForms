@@ -51,15 +51,14 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * @param num: Int
      */
     fun newNumberForCalc(num: Int){
-        var calcStringTemp = calculationString.value
+        var calcStringTemp = getLastPartOfCalculation()
         val validationRes = model.convertibles.map{ it.convertUserInput(calculationString.value)}.filter{it.isConvertible}.map{it.convertedValueAsText}
         if(validationRes.size > 0){
             calcStringTemp = validationRes.get(0)
         }
         if(calcStringTemp.matches(validRegex)){
-            calcStringTemp += num.toString()
             calculationString.value += num.toString()
-            calculationStringToNumber(calcStringTemp)
+            calculationStringToNumber(calculationString.value)
         }
     }
 
@@ -91,7 +90,7 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * @param op: String
      */
     fun newOperatorForCalc(op: String){
-        var calcStringTemp = calculationString.value
+        var calcStringTemp = getLastPartOfCalculation()
         val validationRes = model.convertibles.map{ it.convertUserInput(calculationString.value)}.filter{it.isConvertible}.map{it.convertedValueAsText}
         if(validationRes.size > 0){
             calcStringTemp = validationRes.get(0)
@@ -101,7 +100,7 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
                 calculationString.value = calculationString.value.dropLast(3)
             }
             calculationString.value += " $op "
-            calculationStringToNumber(calculationString.value, false)
+//            calculationStringToNumber(calculationString.value, false)
         }
         recalculatePointIsActive()
     }
@@ -120,7 +119,7 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
             }
         }
 
-        if(calculationString.value.matches(validRegex)) { //valid characters -> calculate result
+        if(getLastPartOfCalculation().matches(validRegex)) { //valid characters -> calculate result
             calculationStringToNumber(calculationString.value)
         }else{ //invalid characters -> no calculation
             model.setValueAsString(calculationString.value)
@@ -162,9 +161,15 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
                 if (it in operators) {
                     operatorCache = it
                 } else {
-                    currentResult = calculate(currentResult.toDouble(), it.toDouble(), operatorCache)
+                    var temp = it
+                    val validationRes = model.convertibles.map{ it.convertUserInput(temp)}.filter{it.isConvertible}.map{it.convertedValueAsText}
+                    if(validationRes.size > 0){
+                        temp = validationRes.get(0)
+                    }
+                    currentResult = calculate(currentResult.toDouble(), temp.toDouble(), operatorCache)
                 }
             }
+            println("current Result: $currentResult")
             model.setValueAsString(currentResult.toString())
         }
 
@@ -198,7 +203,6 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * @param attrType: AttributeType
      */
     private fun toDataType(value : Double, attrType: AttributeType) : T{
-        println("A-T: " + attrType +", val: " + value)
         return when (attrType){
             AttributeType.SHORT     -> value.toInt().toShort() as T
             AttributeType.INTEGER   -> value.toInt() as T
@@ -211,7 +215,6 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
     }
 
     private fun getLastPartOfCalculation(): String{
-        println("last number of calculation")
         val list = calculationString.value.split(" ")
         for(element in list.asReversed()){
             if(!element.isEmpty()){

@@ -88,6 +88,7 @@ object Model {
             possibleSelections = dtoAttribute.possibleSelections
             convertibles = dtoAttribute.convertibles
             calcModel = returnCalculatorModelWithCorrectType()
+
         }, onConnected = {
             isConnected = true
             val dtoCommand = DTOCommand(Command.REQUEST)
@@ -131,7 +132,8 @@ object Model {
         if(validationRes.size > 0){
             valueAsString.value = validationRes.get(0)
         }
-
-        valueAsString.value = text
+        if(!valueAsString.value.equals(text)){
+            valueAsString.value = text
+        }
     }
 }
