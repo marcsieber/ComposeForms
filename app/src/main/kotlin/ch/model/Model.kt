@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import communication.*
+import convertibles.CustomConvertible
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -48,11 +49,12 @@ object Model {
 
     var id : Int = 0
 
-    var text by mutableStateOf("")
+    private var valueAsString = mutableStateOf("")
     var label by mutableStateOf("")
     var possibleSelections by mutableStateOf(emptySet<String>())
     var isValid by mutableStateOf(true)
     var isOnRightTrack by mutableStateOf(true)
+    var convertibles: List<CustomConvertible> = emptyList()
     var type by mutableStateOf(AttributeType.OTHER)
     var errorMessages = mutableStateOf<List<String>>(emptyList())
 
@@ -79,11 +81,12 @@ object Model {
         mqttConnectorCommand = MqttConnector(mqttBroker, mainTopic)
 
         mqttConnectorAttribute.connectAndSubscribe(subtopic = "attribute", onNewMessage = {
-            val dtoText = Json.decodeFromString<DTOAttribute>(it)
-            id = dtoText.id
-            label = dtoText.label
-            type = dtoText.attrType
-            possibleSelections = dtoText.possibleSelections
+            val dtoAttribute = Json.decodeFromString<DTOAttribute>(it)
+            id = dtoAttribute.id
+            label = dtoAttribute.label
+            type = dtoAttribute.attrType
+            possibleSelections = dtoAttribute.possibleSelections
+            convertibles = dtoAttribute.convertibles
             calcModel = returnCalculatorModelWithCorrectType()
         }, onConnected = {
             isConnected = true
@@ -95,7 +98,7 @@ object Model {
         mqttConnectorText.connectAndSubscribe(subtopic = "text", onNewMessage = {
             val dtoText = Json.decodeFromString<DTOText>(it)
             id = dtoText.id
-            text = dtoText.text
+            setValueAsString(dtoText.text)
             calcModel?.reset()
         })
 
@@ -110,12 +113,20 @@ object Model {
     }
 
     fun publish(){
-        val string = Json.encodeToString(DTOText(id, text))
+        val string = Json.encodeToString(DTOText(id, getValueAsString()))
         mqttConnectorText.publish(message = string, subtopic = "text", onPublished = { println("message sent") })
     }
 
     fun sendCommand(command : Command){
         val string = Json.encodeToString(DTOCommand(command))
         mqttConnectorCommand.publish(message = string, subtopic = "command", onPublished = { println("command sent") })
+    }
+
+    public fun getValueAsString(): String{
+        return valueAsString.value
+    }
+
+    public fun setValueAsString(text: String){
+        valueAsString.value = text
     }
 }

@@ -41,7 +41,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ch.model.Model
 import ch.model.Model.possibleSelections
-import ch.model.Model.text
+import ch.model.Model.getValueAsString
+import ch.model.Model.setValueAsString
 import util.Utilities
 import ui.theme.ColorsUtil
 import ui.theme.DropdownColors
@@ -133,21 +134,21 @@ fun filterPossibleSelections(searchString: String){
 
 fun addUserSelection(value: String){
     if(possibleSelections.contains(value)){
-        var newSet = Utilities<Set<String>>().stringToSetConverter(text)
+        var newSet = Utilities<Set<String>>().stringToSetConverter(getValueAsString())
         newSet = newSet.toMutableSet()
         newSet.add(value)
-        text = newSet.toString()
+        setValueAsString(newSet.toString())
     }
 }
 
 fun removeUserSelection(value: String){
-    val newSet : MutableSet<String> = Utilities<Set<String>>().stringToSetConverter(text)!!.toMutableSet()
+    val newSet : MutableSet<String> = Utilities<Set<String>>().stringToSetConverter(getValueAsString())!!.toMutableSet()
     newSet.remove(value)
-    text = newSet.toString()
+    setValueAsString(newSet.toString())
 }
 
 fun elementIsSelected(element : String) : Boolean{
-    text.substring(1,  text.length-1).split(",").forEach{
+    getValueAsString().substring(1, getValueAsString().length-1).split(",").forEach{
         if(it.trim() == element){
             return true
         }

@@ -32,7 +32,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class DTOAttribute(val id: Int, val label: String, val attrType: AttributeType = AttributeType.OTHER,
-                   val possibleSelections: Set<String> = emptySet(), val convertibles: List<CustomConvertible>)
+                   val possibleSelections: Set<String> = emptySet(), val convertibles: List<CustomConvertible> = emptyList())
 
 @Serializable
 class DTOText(val id: Int, val text: String)

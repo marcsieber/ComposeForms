@@ -38,12 +38,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ch.model.Model
 import communication.AttributeType
 import communication.Command
 import ui.theme.ColorsUtil
 import ui.theme.FormColors
 import ui.theme.ColorsUtil.Companion.get
+import ch.model.Model
 
 /**
  * @author Louisa Reinger
@@ -119,9 +119,9 @@ fun InputField(model : Model, attrType: AttributeType){
         OutlinedTextField(
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            value = showTextForType(text, attrType),
+            value = showTextForType(getValueAsString(), attrType),
             onValueChange = {
-                text = it
+                setValueAsString(it)
                 publish()
             },
             label = { Text(label) },

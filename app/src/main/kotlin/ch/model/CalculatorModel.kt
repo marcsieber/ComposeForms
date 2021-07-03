@@ -33,7 +33,7 @@ import communication.AttributeType
  */
 class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T : Number {
 
-    val calculationString   = mutableStateOf(model.text)
+    val calculationString   = mutableStateOf(model.getValueAsString())
     val operators           = listOf("+", "-", "*", "/")
     val operatorsBlanked: List<String> = operators.map{ " $it " }
     val validRegex          = Regex("^[0123456789\\.\\*\\-\\+\\/ ]*$")
@@ -108,7 +108,7 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
         if(calculationString.value.matches(validRegex)) { //valid characters -> calculate result
             calculationStringToNumber()
         }else{ //invalid characters -> no calculation
-            model.text = calculationString.value
+            model.setValueAsString(calculationString.value)
             model.publish()
         }
 
@@ -119,7 +119,7 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * This method ensures that the calculationString is reset to model.text.
      */
     fun reset(){
-        calculationString.value = model.text
+        calculationString.value = model.getValueAsString()
     }
 
     //******************************
@@ -132,7 +132,7 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      */
     private fun calculationStringToNumber(publish: Boolean = true){ //TODO fix "num SPACE num" (num + num is excecuted)
         if(calculationString.value.trim().isEmpty()){
-            model.text = ""
+            model.setValueAsString("")
             calculationString.value = ""
         }else {
             val list = calculationString.value.split(" ")
@@ -150,7 +150,7 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
                     currentResult = calculate(currentResult.toDouble(), it.toDouble(), operatorCache)
                 }
             }
-            model.text = currentResult.toString()
+            model.setValueAsString(currentResult.toString())
         }
 
         if(publish){
