@@ -127,6 +127,11 @@ object Model {
     }
 
     public fun setValueAsString(text: String){
+        val validationRes = convertibles.map{ it.convertUserInput(text)}.filter{it.isConvertible && it.convertImmediately}.map{it.convertedValueAsText}
+        if(validationRes.size > 0){
+            valueAsString.value = validationRes.get(0)
+        }
+
         valueAsString.value = text
     }
 }

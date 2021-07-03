@@ -51,9 +51,15 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * @param num: Int
      */
     fun newNumberForCalc(num: Int){
-        if(calculationString.value.matches(validRegex)){
+        var calcStringTemp = calculationString.value
+        val validationRes = model.convertibles.map{ it.convertUserInput(calculationString.value)}.filter{it.isConvertible}.map{it.convertedValueAsText}
+        if(validationRes.size > 0){
+            calcStringTemp = validationRes.get(0)
+        }
+        if(calcStringTemp.matches(validRegex)){
+            calcStringTemp += num.toString()
             calculationString.value += num.toString()
-            calculationStringToNumber()
+            calculationStringToNumber(calcStringTemp)
         }
     }
 
@@ -72,7 +78,10 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * Recalculating point is active on the attribute type and the number
      */
     private fun recalculatePointIsActive(){
-        pointIsActive.value = isFloatingPoint && !calculationString.value.contains(".")
+        val lastNumber = getLastPartOfCalculation()
+        val convertibleResult = model.convertibles.map{ it.convertUserInput(lastNumber)}.filter{it.isConvertible}.map{it.convertedValueAsText}
+        val containingFloatingPoint = if(!convertibleResult.isEmpty()) convertibleResult.get(0).contains(".") else lastNumber.contains(".")
+        pointIsActive.value = isFloatingPoint && !containingFloatingPoint
     }
 
     /**
@@ -82,13 +91,19 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * @param op: String
      */
     fun newOperatorForCalc(op: String){
-        if(calculationString.value.matches(validRegex)) {
+        var calcStringTemp = calculationString.value
+        val validationRes = model.convertibles.map{ it.convertUserInput(calculationString.value)}.filter{it.isConvertible}.map{it.convertedValueAsText}
+        if(validationRes.size > 0){
+            calcStringTemp = validationRes.get(0)
+        }
+        if(calcStringTemp.matches(validRegex)){
             if (calculationString.value.isNotEmpty() && calculationString.value[calculationString.value.lastIndex] == ' ') {
                 calculationString.value = calculationString.value.dropLast(3)
             }
             calculationString.value += " $op "
-            calculationStringToNumber(false)
+            calculationStringToNumber(calculationString.value, false)
         }
+        recalculatePointIsActive()
     }
 
     /**
@@ -106,7 +121,7 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
         }
 
         if(calculationString.value.matches(validRegex)) { //valid characters -> calculate result
-            calculationStringToNumber()
+            calculationStringToNumber(calculationString.value)
         }else{ //invalid characters -> no calculation
             model.setValueAsString(calculationString.value)
             model.publish()
@@ -130,17 +145,17 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
      * The publish parameter can be used to specify whether publish should be executed or not.
      * @param publish : Boolean
      */
-    private fun calculationStringToNumber(publish: Boolean = true){ //TODO fix "num SPACE num" (num + num is excecuted)
-        if(calculationString.value.trim().isEmpty()){
+    private fun calculationStringToNumber(text : String, publish: Boolean = true){ //TODO fix "num SPACE num" (num + num is excecuted)
+        if(text.trim().isEmpty()){
             model.setValueAsString("")
             calculationString.value = ""
         }else {
-            val list = calculationString.value.split(" ")
+            val list = text.split(" ")
             var currentResult = toDataType(0.0, attrType)
             var operatorCache = "+"
 
             list.forEach {
-                if (it.isEmpty()) {
+                if (it.isEmpty() || it.equals(".")) {
                     return@forEach
                 }
 
@@ -193,5 +208,16 @@ class CalculatorModel<T>(val model: Model, val attrType: AttributeType) where T 
             AttributeType.FLOAT     -> value.toFloat() as T
             else -> value as T
         }
+    }
+
+    private fun getLastPartOfCalculation(): String{
+        println("last number of calculation")
+        val list = calculationString.value.split(" ")
+        for(element in list.asReversed()){
+            if(!element.isEmpty()){
+                return element
+            }
+        }
+        return ""
     }
 }

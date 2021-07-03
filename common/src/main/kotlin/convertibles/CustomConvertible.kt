@@ -50,14 +50,4 @@ class CustomConvertible(var replaceRegex : List<ReplacementPair>, var convertUse
         return ConvertibleResult(false, "", convertUserView, convertImmediately)
     }
 
-    //******************************************************************************************************
-    //Getter
-
-//    fun getConvertUserView() : Boolean{
-//        return convertUserView
-//    }
-
-//    fun getReplaceRegex(): List<ReplacementPair>{
-//        return replaceRegex
-//    }
 }
