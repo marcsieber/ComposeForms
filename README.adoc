@@ -705,6 +705,43 @@ Beispiel: +
 image::img/customValidator.png[]
 
 ==== [[anchor-convertibles]] convertibles  _(optional)_
+
+Mit einem Convertible kann man dem User eine alternative Schreibweise zu dem Wert geben, der tatsächlich abgespeichert wird. Die alternative Schreibweise wird dann in den richtigen Wert konvertiert.
+(So kann man beispielsweise einstellen, dass der User Komma, statt Punkt verwenden kann, obwohl ein Double-Typ gefordert ist). Hier ein Beipiel-Aufruf:
+
+
+image::img/sizeConvertible.png[]
+
+Da man mehrere Convertibles in einem Attribut haben kann, muss immer eine Liste mit Convertibles angegeben werden.
+Es gibt nur eine Form des Convertibles, nämlich das _CustomConvertible_. Dieses hat 3 Parameter:
+
+====== Custom-Convertible (für alle Attribute)
+
+.Custom-Convertible-Parameter
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Parameter | Typ |Beschreibung
+
+| replaceRegex *
+| List<ReplacementPair>
+| Ein ReplacementPair besteht aus einem _convertibleRegex_-String (die zusätzliche valide Input-Form, die der User verwenden kann) und einem _convertIntoRegex_-String (in was das erstere umgewandelt werden soll). +
+*Achtung:* Der _convertIntoRegex_-String muss umwandelbar sein in den Typ des Attributs!
+
+| convertUserView
+| Boolean
+| Mit diesem Parameter kann man festlegen, ob die User-Ansicht in das Konvertierte aktualisiert werden soll (sodass der User den Wert sieht, was abgespeichert wird) oder nicht. +
+(Default-Wert: _true_)
+
+| convertImmediately
+| Boolean
+| Mit diesem Parameter kann man festlegen wann konvertiert werden soll. Wenn _convertImmediately = true_, dann wird sofort umgewandelt, sobald der Input konvertierbar ist. Wenn _convertImmediately = false_, wird konvertiert, wenn der User das Feld verlässt (nicht mehr fokussiert). +
+(Default-Wert: _false_)
+
+
+|===
+_(Parameter mit * sind erforderlich, die anderen optional)_
+
+
 ==== [[anchor-meaning]] meaning  _(optional)_
 
 Über den _meaning_-Parameter kann man dem Attribut-Wert eine Bedeutung geben.
