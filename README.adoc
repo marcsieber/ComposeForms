@@ -247,30 +247,43 @@ Beim Window bieten sich folgende Parameter an, um das Window optimal anzuzeigen:
 
 == Applikation starten
 
-Falls das Smartphone verwendet werden soll, ist es wichtig, dass zuerst die Desktop-Appliaktion gestartet wird und erst danach das Smartphone, da sonst keine Verbindung zwischen den beiden Applikationen hergestellt werden kann.
+=== Desktop-Applikation starten
 
-* Starterklasse starten
+Die Starterklasse über die Entwicklngsumgebung starten.
 
 image::startDesktopApp.png[]
 
-* Smartphone-App auf einem Android-Device (oder dem Emulator) installieren und starten
+=== Smartphone-App auf einem Device installieren
+
+Bevor die Smartphone-App sich via QR-Code mit dem Dektop verbinden kann, muss die App auf dem Android-Device (oder dem Emulator) installiert werden.
+Hierzu einfach die ComposeForms.app in der Entwicklungsumgebung starten.
 
 image::Smartphone-App.png[]
 
-Um die Smartphone-App starten zu können, muss aktuell noch im Model ( _[silver]#app > src > main > kotlin > ch > model > Model#_ ) in der Variable _mqttBroker_ die IP-Adresse des Desktop-Devices gesetzt werden.
+=== Smartphone-Applikation über QR-Code starten
+Wenn sich das Smartphone via QR-Code (über die Desktop-Applikation) verbinden soll, muss die App bereits auf dem Smartphone installiert sein und das Smartphone sich im selben WLAN befinden, wie die Desktop-Applikation.
+
+*Hinweis:* Um das Smartphone verwenden zu können muss beim <<anchor-Model, Model>> der Parameter _smartphoneOption_ auf true gesetzt sein.
+
+=== Smartphone-Applikation über die Entwicklungsumgebung starten
+
+Um die Smartphone-App über die Entwicklungsumgebung mit der Desktop-Applikation richtig verbinden zu können, muss im Model ( _[silver]#app > src > main > kotlin > ch > model > Model#_ ) in der Variable _mqttBroker_ die IP-Adresse des Desktop-Devices gesetzt werden.
 
 [source, kotlin]
 var mqttBroker    = "192.168.0.94" //Beispiel
 
-( _[silver]#app > src > main > kotlin > ch > model > Model#_ )
 
-IP-Adresse herausfinden: +
-Terminal öffnen und _ifconfig_ eingeben. Im Output ist unter _en0:_ unter anderem die IP-Adresse zu finden (hinter dem Wort _inet_)
+_IP-Adresse herausfinden:_ +
+Terminal öffnen und _ifconfig_ eingeben. +
+Im Output ist unter _en0:_ unter anderem die IP-Adresse zu finden (hinter dem Wort _inet_)
 
-*Hinweis:* Um das Smartphone verwenden zu können muss beim <<anchor-Model, Model>> der Parameter _smartphoneOption_ auf true gesetzt sein.
+Danach kann die Smartphone-App in der Entwicklungsumgebung gestartet werden:
 
-=== Smartphone über QR-Code verbinden
-Wenn sich das Smartphone via QR-Code (über die Desktop-Applikation) verbinden soll, muss die App bereits auf dem Smartphone installiert sein und das Smartphone sich im selben WLAN befinden, wie die Desktop-Applikation.
+
+image::Smartphone-App.png[]
+
+*Hinweis:* Es wichtig, dass zuerst die Desktop-Appliaktion gestartet wird und erst danach das Smartphone, da sonst keine Verbindung zwischen den beiden Applikationen hergestellt werden kann.
+
 
 == UI modifizieren (optional)
 
@@ -320,7 +333,7 @@ image::qr-code.png[]
 
 |===
 
-=== 3 Stati
+=== [[anchor-stati]] 3 Stati
 
 Für eine bessere User-Experience können sich die Attribute in 3 verschiedenen Stati befinden. +
 Mit dem _rightTrack_-Status sind die Zeiten vorbei, in denen sich der User über rote Fehlermeldungen aufregt, die von Anfang an angezeit werden, bevor der User auch nur die Chance hatte sich um einen richtigen Input zu bemühen. Der rightTrack-Status gibt an, ob sich der User auf dem richtigen Weg zu einem validen Input befindet. Erst, wenn der Input wirklich in die falsche Richtung geht wird der Input als invalid angezeigt.
@@ -583,13 +596,113 @@ Für bestimmte Attributtypen stehen bestimmte Validatoren mit unterschiedlichen 
 
 ====== FloatingPoint-Validator (für alle FloatingPoint-Attribute)
 
+.FloatingPoint-Validator-Properties
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+| decimalPlaces
+| Int
+| Anzahl erlaubter Nachkommastellen +
+(Default-Wert: _10_)
+
+| validationMessage
+| String
+| Nachricht, die dem User angezeigt werden soll, wenn der Input aufgrund dieses Validators invalid ist.
+|===
+
 ====== Selection-Validator (für alle Selection-Attribute)
+
+.Selection-Validator-Properties
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+| minNumberOfSelections
+| Int
+| minimale Anzahl Selektionen, die vom User ausgewählt werden müssen. +
+(Default-Wert: _0_)
+
+| maxNumberOfSelections
+| Int
+| maximale Anzahl Selektionen, die vom User ausgewählt werden müssen. +
+(Default-Wert: _Int.MAX_VALUE_)
+
+| validationMessage
+| String
+| Nachricht, die dem User angezeigt werden soll, wenn der Input aufgrund dieses Validators invalid ist.
+|===
 
 ====== String-Validator (für alle String-Attribute)
 
+.String-Validator-Properties
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+| minLength
+| Int
+| minimale Länge des Inputwortes. (Anzahl Characters) +
+(Default-Wert: _0_)
+
+| maxLength
+| Int
+| maximale Länge des Inputwortes. (Anzahl Characters) +
+(Default-Wert: _1_000_000_)
+
+| validationMessage
+| String
+| Nachricht, die dem User angezeigt werden soll, wenn der Input aufgrund dieses Validators invalid ist.
+|===
+
 ====== Regex-Validator (für alle Attribute)
 
+.Regex-Validator-Properties
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+| regexPattern
+| String
+| Regex, der angibt wann das Inputwort valid ist, als String.
+
+| rightTrackRegexPattern
+| String
+| Regex, der angibt wann das Inputwort <<anchor-stati, onRightTrack>> ist, als String.
+
+| validationMessage
+| String
+| Nachricht, die dem User angezeigt werden soll, wenn der Input aufgrund dieses Validators invalid ist.
+|===
+
+Beispiel:
+
+image::regexValifdator.png[width = 600]
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
+
 ====== Custom-Validator (für alle Attribute)
+
+.Custom-Validator-Properties
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+| validationFunction
+| (T?) -> Boolean
+| Regex, der angibt wann das Inputwort valid ist, als String.
+
+| rightTrackFunction
+| ((T?) -> Boolean) ?
+| Regex, der angibt wann das Inputwort <<anchor-stati, onRightTrack>> ist, als String.
+
+| validationMessage
+| String
+| Nachricht, die dem User angezeigt werden soll, wenn der Input aufgrund dieses Validators invalid ist.
+|===
+
+Beispiel: +
+
+image::customValidator.png[]
 
 ==== [[anchor-convertibles]] convertibles  _(optional)_
 ==== [[anchor-meaning]] meaning  _(optional)_

@@ -23,7 +23,10 @@ class UserDefinedModel : BaseModel(Labels.stringLabel, smartphoneOption = true){
 
 
     val strValidator = StringValidator(5, 10)
-    val customValidator = CustomValidator<String>({value -> value!!.length in 3..5}, validationMessage = "Message")
+
+    val customValidator = CustomValidator<String>(
+        {value -> value!!.length in 3..5}, validationMessage = "The input must be 3 - 5 characters long"
+    )
 
 
     val s = StringAttribute(

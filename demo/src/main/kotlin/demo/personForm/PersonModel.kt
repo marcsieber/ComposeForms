@@ -88,7 +88,10 @@ class PersonModel : BaseModel(iLabel = PersonLabels.SIZE, smartphoneOption = tru
         ))
 
     val postCode    = IntegerAttribute(this, PersonLabels.POSTCODE,
-        validators = listOf(RegexValidator(regexPattern = "*{3,5}", rightTrackRegexPattern = "*{0,5}", validationMessage = "The input must be 3 - 5 characters long")))
+        validators = listOf(RegexValidator(
+            regexPattern = "*{3,5}", rightTrackRegexPattern = "*{0,5}",
+            validationMessage = "The input must be 3 - 5 characters long")
+        ))
 
     val place       = StringAttribute(this, PersonLabels.PLACE)
     val street      = StringAttribute(this, PersonLabels.STREET)
