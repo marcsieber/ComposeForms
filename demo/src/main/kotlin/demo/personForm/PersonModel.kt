@@ -35,8 +35,7 @@ import model.validators.semanticValidators.*
  * @author Louisa Reinger
  * @author Steve Vogel
  */
-class PersonModel : BaseModel(smartphoneOption = true, iLabel = PersonLabels.SIZE) {
-
+class PersonModel : BaseModel(iLabel = PersonLabels.SIZE, smartphoneOption = true) {
 
     init {
         setTitle("Clients")
@@ -52,9 +51,6 @@ class PersonModel : BaseModel(smartphoneOption = true, iLabel = PersonLabels.SIZ
 
     val lastName    = StringAttribute(model = this, label = PersonLabels.LASTNAME,
         required = true)
-
-    val age         = LongAttribute(this, PersonLabels.AGE,
-        validators = listOf(NumberValidator(lowerBound = 0, upperBound = 130)))
 
     val gender      = SelectionAttribute(this, PersonLabels.GENDER,
         possibleSelections = setOf("Man", "Woman", "Other"),
@@ -75,11 +71,20 @@ class PersonModel : BaseModel(smartphoneOption = true, iLabel = PersonLabels.SIZ
             convertImmediately = true
         )))
 
+    val ageValidator = NumberValidator<Long>(lowerBound = 0, upperBound = 130)
+
+    val age         = LongAttribute(this, PersonLabels.AGE,
+        validators = listOf(ageValidator),
+        onChangeListeners = listOf(
+            size addOnChangeListener { _, sizeValue ->
+                ageValidator.overrideNumberValidator(lowerBound = if(sizeValue!! >= 1) 6 else 0)}
+        ))
+
     val occupation  = StringAttribute(this, PersonLabels.OCCUPATION)
 
     val taxNumber   = IntegerAttribute(this, PersonLabels.TAXNUMBER,
         onChangeListeners = listOf(
-            occupation addOnChangeListener {taxN, occ -> taxN.setRequired(occ != null)}
+            occupation addOnChangeListener {taxAttr, occValue -> taxAttr.setRequired(occValue != null)}
         ))
 
     val postCode    = IntegerAttribute(this, PersonLabels.POSTCODE,

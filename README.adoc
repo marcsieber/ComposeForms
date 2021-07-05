@@ -29,26 +29,51 @@ Für die Erstellung eines Formulares sind grundsätzlich folgende 3 Klassen nöt
 * Enum, in welchem die Label-Namen definiert werden
 * Starter-Klasse
 
-== Model
+== [[anchor-Model]] Model
 
-Um ein Formular zu erstellen, muss zuerst ein Model erstellt werden. Dieses sollte das BaseModel implementieren. +
+Um ein Formular zu erstellen, muss zuerst ein Model erstellt werden. Dieses sollte das _BaseModel_ implementieren. +
 
 [source,kotlin]
-class UserDefinedModel : BaseModel(){ }
+class PersonModel : BaseModel(iLabel = PersonLabels.SIZE, smartphoneOption = true) { ... }
 
-Nun kann in einem init-Block, welcher beim starten 1x ausgeführt wird, der Applikationstitel festgelegt werden, die Sprache gesetzt werden und falls das Smartphone verwendet werden soll auch dieses startbar gemacht werden.
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
+
+Das BaseModel hat 2 Parameter: _iLabel_ und _smartPhoneOption_. +
+Auf den Parameter _iLabel_ kommen wir später wieder zurück bei der Erstellung der Attribut-Label. +
+Im Folgenden die Übersicht zu den beiden Parametern und ihrer Auswirkung:
+
+.Attribut-Parameter
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Property | Typ |Beschreibung
+
+|_iLabel_ *
+|ILabel
+|Hier sollte ein beliebiger Eintrag des zu erstellenden Label-Enums übergeben werden. Mehr Infos unter dem Attribut-Parameter  <<anchor-label, label>>. +
+(Die Angabe des Parameters _iLabel_ ist notwendig, damit das Formular automatisch die verwendeten Sprachen erkennen kann).
+
+
+| _smartphoneOption_
+| Boolean
+| Hier kann _true_ übergeben werden, wenn die Smartphoneverwendung zugelassen werden soll. (Dem User wird dann der QR-Code-Button angezeigt, um sich mit dem Handy verbinden zu können). +
+_Wenn nichts übergeben wird, wird die Smartphone-Option default-mässig auf false gesetzt._
+
+|===
+
+_Parameter mit * sind zwingend erforrderlich. Parameter ohne * sind optional._
+
+Im Model-Body kann nun in einem init-Block, welcher beim starten 1x ausgeführt wird, der Applikationstitel festgelegt werden:
 
 [source,kotlin]
 init {
-        setTitle("Demo Title")
-        setCurrentLanguageForAll("english")
-        startUp()
+        setTitle("Clients")
 }
 
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
+
+_Momentan ist für den Formular-Titel noch keine Mehrsprachigkeit-Möglichkeit verfügbar. Dies wird sich jedoch in Zukunft ändern._
+
 Jetzt können hier im Model alle benötigten Attribute definiert werden.
-
-
-_Momentan ist für den Formular-Titel noch keine Mehrsprachigkeit-Möglichkeit verfügbar. Dies wird sich in Zukunft ändern._
 
 
 == Attribute
@@ -74,6 +99,8 @@ Es wird ein StringAttribut erstellt, in welchem der Strassenname gespeichert wer
 
 [source,kotlin]
 val street = StringAttribute(model = this, label = PersonLabels.STREET)
+
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Ein Attribut hat verschiedene Parameter, welche der Konfiguration des Attributs dienen. Bestimmte Parameter müssen angegeben werden (im Folgenden mit * markiert), andere sind optional und haben bereits einen Default-Wert gesetzt.
 
@@ -159,6 +186,8 @@ val group2 = Group(model = this, title = "Adress",
         Field(houseNumber)
     )
 
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
+
 Eine Gruppe besitzt folgende Parameter:
 
 .Group-Parameter
@@ -195,7 +224,9 @@ fun main() = Window() {
         Form().of(model)
 }
 
-Wichtig sind die Annotation _@ExperimentalFoundationApi_ und das _remember_ beim Initialisieren des Models
+( _[silver]#demo > src > main > main.kt#_ )
+
+Wichtig sind die Annotation _@ExperimentalFoundationApi_ und das _remember_ beim Initialisieren des Models.
 
 Beim Window bieten sich folgende Parameter an, um das Window optimal anzuzeigen:
 
@@ -226,8 +257,20 @@ image::startDesktopApp.png[]
 
 image::Smartphone-App.png[]
 
+Um die Smartphone-App starten zu können, muss aktuell noch im Model ( _[silver]#app > src > main > kotlin > ch > model > Model#_ ) in der Variable _mqttBroker_ die IP-Adresse des Desktop-Devices gesetzt werden.
+
+[source, kotlin]
+var mqttBroker    = "192.168.0.94" //Beispiel
+
+( _[silver]#app > src > main > kotlin > ch > model > Model#_ )
+
+IP-Adresse herausfinden: +
+Terminal öffnen und _ifconfig_ eingeben. Im Output ist unter _en0:_ unter anderem die IP-Adresse zu finden (hinter dem Wort _inet_)
+
+*Hinweis:* Um das Smartphone verwenden zu können muss beim <<anchor-Model, Model>> der Parameter _smartphoneOption_ auf true gesetzt sein.
+
 === Smartphone über QR-Code verbinden
-Wenn sich das Smartphone via QR-Code (über die Desktop-Applikation) verbinden soll, muss die App bereits auf dem Smartphone installiert sein.
+Wenn sich das Smartphone via QR-Code (über die Desktop-Applikation) verbinden soll, muss die App bereits auf dem Smartphone installiert sein und das Smartphone sich im selben WLAN befinden, wie die Desktop-Applikation.
 
 == UI modifizieren (optional)
 
@@ -363,13 +406,21 @@ invalid
 
 Was tun, wenn sich die Applikation nicht starten lässt?
 
-Checke, ob in den Configurations die Variable _-cp $Classpath$_ bei der Starterklasse unter VM options gesetzt ist.
+==== Class not Found -> Fehlende VM options
+
+Checke, ob in den Configurations die Variable _-cp $Classpath$_ bei der Starterklasse unter VM options gesetzt ist. Falls nicht sollte diese noch gesetzt werden.
 
 image::edit-configurations.png[width = 300]
 
 image::configuration-window.png[width = 800]
 
-Starte dann die Applikation erneut.
+
+==== Language Not Found
+
+Wenn diese Exception beim Starten erscheint wurde der Parameter _iLabel_ (siehe im Abschnitt <<anchor-Model, Model>>) nicht angegeben.
+
+image::languageNotFound.png[]
+
 
 === Attribut-Parameter
 
@@ -408,6 +459,9 @@ Bei den Attributen muss dann nur noch die richtige Code-Variable als Label angeg
 image::label_in_model.png[width = 700]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
+Damit die Sprachen vom Formular automatisch erkannt werden können, muss dem Model der Parameter _iLabel_ mitgegeben werden. Hier kann ein beliebiges Label aus der erstellten Label-Enum-Klasse angegeben werden.
+
+image::model-params.png[]
 
 ==== [[anchor-value]] value _(optional)_
 Wenn ein Attribut beim ersten Öffnen des Formulars nicht leer sein soll, kann über den Parameter _value_ der Wert gesetzt werden. +
@@ -464,9 +518,37 @@ Bei keiner Angabe wird der Default-Wert _emptyList()_ gesetzt.
 
 ==== [[anchor-validators]] validators _(optional)_
 
+Man kann dem Attribut sogenannte _semantische Validatoren_ übergeben, mit welchen man die Validität des Attribut-Wertes einschränken kann.
 
+image::validators.png[width = 700]
 
-===== Number-Validator
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
+
+Da man mehrere Validatoren angeben kann, müssen diese immer in einer Liste übergeben werden ( _listOf(...)_ ). +
+
+===== Validator-Veränderungen zur Laufzeit
+Wenn man einen Validator zur Laufzeit noch verändern möchte, muss man diesen ausserhalb des Attributs als Variable definieren und dann übergeben:
+
+image::validatorOutsideAttribute.png[width = 600]
+
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
+
+Mittels _override...Validator()_ (für ... den verwendeten Typ einsetzen) kann der Validator zur Laufzeit verändert werden.
+
+Ein Beispiel:
+
+image::overrideValidator.png[]
+
+( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
+
+Wenn die Person >= 1m ist, dann muss diese mind. 6 Jahre alt sein. Wenn nicht kann sie auch jünger sein.
+(Das _size_-Attribut wurde zuvor definiert)
+
+===== Validatoren-Übersicht
+
+Für bestimmte Attributtypen stehen bestimmte Validatoren mit unterschiedlichen Parametern zur Verfügung. Im Folgenden eine Übersicht über alle semantischen Validatoren und deren Parameter:
+
+====== Number-Validator (für alle Number-Attribute)
 
 .Number-Validator-Properties
 [cols="1,1,2",width=100%,frame=topbot]
@@ -474,21 +556,40 @@ Bei keiner Angabe wird der Default-Wert _emptyList()_ gesetzt.
 | Property | Typ |Beschreibung
 
 | lowerBound
-| Int
+| T?
 | untere Grenze für Input
 
 | upperBound
-| Int
+| T?
 | obere Grenze für Input
 
 | stepSize
-| Int
+| T?
 | Schrittgrösse
 
 | stepStart
-| Int
+| T?
 | Zahl, von der aus die Schritte nach oben/unten gerechnet werden
+
+| onlyStepValuesAreValid
+| Boolean
+| Wenn _true_ sind alle Zahlen zwischen den Schritten invalid. +
+(Default-Wert: _false_)
+
+| validationMessage
+| String
+| Nachricht, die dem User angezeigt werden soll, wenn der Input aufgrund dieses Validators invalid ist.
 |===
+
+====== FloatingPoint-Validator (für alle FloatingPoint-Attribute)
+
+====== Selection-Validator (für alle Selection-Attribute)
+
+====== String-Validator (für alle String-Attribute)
+
+====== Regex-Validator (für alle Attribute)
+
+====== Custom-Validator (für alle Attribute)
 
 ==== [[anchor-convertibles]] convertibles  _(optional)_
 ==== [[anchor-meaning]] meaning  _(optional)_
@@ -660,3 +761,18 @@ Die folgenden Funktionen können auf einem Model aufgerufen werden:
 | Siehe Attribut-Parameter <<anchor-readOnly, readOnly>>
 
 |===
+
+=== Validator-Funktionen
+
+Die folgenden Funktionen können auf einem Validator aufgerufen werden:
+
+.Funktion, um einen Validator zur Laufzeit verändern zu können
+[cols="2,2",width=100%,frame=topbot]
+|===
+| Funktion |  Beschreibung
+
+| override...Validator() +
+
+(_für ... den richtigen Typ einsetzen_)
+| Mit dieser Funktion kann der jeweilige Validator überschrieben werden.
+Es stehen die gleichen Parameter zur Verfügung wie bei der Initialisierung des jeweiligen Validators. Siehe <<anchor-validators, validators>>.

@@ -1,4 +1,5 @@
 import org.jetbrains.compose.compose
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.application")
@@ -55,4 +56,9 @@ dependencies {
     implementation(project(":common"))
     implementation("androidx.activity:activity-compose:1.3.0-alpha03")
     implementation("org.jetbrains.compose.material:material-icons-extended:0.4.0-build182")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha08")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

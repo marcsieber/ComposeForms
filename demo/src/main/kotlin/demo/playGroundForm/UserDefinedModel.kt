@@ -114,7 +114,7 @@ class UserDefinedModel : BaseModel(Labels.stringLabel, smartphoneOption = true){
         required = true,
         onChangeListeners = listOf(
             intAttr addOnChangeListener { a, v -> a.setRequired(v ?: 0 >= 123) },
-            intAttr addOnChangeListener { a, v -> a.setReadOnly(v ?: 0 == 1) },
+            intAttr addOnChangeListener { a, v -> a.setReadOnly(v ?: 0 == 1) }
         )
     )
 
