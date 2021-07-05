@@ -9,7 +9,7 @@ Compose Forms ist eine Library, mit welcher sich schnell und einfach schöne & b
 
 
 
-image::desktop-form.png[width = 500]
+image::img/desktop-form.png[width = 500]
 
 Der Code zu diesem Beispiel ist hier zu finden:
 
@@ -17,7 +17,7 @@ _[silver]#demo > src > main > kotlin > demo > personForm#_
 
 Eine zusätzliche Benutzer-unterstützende Feature ist die Möglichkeit, das Smartphone für die Eingabe der einzelnen Input-Felder verwenden zu können. Über einen Boolean kann entschieden werden, ob die Smartphone-Eingabe-Möglichkeit für das Formular freigegeben werden soll. Dem End-User ist es frei überlassen, ob er das Smartphone verwenden möchte oder nicht. Über einen Button im Formular kann das Smartphone via QR-Code mit dem Desktop-Formular verbunden werden. Auf dem Smartphone werden dann individuelle Eingabe-Masken zum auf dem Desktop-fokussierten Inputfeld angezeigt.
 
-image::smartphone-calc.png[width = 250]
+image::img/smartphone-calc.png[width = 250]
 
 *Hinweis:*
 Die Library befindet sich gerade im Entwicklungszustand und wird laufend verbessert, daher sind noch nicht alle Funktionalitäten verfügbar.
@@ -84,7 +84,7 @@ mit allen Werten und Informationen, die zur Interaktion (z.B. zum Speichern etc.
 
 In dieser API gibt es folgende Attribut-Typen:
 
-image::attribute-types.png[]
+image::img/attribute-types.png[]
 
 [red]#Orange:# Abstrakte Klassen  +
 [blue]#Blau:# Konkrete Implementierungen. Diese können verwendet werden.
@@ -251,14 +251,14 @@ Beim Window bieten sich folgende Parameter an, um das Window optimal anzuzeigen:
 
 Die Starterklasse über die Entwicklngsumgebung starten.
 
-image::startDesktopApp.png[]
+image::img/startDesktopApp.png[]
 
 === Smartphone-App auf einem Device installieren
 
 Bevor die Smartphone-App sich via QR-Code mit dem Dektop verbinden kann, muss die App auf dem Android-Device (oder dem Emulator) installiert werden.
 Hierzu einfach die ComposeForms.app in der Entwicklungsumgebung starten.
 
-image::Smartphone-App.png[]
+image::img/Smartphone-App.png[]
 
 === Smartphone-Applikation über QR-Code starten
 Wenn sich das Smartphone via QR-Code (über die Desktop-Applikation) verbinden soll, muss die App bereits auf dem Smartphone installiert sein und das Smartphone sich im selben WLAN befinden, wie die Desktop-Applikation.
@@ -280,7 +280,7 @@ Im Output ist unter _en0:_ unter anderem die IP-Adresse zu finden (hinter dem Wo
 Danach kann die Smartphone-App in der Entwicklungsumgebung gestartet werden:
 
 
-image::Smartphone-App.png[]
+image::img/Smartphone-App.png[]
 
 *Hinweis:* Es wichtig, dass zuerst die Desktop-Appliaktion gestartet wird und erst danach das Smartphone, da sonst keine Verbindung zwischen den beiden Applikationen hergestellt werden kann.
 
@@ -300,7 +300,7 @@ _[silver]#common > src > main > kotlin > ui > theme > FormColors.kt#_
 
 === Zur Verfügung stehende Aktionen
 
-image::header-functions.png[width =  600]
+image::img/header-functions.png[width =  600]
 
 
 .User-Aktionen
@@ -309,25 +309,25 @@ image::header-functions.png[width =  600]
 | Funktionalität | aufgerufene Model-Funktion | Auswirkung
 
 a|
-image::language.png[width = 150]
+image::img/language.png[width = 150]
 | setCurrentLanguageForAll( lang : String)
 | Setzt die aktuelle Sprache. Die Sprachen müssen zuvor im Label-Enum definiert werden. (siehe <<anchor-label, label>>) +
 _Diese Funktionalität ist noch nicht vollständig implementiert._
 
 
-a|image::reset.png[width = 90]
+a|image::img/reset.png[width = 90]
 | resetAll()
 | Setzt die Werte aller Attribute auf die zuletzt gespeicherten Werte zurück.
 
 
-a|image::save.png[width = 84]
+a|image::img/save.png[width = 84]
 | saveAll()
 | Speichert die Werte (User-Inputs) aller Attribute, sofern alle in einem validen Zustand sind.
 
 
 a|
-image::qrCode.png[width = 150]
-image::qr-code.png[]
+image::img/qrCode.png[width = 150]
+image::img/qr-code.png[]
 |
 | Generiert einen QR-Code, sodass sich der User mit dem Smartphone verbinden kann.
 
@@ -343,7 +343,7 @@ Mit dem _rightTrack_-Status sind die Zeiten vorbei, in denen sich der User über
 |===
 | Aussehen | Status | Beschreibung
 
-a|image::valid.png[width = 200]
+a|image::img/valid.png[width = 200]
 | *valid* +
 
 _(gültig)_
@@ -354,7 +354,7 @@ Valid  bedeutet der eingegebene Input (String): +
 - ist bezüglich aller gesetzten Validatoren in einem gültigen Zustand +
 
 
-a|image::invalid.png[width = 200]
+a|image::img/invalid.png[width = 200]
 | *invalid* +
 
 _(nicht gültig)_
@@ -362,7 +362,7 @@ _(nicht gültig)_
 Wenn der Input (String) nicht valid ist ist er in einem invaliden Zustand.
 
 
-a|image::rigthtTrack.png[width = 200]
+a|image::img/rigthtTrack.png[width = 200]
 | *rightTrack* +
 
 _(auf dem richtigen Weg zu einem validen Zustand)_
@@ -377,7 +377,7 @@ Der rightTrack Zustand wird nur angezeigt, wenn das Attribut noch nicht fokussie
 ==== Beispiel
 Die obigen Inputfelder gehören zu folgendem Beispiel:
 
-image::example-stati.png[width = 800]
+image::img/example-stati.png[width = 800]
 
 Der Input muss zwischen 3 und 10 Zeichen enthalten, um valid zu sein.
 
@@ -391,24 +391,24 @@ Der Input muss zwischen 3 und 10 Zeichen enthalten, um valid zu sein.
 (nachdem es bereits fokussiert wurde)
 
 |0 - 2
-a|image::rigthtTrack.png[width = 200]
+a|image::img/rigthtTrack.png[width = 200]
 
 rightTrack
-a|image::rightTrack-unfocused.png[width = 200]
+a|image::img/rightTrack-unfocused.png[width = 200]
 invalid
 
 | 3 - 10
-a|image::valid.png[width = 200]
+a|image::img/valid.png[width = 200]
 valid
 a|
-image::valid-unfocused.png[width = 200]
+image::img/valid-unfocused.png[width = 200]
 valid
 
 | 10 - ...
-a|image::invalid.png[width = 200]
+a|image::img/invalid.png[width = 200]
 invalid
 a|
-image::invalid-unfocused.png[width = 200]
+image::img/invalid-unfocused.png[width = 200]
 invalid
 |===
 
@@ -423,16 +423,16 @@ Was tun, wenn sich die Applikation nicht starten lässt?
 
 Checke, ob in den Configurations die Variable _-cp $Classpath$_ bei der Starterklasse unter VM options gesetzt ist. Falls nicht sollte diese noch gesetzt werden.
 
-image::edit-configurations.png[width = 300]
+image::img/edit-configurations.png[width = 300]
 
-image::configuration-window.png[width = 800]
+image::img/configuration-window.png[width = 800]
 
 
 ==== Language Not Found
 
 Wenn diese Exception beim Starten erscheint wurde der Parameter _iLabel_ (siehe im Abschnitt <<anchor-Model, Model>>) nicht angegeben.
 
-image::languageNotFound.png[]
+image::img/languageNotFound.png[]
 
 
 === Attribut-Parameter
@@ -452,11 +452,11 @@ Sowohl beim Attribut als auch bei der Gruppe wird _this_ als Model übergeben. +
 *Beispiel 2 - Attribute und Gruppen in mehreren Klassen verteilt* +
 Zusätzlich zu den Attributen aus Beispiel 1, soll ein weiteres Attribut auf dem Formular erscheinen. Dieses wird in diesem Beispiel direkt in der Starterklasse definiert und einer eigenen Gruppe übergeben. Damit es auf demselben Formular erscheint muss dasselbe Model als Parameter übergeben werden.
 
-image::example_parameter_model.png[width = 700]
+image::img/example_parameter_model.png[width = 700]
 
 Nun erscheint in dem Formular die zusätzliche Gruppe mit dem Attribut unter den bereits im PersonModel definierten:
 
-image::example_result_parameter_model.png[]
+image::img/example_result_parameter_model.png[]
 
 ==== [[anchor-label]] label _(erforderlich)_
 
@@ -464,23 +464,23 @@ Um Mehrsprachigkeit zu gewährleisten müssen die Labeltexte in einem Enum angeg
 Das Enum muss das Interface _ILabel_ implementieren und alle gewünschten Sprachen als Parameter mit Typ String definieren. +
 Im Enum können nun Code-Variablen festgelegt werden, in welchen die Übersetzungen der Labeltexte definiert werden.
 
-image::label-code.png[width = 800]
+image::img/label-code.png[width = 800]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonLabels#_ )
 
 Bei den Attributen muss dann nur noch die richtige Code-Variable als Label angegeben werden.
 
-image::label_in_model.png[width = 700]
+image::img/label_in_model.png[width = 700]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Damit die Sprachen vom Formular automatisch erkannt werden können, muss dem Model der Parameter _iLabel_ mitgegeben werden. Hier kann ein beliebiges Label aus der erstellten Label-Enum-Klasse angegeben werden.
 
-image::model-params.png[]
+image::img/model-params.png[]
 
 ==== [[anchor-value]] value _(optional)_
 Wenn ein Attribut beim ersten Öffnen des Formulars nicht leer sein soll, kann über den Parameter _value_ der Wert gesetzt werden. +
 
 
-image::value-example.png[width = 700]
+image::img/value-example.png[width = 700]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Der Wert muss vom gleichen Typ sein wie das Attribut! Bei keiner Angabe wird der Default-Wert _null_ gesetzt.
@@ -491,7 +491,7 @@ Der Wert muss vom gleichen Typ sein wie das Attribut! Bei keiner Angabe wird der
 
 Wenn ein Atribut ein Pflichtfeld sein soll (also der User also gezwungen werden soll eine Eingabe zu tätigen und das Feld nicht leer zu lassen), kann beim Parameter required _true_ übergeben werden.
 
-image::required-example.png[width = 700]
+image::img/required-example.png[width = 700]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 
@@ -503,7 +503,7 @@ Bei keiner Angabe wird der Default-Wert _false_ gesetzt.
 
 Wenn ein Attribut für den User nur lesbar aber nicht modifizierbar sein soll, kann beim Parameter readonly _true_ übergeben werden.
 
-image::value-example.png[width = 700]
+image::img/value-example.png[width = 700]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Bei keiner Angabe wird der Default-Wert _false_ gesetzt.
@@ -522,7 +522,7 @@ Da mehrere onChangeListener übergeben werden können, muss immer eine Liste üb
 
 *Beispiel:*
 
-image::onChangeListener.png[width = 850]
+image::img/onChangeListener.png[width = 850]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Sobald beim Attribut Beruf (occupation) etwas eingegeben wurde (Wert != null), soll die Steuernummer (taxnumber) zu einem Pflichtfeld werden.
@@ -533,7 +533,7 @@ Bei keiner Angabe wird der Default-Wert _emptyList()_ gesetzt.
 
 Man kann dem Attribut sogenannte _semantische Validatoren_ übergeben, mit welchen man die Validität des Attribut-Wertes einschränken kann.
 
-image::validators.png[width = 700]
+image::img/validators.png[width = 700]
 
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
@@ -542,7 +542,7 @@ Da man mehrere Validatoren angeben kann, müssen diese immer in einer Liste übe
 ===== Validator-Veränderungen zur Laufzeit
 Wenn man einen Validator zur Laufzeit noch verändern möchte, muss man diesen ausserhalb des Attributs als Variable definieren und dann übergeben:
 
-image::validatorOutsideAttribute.png[width = 600]
+image::img/validatorOutsideAttribute.png[width = 600]
 
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
@@ -550,7 +550,7 @@ Mittels _override...Validator()_ (für ... den verwendeten Typ einsetzen) kann d
 
 Ein Beispiel:
 
-image::overrideValidator.png[]
+image::img/overrideValidator.png[]
 
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
@@ -677,7 +677,7 @@ Für bestimmte Attributtypen stehen bestimmte Validatoren mit unterschiedlichen 
 
 Beispiel:
 
-image::regexValifdator.png[width = 600]
+image::img/regexValifdator.png[width = 600]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 ====== Custom-Validator (für alle Attribute)
@@ -702,10 +702,42 @@ image::regexValifdator.png[width = 600]
 
 Beispiel: +
 
-image::customValidator.png[]
+image::img/customValidator.png[]
 
 ==== [[anchor-convertibles]] convertibles  _(optional)_
 ==== [[anchor-meaning]] meaning  _(optional)_
+
+Über den _meaning_-Parameter kann man dem Attribut-Wert eine Bedeutung geben.
+Zum Beispiel, dass der Wert in Metern angegeben ist:
+
+image::img/meaningMeter.png[width = 600]
+
+image::img/sizeInMeter.png[width = 260]
+
+Es gibt verschiedene Meanings, welche man erstellen kann:
+
+.Meanings
+[cols="1,1,2",width=100%,frame=topbot]
+|===
+| Meaning | Beschreibung |Beispiel-Code
+
+| *Currency(* _currency_ *)* +
+
+_(nur für Number-Attribute)_
+| Nimmt einen Währungs-Iso-Code und wandelt ihn in das entsprechende Währungszeichen um, welches dann auf dem Formular erscheint.
+a|image::img/codeEur.png[]
+
+| *Percentage( )* +
+
+_(nur für Number-Attribute)_
+| Auf dem Formular erscheint ein %-Zeichen.
+a|image::img/percentageCode.png[width = 180]
+
+| *CustomMeaning(* _customText_ *)*
+| Nimmt einen String, welcher dann genau so auf dem Formular erscheint.
+a|image::img/kgCode.png[width = 300]
+|===
+
 ==== [[anchor-decimalPlaces]] decimalPlaces _(optional)_
 
 *Nur für FloatingPoint-Attribute*
@@ -713,7 +745,7 @@ image::customValidator.png[]
 Bei Attributen die Kommazahlen als Wert speichern, kann zusätzlich angegeben werden wie viele Nachkommastellen maximal erwünscht sind.
 Sobald der User mehr Kommastellen eingibt wird der Input invalid.
 
-image::decimalPlaces.png[width = 600]
+image::img/decimalPlaces.png[width = 600]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 Bei keiner Angabe wird der Default-Wert _8_ gesetzt.
@@ -723,7 +755,7 @@ Bei keiner Angabe wird der Default-Wert _8_ gesetzt.
 
 Beim Selection-Attribut müssen die Auswahlmöglichkeiten, die dem User zur Verfügung stehen über den Parameter _possibleSelections_, angegeben werden. Die Auswahlmöglichkeiten müssen als Strings in einem Set übergeben werden.
 
-image::possibleSelections.png[width = 900]
+image::img/possibleSelections.png[width = 900]
 
 _Momentan ist hier noch keine Mehrsprachigkeit-Möglichkeit verfügbar. Dies wird sich in Zukunft ändern._
 
@@ -736,14 +768,14 @@ Im Folgenden eine detaillierte Erklärung zur richtigen Erstellung der Group-Par
 Das Model der Gruppe muss dasselbe sein, wie das Model der Attribute, die sich in der Gruppe befinden (im Parameter <<anchor-fields, fields>>). Falls dies nicht der Fall ist wird eine Exception geworfen. +
 *Beispiele*: siehe Parameter <<anchor-model, model>> beim Attribut.
 
-image::groupModel.png[width = 500]
+image::img/groupModel.png[width = 500]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 ==== [[anchor-group-title]] title _(erforderlich)_
 
 Es muss ein Gruppen-Titel als String angegeben werden.
 
-image::groupModel.png[width = 500]
+image::img/groupModel.png[width = 500]
 ( _[silver]#demo > src > main > kotlin > demo > personForm > PersonModel#_ )
 
 _Momentan ist hier noch keine Mehrsprachigkeit-Möglichkeit verfügbar. Dies wird sich in Zukunft ändern._
@@ -754,11 +786,11 @@ _Momentan ist hier noch keine Mehrsprachigkeit-Möglichkeit verfügbar. Dies wir
 
 Bei der _Group_ und _Field_ sollte darauf geachtet werden, dass die richtigen Klassen importiert werden:
 
-image::importsGroup.png[width = 450]
+image::img/importsGroup.png[width = 450]
 
 Die Felder können einfach durch Komma getrennt angegeben werden:
 
-image::defineGroupFields.png[width = 600]
+image::img/defineGroupFields.png[width = 600]
 
 Ein Field hat die Parameter *attribute* _(erforderlich)_, bei dem ein Attribut übergeben werden kann und *fieldSize* _(optional)_, mit dem die Grösse des Inputfeldes bestimmt werden kann.
 
@@ -767,7 +799,7 @@ Wenn dem Field keine _fieldSize_ übergeben wird, wird der Default-Wert _FieldSi
 Die Felder erscheinen in derselben Reihenfolge, wie sie der Gruppe übergeben werden. +
 FieldSize.SMALL ist halb so gross wie FieldSize.NORMAL:
 
-image::groupWithFieldSizes.png[]
+image::img/groupWithFieldSizes.png[]
 
 Wenn der Gruppe keine Felder übergeben werden wird im Formular nur der Gruppen-Titel angezeigt.
 
