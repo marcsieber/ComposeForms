@@ -85,8 +85,12 @@ fun Header(model: Model){
                         }
                     }
                     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
-                        Text("Previous value", fontSize = 14.sp)
-                        Text("Hier verbinden", fontSize = 14.sp)
+                        Text("",
+//                            "Previous value",
+                            fontSize = 14.sp)
+                        Text("",
+//                            "Hier verbinden",
+                            fontSize = 14.sp)
                     }
                 }
             }
@@ -102,7 +106,7 @@ fun BottomBar(model: Model){
                 IconButton(onClick = {sendCommand(Command.PREVIOUS)}) {
                     Icon(Icons.Filled.ArrowBack, "Back") }
 
-                Text("undo", modifier = Modifier.clickable {  }, textAlign = TextAlign.Center, fontSize = 16.sp)
+//                Text("undo", modifier = Modifier.clickable {  }, textAlign = TextAlign.Center, fontSize = 16.sp) //TODO Undo-Button functionality
 
                 IconButton(onClick = {sendCommand(Command.NEXT)}) {
                     Icon(Icons.Filled.ArrowForward, "Forward")}

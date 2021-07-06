@@ -51,7 +51,7 @@ class UserDefinedModel : BaseModel(Labels.stringLabel, smartphoneOption = true){
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true)
         ),
-        meaning = CustomMeaning("g")
+        meaning = CustomMeaning("kg")
     )
 
     val d2 = DoubleAttribute(
@@ -67,7 +67,9 @@ class UserDefinedModel : BaseModel(Labels.stringLabel, smartphoneOption = true){
                 ReplacementPair("(\\d*)(,)(\\d*)", "$1.$3")
             ), convertUserView = true, true)
         ),
-        meaning = Currency(java.util.Currency.getInstance("EUR"))
+//        meaning = Currency(
+//            java.util.Currency.getInstance("EUR")
+//        )
     )
 
     val d3 = DoubleAttribute(
