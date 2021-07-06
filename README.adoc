@@ -5,6 +5,8 @@
 :url-docs: https://asciidoctor.org/docs
 :url-gem: https://rubygems.org/gems/asciidoctor
 
+German ReadMe: See document _[silver]#README_GERMAN.adoc#_
+
 Compose Forms is a library that allows you to create beautiful & user-friendly forms quickly and easily.
 
 
