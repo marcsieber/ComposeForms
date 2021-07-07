@@ -19,8 +19,68 @@ Eine zusätzliche Benutzer-unterstützende Feature ist die Möglichkeit, das Sma
 
 image::img/smartphone-calc_new.png[width = 250]
 
+*Verwendete Technologien:*
+Kotlin, Compose for Desktop, Jetpack Compose
+
 *Hinweis:*
 Die Library befindet sich gerade im Entwicklungszustand und wird laufend verbessert, daher sind noch nicht alle Funktionalitäten verfügbar.
+
+
+== Installation
+
+Du brauchst:
+
+* [[anchor-intelliJ]] *IntelliJ* oder eine andere Entwicklungsumgebung, die Kotlin unterstützt. +
+(https://www.jetbrains.com/de-de/idea/download/)
+* [[anchor-git]] *Git*, um das ComposeForms-Projekt zu clonen (https://git-scm.com/downloads)
+
+ git clone https://github.com/FHNW-IP5-IP6/ComposeForms.git
+
+* [[anchor-andoidSdk]]Android SDK +
+Da das Android SDK in das Entwickler-Tool _Android Studio_ integriert wurde, am besten *Android Studio* herunterladen. +
+(https://developer.android.com/studio)
+
+* Gradle - Version 6.8.2 +
+(https://gradle.org/releases/) +
+_Bei Verwendung von IntelliJ muss dieses nicht extra installiert werden._
+* JDK 11 oder neuer +
+(https://bell-sw.com/pages/downloads/#/java-11-lts) _oder_
+(https://www.oracle.com/de/java/technologies/javase-downloads.html) +
+_Bei Verwendung von IntelliJ muss dieses nicht extra installiert werden._
+
+=== Beispiel: Verwendung von IntelliJ
+
+* <<anchor-intelliJ, IntelliJ>> downloaden und installieren
+
+* <<anchor-git, Git>> downloaden und installieren
+
+* Terminal öffnen und ComposeForms-Projekt clonen
+
+* IntelliJ öffnen > New Project > ComposeForms auswählen
+
+Wenn noch kein Android-Sdk vorhanden ist, wird danach gefragt:
+
+image::img/missingAndroidSdk[width = 500]
+
+Wenn noch kein Android SDK vorhanden ist
+<<anchor-andoidSdk, Android Studio>> _(bzw. Android SDK)_ herunterladen und installieren/öffnen. Dann im obigen IntelliJ Fenster den Pfad zum installierten Android Sdk angeben.
+
+_Wenn nicht klar ist, wo das Android SDK gespeichert wurde:_ +
+Android Studio starten und ein neues leeres Projekt erstellen.
+Dann oben rechts _Project Structure_ öffnen:
+
+image::img/projectStructureAndroidStudio.png[width = 400]
+
+
+Hier steht der Speicherort des Android-SDKs:
+
+image::img/StoragePlaceAndroidSdk.png[width = 800]
+
+Dieser kann kopiert werden und dann beim IntelliJ als Android-Sdk Speicherplatz eingegeben werden.
+
+* Wenn das Andoid SDK vorhanden ist startet nun automatisch das Gradle. Beim ersten Mal kann dies etwas länger dauern, da erst alle Dateien heruntergeladen werden müssen.
+
+* Wenn das Gradle fertig ist, kann die Demo-Starterklasse _main.kt_ gestartet werden. ( _[silver]#demo > src > main > main.kt#_ )
 
 == Übersicht
 Für die Erstellung eines Formulares sind grundsätzlich folgende 3 Klassen nötig:
