@@ -20,7 +20,69 @@ An additional user-supporting feature is the possibility to use the smartphone f
 
 image::img/smartphone-calc_new.png[width = 250]
 
+*Used Technologies:*
+Kotlin, Compose for Desktop, Jetpack Compose
+
 *Note:* The library is currently under development and is being improved continuously, therefore not all functionalities are available yet.
+
+
+== Installation
+
+You need:
+
+* [[anchor-intelliJ]] *IntelliJ* or other development environment that supports Kotlin. +
+(https://www.jetbrains.com/de-de/idea/download/)
+* [[anchor-git]] *Git* to clone the ComposeForms project (https://git-scm.com/downloads)
+
+ git clone https://github.com/FHNW-IP5-IP6/ComposeForms.git
+
+* [[anchor-andoidSdk]]Android SDK +
+Since the Android SDK has been integrated into the developer tool _Android Studio_, it is best to download *Android Studio*. +
+(https://developer.android.com/studio)
+
+* Gradle - version 6.8.2 +
+(https://gradle.org/releases/) +
+_When using IntelliJ, this does not need to be installed separately._
+
+* JDK 11 or newer +
+(https://bell-sw.com/pages/downloads/#/java-11-lts) _or_
+(https://www.oracle.com/de/java/technologies/javase-downloads.html) +
+_When using IntelliJ, this does not need to be installed separately._
+
+=== Example: Using IntelliJ
+
+* Download and install <<anchor-intelliJ,  IntelliJ>>.
+
+* Download and install <<anchor-git, Git>>.
+
+* Open terminal and clone ComposeForms project
+
+* Open IntelliJ > New Project > Select ComposeForms
+
+If there is no Android SDK yet, it will be asked for it:
+
+image::img/missingAndroidSdk.png[width = 500]
+
+If no Android SDK is available yet, download
+<<anchor-andoidSdk, Android Studio>> _(or Android SDK)_  and install/open it. Then specify the path to the installed Android Sdk in the IntelliJ window above.
+
+_If it is not clear where the Android SDK was saved:_ +
+Start Android Studio and create a new empty project.
+Then open _Project Structure_ at the top right:
+
+image::img/projectStructureAndroidStudio.png[width = 400]
+
+
+This is the location of the Android SDK:
+
+image::img/storagePlaceAndroidSdk.png[width = 800]
+
+This can be copied and then entered into the IntelliJ as android sdk location.
+
+* If the Andoid SDK is available, Gradle will start automatically. The first time this can take a little longer, because all files must be downloaded first.
+
+* When the Gradle is ready, the demo starter class _main.kt_ can be started. ( _[silver]#demo > src > main > main.kt#_ )
+
 
 == Overview
 For the creation of a form the following 3 classes are basically needed:
@@ -257,7 +319,7 @@ image::img/startDesktopApp.png[]
 Before the smartphone app can connect to the desktop via QR code, the app must be installed on the Android device (or emulator).
 To do this, simply launch the ComposeForms.app in the development environment.
 
-image::img/Smartphone-App.png[]
+image::img/smartphoneApp.png[]
 
 === Start smartphone app via QR code.
 If the smartphone is to connect via QR code (via the desktop application), the app must already be installed on the smartphone and the smartphone must be in the same WLAN as the desktop application.
@@ -279,7 +341,7 @@ In the output under _en0:_ you can find among other things the IP address (behin
 After that the smartphone app can be started in the development environment:
 
 
-image::img/Smartphone-App.png[]
+image::img/smartphoneApp.png[]
 
 *Note:* It is important that the desktop appliaction is started first and afterwards the smartphone, otherwise no connection can be established between the two applications.
 
